@@ -1,0 +1,21 @@
+# 示例：在Qt中嵌入Matplotlib散点图矩阵
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
+from matplotlib.figure import Figure
+import pandas as pd
+
+class ScatterMatrixWidget(QWidget):
+    def __init__(self, X, y_pred, y_true):
+        super().__init__()
+        self.figure = Figure(figsize=(12, 8))
+        self.canvas = FigureCanvasQTAgg(self.figure)
+        layout = QVBoxLayout()
+        layout.addWidget(self.canvas)
+        self.setLayout(layout)
+        
+        # 绘制散点矩阵
+        df = pd.DataFrame({'Pred': y_pred, 'True': y_true})
+        axes = df.plot.scatter(x='True', y='Pred', ax=self.figure.add_subplot(111))
+        axes.plot([y_true.min(), y_true.max()], [y_true.min(), y_true.max()], 'r--')
+        self.canvas.draw()
+
+

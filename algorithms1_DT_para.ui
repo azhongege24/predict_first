@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DT_para</class>
+ <widget class="QMainWindow" name="DT_para">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>544</width>
+    <height>369</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>决策树：参数设置</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QSpinBox" name="spinBox_max_depth">
+    <property name="geometry">
+     <rect>
+      <x>308</x>
+      <y>69</y>
+      <width>110</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>110</width>
+      <height>40</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <family>Times New Roman</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QSpinBox::up-button:pressed {
+    margin-top: 4px;  /* 模拟按压下沉 */
+}
+QSpinBox::down-button:pressed {
+    margin-top: 4px;
+}</string>
+    </property>
+    <property name="value">
+     <number>4</number>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBox_random_state">
+    <property name="geometry">
+     <rect>
+      <x>308</x>
+      <y>119</y>
+      <width>110</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>110</width>
+      <height>40</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <family>Times New Roman</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QSpinBox::up-button:pressed {
+    margin-top: 4px;  /* 模拟按压下沉 */
+}
+QSpinBox::down-button:pressed {
+    margin-top: 4px;
+}</string>
+    </property>
+    <property name="value">
+     <number>2</number>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>200</y>
+      <width>81</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(149, 236, 165);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+
+font:bold;
+}
+QPushButton:hover {
+    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */
+}
+QPushButton:pressed {
+    background-color:rgb(99, 181, 255);     /* 点击时背景色 */
+}</string>
+    </property>
+    <property name="text">
+     <string>确定</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>200</y>
+      <width>91</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(149, 236, 165);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+
+font:bold;
+}
+QPushButton:hover {
+    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */
+}
+QPushButton:pressed {
+    background-color:rgb(99, 181, 255);     /* 点击时背景色 */
+}</string>
+    </property>
+    <property name="text">
+     <string>取消</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>70</y>
+      <width>231</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>250</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(177, 255, 255);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+
+font:bold;
+}</string>
+       </property>
+       <property name="text">
+        <string>DT_max_depth</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="minimumSize">
+        <size>
+         <width>160</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>250</width>
+         <height>200</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(177, 255, 255);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+
+font:bold;
+}</string>
+       </property>
+       <property name="text">
+        <string>DT_random_state</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>544</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>DT_para</receiver>
+   <slot>Confirm()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>183</x>
+     <y>259</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>183</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>DT_para</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>286</x>
+     <y>250</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>291</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>released()</signal>
+   <receiver>DT_para</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>148</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>78</x>
+     <y>289</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>Confirm()</slot>
+ </slots>
+</ui>

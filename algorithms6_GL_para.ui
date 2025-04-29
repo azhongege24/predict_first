@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GL_para</class>
+ <widget class="QMainWindow" name="GL_para">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>601</width>
+    <height>380</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Group_Lasso参数选择</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>70</y>
+      <width>181</width>
+      <height>104</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="styleSheet">
+        <string notr="true">QLabel{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(177, 255, 255);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+qproperty-alignment: 'AlignCenter';
+font:bold;
+}</string>
+       </property>
+       <property name="text">
+        <string>random_state</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="styleSheet">
+        <string notr="true">QLabel{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(177, 255, 255);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+qproperty-alignment: 'AlignCenter';
+font:bold;
+}</string>
+       </property>
+       <property name="text">
+        <string>alpha</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="styleSheet">
+        <string notr="true">QLabel{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(177, 255, 255);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+qproperty-alignment: 'AlignCenter';
+font:bold;
+}</string>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>70</y>
+      <width>111</width>
+      <height>104</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QSpinBox" name="spinBox_random_state">
+       <property name="minimumSize">
+        <size>
+         <width>80</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QSpinBox::up-button:pressed {
+    margin-top: 4px;  /* 模拟按压下沉 */
+}
+QSpinBox::down-button:pressed {
+    margin-top: 4px;
+}</string>
+       </property>
+       <property name="value">
+        <number>42</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="doubleSpinBox_alpha">
+       <property name="minimumSize">
+        <size>
+         <width>80</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QDoubleSpinBox::up-button:pressed {
+    margin-top: 4px;  /* 模拟按压下沉 */
+}
+QDoubleSpinBox::down-button:pressed {
+    margin-top: 4px;
+}</string>
+       </property>
+       <property name="singleStep">
+        <double>0.100000000000000</double>
+       </property>
+       <property name="value">
+        <double>0.100000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="spinBox_3">
+       <property name="minimumSize">
+        <size>
+         <width>80</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QSpinBox::up-button:pressed {
+    margin-top: 4px;  /* 模拟按压下沉 */
+}
+QSpinBox::down-button:pressed {
+    margin-top: 4px;
+}</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>220</y>
+      <width>181</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(149, 236, 165);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+
+font:bold;
+}
+QPushButton:hover {
+    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */
+}
+QPushButton:pressed {
+    background-color:rgb(99, 181, 255);     /* 点击时背景色 */
+}</string>
+       </property>
+       <property name="text">
+        <string>确认</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(149, 236, 165);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+
+font:bold;
+}
+QPushButton:hover {
+    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */
+}
+QPushButton:pressed {
+    background-color:rgb(99, 181, 255);     /* 点击时背景色 */
+}</string>
+       </property>
+       <property name="text">
+        <string>取消</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>601</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>GL_para</receiver>
+   <slot>Confirm()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>253</x>
+     <y>262</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>168</x>
+     <y>320</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>GL_para</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>346</x>
+     <y>264</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>515</x>
+     <y>309</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>released()</signal>
+   <receiver>GL_para</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>224</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>78</x>
+     <y>255</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>Confirm()</slot>
+ </slots>
+</ui>

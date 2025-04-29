@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RF_para</class>
+ <widget class="QMainWindow" name="RF_para">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>479</width>
+    <height>325</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>随机森林：参数设置</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>60</y>
+      <width>121</width>
+      <height>140</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QSpinBox" name="spinBox_n_estimators">
+       <property name="minimumSize">
+        <size>
+         <width>80</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QSpinBox::up-button:pressed {
+    margin-top: 4px;  /* 模拟按压下沉 */
+}
+QSpinBox::down-button:pressed {
+    margin-top: 4px;
+}</string>
+       </property>
+       <property name="maximum">
+        <number>1000</number>
+       </property>
+       <property name="value">
+        <number>100</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="spinBox_max_depth">
+       <property name="minimumSize">
+        <size>
+         <width>80</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QSpinBox::up-button:pressed {
+    margin-top: 4px;  /* 模拟按压下沉 */
+}
+QSpinBox::down-button:pressed {
+    margin-top: 4px;
+}</string>
+       </property>
+       <property name="value">
+        <number>4</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="spinBox_n_jobs">
+       <property name="minimumSize">
+        <size>
+         <width>80</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QSpinBox::up-button:pressed {
+    margin-top: 4px;  /* 模拟按压下沉 */
+}
+QSpinBox::down-button:pressed {
+    margin-top: 4px;
+}</string>
+       </property>
+       <property name="minimum">
+        <number>-1</number>
+       </property>
+       <property name="maximum">
+        <number>1</number>
+       </property>
+       <property name="value">
+        <number>-1</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="spinBox_random_state">
+       <property name="minimumSize">
+        <size>
+         <width>80</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QSpinBox::up-button:pressed {
+    margin-top: 4px;  /* 模拟按压下沉 */
+}
+QSpinBox::down-button:pressed {
+    margin-top: 4px;
+}</string>
+       </property>
+       <property name="value">
+        <number>2</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>210</y>
+      <width>181</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(149, 236, 165);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+
+font:bold;
+}
+QPushButton:hover {
+    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */
+}
+QPushButton:pressed {
+    background-color:rgb(99, 181, 255);     /* 点击时背景色 */
+}</string>
+       </property>
+       <property name="text">
+        <string>确认</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(149, 236, 165);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+
+font:bold;
+}
+QPushButton:hover {
+    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */
+}
+QPushButton:pressed {
+    background-color:rgb(99, 181, 255);     /* 点击时背景色 */
+}</string>
+       </property>
+       <property name="text">
+        <string>取消</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>58</x>
+      <y>60</y>
+      <width>181</width>
+      <height>140</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="labeln_estimators">
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>200</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>楷体</family>
+         <pointsize>18</pointsize>
+         <weight>75</weight>
+         <italic>false</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(177, 255, 255);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+
+font:bold;
+}</string>
+       </property>
+       <property name="text">
+        <string>n_estimators</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_max_depth">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>楷体</family>
+         <pointsize>18</pointsize>
+         <weight>75</weight>
+         <italic>false</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(177, 255, 255);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+
+font:bold;
+}</string>
+       </property>
+       <property name="text">
+        <string>max_depth</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>楷体</family>
+         <pointsize>18</pointsize>
+         <weight>75</weight>
+         <italic>false</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(177, 255, 255);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+
+font:bold;
+}</string>
+       </property>
+       <property name="text">
+        <string>n_jobs</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_random_state">
+       <property name="font">
+        <font>
+         <family>楷体</family>
+         <pointsize>18</pointsize>
+         <weight>75</weight>
+         <italic>false</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(177, 255, 255);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+
+font:bold;
+}</string>
+       </property>
+       <property name="text">
+        <string>random_state</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>479</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>RF_para</receiver>
+   <slot>Confirm()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>178</x>
+     <y>276</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>69</x>
+     <y>277</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>released()</signal>
+   <receiver>RF_para</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>148</x>
+     <y>263</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>63</x>
+     <y>237</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>RF_para</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>253</x>
+     <y>271</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>434</x>
+     <y>272</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>Confirm()</slot>
+ </slots>
+</ui>

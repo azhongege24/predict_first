@@ -1,0 +1,39 @@
+# 假设 X_train 和 y_train 已定义，n_tasks=16
+n_tasks = y_train.shape[1]
+n_cols = 4  # 每行4个子图
+n_rows = 2  # 每页2行（共8个子图）
+n_pages = int(np.ceil(n_tasks / (n_rows * n_cols)))  # 计算总页数
+
+for page in range(n_pages):
+    # 创建新页
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=(20, 10))
+    axes = axes.ravel()  # 展平axes数组方便索引
+    
+    # 当前页的任务范围
+    start_task = page * n_rows * n_cols
+    end_task = min((page + 1) * n_rows * n_cols, n_tasks)
+    
+    for idx, task in enumerate(range(start_task, end_task)):
+        ax = axes[idx]
+        # 计算当前任务的LASSO路径
+        alphas, coefs, _ = lasso_path(X_train, y_train[:, task], alphas=np.logspace(-4, 1, 100))
+        
+        # 绘制系数路径
+        for i in range(coefs.shape[0]):
+            sns.lineplot(x=np.log10(alphas), y=coefs[i], ax=ax, label=f'Feat {i+1}', linewidth=1)
+        
+        ax.set_xlabel('log(α)')
+        ax.set_ylabel('Coeff Value')
+        ax.set_title(f'Task {task+1}')
+        ax.grid(True)
+        sns.despine(ax=ax)
+    
+    # 隐藏多余的子图
+    for j in range(end_task - start_task, n_rows * n_cols):
+        axes[j].axis('off')
+    
+    plt.tight_layout()
+    plt.show()
+
+
+

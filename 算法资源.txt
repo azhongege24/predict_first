@@ -1,0 +1,39 @@
+https://github.com/hengzhe-zhang/Scikit-MTR
+工具包：
+
+Currently, the following regressors are in our arsenal:
+
+DT: 🌲 Decision Tree
+LR: 📈 Linear Regression
+RF: 🌳 Random Forest
+ET: 🍃 Extra Trees
+MLP: 🧠 Multi-layer Perceptron
+MOKP: 🔮 MOKP Regressor
+
+
+https://github.com/hichamjanati/mutar
+
+Independent linear models:
+Independent Lasso estimator
+Independent Re-weighted (Adaptive) Lasso estimator
+
+Group-norms multi-task linear models:
+GroupLasso: The Group Lasso is an l1/l2 regularized regression with identical feature supports across tasks (Yuan and Lin, J. R Statistical Society 2006).
+DirtyModel: Dirty models are a generalization of the Group Lasso with a partial overlap of features. They are defined using a composite l1/l2 and l1 regularization (Jalali et al., NeurIPS 2010).
+MultiLevelLasso : Multilevel Lasso is a non-convex model that enhances further sparsity and encourages partial overlap with a product decomposition (Lozano and Swirszcz, ICML 2012).
+
+Optimal transport regularized models:
+MTW: Multi-task Wasserstein is a sparse regression model where relevant features across tasks are close according to some defined geometry. (Janati et al., AISTATS 2019).
+ReMTW: Reweighted MTW is a non-convex variant of MTW that promotes even more sparsity and reduces the amplitude bias caused by the L1 norm. Both models are implemented with a concomitant argument for inferring the standard deviation of each task and adapting the amount of regularization accordingly.
+
+
+https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.MultiTaskLasso.html
+多任务lasso
+https://docs.gpytorch.ai/en/stable/examples/03_Multitask_Exact_GPs/Multitask_GP_Regression.html
+多任务高斯过程回归
+
+
+
+https://www.pythonlore.com/multi-output-and-multi-task-learning-in-scikit-learn/  #教程
+
+MultiOutputRegressor。这个类允许将任何回归器扩展为能够处理多个输出，实际上是将每个输出视为一个单独的回归任务，同时仍然能够捕捉它们之间的任何潜在关系。

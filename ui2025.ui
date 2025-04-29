@@ -1,0 +1,1619 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1404</width>
+    <height>877</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>多目标回归预示分析系统</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow{
+
+
+background-color:;	/*背景颜色*/
+
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGraphicsView" name="graphicsView">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>280</y>
+      <width>861</width>
+      <height>471</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QGraphicsView{
+
+border:1px solid  black;   /*边框的粗细，颜色*/
+
+
+
+
+}</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_headline">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>30</y>
+      <width>391</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel{
+
+
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 20pt &quot;隶书&quot;;
+
+font: 30px;		/*设置按钮文字和大小*/
+}</string>
+    </property>
+    <property name="text">
+     <string>多目标回归预示分析系统</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>170</y>
+      <width>861</width>
+      <height>108</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QPushButton" name="pushButton_vibration_analysis">
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(255, 231, 151);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+min-width:100px;	/*设置最小宽度*/
+min-height:80px;	/*设置最小高度*/
+font:bold;
+}
+QPushButton:hover {
+    background-color: rgb(21, 151, 165); /* 悬停时背景色 */
+    color: white;             /* 悬停时文字颜色 */
+}
+QPushButton:pressed {
+    background-color:  rgb(38, 70, 83); /* 按下时背景色 */
+}</string>
+       </property>
+       <property name="text">
+        <string>振动分析</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_otherpara">
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(255, 231, 151);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+min-width:100px;	/*设置最小宽度*/
+min-height:80px;	/*设置最小高度*/
+font:bold;
+}
+QPushButton:hover {
+    background-color: rgb(21, 151, 165); /* 悬停时背景色 */
+    color: white;             /* 悬停时文字颜色 */
+}
+QPushButton:pressed {
+    background-color:  rgb(38, 70, 83); /* 按下时背景色 */
+}</string>
+       </property>
+       <property name="text">
+        <string>其他参数</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_dataset">
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(255, 231, 151);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+min-width:100px;	/*设置最小宽度*/
+min-height:80px;	/*设置最小高度*/
+font:bold;
+}
+QPushButton:hover {
+    background-color: rgb(21, 151, 165); /* 悬停时背景色 */
+    color: white;             /* 悬停时文字颜色 */
+}
+QPushButton:pressed {
+    background-color:  rgb(38, 70, 83); /* 按下时背景色 */
+}</string>
+       </property>
+       <property name="text">
+        <string>数据集合</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_train">
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(255, 231, 151);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+min-width:100px;	/*设置最小宽度*/
+min-height:80px;	/*设置最小高度*/
+font:bold;
+}
+QPushButton:hover {
+    background-color: rgb(21, 151, 165); /* 悬停时背景色 */
+    color: white;             /* 悬停时文字颜色 */
+}
+QPushButton:pressed {
+    background-color:  rgb(38, 70, 83); /* 按下时背景色 */
+}</string>
+       </property>
+       <property name="text">
+        <string>训练验模</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_predict">
+       <property name="maximumSize">
+        <size>
+         <width>131</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(255, 231, 151);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+min-width:100px;	/*设置最小宽度*/
+min-height:80px;	/*设置最小高度*/
+font:bold;
+}
+QPushButton:hover {
+    background-color: rgb(21, 151, 165); /* 悬停时背景色 */
+    color: white;             /* 悬停时文字颜色 */
+}
+QPushButton:pressed {
+    background-color:  rgb(38, 70, 83); /* 按下时背景色 */
+}</string>
+       </property>
+       <property name="text">
+        <string>预测</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="label_version">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>121</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>90</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel{
+
+font: 16 px  &quot;Times New Roman&quot;;
+
+}</string>
+    </property>
+    <property name="text">
+     <string>v3.0 2025.04.14</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>930</x>
+      <y>310</y>
+      <width>131</width>
+      <height>451</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPushButton" name="pushButton_AL1">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;决策树算法&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color:rgb(168, 249, 124);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+min-width:80px;	/*设置最小宽度*/
+min-height:40px;	/*设置最小高度*/
+font:bold;
+}
+QPushButton:hover {
+    background-color: rgb(21, 151, 165); /* 悬停时背景色 */
+    color: white;             /* 悬停时文字颜色 */
+}
+QPushButton:pressed {
+    background-color:  rgb(38, 70, 83); /* 按下时背景色 */
+}</string>
+       </property>
+       <property name="text">
+        <string>DT</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_AL2">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;随机森林算法&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color:rgb(168, 249, 124);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+min-width:80px;	/*设置最小宽度*/
+min-height:40px;	/*设置最小高度*/
+font:bold;
+}
+QPushButton:hover {
+    background-color: rgb(21, 151, 165); /* 悬停时背景色 */
+    color: white;             /* 悬停时文字颜色 */
+}
+QPushButton:pressed {
+    background-color:  rgb(38, 70, 83); /* 按下时背景色 */
+}</string>
+       </property>
+       <property name="text">
+        <string>RF</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_AL3">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;支持向量机算法&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color:rgb(168, 249, 124);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+min-width:80px;	/*设置最小宽度*/
+min-height:40px;	/*设置最小高度*/
+font:bold;
+}
+QPushButton:hover {
+    background-color: rgb(21, 151, 165); /* 悬停时背景色 */
+    color: white;             /* 悬停时文字颜色 */
+}
+QPushButton:pressed {
+    background-color:  rgb(38, 70, 83); /* 按下时背景色 */
+}</string>
+       </property>
+       <property name="text">
+        <string>SVM</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_AL4">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;多层感知机算法&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color:rgb(168, 249, 124);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+min-width:80px;	/*设置最小宽度*/
+min-height:40px;	/*设置最小高度*/
+font:bold;
+}
+QPushButton:hover {
+    background-color: rgb(21, 151, 165); /* 悬停时背景色 */
+    color: white;             /* 悬停时文字颜色 */
+}
+QPushButton:pressed {
+    background-color:  rgb(38, 70, 83); /* 按下时背景色 */
+}</string>
+       </property>
+       <property name="text">
+        <string>MLP</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_AL5">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;极端树算法&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color:rgb(168, 249, 124);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+min-width:80px;	/*设置最小宽度*/
+min-height:40px;	/*设置最小高度*/
+font:bold;
+}
+QPushButton:hover {
+    background-color: rgb(21, 151, 165); /* 悬停时背景色 */
+    color: white;             /* 悬停时文字颜色 */
+}
+QPushButton:pressed {
+    background-color:  rgb(38, 70, 83); /* 按下时背景色 */
+}</string>
+       </property>
+       <property name="text">
+        <string>ET</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: 1px solid #2b8cbe;           /* 科技蓝边框 */
+    border-radius: 15px;
+    padding: 2px 4px;
+    background-color: #e0f3f8;           /* 浅蓝灰背景 */
+    color: #0c2c84;                     /* 深蓝字体 */
+    font: bold 18pt &quot;楷体&quot;;
+    min-width: 80px;
+    min-height: 40px;
+}
+
+QPushButton:hover {
+    background-color: #7bccc4;          /* 悬浮时：蓝绿色 */
+    border-color: #0868ac;              /* 加深边框 */
+    color: #f7fcfd;                     /* 悬停文字改为白色 */
+}
+
+QPushButton:pressed {
+    background-color: #4eb3d3;          /* 按压时：科技蓝 */
+    border-color: #084081;              /* 深蓝边框 */
+}</string>
+       </property>
+       <property name="text">
+        <string>GL</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: 1px solid #2b8cbe;           /* 科技蓝边框 */
+    border-radius: 15px;
+    padding: 2px 4px;
+    background-color: #e0f3f8;           /* 浅蓝灰背景 */
+    color: #0c2c84;                     /* 深蓝字体 */
+    font: bold 18pt &quot;楷体&quot;;
+    min-width: 80px;
+    min-height: 40px;
+}
+
+QPushButton:hover {
+    background-color: #7bccc4;          /* 悬浮时：蓝绿色 */
+    border-color: #0868ac;              /* 加深边框 */
+    color: #f7fcfd;                     /* 悬停文字改为白色 */
+}
+
+QPushButton:pressed {
+    background-color: #4eb3d3;          /* 按压时：科技蓝 */
+    border-color: #084081;              /* 深蓝边框 */
+}</string>
+       </property>
+       <property name="text">
+        <string>MTW</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_3">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: 1px solid #2b8cbe;           /* 科技蓝边框 */
+    border-radius: 15px;
+    padding: 2px 4px;
+    background-color: #e0f3f8;           /* 浅蓝灰背景 */
+    color: #0c2c84;                     /* 深蓝字体 */
+    font: bold 18pt &quot;楷体&quot;;
+    min-width: 80px;
+    min-height: 40px;
+}
+
+QPushButton:hover {
+    background-color: #7bccc4;          /* 悬浮时：蓝绿色 */
+    border-color: #0868ac;              /* 加深边框 */
+    color: #f7fcfd;                     /* 悬停文字改为白色 */
+}
+
+QPushButton:pressed {
+    background-color: #4eb3d3;          /* 按压时：科技蓝 */
+    border-color: #084081;              /* 深蓝边框 */
+}</string>
+       </property>
+       <property name="text">
+        <string>REMTW</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>110</y>
+      <width>861</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="font">
+        <font>
+         <family>楷体</family>
+         <pointsize>16</pointsize>
+         <weight>75</weight>
+         <italic>false</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel{
+
+
+
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 16pt &quot;楷体&quot;;
+
+font:bold;		/*设置按钮文字和大小*/
+}</string>
+       </property>
+       <property name="text">
+        <string>数据集:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_dataset_file">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>14</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLineEdit{
+
+border:1px solid black; 
+border-radius:10px; 
+color:red;
+
+}</string>
+       </property>
+       <property name="text">
+        <string>Please select a Dataset</string>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_dataset_nums">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>250</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLineEdit{
+
+border:1px solid black; 
+border-radius:10px; 
+
+}</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>1079</x>
+      <y>300</y>
+      <width>251</width>
+      <height>471</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+
+   text-align: center;    
+ qproperty-alignment: 'AlignCenter';   
+
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 12pt &quot;华文楷体&quot;;
+
+font:bold 16px;		/*设置按钮文字和大小*/
+}</string>
+         </property>
+         <property name="text">
+          <string>输入特征</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListWidget" name="listWidget_inputfeature">
+         <property name="acceptDrops">
+          <bool>true</bool>
+         </property>
+         <property name="dragEnabled">
+          <bool>true</bool>
+         </property>
+         <property name="defaultDropAction">
+          <enum>Qt::MoveAction</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_inputall">
+         <property name="minimumSize">
+          <size>
+           <width>75</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>微软雅黑 Light</family>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>全选</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+
+
+   text-align: center;    
+ qproperty-alignment: 'AlignCenter';   
+
+
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 12pt &quot;华文楷体&quot;;
+
+font: bold 16px;		/*设置按钮文字和大小*/
+}</string>
+         </property>
+         <property name="text">
+          <string>输出特征</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListWidget" name="listWidget_outputfeature">
+         <property name="acceptDrops">
+          <bool>true</bool>
+         </property>
+         <property name="dragEnabled">
+          <bool>true</bool>
+         </property>
+         <property name="defaultDropAction">
+          <enum>Qt::MoveAction</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_outputall">
+         <property name="minimumSize">
+          <size>
+           <width>75</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>微软雅黑 Light</family>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>全选</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>971</x>
+      <y>209</y>
+      <width>370</width>
+      <height>72</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <item>
+        <widget class="QLabel" name="label_train_feature">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+
+   text-align: center;    
+ qproperty-alignment: 'AlignCenter';   
+
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 12pt &quot;华文楷体&quot;;
+
+font:bold 16px;		/*设置按钮文字和大小*/
+}</string>
+         </property>
+         <property name="text">
+          <string>训练样本数:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBox_train_start">
+         <property name="minimumSize">
+          <size>
+           <width>120</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Times New Roman</family>
+           <pointsize>12</pointsize>
+           <weight>50</weight>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="maximumSize">
+          <size>
+           <width>10</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+
+   text-align: center;    
+ qproperty-alignment: 'AlignCenter';   
+
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 12pt &quot;华文楷体&quot;;
+
+font:bold 16px;		/*设置按钮文字和大小*/
+}</string>
+         </property>
+         <property name="text">
+          <string>:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBox_train_end">
+         <property name="minimumSize">
+          <size>
+           <width>120</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Times New Roman</family>
+           <pointsize>12</pointsize>
+           <weight>50</weight>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="maximum">
+          <number>999999</number>
+         </property>
+         <property name="value">
+          <number>9000</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_6">
+       <item>
+        <widget class="QLabel" name="label_test_feature">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+
+   text-align: center;    
+ qproperty-alignment: 'AlignCenter';   
+
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 12pt &quot;华文楷体&quot;;
+
+font:bold 16px;		/*设置按钮文字和大小*/
+}</string>
+         </property>
+         <property name="text">
+          <string>测试样本数:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBox_test_start">
+         <property name="minimumSize">
+          <size>
+           <width>120</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Times New Roman</family>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="maximum">
+          <number>999999</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="maximumSize">
+          <size>
+           <width>10</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+
+   text-align: center;    
+ qproperty-alignment: 'AlignCenter';   
+
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 12pt &quot;华文楷体&quot;;
+
+font:bold 16px;		/*设置按钮文字和大小*/
+}</string>
+         </property>
+         <property name="text">
+          <string>:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBox_test_end">
+         <property name="minimumSize">
+          <size>
+           <width>120</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Times New Roman</family>
+           <pointsize>12</pointsize>
+           <weight>50</weight>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="maximum">
+          <number>999999</number>
+         </property>
+         <property name="value">
+          <number>10000</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>760</y>
+      <width>891</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_5">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_7">
+       <item>
+        <widget class="QLabel" name="label_AL">
+         <property name="minimumSize">
+          <size>
+           <width>60</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>90</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>楷体</family>
+           <pointsize>16</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;当前使用的算法&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+
+   text-align: center;    
+ qproperty-alignment: 'AlignCenter';   
+
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	
+
+
+}</string>
+         </property>
+         <property name="text">
+          <string>算法:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_Algorithm_name">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>400</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Times New Roman</family>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit{
+
+border:1px solid black; 
+border-radius:10px; 
+color:red;
+
+
+}</string>
+         </property>
+         <property name="text">
+          <string>Please select an Algorithm</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_state">
+         <property name="minimumSize">
+          <size>
+           <width>60</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>90</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>楷体</family>
+           <pointsize>16</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;当前训练状态&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+
+   text-align: center;    
+ qproperty-alignment: 'AlignCenter';   
+
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	
+
+
+}</string>
+         </property>
+         <property name="text">
+          <string>状态:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_state">
+         <property name="maximumSize">
+          <size>
+           <width>250</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Times New Roman</family>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit{
+
+border:1px solid black; 
+border-radius:10px; 
+
+}</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label_MSE">
+         <property name="minimumSize">
+          <size>
+           <width>90</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Times New Roman</family>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;均方误差&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+
+   text-align: center;    
+ qproperty-alignment: 'AlignCenter';   
+
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	
+
+
+}</string>
+         </property>
+         <property name="text">
+          <string>MSE</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_MSE">
+         <property name="minimumSize">
+          <size>
+           <width>120</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Times New Roman</family>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit{
+
+border:1px solid black; 
+border-radius:10px; 
+
+}</string>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_R2">
+         <property name="minimumSize">
+          <size>
+           <width>90</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Times New Roman</family>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;决定系数R^2,越接近1，代表模型拟合能力越强&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+
+   text-align: center;    
+ qproperty-alignment: 'AlignCenter';   
+
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 12pt  &quot;Times New Roman&quot;;
+font:bold;
+
+
+}</string>
+         </property>
+         <property name="text">
+          <string>R^2</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_R2">
+         <property name="minimumSize">
+          <size>
+           <width>120</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Times New Roman</family>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit{
+
+border:1px solid black; 
+border-radius:10px; 
+
+}</string>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_DEVICE">
+         <property name="minimumSize">
+          <size>
+           <width>90</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Times New Roman</family>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;当前使用的设备&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+
+   text-align: center;    
+ qproperty-alignment: 'AlignCenter';   
+
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 12pt &quot;Times New Roman&quot;;
+font:bold;
+
+}</string>
+         </property>
+         <property name="text">
+          <string>DEVICE</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_DEVICE">
+         <property name="minimumSize">
+          <size>
+           <width>120</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Times New Roman</family>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit{
+
+border:1px solid black; 
+border-radius:10px; 
+
+}</string>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_percentage">
+    <property name="geometry">
+     <rect>
+      <x>1150</x>
+      <y>180</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>楷体</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>百分比显示</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>440</y>
+      <width>42</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_6">
+     <item>
+      <widget class="QPushButton" name="pushButton_top">
+       <property name="maximumSize">
+        <size>
+         <width>40</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;上翻页&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>↑</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_bottom">
+       <property name="maximumSize">
+        <size>
+         <width>40</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;下翻页&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>↓</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushButton_AL1</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>AL_DT_para()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>994</x>
+     <y>352</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1023</x>
+     <y>320</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_AL2</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>AL_RF_para()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1002</x>
+     <y>412</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1042</x>
+     <y>413</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_AL3</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>AL_SVM_para()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>987</x>
+     <y>465</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1045</x>
+     <y>488</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_AL4</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>AL_MLP_para()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1014</x>
+     <y>518</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1043</x>
+     <y>572</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_AL5</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>AL_ET_para()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>997</x>
+     <y>571</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1016</x>
+     <y>732</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_otherpara</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>openfolder()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>418</x>
+     <y>278</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>342</x>
+     <y>219</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_train</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>All_Methods_Begin()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>725</x>
+     <y>248</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>755</x>
+     <y>189</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>AL_GL_para()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>972</x>
+     <y>624</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>982</x>
+     <y>762</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_percentage</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_percentage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1195</x>
+     <y>210</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1147</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>AL_MTW_para()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>940</x>
+     <y>677</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>976</x>
+     <y>831</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>AL_REMTW_para()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1037</x>
+     <y>707</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1143</x>
+     <y>826</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>AL_DT_para()</slot>
+  <slot>AL_RF_para()</slot>
+  <slot>AL_SVM_para()</slot>
+  <slot>AL_MLP_para()</slot>
+  <slot>AL_ET_para()</slot>
+  <slot>openfolder()</slot>
+  <slot>All_Methods_Begin()</slot>
+  <slot>change_percentage()</slot>
+  <slot>AL_GL_para()</slot>
+  <slot>show_previous_page()</slot>
+  <slot>show_next_page()</slot>
+  <slot>AL_MTW_para()</slot>
+  <slot>AL_REMTW_para()</slot>
+ </slots>
+</ui>
