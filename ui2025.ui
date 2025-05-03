@@ -246,7 +246,7 @@ font: 16 px  &quot;Times New Roman&quot;;
 }</string>
     </property>
     <property name="text">
-     <string>v3.0 2025.04.14</string>
+     <string>v3.0 2025.05.03</string>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">
@@ -411,6 +411,9 @@ QPushButton:pressed {
      </item>
      <item>
       <widget class="QPushButton" name="pushButton">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;GroupLasso：基于 L1/L2混合范数正则化的多任务学习模型&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
        <property name="styleSheet">
         <string notr="true">QPushButton {
     border: 1px solid #2b8cbe;           /* 科技蓝边框 */
@@ -441,6 +444,9 @@ QPushButton:pressed {
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_2">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Multitask Wasserstein：基于Wasserstein距离正则化的稀疏多任务回归模型&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
        <property name="styleSheet">
         <string notr="true">QPushButton {
     border: 1px solid #2b8cbe;           /* 科技蓝边框 */
@@ -471,6 +477,9 @@ QPushButton:pressed {
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_3">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Reweighted Multitask Wasserstein：基于Wasserstein距离正则化和L0.5稀疏约束的多任务回归模型&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
        <property name="styleSheet">
         <string notr="true">QPushButton {
     border: 1px solid #2b8cbe;           /* 科技蓝边框 */
@@ -565,7 +574,7 @@ color:red;
 }</string>
        </property>
        <property name="text">
-        <string>Please select a Dataset</string>
+        <string>Please select a Dataset！</string>
        </property>
        <property name="readOnly">
         <bool>true</bool>
@@ -1045,7 +1054,7 @@ color:red;
 }</string>
          </property>
          <property name="text">
-          <string>Please select an Algorithm</string>
+          <string>Please select an Algorithm！</string>
          </property>
         </widget>
        </item>
@@ -1355,7 +1364,7 @@ border-radius:10px;
       <x>10</x>
       <y>440</y>
       <width>42</width>
-      <height>71</height>
+      <height>80</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_6">

@@ -172,7 +172,7 @@ class POP_MTW_para(QMainWindow, Ui_MTW_para, Ui_MainWindow):#mtw算法改
         print("alpha:", alpha)
         print("beta:", beta)
 
-class POP_REMTW_para(QMainWindow, Ui_REMTW_para, Ui_MainWindow):#mtw算法改
+class POP_REMTW_para(QMainWindow, Ui_REMTW_para, Ui_MainWindow):#remtw算法改
     def __init__(self,parent=None):
         super(POP_REMTW_para, self).__init__()
         self.setupUi(self)
