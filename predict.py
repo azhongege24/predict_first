@@ -27,8 +27,8 @@ from ALL_Algorithms.Group_Lasso import group_lasso_predictor
 from ALL_Algorithms.Group_Lasso import group_lasso_plot_and_evaluate
 from ALL_Algorithms.MTW import MTW_Lasso
 from ALL_Algorithms.MTW import mtw_plot_and_evaluate
-from ReMTW import REMTW_Lasso
-from ReMTW import remtw_plot_and_evaluate
+from ALL_Algorithms.ReMTW import REMTW_Lasso
+from ALL_Algorithms.ReMTW import remtw_plot_and_evaluate
 global max_depth, random_state,n_estimators,kernel, C, epsilon
 global hidden_layer_sizes, max_iter,method,n_jobs,alpha,beta
 method = 'NONE'  # 初始化方法为NONE
