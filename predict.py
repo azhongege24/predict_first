@@ -11,22 +11,22 @@ from PyQt5.QtGui import QPixmap
 import sys
 import os
 import scipy.io as sio
-from algorithms1_DT_para import Ui_DT_para
-from algorithms2_RF_para import Ui_RF_para
-from algorithms3_SVM_para import Ui_SVM_para   
-from algorithms4_MLP_para import Ui_MLP_para   
-from algorithms5_ET_para import Ui_ET_para 
-from algorithms6_GL_para import Ui_GL_para  
-from algorithms7_MTW_para import Ui_MTW_para
-from algorithms8_REMTW_para import Ui_REMTW_para
+from ALL_Algorithms.algorithms1_DT_para import Ui_DT_para
+from ALL_Algorithms.algorithms2_RF_para import Ui_RF_para
+from ALL_Algorithms.algorithms3_SVM_para import Ui_SVM_para   
+from ALL_Algorithms.algorithms4_MLP_para import Ui_MLP_para   
+from ALL_Algorithms.algorithms5_ET_para import Ui_ET_para 
+from ALL_Algorithms.algorithms6_GL_para import Ui_GL_para  
+from ALL_Algorithms.algorithms7_MTW_para import Ui_MTW_para
+from ALL_Algorithms.algorithms8_REMTW_para import Ui_REMTW_para
 from PyQt5.QtCore import pyqtSlot
-from Algorithms import multi_task_regression_predictor
-from Algorithms import single_plot_and_evaluate
-from Algorithms import Multi_output_plot_and_evaluate
-from Group_Lasso import group_lasso_predictor
-from Group_Lasso import group_lasso_plot_and_evaluate
-from MTW import MTW_Lasso
-from MTW import mtw_plot_and_evaluate
+from ALL_Algorithms.Algorithms import multi_task_regression_predictor
+from ALL_Algorithms.Algorithms import single_plot_and_evaluate
+from ALL_Algorithms.Algorithms import Multi_output_plot_and_evaluate
+from ALL_Algorithms.Group_Lasso import group_lasso_predictor
+from ALL_Algorithms.Group_Lasso import group_lasso_plot_and_evaluate
+from ALL_Algorithms.MTW import MTW_Lasso
+from ALL_Algorithms.MTW import mtw_plot_and_evaluate
 from ReMTW import REMTW_Lasso
 from ReMTW import remtw_plot_and_evaluate
 global max_depth, random_state,n_estimators,kernel, C, epsilon
