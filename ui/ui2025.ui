@@ -513,111 +513,6 @@ QPushButton:pressed {
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>110</y>
-      <width>861</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="font">
-        <font>
-         <family>楷体</family>
-         <pointsize>16</pointsize>
-         <weight>75</weight>
-         <italic>false</italic>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QLabel{
-
-
-
-padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
-color:rgb(0, 0, 0);		/*字体颜色*/
-	font: 16pt &quot;楷体&quot;;
-
-font:bold;		/*设置按钮文字和大小*/
-}</string>
-       </property>
-       <property name="text">
-        <string>数据集:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="lineEdit_dataset_file">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Times New Roman</family>
-         <pointsize>14</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QLineEdit{
-
-border:1px solid black; 
-border-radius:10px; 
-color:red;
-
-}</string>
-       </property>
-       <property name="text">
-        <string>Please select a Dataset！</string>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="lineEdit_dataset_nums">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>250</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Times New Roman</family>
-         <pointsize>12</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QLineEdit{
-
-border:1px solid black; 
-border-radius:10px; 
-
-}</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
       <x>1079</x>
       <y>300</y>
       <width>251</width>
@@ -1418,6 +1313,135 @@ border-radius:10px;
      </item>
     </layout>
    </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>120</y>
+      <width>100</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>50</width>
+      <height>30</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>100</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <family>楷体</family>
+      <pointsize>16</pointsize>
+      <weight>75</weight>
+      <italic>false</italic>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel{
+
+
+
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 16pt &quot;楷体&quot;;
+
+font:bold;		/*设置按钮文字和大小*/
+}</string>
+    </property>
+    <property name="text">
+     <string>数据集:</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>168</x>
+      <y>120</y>
+      <width>751</width>
+      <height>42</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLineEdit" name="lineEdit_dataset_file">
+       <property name="minimumSize">
+        <size>
+         <width>400</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>500</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>14</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLineEdit{
+
+border:1px solid black; 
+border-radius:10px; 
+color:red;
+
+}</string>
+       </property>
+       <property name="text">
+        <string>Please select a Dataset！</string>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_dataset_nums">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>400</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLineEdit{
+
+border:1px solid black; 
+border-radius:10px; 
+
+}</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
@@ -1600,12 +1624,28 @@ border-radius:10px;
    <slot>AL_REMTW_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1037</x>
-     <y>707</y>
+     <x>1038</x>
+     <y>764</y>
     </hint>
     <hint type="destinationlabel">
      <x>1143</x>
      <y>826</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_vibration_analysis</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>AL_VA_para()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>120</x>
+     <y>234</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>19</x>
+     <y>204</y>
     </hint>
    </hints>
   </connection>
@@ -1624,5 +1664,6 @@ border-radius:10px;
   <slot>show_next_page()</slot>
   <slot>AL_MTW_para()</slot>
   <slot>AL_REMTW_para()</slot>
+  <slot>AL_VA_para()</slot>
  </slots>
 </ui>

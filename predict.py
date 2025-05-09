@@ -11,6 +11,7 @@ from PyQt5.QtGui import QPixmap
 import sys
 import os
 import scipy.io as sio
+from VA_para import Ui_VA_para
 from ALL_Algorithms.algorithms1_DT_para import Ui_DT_para
 from ALL_Algorithms.algorithms2_RF_para import Ui_RF_para
 from ALL_Algorithms.algorithms3_SVM_para import Ui_SVM_para   
@@ -33,6 +34,64 @@ global max_depth, random_state,n_estimators,kernel, C, epsilon
 global hidden_layer_sizes, max_iter,method,n_jobs,alpha,beta
 method = 'NONE'  # 初始化方法为NONE
 # 读取输入参数
+class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
+    def __init__(self, parent=None):
+        super(POP_VA_para, self).__init__()
+        self.setupUi(self)
+        self.parent_window = parent#保存主窗口的引用
+        self.lastSelectedPath = ""
+    
+    def Confirm(self):
+         # 读取输入参数
+        global sampling_rate,VA_inpath,VA_outpath
+        sampling_rate = self.spinBox_sampling_rate.text()
+        VA_inpath = self.lineEdit_VA_inputpath.text()
+        VA_outpath = self.lineEdit_VA_outputpath.text()
+        if self.parent_window:
+            self.parent_window.lineEdit_Algorithm_name.setText("Decision Tree")
+
+        print("sampling_rate:", sampling_rate) 
+        print("VA_inpath:", VA_inpath)
+        print("VA_outpath:", VA_outpath)
+    
+    def open_VA_folder(self):
+        '''新内容取消的时候不会改变linedit'''
+        file_filter = "Data Files (*.csv *.xls *.xlsx *.mat);;Excel Files (*.xls *.xlsx);;MATLAB Files (*.mat);;CSV Files (*.csv);;All Files(*.*)"
+        initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
+        self.fileName, _ = QFileDialog.getOpenFileName(
+            self, "选取文件", initial_dir, file_filter
+        )
+
+        if not self.fileName:  # 用户取消选择
+            return  # 直接返回，不改变lineEdit的内容
+
+        # 更新上次路径并显示到lineEdit
+        self.lastSelectedPath = self.fileName
+        self.lineEdit_VA_inputpath.setText(self.fileName)
+        print("选择的文件:", self.fileName)
+        if not os.path.isfile(self.fileName):
+            self.lineEdit_VA_inputpath.setText("File path doesn't exist")
+            return
+
+    def save_VA_folder(self):
+        '''新内容取消的时候不会改变linedit'''
+        file_filter = "Data Files (*.csv *.xls *.xlsx *.mat);;Excel Files (*.xls *.xlsx);;MATLAB Files (*.mat);;CSV Files (*.csv);;All Files(*.*)"
+        initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
+        self.fileName, _ = QFileDialog.getSaveFileName(
+            self, "选取文件", initial_dir, file_filter
+        )
+
+        if not self.fileName:  # 用户取消选择
+            return 
+        # 更新上次路径并显示到lineEdit
+        self.lastSelectedPath = self.fileName
+        self.lineEdit_VA_outputpath.setText(self.fileName)
+        print("选择的文件:", self.fileName)
+        if not os.path.isfile(self.fileName):
+            self.lineEdit_VA_outputpath.setText("File path doesn't exist")
+            return
+
+
 class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):
     def __init__(self, parent=None):
         super(POP_DT_para, self).__init__()
@@ -238,6 +297,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
 
     @pyqtSlot()
+    def AL_VA_para(self):
+    
+        self.ui_pop = POP_VA_para(self)
+        self.ui_pop.show()
+
     def AL_DT_para(self):
       
         self.ui_pop = POP_DT_para(self)

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui2025.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\ui2025.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -353,75 +353,14 @@ class Ui_MainWindow(object):
         self.pushButton_3.setObjectName("pushButton_3")
         self.verticalLayout.addWidget(self.pushButton_3)
         self.layoutWidget2 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget2.setGeometry(QtCore.QRect(60, 110, 861, 61))
+        self.layoutWidget2.setGeometry(QtCore.QRect(1079, 300, 251, 471))
         self.layoutWidget2.setObjectName("layoutWidget2")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget2)
-        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.label = QtWidgets.QLabel(self.layoutWidget2)
-        font = QtGui.QFont()
-        font.setFamily("楷体")
-        font.setPointSize(16)
-        font.setBold(True)
-        font.setItalic(False)
-        font.setWeight(75)
-        self.label.setFont(font)
-        self.label.setStyleSheet("QLabel{\n"
-"\n"
-"\n"
-"\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 16pt \"楷体\";\n"
-"\n"
-"font:bold;        /*设置按钮文字和大小*/\n"
-"}")
-        self.label.setObjectName("label")
-        self.horizontalLayout_2.addWidget(self.label)
-        self.lineEdit_dataset_file = QtWidgets.QLineEdit(self.layoutWidget2)
-        self.lineEdit_dataset_file.setMinimumSize(QtCore.QSize(0, 40))
-        font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(14)
-        font.setBold(True)
-        font.setWeight(75)
-        self.lineEdit_dataset_file.setFont(font)
-        self.lineEdit_dataset_file.setStyleSheet("QLineEdit{\n"
-"\n"
-"border:1px solid black; \n"
-"border-radius:10px; \n"
-"color:red;\n"
-"\n"
-"}")
-        self.lineEdit_dataset_file.setReadOnly(True)
-        self.lineEdit_dataset_file.setObjectName("lineEdit_dataset_file")
-        self.horizontalLayout_2.addWidget(self.lineEdit_dataset_file)
-        self.lineEdit_dataset_nums = QtWidgets.QLineEdit(self.layoutWidget2)
-        self.lineEdit_dataset_nums.setMinimumSize(QtCore.QSize(0, 40))
-        self.lineEdit_dataset_nums.setMaximumSize(QtCore.QSize(250, 16777215))
-        font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.lineEdit_dataset_nums.setFont(font)
-        self.lineEdit_dataset_nums.setStyleSheet("QLineEdit{\n"
-"\n"
-"border:1px solid black; \n"
-"border-radius:10px; \n"
-"\n"
-"}")
-        self.lineEdit_dataset_nums.setObjectName("lineEdit_dataset_nums")
-        self.horizontalLayout_2.addWidget(self.lineEdit_dataset_nums)
-        self.layoutWidget3 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget3.setGeometry(QtCore.QRect(1079, 300, 251, 471))
-        self.layoutWidget3.setObjectName("layoutWidget3")
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.layoutWidget3)
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.layoutWidget2)
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.label_3 = QtWidgets.QLabel(self.layoutWidget3)
+        self.label_3 = QtWidgets.QLabel(self.layoutWidget2)
         self.label_3.setStyleSheet("QLabel{\n"
 "\n"
 "   text-align: center;    \n"
@@ -435,13 +374,13 @@ class Ui_MainWindow(object):
 "}")
         self.label_3.setObjectName("label_3")
         self.verticalLayout_2.addWidget(self.label_3)
-        self.listWidget_inputfeature = QtWidgets.QListWidget(self.layoutWidget3)
+        self.listWidget_inputfeature = QtWidgets.QListWidget(self.layoutWidget2)
         self.listWidget_inputfeature.setAcceptDrops(True)
         self.listWidget_inputfeature.setDragEnabled(True)
         self.listWidget_inputfeature.setDefaultDropAction(QtCore.Qt.MoveAction)
         self.listWidget_inputfeature.setObjectName("listWidget_inputfeature")
         self.verticalLayout_2.addWidget(self.listWidget_inputfeature)
-        self.pushButton_inputall = QtWidgets.QPushButton(self.layoutWidget3)
+        self.pushButton_inputall = QtWidgets.QPushButton(self.layoutWidget2)
         self.pushButton_inputall.setMinimumSize(QtCore.QSize(75, 30))
         font = QtGui.QFont()
         font.setFamily("微软雅黑 Light")
@@ -454,7 +393,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addLayout(self.verticalLayout_2)
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.label_4 = QtWidgets.QLabel(self.layoutWidget3)
+        self.label_4 = QtWidgets.QLabel(self.layoutWidget2)
         self.label_4.setStyleSheet("QLabel{\n"
 "\n"
 "\n"
@@ -470,13 +409,13 @@ class Ui_MainWindow(object):
 "}")
         self.label_4.setObjectName("label_4")
         self.verticalLayout_3.addWidget(self.label_4)
-        self.listWidget_outputfeature = QtWidgets.QListWidget(self.layoutWidget3)
+        self.listWidget_outputfeature = QtWidgets.QListWidget(self.layoutWidget2)
         self.listWidget_outputfeature.setAcceptDrops(True)
         self.listWidget_outputfeature.setDragEnabled(True)
         self.listWidget_outputfeature.setDefaultDropAction(QtCore.Qt.MoveAction)
         self.listWidget_outputfeature.setObjectName("listWidget_outputfeature")
         self.verticalLayout_3.addWidget(self.listWidget_outputfeature)
-        self.pushButton_outputall = QtWidgets.QPushButton(self.layoutWidget3)
+        self.pushButton_outputall = QtWidgets.QPushButton(self.layoutWidget2)
         self.pushButton_outputall.setMinimumSize(QtCore.QSize(75, 30))
         font = QtGui.QFont()
         font.setFamily("微软雅黑 Light")
@@ -487,15 +426,15 @@ class Ui_MainWindow(object):
         self.pushButton_outputall.setObjectName("pushButton_outputall")
         self.verticalLayout_3.addWidget(self.pushButton_outputall)
         self.horizontalLayout_3.addLayout(self.verticalLayout_3)
-        self.layoutWidget4 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget4.setGeometry(QtCore.QRect(971, 209, 370, 72))
-        self.layoutWidget4.setObjectName("layoutWidget4")
-        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.layoutWidget4)
+        self.layoutWidget3 = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget3.setGeometry(QtCore.QRect(971, 209, 370, 72))
+        self.layoutWidget3.setObjectName("layoutWidget3")
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.layoutWidget3)
         self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
-        self.label_train_feature = QtWidgets.QLabel(self.layoutWidget4)
+        self.label_train_feature = QtWidgets.QLabel(self.layoutWidget3)
         self.label_train_feature.setMinimumSize(QtCore.QSize(0, 30))
         self.label_train_feature.setStyleSheet("QLabel{\n"
 "\n"
@@ -510,7 +449,7 @@ class Ui_MainWindow(object):
 "}")
         self.label_train_feature.setObjectName("label_train_feature")
         self.horizontalLayout_5.addWidget(self.label_train_feature)
-        self.spinBox_train_start = QtWidgets.QSpinBox(self.layoutWidget4)
+        self.spinBox_train_start = QtWidgets.QSpinBox(self.layoutWidget3)
         self.spinBox_train_start.setMinimumSize(QtCore.QSize(120, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -522,7 +461,7 @@ class Ui_MainWindow(object):
         self.spinBox_train_start.setStyleSheet("")
         self.spinBox_train_start.setObjectName("spinBox_train_start")
         self.horizontalLayout_5.addWidget(self.spinBox_train_start)
-        self.label_5 = QtWidgets.QLabel(self.layoutWidget4)
+        self.label_5 = QtWidgets.QLabel(self.layoutWidget3)
         self.label_5.setMaximumSize(QtCore.QSize(10, 16777215))
         self.label_5.setStyleSheet("QLabel{\n"
 "\n"
@@ -537,7 +476,7 @@ class Ui_MainWindow(object):
 "}")
         self.label_5.setObjectName("label_5")
         self.horizontalLayout_5.addWidget(self.label_5)
-        self.spinBox_train_end = QtWidgets.QSpinBox(self.layoutWidget4)
+        self.spinBox_train_end = QtWidgets.QSpinBox(self.layoutWidget3)
         self.spinBox_train_end.setMinimumSize(QtCore.QSize(120, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -554,7 +493,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.addLayout(self.horizontalLayout_5)
         self.horizontalLayout_6 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
-        self.label_test_feature = QtWidgets.QLabel(self.layoutWidget4)
+        self.label_test_feature = QtWidgets.QLabel(self.layoutWidget3)
         self.label_test_feature.setMinimumSize(QtCore.QSize(0, 30))
         self.label_test_feature.setStyleSheet("QLabel{\n"
 "\n"
@@ -569,7 +508,7 @@ class Ui_MainWindow(object):
 "}")
         self.label_test_feature.setObjectName("label_test_feature")
         self.horizontalLayout_6.addWidget(self.label_test_feature)
-        self.spinBox_test_start = QtWidgets.QSpinBox(self.layoutWidget4)
+        self.spinBox_test_start = QtWidgets.QSpinBox(self.layoutWidget3)
         self.spinBox_test_start.setMinimumSize(QtCore.QSize(120, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -578,7 +517,7 @@ class Ui_MainWindow(object):
         self.spinBox_test_start.setMaximum(999999)
         self.spinBox_test_start.setObjectName("spinBox_test_start")
         self.horizontalLayout_6.addWidget(self.spinBox_test_start)
-        self.label_6 = QtWidgets.QLabel(self.layoutWidget4)
+        self.label_6 = QtWidgets.QLabel(self.layoutWidget3)
         self.label_6.setMaximumSize(QtCore.QSize(10, 16777215))
         self.label_6.setStyleSheet("QLabel{\n"
 "\n"
@@ -593,7 +532,7 @@ class Ui_MainWindow(object):
 "}")
         self.label_6.setObjectName("label_6")
         self.horizontalLayout_6.addWidget(self.label_6)
-        self.spinBox_test_end = QtWidgets.QSpinBox(self.layoutWidget4)
+        self.spinBox_test_end = QtWidgets.QSpinBox(self.layoutWidget3)
         self.spinBox_test_end.setMinimumSize(QtCore.QSize(120, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -608,15 +547,15 @@ class Ui_MainWindow(object):
         self.spinBox_test_end.setObjectName("spinBox_test_end")
         self.horizontalLayout_6.addWidget(self.spinBox_test_end)
         self.verticalLayout_4.addLayout(self.horizontalLayout_6)
-        self.layoutWidget5 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget5.setGeometry(QtCore.QRect(40, 760, 891, 81))
-        self.layoutWidget5.setObjectName("layoutWidget5")
-        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.layoutWidget5)
+        self.layoutWidget4 = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget4.setGeometry(QtCore.QRect(40, 760, 891, 81))
+        self.layoutWidget4.setObjectName("layoutWidget4")
+        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.layoutWidget4)
         self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
-        self.label_AL = QtWidgets.QLabel(self.layoutWidget5)
+        self.label_AL = QtWidgets.QLabel(self.layoutWidget4)
         self.label_AL.setMinimumSize(QtCore.QSize(60, 30))
         self.label_AL.setMaximumSize(QtCore.QSize(90, 30))
         font = QtGui.QFont()
@@ -638,7 +577,7 @@ class Ui_MainWindow(object):
 "}")
         self.label_AL.setObjectName("label_AL")
         self.horizontalLayout_7.addWidget(self.label_AL)
-        self.lineEdit_Algorithm_name = QtWidgets.QLineEdit(self.layoutWidget5)
+        self.lineEdit_Algorithm_name = QtWidgets.QLineEdit(self.layoutWidget4)
         self.lineEdit_Algorithm_name.setMinimumSize(QtCore.QSize(0, 30))
         self.lineEdit_Algorithm_name.setMaximumSize(QtCore.QSize(400, 16777215))
         font = QtGui.QFont()
@@ -657,7 +596,7 @@ class Ui_MainWindow(object):
 "}")
         self.lineEdit_Algorithm_name.setObjectName("lineEdit_Algorithm_name")
         self.horizontalLayout_7.addWidget(self.lineEdit_Algorithm_name)
-        self.label_state = QtWidgets.QLabel(self.layoutWidget5)
+        self.label_state = QtWidgets.QLabel(self.layoutWidget4)
         self.label_state.setMinimumSize(QtCore.QSize(60, 30))
         self.label_state.setMaximumSize(QtCore.QSize(90, 30))
         font = QtGui.QFont()
@@ -679,7 +618,7 @@ class Ui_MainWindow(object):
 "}")
         self.label_state.setObjectName("label_state")
         self.horizontalLayout_7.addWidget(self.label_state)
-        self.lineEdit_state = QtWidgets.QLineEdit(self.layoutWidget5)
+        self.lineEdit_state = QtWidgets.QLineEdit(self.layoutWidget4)
         self.lineEdit_state.setMaximumSize(QtCore.QSize(250, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -698,7 +637,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_5.addLayout(self.horizontalLayout_7)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.label_MSE = QtWidgets.QLabel(self.layoutWidget5)
+        self.label_MSE = QtWidgets.QLabel(self.layoutWidget4)
         self.label_MSE.setMinimumSize(QtCore.QSize(90, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -720,7 +659,7 @@ class Ui_MainWindow(object):
 "}")
         self.label_MSE.setObjectName("label_MSE")
         self.horizontalLayout.addWidget(self.label_MSE)
-        self.lineEdit_MSE = QtWidgets.QLineEdit(self.layoutWidget5)
+        self.lineEdit_MSE = QtWidgets.QLineEdit(self.layoutWidget4)
         self.lineEdit_MSE.setMinimumSize(QtCore.QSize(120, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -737,7 +676,7 @@ class Ui_MainWindow(object):
         self.lineEdit_MSE.setReadOnly(True)
         self.lineEdit_MSE.setObjectName("lineEdit_MSE")
         self.horizontalLayout.addWidget(self.lineEdit_MSE)
-        self.label_R2 = QtWidgets.QLabel(self.layoutWidget5)
+        self.label_R2 = QtWidgets.QLabel(self.layoutWidget4)
         self.label_R2.setMinimumSize(QtCore.QSize(90, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -760,7 +699,7 @@ class Ui_MainWindow(object):
 "}")
         self.label_R2.setObjectName("label_R2")
         self.horizontalLayout.addWidget(self.label_R2)
-        self.lineEdit_R2 = QtWidgets.QLineEdit(self.layoutWidget5)
+        self.lineEdit_R2 = QtWidgets.QLineEdit(self.layoutWidget4)
         self.lineEdit_R2.setMinimumSize(QtCore.QSize(120, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -777,7 +716,7 @@ class Ui_MainWindow(object):
         self.lineEdit_R2.setReadOnly(True)
         self.lineEdit_R2.setObjectName("lineEdit_R2")
         self.horizontalLayout.addWidget(self.lineEdit_R2)
-        self.label_DEVICE = QtWidgets.QLabel(self.layoutWidget5)
+        self.label_DEVICE = QtWidgets.QLabel(self.layoutWidget4)
         self.label_DEVICE.setMinimumSize(QtCore.QSize(90, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -799,7 +738,7 @@ class Ui_MainWindow(object):
 "}")
         self.label_DEVICE.setObjectName("label_DEVICE")
         self.horizontalLayout.addWidget(self.label_DEVICE)
-        self.lineEdit_DEVICE = QtWidgets.QLineEdit(self.layoutWidget5)
+        self.lineEdit_DEVICE = QtWidgets.QLineEdit(self.layoutWidget4)
         self.lineEdit_DEVICE.setMinimumSize(QtCore.QSize(120, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -826,13 +765,13 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.checkBox_percentage.setFont(font)
         self.checkBox_percentage.setObjectName("checkBox_percentage")
-        self.layoutWidget6 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget6.setGeometry(QtCore.QRect(10, 440, 42, 80))
-        self.layoutWidget6.setObjectName("layoutWidget6")
-        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.layoutWidget6)
+        self.layoutWidget5 = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget5.setGeometry(QtCore.QRect(10, 440, 42, 80))
+        self.layoutWidget5.setObjectName("layoutWidget5")
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.layoutWidget5)
         self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
-        self.pushButton_top = QtWidgets.QPushButton(self.layoutWidget6)
+        self.pushButton_top = QtWidgets.QPushButton(self.layoutWidget5)
         self.pushButton_top.setMaximumSize(QtCore.QSize(40, 16777215))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -842,7 +781,7 @@ class Ui_MainWindow(object):
         self.pushButton_top.setFont(font)
         self.pushButton_top.setObjectName("pushButton_top")
         self.verticalLayout_6.addWidget(self.pushButton_top)
-        self.pushButton_bottom = QtWidgets.QPushButton(self.layoutWidget6)
+        self.pushButton_bottom = QtWidgets.QPushButton(self.layoutWidget5)
         self.pushButton_bottom.setMaximumSize(QtCore.QSize(40, 16777215))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -852,6 +791,70 @@ class Ui_MainWindow(object):
         self.pushButton_bottom.setFont(font)
         self.pushButton_bottom.setObjectName("pushButton_bottom")
         self.verticalLayout_6.addWidget(self.pushButton_bottom)
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(60, 120, 100, 40))
+        self.label.setMinimumSize(QtCore.QSize(50, 30))
+        self.label.setMaximumSize(QtCore.QSize(100, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("楷体")
+        font.setPointSize(16)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.label.setFont(font)
+        self.label.setStyleSheet("QLabel{\n"
+"\n"
+"\n"
+"\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 16pt \"楷体\";\n"
+"\n"
+"font:bold;        /*设置按钮文字和大小*/\n"
+"}")
+        self.label.setObjectName("label")
+        self.layoutWidget6 = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget6.setGeometry(QtCore.QRect(168, 120, 751, 42))
+        self.layoutWidget6.setObjectName("layoutWidget6")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget6)
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.lineEdit_dataset_file = QtWidgets.QLineEdit(self.layoutWidget6)
+        self.lineEdit_dataset_file.setMinimumSize(QtCore.QSize(400, 40))
+        self.lineEdit_dataset_file.setMaximumSize(QtCore.QSize(500, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lineEdit_dataset_file.setFont(font)
+        self.lineEdit_dataset_file.setStyleSheet("QLineEdit{\n"
+"\n"
+"border:1px solid black; \n"
+"border-radius:10px; \n"
+"color:red;\n"
+"\n"
+"}")
+        self.lineEdit_dataset_file.setReadOnly(True)
+        self.lineEdit_dataset_file.setObjectName("lineEdit_dataset_file")
+        self.horizontalLayout_2.addWidget(self.lineEdit_dataset_file)
+        self.lineEdit_dataset_nums = QtWidgets.QLineEdit(self.layoutWidget6)
+        self.lineEdit_dataset_nums.setMinimumSize(QtCore.QSize(0, 40))
+        self.lineEdit_dataset_nums.setMaximumSize(QtCore.QSize(400, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lineEdit_dataset_nums.setFont(font)
+        self.lineEdit_dataset_nums.setStyleSheet("QLineEdit{\n"
+"\n"
+"border:1px solid black; \n"
+"border-radius:10px; \n"
+"\n"
+"}")
+        self.lineEdit_dataset_nums.setObjectName("lineEdit_dataset_nums")
+        self.horizontalLayout_2.addWidget(self.lineEdit_dataset_nums)
         MainWindow.setCentralWidget(self.centralwidget)
         self.toolBar = QtWidgets.QToolBar(MainWindow)
         self.toolBar.setObjectName("toolBar")
@@ -869,6 +872,7 @@ class Ui_MainWindow(object):
         self.checkBox_percentage.clicked.connect(MainWindow.change_percentage) # type: ignore
         self.pushButton_2.clicked.connect(MainWindow.AL_MTW_para) # type: ignore
         self.pushButton_3.clicked.connect(MainWindow.AL_REMTW_para) # type: ignore
+        self.pushButton_vibration_analysis.clicked.connect(MainWindow.AL_VA_para) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -897,8 +901,6 @@ class Ui_MainWindow(object):
         self.pushButton_2.setText(_translate("MainWindow", "MTW"))
         self.pushButton_3.setToolTip(_translate("MainWindow", "<html><head/><body><p>Reweighted Multitask Wasserstein：基于Wasserstein距离正则化和L0.5稀疏约束的多任务回归模型</p></body></html>"))
         self.pushButton_3.setText(_translate("MainWindow", "REMTW"))
-        self.label.setText(_translate("MainWindow", "数据集:"))
-        self.lineEdit_dataset_file.setText(_translate("MainWindow", "Please select a Dataset！"))
         self.label_3.setText(_translate("MainWindow", "输入特征"))
         self.pushButton_inputall.setText(_translate("MainWindow", "全选"))
         self.label_4.setText(_translate("MainWindow", "输出特征"))
@@ -923,4 +925,6 @@ class Ui_MainWindow(object):
         self.pushButton_top.setText(_translate("MainWindow", "↑"))
         self.pushButton_bottom.setToolTip(_translate("MainWindow", "<html><head/><body><p>下翻页</p></body></html>"))
         self.pushButton_bottom.setText(_translate("MainWindow", "↓"))
+        self.label.setText(_translate("MainWindow", "数据集:"))
+        self.lineEdit_dataset_file.setText(_translate("MainWindow", "Please select a Dataset！"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
