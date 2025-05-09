@@ -73,29 +73,8 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         if not os.path.isfile(self.fileName):
             self.lineEdit_VA_inputpath.setText("File path doesn't exist")
             return
+
     def save_VA_folder(self):
-        '''保存文件并记住文件夹路径'''
-        file_filter = "Data Files (*.csv *.xls *.xlsx *.mat);;Excel Files (*.xls *.xlsx);;MATLAB Files (*.mat);;CSV Files (*.csv);;All Files(*.*)"
-        
-        # 初始化QSettings（保存到配置文件）
-        settings = QSettings("YourCompany", "YourApp")
-        settings.setIniCodec("UTF-8")  # 防止中文乱码
-        
-        # 读取上次保存的目录，若不存在则用默认路径
-        default_dir = settings.value("LastSaveDir", "data/")  # "data/"是默认路径
-        
-        # 弹出保存对话框
-        fileName, _ = QFileDialog.getSaveFileName(
-            self, "保存文件", default_dir, file_filter
-        )
-        
-        if fileName:  # 用户确认保存
-            # 更新配置文件中的路径（只保存目录部分）
-            settings.setValue("LastSaveDir", os.path.dirname(fileName))
-            self.lineEdit_VA_outputpath.setText(fileName)
-        else:  # 用户取消操作
-            return
-    # def save_VA_folder(self):
         '''新内容取消的时候不会改变linedit'''
         file_filter = "Data Files (*.csv *.xls *.xlsx *.mat);;Excel Files (*.xls *.xlsx);;MATLAB Files (*.mat);;CSV Files (*.csv);;All Files(*.*)"
         initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"

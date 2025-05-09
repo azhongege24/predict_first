@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1414</width>
+    <width>1423</width>
     <height>877</height>
    </rect>
   </property>
@@ -25,7 +25,7 @@ background-color:;	/*背景颜色*/
    <widget class="QGraphicsView" name="graphicsView">
     <property name="geometry">
      <rect>
-      <x>110</x>
+      <x>120</x>
       <y>280</y>
       <width>861</width>
       <height>471</height>
@@ -45,7 +45,7 @@ border:1px solid  black;   /*边框的粗细，颜色*/
    <widget class="QLabel" name="label_headline">
     <property name="geometry">
      <rect>
-      <x>570</x>
+      <x>580</x>
       <y>30</y>
       <width>391</width>
       <height>61</height>
@@ -70,7 +70,7 @@ font: 30px;		/*设置按钮文字和大小*/
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>110</x>
+      <x>120</x>
       <y>170</y>
       <width>861</width>
       <height>108</height>
@@ -246,13 +246,13 @@ font: 16 px  &quot;Times New Roman&quot;;
 }</string>
     </property>
     <property name="text">
-     <string>v3.0 2025.05.03</string>
+     <string>v3.0 2025.05.09</string>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>990</x>
+      <x>1000</x>
       <y>260</y>
       <width>131</width>
       <height>471</height>
@@ -551,7 +551,7 @@ QPushButton:pressed {
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>1129</x>
+      <x>1139</x>
       <y>260</y>
       <width>251</width>
       <height>471</height>
@@ -681,7 +681,7 @@ font: bold 16px;		/*设置按钮文字和大小*/
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>1021</x>
+      <x>999</x>
       <y>173</y>
       <width>370</width>
       <height>72</height>
@@ -902,7 +902,7 @@ font:bold 16px;		/*设置按钮文字和大小*/
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>100</x>
       <y>760</y>
       <width>891</width>
       <height>81</height>
@@ -1273,7 +1273,7 @@ border-radius:10px;
    <widget class="QCheckBox" name="checkBox_percentage">
     <property name="geometry">
      <rect>
-      <x>1183</x>
+      <x>1161</x>
       <y>136</y>
       <width>106</width>
       <height>16</height>
@@ -1302,7 +1302,7 @@ border-radius:10px;
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>110</x>
+      <x>120</x>
       <y>120</y>
       <width>100</width>
       <height>40</height>
@@ -1348,7 +1348,7 @@ font:bold;		/*设置按钮文字和大小*/
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>218</x>
+      <x>228</x>
       <y>120</y>
       <width>751</width>
       <height>42</height>
@@ -1431,7 +1431,7 @@ border-radius:10px;
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>40</x>
       <y>410</y>
       <width>54</width>
       <height>12</height>
@@ -1444,7 +1444,7 @@ border-radius:10px;
    <widget class="QLabel" name="label_10">
     <property name="geometry">
      <rect>
-      <x>1022</x>
+      <x>1000</x>
       <y>122</y>
       <width>155</width>
       <height>44</height>
@@ -1470,7 +1470,7 @@ qproperty-alignment: 'AlignCenter';
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>280</y>
       <width>90</width>
       <height>81</height>
@@ -1554,15 +1554,21 @@ qproperty-alignment: 'AlignCenter';
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>400</y>
+      <x>20</x>
+      <y>380</y>
       <width>94</width>
-      <height>150</height>
+      <height>261</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_7">
      <item>
       <widget class="QLabel" name="label_9">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>50</height>
+        </size>
+       </property>
        <property name="styleSheet">
         <string notr="true">QLabel {
 
@@ -1582,7 +1588,45 @@ qproperty-alignment: 'AlignCenter';
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="pushButton_6">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: 1px solid #8B5A2B;  
+    border-radius: 15px;
+    padding: 2px 4px;
+    background-color: #D2B48C;  /* 浅卡其色，柔和自然 */
+    color: #5C4033;            /* 深棕文字，类似学术皮革色 */
+    font: bold 14pt &quot;微软雅黑&quot;; /* 中文黑体更正式 */
+    min-width: 80px;
+    min-height: 40px;
+}
+QPushButton:hover {
+    background-color: #A0522D;  /* 悬停转为红棕，温暖但不刺眼 */
+    color: #FFFFFF;
+}
+QPushButton:pressed {
+    background-color: #5C4033;  /* 深棕按压，模拟墨水质感 */
+}</string>
+       </property>
+       <property name="text">
+        <string>预览数据</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="pushButton_4">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>40</height>
+        </size>
+       </property>
        <property name="styleSheet">
         <string notr="true">QPushButton {
     border: 1px solid #8B5A2B;  
@@ -1609,6 +1653,12 @@ QPushButton:pressed {
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_5">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>40</height>
+        </size>
+       </property>
        <property name="styleSheet">
         <string notr="true">QPushButton {
     border: 1px solid #8B5A2B;  

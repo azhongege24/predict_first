@@ -1,3 +1,4 @@
+from matplotlib import pyplot as plt
 import numpy as np
 from scipy import signal
 from scipy.fft import fft, fftfreq
@@ -93,6 +94,68 @@ class VibrationAnalyzer:
                 freq = 30 + i * 20
                 data[f'group_{i+1}'] = 0.5 * np.sin(2 * np.pi * freq * t) + 0.1 * np.random.normal(size=num_samples)
             return data
+    def visualize_data(self, vibration_data, psd_result=None):
+        """
+        可视化振动数据和 PSD 分析结果
+        :param vibration_data: 振动数据(单组或多组)
+        :param psd_result: PSD 分析结果(可选)
+        """
+        if isinstance(vibration_data, dict):
+            # 多组数据可视化
+            for name, data in vibration_data.items():
+                plt.figure(figsize=(10, 4))
+                
+                # 绘制振动数据
+                plt.subplot(1, 2, 1)
+                t = np.linspace(0, len(data) / self.sampling_rate, len(data))
+                plt.plot(t, data, label=f'{name} - Raw Data')
+                plt.xlabel('Time (s)')
+                plt.ylabel('Amplitude')
+                plt.title(f'{name} - Vibration Data')
+                plt.legend()
+                plt.grid()
+
+                # 绘制 PSD 分析结果
+                if psd_result and name in psd_result:
+                    plt.subplot(1, 2, 2)
+                    frequencies = psd_result[name]['frequencies']
+                    psd = psd_result[name]['psd']
+                    plt.semilogy(frequencies, psd, label=f'{name} - PSD')
+                    plt.xlabel('Frequency (Hz)')
+                    plt.ylabel('PSD')
+                    plt.title(f'{name} - Power Spectral Density')
+                    plt.legend()
+                    plt.grid()
+
+                plt.tight_layout()
+                plt.show()
+        else:
+            # 单组数据可视化
+            plt.figure(figsize=(10, 4))
+            
+            # 绘制振动数据
+            plt.subplot(1, 2, 1)
+            t = np.linspace(0, len(vibration_data) / self.sampling_rate, len(vibration_data))
+            plt.plot(t, vibration_data, label='Raw Data')
+            plt.xlabel('Time (s)')
+            plt.ylabel('Amplitude')
+            plt.title('Vibration Data')
+            plt.legend()
+            plt.grid()
+
+            # 绘制 PSD 分析结果
+            if psd_result:
+                frequencies, psd = psd_result
+                plt.subplot(1, 2, 2)
+                plt.semilogy(frequencies, psd, label='PSD')
+                plt.xlabel('Frequency (Hz)')
+                plt.ylabel('PSD')
+                plt.title('Power Spectral Density')
+                plt.legend()
+                plt.grid()
+
+            plt.tight_layout()
+            plt.show()    
         
 if __name__ == "__main__":
     # 创建分析器实例
@@ -100,9 +163,11 @@ if __name__ == "__main__":
             # 测试单组数据
     single_data = analyzer.generate_test_data(num_groups=1)
     f, psd = analyzer.calculate_psd(single_data)
+    analyzer.visualize_data(single_data, psd_result=(f, psd))
     analyzer.analyze_and_save(single_data, 'Vibration_Analyzer_data/single_result.csv', format='csv')
 
     # 测试多组数据
     multi_data = analyzer.generate_test_data(num_groups=3)
     results = analyzer.calculate_psd(multi_data)
+    analyzer.visualize_data(multi_data, psd_result=results)
     analyzer.analyze_and_save(multi_data, 'Vibration_Analyzer_data/multi_result.csv', format='csv')
