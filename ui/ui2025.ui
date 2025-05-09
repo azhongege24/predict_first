@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1404</width>
+    <width>1414</width>
     <height>877</height>
    </rect>
   </property>
@@ -25,7 +25,7 @@ background-color:;	/*背景颜色*/
    <widget class="QGraphicsView" name="graphicsView">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>110</x>
       <y>280</y>
       <width>861</width>
       <height>471</height>
@@ -45,7 +45,7 @@ border:1px solid  black;   /*边框的粗细，颜色*/
    <widget class="QLabel" name="label_headline">
     <property name="geometry">
      <rect>
-      <x>520</x>
+      <x>570</x>
       <y>30</y>
       <width>391</width>
       <height>61</height>
@@ -70,7 +70,7 @@ font: 30px;		/*设置按钮文字和大小*/
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>110</x>
       <y>170</y>
       <width>861</width>
       <height>108</height>
@@ -252,13 +252,51 @@ font: 16 px  &quot;Times New Roman&quot;;
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>930</x>
-      <y>310</y>
+      <x>990</x>
+      <y>260</y>
       <width>131</width>
-      <height>451</height>
+      <height>471</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="minimumSize">
+        <size>
+         <width>88</width>
+         <height>44</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>楷体</family>
+         <pointsize>14</pointsize>
+         <weight>75</weight>
+         <italic>false</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
+
+	color:white;	
+    padding: 2px 4px;  
+    background-color:#5F9EA0; 
+    font: 14pt &quot;楷体&quot;;  /* 推荐使用无衬线字体更清晰  */
+    min-width: 80px;
+    min-height: 40px;
+    font-weight: bold;
+qproperty-alignment: 'AlignCenter'; 
+}</string>
+       </property>
+       <property name="text">
+        <string>算法功能区</string>
+       </property>
+       <property name="margin">
+        <number>1</number>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QPushButton" name="pushButton_AL1">
        <property name="toolTip">
@@ -513,8 +551,8 @@ QPushButton:pressed {
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>1079</x>
-      <y>300</y>
+      <x>1129</x>
+      <y>260</y>
       <width>251</width>
       <height>471</height>
      </rect>
@@ -643,13 +681,13 @@ font: bold 16px;		/*设置按钮文字和大小*/
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>971</x>
-      <y>209</y>
+      <x>1021</x>
+      <y>173</y>
       <width>370</width>
       <height>72</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout_4">
+    <layout class="QVBoxLayout" name="verticalLayout_testdata">
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
@@ -864,7 +902,7 @@ font:bold 16px;		/*设置按钮文字和大小*/
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>40</x>
+      <x>90</x>
       <y>760</y>
       <width>891</width>
       <height>81</height>
@@ -1235,10 +1273,10 @@ border-radius:10px;
    <widget class="QCheckBox" name="checkBox_percentage">
     <property name="geometry">
      <rect>
-      <x>1150</x>
-      <y>180</y>
-      <width>111</width>
-      <height>20</height>
+      <x>1183</x>
+      <y>136</y>
+      <width>106</width>
+      <height>16</height>
      </rect>
     </property>
     <property name="font">
@@ -1249,74 +1287,22 @@ border-radius:10px;
       <bold>true</bold>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QCheckBox {
+    qproperty-alignment: AlignCenter;  /* 文本居中 */
+    spacing: 5px;
+}
+
+</string>
+    </property>
     <property name="text">
      <string>百分比显示</string>
     </property>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>440</y>
-      <width>42</width>
-      <height>80</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_6">
-     <item>
-      <widget class="QPushButton" name="pushButton_top">
-       <property name="maximumSize">
-        <size>
-         <width>40</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Times New Roman</family>
-         <pointsize>12</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;上翻页&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="text">
-        <string>↑</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_bottom">
-       <property name="maximumSize">
-        <size>
-         <width>40</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Times New Roman</family>
-         <pointsize>12</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;下翻页&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="text">
-        <string>↓</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>110</x>
       <y>120</y>
       <width>100</width>
       <height>40</height>
@@ -1362,7 +1348,7 @@ font:bold;		/*设置按钮文字和大小*/
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>168</x>
+      <x>218</x>
       <y>120</y>
       <width>751</width>
       <height>42</height>
@@ -1437,6 +1423,213 @@ border:1px solid black;
 border-radius:10px; 
 
 }</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>410</y>
+      <width>54</width>
+      <height>12</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>1022</x>
+      <y>122</y>
+      <width>155</width>
+      <height>44</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+
+	color:white;	
+    padding: 2px 4px;  
+    background-color:#5F9EA0; 
+    font: 14pt &quot;楷体&quot;;  /* 推荐使用无衬线字体更清晰  */
+    min-width: 80px;
+    min-height: 40px;
+    font-weight: bold;
+qproperty-alignment: 'AlignCenter'; 
+}</string>
+    </property>
+    <property name="text">
+     <string>实验数据调控区</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>280</y>
+      <width>90</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_6">
+     <item>
+      <widget class="QLabel" name="label_7">
+       <property name="styleSheet">
+        <string notr="true">QLabel {
+
+	color:white;	
+    padding: 2px 4px;  
+    background-color:#5F9EA0; 
+    font: 14pt &quot;楷体&quot;;  /* 推荐使用无衬线字体更清晰  */
+    min-width: 80px;
+    min-height: 40px;
+    font-weight: bold;
+qproperty-alignment: 'AlignCenter'; 
+}</string>
+       </property>
+       <property name="text">
+        <string>上下翻页</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_8">
+       <item>
+        <widget class="QPushButton" name="pushButton_top">
+         <property name="maximumSize">
+          <size>
+           <width>40</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Times New Roman</family>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;上翻页&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>↑</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_bottom">
+         <property name="maximumSize">
+          <size>
+           <width>40</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Times New Roman</family>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;下翻页&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>↓</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>400</y>
+      <width>94</width>
+      <height>150</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_7">
+     <item>
+      <widget class="QLabel" name="label_9">
+       <property name="styleSheet">
+        <string notr="true">QLabel {
+
+	color:white;	
+    padding: 2px 4px;  
+    background-color:#5F9EA0; 
+    font: 14pt &quot;楷体&quot;;  /* 推荐使用无衬线字体更清晰  */
+    min-width: 80px;
+    min-height: 40px;
+    font-weight: bold;
+qproperty-alignment: 'AlignCenter'; 
+}</string>
+       </property>
+       <property name="text">
+        <string>振动分析</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_4">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: 1px solid #8B5A2B;  
+    border-radius: 15px;
+    padding: 2px 4px;
+    background-color: #D2B48C;  /* 浅卡其色，柔和自然 */
+    color: #5C4033;            /* 深棕文字，类似学术皮革色 */
+    font: bold 14pt &quot;微软雅黑&quot;; /* 中文黑体更正式 */
+    min-width: 80px;
+    min-height: 40px;
+}
+QPushButton:hover {
+    background-color: #A0522D;  /* 悬停转为红棕，温暖但不刺眼 */
+    color: #FFFFFF;
+}
+QPushButton:pressed {
+    background-color: #5C4033;  /* 深棕按压，模拟墨水质感 */
+}</string>
+       </property>
+       <property name="text">
+        <string>开始分析</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_5">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: 1px solid #8B5A2B;  
+    border-radius: 15px;
+    padding: 2px 4px;
+    background-color: #D2B48C;  /* 浅卡其色，柔和自然 */
+    color: #5C4033;            /* 深棕文字，类似学术皮革色 */
+    font: bold 14pt &quot;微软雅黑&quot;; /* 中文黑体更正式 */
+    min-width: 80px;
+    min-height: 40px;
+}
+QPushButton:hover {
+    background-color: #A0522D;  /* 悬停转为红棕，温暖但不刺眼 */
+    color: #FFFFFF;
+}
+QPushButton:pressed {
+    background-color: #5C4033;  /* 深棕按压，模拟墨水质感 */
+}</string>
+       </property>
+       <property name="text">
+        <string>保存数据</string>
        </property>
       </widget>
      </item>

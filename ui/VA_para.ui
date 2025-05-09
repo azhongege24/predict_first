@@ -100,28 +100,26 @@ QPushButton:pressed {
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>100</y>
-      <width>431</width>
-      <height>120</height>
+      <x>142</x>
+      <y>102</y>
+      <width>321</width>
+      <height>42</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QLabel{
+      <widget class="QLabel" name="label">
+       <property name="maximumSize">
+        <size>
+         <width>200</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel{
 border:1px solid red;   /*边框的粗细，颜色*/
 border-radius:15px;    /*设置圆角半径 */
 padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
@@ -131,182 +129,24 @@ color:rgb(0, 0, 0);		/*字体颜色*/
 
 font:bold;
 }</string>
-         </property>
-         <property name="text">
-          <string>sampling_rate</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="spinBox_sampling_rate">
-         <property name="minimumSize">
-          <size>
-           <width>110</width>
-           <height>40</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Times New Roman</family>
-           <pointsize>12</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QSpinBox::up-button:pressed {
-    margin-top: 4px;  /* 模拟按压下沉 */
-}
-QSpinBox::down-button:pressed {
-    margin-top: 4px;
-}</string>
-         </property>
-         <property name="maximum">
-          <number>9999</number>
-         </property>
-         <property name="value">
-          <number>1000</number>
-         </property>
-        </widget>
-       </item>
-      </layout>
+       </property>
+       <property name="text">
+        <string>sampling_rate</string>
+       </property>
+      </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QLabel{
-border:1px solid red;   /*边框的粗细，颜色*/
-border-radius:15px;    /*设置圆角半径 */
-padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
-background-color: rgb(177, 255, 255);	/*背景颜色*/
-color:rgb(0, 0, 0);		/*字体颜色*/
-	font: 18pt &quot;楷体&quot;;
-
-font:bold;
-}</string>
-         </property>
-         <property name="text">
-          <string>VA_inputpath</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="lineEdit_VA_inputpath">
-         <property name="minimumSize">
-          <size>
-           <width>40</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Times New Roman</family>
-           <pointsize>12</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
-       <item>
-        <widget class="QLabel" name="label_3">
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QLabel{
-border:1px solid red;   /*边框的粗细，颜色*/
-border-radius:15px;    /*设置圆角半径 */
-padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
-background-color: rgb(177, 255, 255);	/*背景颜色*/
-color:rgb(0, 0, 0);		/*字体颜色*/
-	font: 18pt &quot;楷体&quot;;
-
-font:bold;
-}</string>
-         </property>
-         <property name="text">
-          <string>VA_outputpath</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="lineEdit_VA_outputpath">
-         <property name="minimumSize">
-          <size>
-           <width>40</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Times New Roman</family>
-           <pointsize>12</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>580</x>
-      <y>150</y>
-      <width>32</width>
-      <height>68</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QPushButton" name="pushButton_3">
+      <widget class="QSpinBox" name="spinBox_sampling_rate">
        <property name="minimumSize">
         <size>
-         <width>30</width>
-         <height>30</height>
+         <width>110</width>
+         <height>40</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>30</width>
-         <height>30</height>
+         <width>250</width>
+         <height>16777215</height>
         </size>
        </property>
        <property name="font">
@@ -317,13 +157,85 @@ font:bold;
          <bold>true</bold>
         </font>
        </property>
+       <property name="styleSheet">
+        <string notr="true">QSpinBox::up-button:pressed {
+    margin-top: 4px;  /* 模拟按压下沉 */
+}
+QSpinBox::down-button:pressed {
+    margin-top: 4px;
+}</string>
+       </property>
+       <property name="maximum">
+        <number>9999</number>
+       </property>
+       <property name="value">
+        <number>1000</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>142</x>
+      <y>164</y>
+      <width>441</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="maximumSize">
+        <size>
+         <width>200</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color: rgb(177, 255, 255);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 18pt &quot;楷体&quot;;
+
+font:bold;
+}</string>
+       </property>
        <property name="text">
-        <string>...</string>
+        <string>VA_inputpath</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_4">
+      <widget class="QLineEdit" name="lineEdit_VA_inputpath">
+       <property name="minimumSize">
+        <size>
+         <width>40</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>200</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_3">
        <property name="minimumSize">
         <size>
          <width>30</width>
@@ -379,22 +291,6 @@ font:bold;
     <hint type="destinationlabel">
      <x>662</x>
      <y>141</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton_4</sender>
-   <signal>clicked()</signal>
-   <receiver>VA_para</receiver>
-   <slot>save_VA_folder()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>603</x>
-     <y>235</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>670</x>
-     <y>252</y>
     </hint>
    </hints>
   </connection>

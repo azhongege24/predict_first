@@ -6,7 +6,7 @@ import numpy as np
 from ui2025 import Ui_MainWindow #我新创建的界面类
 import pandas as pd
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QFileDialog, QGraphicsScene, QGraphicsView, QWidget, QCheckBox, QListWidgetItem
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt ,QSettings
 from PyQt5.QtGui import QPixmap
 import sys
 import os
@@ -48,7 +48,8 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         VA_inpath = self.lineEdit_VA_inputpath.text()
         VA_outpath = self.lineEdit_VA_outputpath.text()
         if self.parent_window:
-            self.parent_window.lineEdit_Algorithm_name.setText("Decision Tree")
+            self.parent_window.lineEdit_Algorithm_name.setText("Vibration Analysis")
+            self.parent_window.lineEdit_state.setText("正在进行振动分析")
 
         print("sampling_rate:", sampling_rate) 
         print("VA_inpath:", VA_inpath)
@@ -72,8 +73,29 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         if not os.path.isfile(self.fileName):
             self.lineEdit_VA_inputpath.setText("File path doesn't exist")
             return
-
     def save_VA_folder(self):
+        '''保存文件并记住文件夹路径'''
+        file_filter = "Data Files (*.csv *.xls *.xlsx *.mat);;Excel Files (*.xls *.xlsx);;MATLAB Files (*.mat);;CSV Files (*.csv);;All Files(*.*)"
+        
+        # 初始化QSettings（保存到配置文件）
+        settings = QSettings("YourCompany", "YourApp")
+        settings.setIniCodec("UTF-8")  # 防止中文乱码
+        
+        # 读取上次保存的目录，若不存在则用默认路径
+        default_dir = settings.value("LastSaveDir", "data/")  # "data/"是默认路径
+        
+        # 弹出保存对话框
+        fileName, _ = QFileDialog.getSaveFileName(
+            self, "保存文件", default_dir, file_filter
+        )
+        
+        if fileName:  # 用户确认保存
+            # 更新配置文件中的路径（只保存目录部分）
+            settings.setValue("LastSaveDir", os.path.dirname(fileName))
+            self.lineEdit_VA_outputpath.setText(fileName)
+        else:  # 用户取消操作
+            return
+    # def save_VA_folder(self):
         '''新内容取消的时候不会改变linedit'''
         file_filter = "Data Files (*.csv *.xls *.xlsx *.mat);;Excel Files (*.xls *.xlsx);;MATLAB Files (*.mat);;CSV Files (*.csv);;All Files(*.*)"
         initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"

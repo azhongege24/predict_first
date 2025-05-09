@@ -65,16 +65,14 @@ class Ui_VA_para(object):
 "}")
         self.pushButton_2.setObjectName("pushButton_2")
         self.horizontalLayout.addWidget(self.pushButton_2)
-        self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(140, 100, 431, 120))
-        self.layoutWidget1.setObjectName("layoutWidget1")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget1)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.widget.setGeometry(QtCore.QRect(142, 102, 321, 42))
+        self.widget.setObjectName("widget")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget)
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.label = QtWidgets.QLabel(self.layoutWidget1)
-        self.label.setMaximumSize(QtCore.QSize(200, 16777215))
+        self.label = QtWidgets.QLabel(self.widget)
+        self.label.setMaximumSize(QtCore.QSize(200, 40))
         self.label.setStyleSheet("QLabel{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
 "border-radius:15px;    /*设置圆角半径 */\n"
@@ -87,9 +85,9 @@ class Ui_VA_para(object):
 "}")
         self.label.setObjectName("label")
         self.horizontalLayout_2.addWidget(self.label)
-        self.spinBox_sampling_rate = QtWidgets.QSpinBox(self.layoutWidget1)
+        self.spinBox_sampling_rate = QtWidgets.QSpinBox(self.widget)
         self.spinBox_sampling_rate.setMinimumSize(QtCore.QSize(110, 40))
-        self.spinBox_sampling_rate.setMaximumSize(QtCore.QSize(200, 16777215))
+        self.spinBox_sampling_rate.setMaximumSize(QtCore.QSize(250, 16777215))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
         font.setPointSize(12)
@@ -106,11 +104,14 @@ class Ui_VA_para(object):
         self.spinBox_sampling_rate.setProperty("value", 1000)
         self.spinBox_sampling_rate.setObjectName("spinBox_sampling_rate")
         self.horizontalLayout_2.addWidget(self.spinBox_sampling_rate)
-        self.verticalLayout.addLayout(self.horizontalLayout_2)
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+        self.widget1 = QtWidgets.QWidget(self.centralwidget)
+        self.widget1.setGeometry(QtCore.QRect(142, 164, 441, 41))
+        self.widget1.setObjectName("widget1")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.widget1)
+        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.label_2 = QtWidgets.QLabel(self.layoutWidget1)
-        self.label_2.setMaximumSize(QtCore.QSize(200, 16777215))
+        self.label_2 = QtWidgets.QLabel(self.widget1)
+        self.label_2.setMaximumSize(QtCore.QSize(200, 40))
         self.label_2.setStyleSheet("QLabel{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
 "border-radius:15px;    /*设置圆角半径 */\n"
@@ -123,7 +124,7 @@ class Ui_VA_para(object):
 "}")
         self.label_2.setObjectName("label_2")
         self.horizontalLayout_3.addWidget(self.label_2)
-        self.lineEdit_VA_inputpath = QtWidgets.QLineEdit(self.layoutWidget1)
+        self.lineEdit_VA_inputpath = QtWidgets.QLineEdit(self.widget1)
         self.lineEdit_VA_inputpath.setMinimumSize(QtCore.QSize(40, 30))
         self.lineEdit_VA_inputpath.setMaximumSize(QtCore.QSize(200, 16777215))
         font = QtGui.QFont()
@@ -134,42 +135,7 @@ class Ui_VA_para(object):
         self.lineEdit_VA_inputpath.setFont(font)
         self.lineEdit_VA_inputpath.setObjectName("lineEdit_VA_inputpath")
         self.horizontalLayout_3.addWidget(self.lineEdit_VA_inputpath)
-        self.verticalLayout.addLayout(self.horizontalLayout_3)
-        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.label_3 = QtWidgets.QLabel(self.layoutWidget1)
-        self.label_3.setMaximumSize(QtCore.QSize(200, 16777215))
-        self.label_3.setStyleSheet("QLabel{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(177, 255, 255);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
-"\n"
-"font:bold;\n"
-"}")
-        self.label_3.setObjectName("label_3")
-        self.horizontalLayout_4.addWidget(self.label_3)
-        self.lineEdit_VA_outputpath = QtWidgets.QLineEdit(self.layoutWidget1)
-        self.lineEdit_VA_outputpath.setMinimumSize(QtCore.QSize(40, 30))
-        self.lineEdit_VA_outputpath.setMaximumSize(QtCore.QSize(200, 16777215))
-        font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.lineEdit_VA_outputpath.setFont(font)
-        self.lineEdit_VA_outputpath.setObjectName("lineEdit_VA_outputpath")
-        self.horizontalLayout_4.addWidget(self.lineEdit_VA_outputpath)
-        self.verticalLayout.addLayout(self.horizontalLayout_4)
-        self.layoutWidget2 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget2.setGeometry(QtCore.QRect(580, 150, 32, 68))
-        self.layoutWidget2.setObjectName("layoutWidget2")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.layoutWidget2)
-        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.pushButton_3 = QtWidgets.QPushButton(self.layoutWidget2)
+        self.pushButton_3 = QtWidgets.QPushButton(self.widget1)
         self.pushButton_3.setMinimumSize(QtCore.QSize(30, 30))
         self.pushButton_3.setMaximumSize(QtCore.QSize(30, 30))
         font = QtGui.QFont()
@@ -179,18 +145,7 @@ class Ui_VA_para(object):
         font.setWeight(75)
         self.pushButton_3.setFont(font)
         self.pushButton_3.setObjectName("pushButton_3")
-        self.verticalLayout_2.addWidget(self.pushButton_3)
-        self.pushButton_4 = QtWidgets.QPushButton(self.layoutWidget2)
-        self.pushButton_4.setMinimumSize(QtCore.QSize(30, 30))
-        self.pushButton_4.setMaximumSize(QtCore.QSize(30, 30))
-        font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.pushButton_4.setFont(font)
-        self.pushButton_4.setObjectName("pushButton_4")
-        self.verticalLayout_2.addWidget(self.pushButton_4)
+        self.horizontalLayout_3.addWidget(self.pushButton_3)
         VA_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(VA_para)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 728, 23))
@@ -202,7 +157,6 @@ class Ui_VA_para(object):
 
         self.retranslateUi(VA_para)
         self.pushButton_3.clicked.connect(VA_para.open_VA_folder) # type: ignore
-        self.pushButton_4.clicked.connect(VA_para.save_VA_folder) # type: ignore
         self.pushButton.clicked.connect(VA_para.Confirm) # type: ignore
         self.pushButton.released.connect(VA_para.close) # type: ignore
         self.pushButton_2.clicked.connect(VA_para.close) # type: ignore
@@ -215,6 +169,4 @@ class Ui_VA_para(object):
         self.pushButton_2.setText(_translate("VA_para", "取消"))
         self.label.setText(_translate("VA_para", "sampling_rate"))
         self.label_2.setText(_translate("VA_para", "VA_inputpath"))
-        self.label_3.setText(_translate("VA_para", "VA_outputpath"))
         self.pushButton_3.setText(_translate("VA_para", "..."))
-        self.pushButton_4.setText(_translate("VA_para", "..."))
