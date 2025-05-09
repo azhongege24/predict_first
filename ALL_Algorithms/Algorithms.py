@@ -150,6 +150,7 @@ def single_plot_and_evaluate(self, y_test, y_pred, method, data_test,
     self.lineEdit_Algorithm_name.setText(
         f'当前生成数据: {output_columns[0]} [ {N_start_test}:{N_end_test} ]'
     )
+    return self.data_save
 def multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test, 
                                    output_columns, N_start_test, N_end_test, MSE, R2):
     """
@@ -312,6 +313,7 @@ def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test,
                                 columns=[f"pred_{col}" for col in output_columns])
     self.lineEdit_Algorithm_name.setText(
         f'当前生成数据: {", ".join(output_columns)} [{N_start_test}:{N_end_test}]')
+    return self.data_save
 
 # 使用示例 ---------------------------------------------------
 if __name__ == "__main__":

@@ -5,6 +5,8 @@ from scipy.fft import fft, fftfreq
 import pandas as pd
 import json
 import os
+import scipy.io as sio
+from PyQt5.QtWidgets import QFileDialog
 
 class VibrationAnalyzer:
     def __init__(self, sampling_rate=1000):
@@ -33,47 +35,64 @@ class VibrationAnalyzer:
             f, Pxx = signal.welch(vibration_data, fs=self.sampling_rate, nperseg=nperseg)
             return f, Pxx
             
-    def analyze_and_save(self, vibration_data, output_path, format='json'):
+    def analyze_data(self, vibration_data):
         """
-        分析并保存结果
+        分析振动数据，返回分析结果
         :param vibration_data: 振动数据(单组或多组)
-        :param output_path: 输出路径
-        :param format: 保存格式('json'或'csv')
+        :return: 分析结果 (单组: (frequencies, psd)，多组: 字典)
         """
-        result = self.calculate_psd(vibration_data)
-        
-        if isinstance(vibration_data, dict):
-            # 多组数据保存
-            if format == 'json':
-                with open(output_path, 'w') as f:
-                    json.dump(result, f, indent=4)#indent=4为缩进级别
-            elif format == 'csv':
-                # 将所有数据合并到一个DataFrame中
-                dfs = []
-                for name, data in result.items():
-                    df = pd.DataFrame({
-                        'frequency': data['frequencies'],
-                        'psd': data['psd'],
-                        'group': name
-                    })
-                    dfs.append(df)
-                combined_df = pd.concat(dfs)
-                combined_df.to_csv(output_path, index=False)
-        else:
-            # 单组数据保存
-            f, Pxx = result
-            if format == 'json':
-                data = {
-                    'frequencies': f.tolist(),
-                    'psd': Pxx.tolist(),
-                    'sampling_rate': self.sampling_rate
-                }
-                with open(output_path, 'w') as f:
-                    json.dump(data, f, indent=4)
-            elif format == 'csv':
-                df = pd.DataFrame({'frequency': f, 'psd': Pxx})
-                df.to_csv(output_path, index=False)
+        return self.calculate_psd(vibration_data)
     
+    def save_analysis_result(self, result):
+        """
+        保存分析结果到文件，支持 JSON、CSV 和 MATLAB 格式
+        :param result: 分析结果 (单组: (frequencies, psd)，多组: 字典)
+        """
+        # 打开文件保存对话框
+        file_save, _ = QFileDialog.getSaveFileName(
+            None, "保存文件", "",
+            "JSON Files (*.json);;CSV Files (*.csv);;MATLAB Files (*.mat)"
+        )
+        if file_save:
+            try:
+                # 根据文件扩展名选择保存方式
+                if file_save.endswith('.mat'):
+                    # 将结果转换为 MATLAB 兼容格式
+                    if isinstance(result, dict):
+                        mat_data = {name: {'frequencies': data['frequencies'], 'psd': data['psd']} for name, data in result.items()}
+                    else:
+                        f, Pxx = result
+                        mat_data = {'frequencies': f, 'psd': Pxx}
+                    sio.savemat(file_save, mat_data)
+                elif file_save.endswith('.json'):
+                    # 保存为 JSON 文件
+                    with open(file_save, 'w') as f:
+                        json.dump(result, f, indent=4)
+                elif file_save.endswith('.csv'):
+                    # 保存为 CSV 文件
+                    if isinstance(result, dict):
+                        # 多组数据保存
+                        dfs = []
+                        for name, data in result.items():
+                            df = pd.DataFrame({
+                                'frequency': data['frequencies'],
+                                'psd': data['psd'],
+                                'group': name
+                            })
+                            dfs.append(df)
+                        combined_df = pd.concat(dfs)
+                        combined_df.to_csv(file_save, index=False)
+                    else:
+                        # 单组数据保存
+                        f, Pxx = result
+                        df = pd.DataFrame({'frequency': f, 'psd': Pxx})
+                        df.to_csv(file_save, index=False)
+
+                # 显示保存成功信息
+                print("Data saved successfully")
+            except Exception as e:
+                # 捕获异常并显示错误信息
+                print(f"Save failed: {str(e)}")
     @staticmethod
     def generate_test_data(num_samples=1000, num_groups=3):
         """
@@ -164,10 +183,9 @@ if __name__ == "__main__":
     single_data = analyzer.generate_test_data(num_groups=1)
     f, psd = analyzer.calculate_psd(single_data)
     analyzer.visualize_data(single_data, psd_result=(f, psd))
-    analyzer.analyze_and_save(single_data, 'Vibration_Analyzer_data/single_result.csv', format='csv')
+   
 
     # 测试多组数据
     multi_data = analyzer.generate_test_data(num_groups=3)
     results = analyzer.calculate_psd(multi_data)
     analyzer.visualize_data(multi_data, psd_result=results)
-    analyzer.analyze_and_save(multi_data, 'Vibration_Analyzer_data/multi_result.csv', format='csv')

@@ -542,7 +542,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             print("真实值:", y_test)
             print("评估指标:", metrics)
             if len(output_columns) > 1:
-                Multi_output_plot_and_evaluate(self,y_test, 
+                self.data_save=Multi_output_plot_and_evaluate(self,y_test, 
                                                y_pred, method,
                                                 data_test, 
                                                 output_columns, 
@@ -551,7 +551,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                   metrics['MSE'],
                                                   metrics['R2'])
             if len(output_columns) == 1:
-                single_plot_and_evaluate(self,y_test, y_pred,
+                self.data_save=single_plot_and_evaluate(self,y_test, y_pred,
                                         method, data_test,
                                         output_columns, N_start_test, 
                                         N_end_test,metrics['MSE'],
@@ -577,7 +577,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             print("真实值:", y_test)
             print("评估指标:", metrics)
             if len(output_columns) > 1:
-                Multi_output_plot_and_evaluate(self,y_test, 
+                self.data_save=Multi_output_plot_and_evaluate(self,y_test, 
                                                y_pred, method,
                                                 data_test, 
                                                 output_columns, 
@@ -586,7 +586,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                   metrics['MSE'],
                                                   metrics['R2'])
             if len(output_columns) == 1:
-                single_plot_and_evaluate(self,y_test, y_pred, method,
+                self.data_save=single_plot_and_evaluate(self,y_test, y_pred, method,
                                           data_test, output_columns, 
                                           N_start_test, N_end_test,
                                           metrics['MSE'],metrics['R2'])
@@ -613,7 +613,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             print("真实值:", y_test)
             print("评估指标:", metrics)
             if len(output_columns) > 1:
-                Multi_output_plot_and_evaluate(self,y_test, 
+                self.data_save=Multi_output_plot_and_evaluate(self,y_test, 
                                                y_pred, method,
                                                 data_test, 
                                                 output_columns, 
@@ -622,7 +622,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                   metrics['MSE'],
                                                   metrics['R2'])
             if len(output_columns) == 1:
-                single_plot_and_evaluate(self,y_test, y_pred, method, 
+                self.data_save=single_plot_and_evaluate(self,y_test, y_pred, method, 
                                          data_test, output_columns,
                                            N_start_test, N_end_test,
                                            metrics['MSE'],metrics['R2'])
@@ -648,7 +648,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             print("真实值:", y_test)
             print("评估指标:", metrics)
             if len(output_columns) > 1:
-                Multi_output_plot_and_evaluate(self,y_test, 
+                self.data_save=Multi_output_plot_and_evaluate(self,y_test, 
                                                y_pred, method,
                                                 data_test, 
                                                 output_columns, 
@@ -657,7 +657,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                   metrics['MSE'],
                                                   metrics['R2'])
             if len(output_columns) == 1:    
-                single_plot_and_evaluate(self,y_test, y_pred, method, data_test, output_columns, N_start_test, N_end_test,metrics['MSE'],metrics['R2'])
+                self.data_save=single_plot_and_evaluate(self,y_test, y_pred, method,
+                                                         data_test, output_columns, 
+                                                         N_start_test, N_end_test,
+                                                         metrics['MSE'],metrics['R2'])
             self.lineEdit_DEVICE.setText("CPU")
         
         if method == 'ET':
@@ -679,7 +682,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             print("真实值:", y_test)
             print("评估指标:", metrics)
             if len(output_columns) > 1:
-                Multi_output_plot_and_evaluate(self,y_test, 
+                self.data_save=Multi_output_plot_and_evaluate(self,y_test, 
                                                y_pred, method,
                                                 data_test, 
                                                 output_columns, 
@@ -688,7 +691,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                   metrics['MSE'],
                                                   metrics['R2'])
             if len(output_columns) == 1:
-                single_plot_and_evaluate(self,y_test, y_pred, method, data_test,
+                self.data_save=single_plot_and_evaluate(self,y_test, y_pred, method, data_test,
                                            output_columns, N_start_test, N_end_test,
                                            metrics['MSE'],metrics['R2'])
             self.lineEdit_DEVICE.setText("CPU")
