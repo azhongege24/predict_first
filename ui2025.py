@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1423, 877)
+        MainWindow.resize(1457, 893)
         MainWindow.setStyleSheet("QMainWindow{\n"
 "\n"
 "\n"
@@ -24,7 +24,7 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.graphicsView = QtWidgets.QGraphicsView(self.centralwidget)
-        self.graphicsView.setGeometry(QtCore.QRect(120, 280, 861, 471))
+        self.graphicsView.setGeometry(QtCore.QRect(151, 257, 861, 471))
         self.graphicsView.setStyleSheet("QGraphicsView{\n"
 "\n"
 "border:1px solid  black;   /*边框的粗细，颜色*/\n"
@@ -35,7 +35,7 @@ class Ui_MainWindow(object):
 "}")
         self.graphicsView.setObjectName("graphicsView")
         self.label_headline = QtWidgets.QLabel(self.centralwidget)
-        self.label_headline.setGeometry(QtCore.QRect(580, 30, 391, 61))
+        self.label_headline.setGeometry(QtCore.QRect(611, 7, 391, 61))
         self.label_headline.setStyleSheet("QLabel{\n"
 "\n"
 "\n"
@@ -48,7 +48,7 @@ class Ui_MainWindow(object):
 "}")
         self.label_headline.setObjectName("label_headline")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(120, 170, 861, 108))
+        self.layoutWidget.setGeometry(QtCore.QRect(151, 147, 861, 108))
         self.layoutWidget.setObjectName("layoutWidget")
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
@@ -170,13 +170,14 @@ class Ui_MainWindow(object):
 "}")
         self.label_version.setObjectName("label_version")
         self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(1000, 260, 131, 471))
+        self.layoutWidget1.setGeometry(QtCore.QRect(1031, 237, 131, 481))
         self.layoutWidget1.setObjectName("layoutWidget1")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget1)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.label_2 = QtWidgets.QLabel(self.layoutWidget1)
-        self.label_2.setMinimumSize(QtCore.QSize(88, 44))
+        self.label_2.setMinimumSize(QtCore.QSize(88, 34))
+        self.label_2.setMaximumSize(QtCore.QSize(16777215, 35))
         font = QtGui.QFont()
         font.setFamily("楷体")
         font.setPointSize(14)
@@ -191,7 +192,7 @@ class Ui_MainWindow(object):
 "    background-color:#5F9EA0; \n"
 "    font: 14pt \"楷体\";  /* 推荐使用无衬线字体更清晰  */\n"
 "    min-width: 80px;\n"
-"    min-height: 40px;\n"
+"    min-height: 30px;\n"
 "    font-weight: bold;\n"
 "qproperty-alignment: \'AlignCenter\'; \n"
 "}")
@@ -375,7 +376,7 @@ class Ui_MainWindow(object):
         self.pushButton_3.setObjectName("pushButton_3")
         self.verticalLayout.addWidget(self.pushButton_3)
         self.layoutWidget2 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget2.setGeometry(QtCore.QRect(1139, 260, 251, 471))
+        self.layoutWidget2.setGeometry(QtCore.QRect(1170, 237, 251, 481))
         self.layoutWidget2.setObjectName("layoutWidget2")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.layoutWidget2)
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -449,7 +450,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addWidget(self.pushButton_outputall)
         self.horizontalLayout_3.addLayout(self.verticalLayout_3)
         self.layoutWidget3 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget3.setGeometry(QtCore.QRect(999, 173, 370, 72))
+        self.layoutWidget3.setGeometry(QtCore.QRect(1030, 150, 370, 72))
         self.layoutWidget3.setObjectName("layoutWidget3")
         self.verticalLayout_testdata = QtWidgets.QVBoxLayout(self.layoutWidget3)
         self.verticalLayout_testdata.setContentsMargins(0, 0, 0, 0)
@@ -570,7 +571,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_6.addWidget(self.spinBox_test_end)
         self.verticalLayout_testdata.addLayout(self.horizontalLayout_6)
         self.layoutWidget4 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget4.setGeometry(QtCore.QRect(100, 760, 891, 81))
+        self.layoutWidget4.setGeometry(QtCore.QRect(131, 737, 881, 88))
         self.layoutWidget4.setObjectName("layoutWidget4")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.layoutWidget4)
         self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
@@ -779,7 +780,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.lineEdit_DEVICE)
         self.verticalLayout_5.addLayout(self.horizontalLayout)
         self.checkBox_percentage = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox_percentage.setGeometry(QtCore.QRect(1161, 136, 106, 16))
+        self.checkBox_percentage.setGeometry(QtCore.QRect(1200, 120, 106, 16))
         font = QtGui.QFont()
         font.setFamily("楷体")
         font.setPointSize(12)
@@ -787,14 +788,14 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.checkBox_percentage.setFont(font)
         self.checkBox_percentage.setStyleSheet("QCheckBox {\n"
-"    qproperty-alignment: AlignCenter;  /* 文本居中 */\n"
+"\n"
 "    spacing: 5px;\n"
 "}\n"
 "\n"
 "")
         self.checkBox_percentage.setObjectName("checkBox_percentage")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(120, 120, 100, 40))
+        self.label.setGeometry(QtCore.QRect(151, 97, 100, 40))
         self.label.setMinimumSize(QtCore.QSize(50, 30))
         self.label.setMaximumSize(QtCore.QSize(100, 16777215))
         font = QtGui.QFont()
@@ -816,7 +817,7 @@ class Ui_MainWindow(object):
 "}")
         self.label.setObjectName("label")
         self.layoutWidget5 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget5.setGeometry(QtCore.QRect(228, 120, 751, 42))
+        self.layoutWidget5.setGeometry(QtCore.QRect(259, 97, 751, 42))
         self.layoutWidget5.setObjectName("layoutWidget5")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget5)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -858,11 +859,13 @@ class Ui_MainWindow(object):
         self.lineEdit_dataset_nums.setObjectName("lineEdit_dataset_nums")
         self.horizontalLayout_2.addWidget(self.lineEdit_dataset_nums)
         self.label_8 = QtWidgets.QLabel(self.centralwidget)
-        self.label_8.setGeometry(QtCore.QRect(40, 410, 54, 12))
+        self.label_8.setGeometry(QtCore.QRect(71, 387, 54, 12))
         self.label_8.setText("")
         self.label_8.setObjectName("label_8")
         self.label_10 = QtWidgets.QLabel(self.centralwidget)
-        self.label_10.setGeometry(QtCore.QRect(1000, 122, 155, 44))
+        self.label_10.setGeometry(QtCore.QRect(1031, 110, 155, 35))
+        self.label_10.setMinimumSize(QtCore.QSize(88, 34))
+        self.label_10.setMaximumSize(QtCore.QSize(16777215, 40))
         self.label_10.setStyleSheet("QLabel {\n"
 "\n"
 "    color:white;    \n"
@@ -870,18 +873,21 @@ class Ui_MainWindow(object):
 "    background-color:#5F9EA0; \n"
 "    font: 14pt \"楷体\";  /* 推荐使用无衬线字体更清晰  */\n"
 "    min-width: 80px;\n"
-"    min-height: 40px;\n"
+"    min-height: 30px;\n"
 "    font-weight: bold;\n"
 "qproperty-alignment: \'AlignCenter\'; \n"
 "}")
         self.label_10.setObjectName("label_10")
         self.layoutWidget6 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget6.setGeometry(QtCore.QRect(20, 280, 90, 81))
+        self.layoutWidget6.setGeometry(QtCore.QRect(10, 500, 131, 191))
         self.layoutWidget6.setObjectName("layoutWidget6")
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.layoutWidget6)
         self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_6.setSpacing(12)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.label_7 = QtWidgets.QLabel(self.layoutWidget6)
+        self.label_7.setMinimumSize(QtCore.QSize(88, 34))
+        self.label_7.setMaximumSize(QtCore.QSize(16777215, 30))
         self.label_7.setStyleSheet("QLabel {\n"
 "\n"
 "    color:white;    \n"
@@ -889,7 +895,7 @@ class Ui_MainWindow(object):
 "    background-color:#5F9EA0; \n"
 "    font: 14pt \"楷体\";  /* 推荐使用无衬线字体更清晰  */\n"
 "    min-width: 80px;\n"
-"    min-height: 40px;\n"
+"    min-height: 30px;\n"
 "    font-weight: bold;\n"
 "qproperty-alignment: \'AlignCenter\'; \n"
 "}")
@@ -898,7 +904,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
         self.pushButton_top = QtWidgets.QPushButton(self.layoutWidget6)
-        self.pushButton_top.setMaximumSize(QtCore.QSize(40, 16777215))
+        self.pushButton_top.setMinimumSize(QtCore.QSize(0, 30))
+        self.pushButton_top.setMaximumSize(QtCore.QSize(40, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
         font.setPointSize(12)
@@ -908,7 +915,8 @@ class Ui_MainWindow(object):
         self.pushButton_top.setObjectName("pushButton_top")
         self.horizontalLayout_8.addWidget(self.pushButton_top)
         self.pushButton_bottom = QtWidgets.QPushButton(self.layoutWidget6)
-        self.pushButton_bottom.setMaximumSize(QtCore.QSize(40, 16777215))
+        self.pushButton_bottom.setMinimumSize(QtCore.QSize(0, 30))
+        self.pushButton_bottom.setMaximumSize(QtCore.QSize(40, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
         font.setPointSize(12)
@@ -918,8 +926,55 @@ class Ui_MainWindow(object):
         self.pushButton_bottom.setObjectName("pushButton_bottom")
         self.horizontalLayout_8.addWidget(self.pushButton_bottom)
         self.verticalLayout_6.addLayout(self.horizontalLayout_8)
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.label_11 = QtWidgets.QLabel(self.layoutWidget6)
+        self.label_11.setStyleSheet("QLabel {\n"
+"\n"
+"    color:white;    \n"
+"    padding: 2px 4px;  \n"
+"    background-color:#5F9EA0; \n"
+"    font: 14pt \"楷体\";  /* 推荐使用无衬线字体更清晰  */\n"
+"    min-width: 80px;\n"
+"    min-height: 30px;\n"
+"    font-weight: bold;\n"
+"qproperty-alignment: \'AlignCenter\'; \n"
+"}")
+        self.label_11.setObjectName("label_11")
+        self.verticalLayout_4.addWidget(self.label_11)
+        self.pushButton_8 = QtWidgets.QPushButton(self.layoutWidget6)
+        self.pushButton_8.setStyleSheet("QPushButton {\n"
+"    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */\n"
+"    border-radius: 8px;                      /* 适中圆角更显严谨 */\n"
+"    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */\n"
+"    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */\n"
+"    font: bold 14pt \"微软雅黑\";\n"
+"    min-width: 85px;\n"
+"    min-height: 42px;\n"
+" \n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(220, 230, 240);    /* 悬停时轻微加深背景 */\n"
+"    border-color: rgb(40, 60, 80);          /* 加深边框模拟金属反光 */\n"
+"    color: rgb(20, 40, 60);                 /* 文字颜色同步加深 */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: rgb(60, 75, 90);      /* 按压状态与边框同色 */\n"
+"    color: rgb(230, 235, 240);              /* 浅灰白文字确保可读性 */\n"
+"}\n"
+"\n"
+"QPushButton:disabled {\n"
+"    background-color: rgb(250, 250, 250);    /* 禁用状态极浅灰 */\n"
+"    color: rgb(180, 190, 200);              /* 灰蓝文字表示不可用 */\n"
+"    border-color: rgb(210, 220, 230);\n"
+"}")
+        self.pushButton_8.setObjectName("pushButton_8")
+        self.verticalLayout_4.addWidget(self.pushButton_8)
+        self.verticalLayout_6.addLayout(self.verticalLayout_4)
         self.layoutWidget7 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget7.setGeometry(QtCore.QRect(20, 380, 94, 261))
+        self.layoutWidget7.setGeometry(QtCore.QRect(10, 250, 131, 241))
         self.layoutWidget7.setObjectName("layoutWidget7")
         self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.layoutWidget7)
         self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
@@ -983,6 +1038,13 @@ class Ui_MainWindow(object):
         self.verticalLayout_7.addWidget(self.pushButton_4)
         self.pushButton_5 = QtWidgets.QPushButton(self.layoutWidget7)
         self.pushButton_5.setMaximumSize(QtCore.QSize(16777215, 40))
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.pushButton_5.setFont(font)
         self.pushButton_5.setStyleSheet("QPushButton {\n"
 "    border: 1px solid #8B5A2B;  \n"
 "    border-radius: 15px;\n"
@@ -1020,18 +1082,20 @@ class Ui_MainWindow(object):
         self.pushButton_2.clicked.connect(MainWindow.AL_MTW_para) # type: ignore
         self.pushButton_3.clicked.connect(MainWindow.AL_REMTW_para) # type: ignore
         self.pushButton_vibration_analysis.clicked.connect(MainWindow.AL_VA_para) # type: ignore
+        self.pushButton_8.clicked.connect(MainWindow.save) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "多目标回归预示分析系统"))
         self.label_headline.setText(_translate("MainWindow", "多目标回归预示分析系统"))
+        self.pushButton_vibration_analysis.setToolTip(_translate("MainWindow", "<html><head/><body><p>设置采样频率并导入振动数据，可以是多组或者是单组</p></body></html>"))
         self.pushButton_vibration_analysis.setText(_translate("MainWindow", "振动分析"))
         self.pushButton_otherpara.setText(_translate("MainWindow", "其他参数"))
         self.pushButton_dataset.setText(_translate("MainWindow", "数据集合"))
         self.pushButton_train.setText(_translate("MainWindow", "训练验模"))
         self.pushButton_predict.setText(_translate("MainWindow", "预测"))
-        self.label_version.setText(_translate("MainWindow", "v3.0 2025.05.09"))
+        self.label_version.setText(_translate("MainWindow", "v3.0 2025.05.11"))
         self.label_2.setText(_translate("MainWindow", "算法功能区"))
         self.pushButton_AL1.setToolTip(_translate("MainWindow", "<html><head/><body><p>决策树算法</p></body></html>"))
         self.pushButton_AL1.setText(_translate("MainWindow", "DT"))
@@ -1077,8 +1141,10 @@ class Ui_MainWindow(object):
         self.pushButton_top.setText(_translate("MainWindow", "↑"))
         self.pushButton_bottom.setToolTip(_translate("MainWindow", "<html><head/><body><p>下翻页</p></body></html>"))
         self.pushButton_bottom.setText(_translate("MainWindow", "↓"))
-        self.label_9.setText(_translate("MainWindow", "振动分析"))
-        self.pushButton_6.setText(_translate("MainWindow", "预览数据"))
-        self.pushButton_4.setText(_translate("MainWindow", "开始分析"))
-        self.pushButton_5.setText(_translate("MainWindow", "保存数据"))
+        self.label_11.setText(_translate("MainWindow", "算法结果区"))
+        self.pushButton_8.setText(_translate("MainWindow", "保存预测结果"))
+        self.label_9.setText(_translate("MainWindow", "振动分析区"))
+        self.pushButton_6.setText(_translate("MainWindow", "预览导入数据"))
+        self.pushButton_4.setText(_translate("MainWindow", "功率谱分析"))
+        self.pushButton_5.setText(_translate("MainWindow", "保存振动数据"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))

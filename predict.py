@@ -11,7 +11,7 @@ from PyQt5.QtGui import QPixmap
 import sys
 import os
 import scipy.io as sio
-from VA_para import Ui_VA_para
+from ALL_Algorithms.VA_para import Ui_VA_para
 from ALL_Algorithms.algorithms1_DT_para import Ui_DT_para
 from ALL_Algorithms.algorithms2_RF_para import Ui_RF_para
 from ALL_Algorithms.algorithms3_SVM_para import Ui_SVM_para   
@@ -372,9 +372,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 else:  # 默认保存CSV
                     self.data_save.to_csv(self.file_save, index=True)
 
-                self.Algorithm_name.setText('Data saved successfully')
+                self.lineEdit_Algorithm_name.setText('Data saved successfully')
             except Exception as e:
-                self.Algorithm_name.setText(f"Save failed: {str(e)}")#尝试一下，三种格式的接入   
+                self.lineEdit_Algorithm_name.setText(f"Save failed: {str(e)}")#尝试一下，三种格式的接入   
 
     def openfolder(self):
       

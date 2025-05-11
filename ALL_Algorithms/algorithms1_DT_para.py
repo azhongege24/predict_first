@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\algorithms1_DT_para.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\algorithms1_DT_para.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -14,43 +14,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_DT_para(object):
     def setupUi(self, DT_para):
         DT_para.setObjectName("DT_para")
-        DT_para.resize(544, 369)
+        DT_para.resize(502, 343)
         self.centralwidget = QtWidgets.QWidget(DT_para)
         self.centralwidget.setObjectName("centralwidget")
-        self.spinBox_max_depth = QtWidgets.QSpinBox(self.centralwidget)
-        self.spinBox_max_depth.setGeometry(QtCore.QRect(308, 69, 110, 40))
-        self.spinBox_max_depth.setMinimumSize(QtCore.QSize(110, 40))
-        font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.spinBox_max_depth.setFont(font)
-        self.spinBox_max_depth.setStyleSheet("QSpinBox::up-button:pressed {\n"
-"    margin-top: 4px;  /* 模拟按压下沉 */\n"
-"}\n"
-"QSpinBox::down-button:pressed {\n"
-"    margin-top: 4px;\n"
-"}")
-        self.spinBox_max_depth.setProperty("value", 4)
-        self.spinBox_max_depth.setObjectName("spinBox_max_depth")
-        self.spinBox_random_state = QtWidgets.QSpinBox(self.centralwidget)
-        self.spinBox_random_state.setGeometry(QtCore.QRect(308, 119, 110, 40))
-        self.spinBox_random_state.setMinimumSize(QtCore.QSize(110, 40))
-        font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.spinBox_random_state.setFont(font)
-        self.spinBox_random_state.setStyleSheet("QSpinBox::up-button:pressed {\n"
-"    margin-top: 4px;  /* 模拟按压下沉 */\n"
-"}\n"
-"QSpinBox::down-button:pressed {\n"
-"    margin-top: 4px;\n"
-"}")
-        self.spinBox_random_state.setProperty("value", 2)
-        self.spinBox_random_state.setObjectName("spinBox_random_state")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(150, 200, 81, 41))
         self.pushButton.setStyleSheet("QPushButton{\n"
@@ -89,45 +55,103 @@ class Ui_DT_para(object):
 "    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
 "}")
         self.pushButton_2.setObjectName("pushButton_2")
-        self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(60, 70, 231, 91))
-        self.layoutWidget.setObjectName("layoutWidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.widget.setGeometry(QtCore.QRect(110, 70, 272, 90))
+        self.widget.setObjectName("widget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.label = QtWidgets.QLabel(self.layoutWidget)
-        self.label.setMinimumSize(QtCore.QSize(200, 30))
-        self.label.setMaximumSize(QtCore.QSize(250, 16777215))
-        self.label.setStyleSheet("QLabel{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(177, 255, 255);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
+        self.label = QtWidgets.QLabel(self.widget)
+        self.label.setMinimumSize(QtCore.QSize(100, 30))
+        self.label.setMaximumSize(QtCore.QSize(150, 16777215))
+        self.label.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
 "\n"
-"font:bold;\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
 "}")
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
-        self.label_2 = QtWidgets.QLabel(self.layoutWidget)
-        self.label_2.setMinimumSize(QtCore.QSize(160, 30))
-        self.label_2.setMaximumSize(QtCore.QSize(250, 200))
-        self.label_2.setStyleSheet("QLabel{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(177, 255, 255);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
+        self.label_2 = QtWidgets.QLabel(self.widget)
+        self.label_2.setMinimumSize(QtCore.QSize(100, 30))
+        self.label_2.setMaximumSize(QtCore.QSize(150, 200))
+        self.label_2.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
 "\n"
-"font:bold;\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
 "}")
         self.label_2.setObjectName("label_2")
         self.verticalLayout.addWidget(self.label_2)
+        self.horizontalLayout.addLayout(self.verticalLayout)
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.spinBox_max_depth = QtWidgets.QSpinBox(self.widget)
+        self.spinBox_max_depth.setMinimumSize(QtCore.QSize(110, 40))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.spinBox_max_depth.setFont(font)
+        self.spinBox_max_depth.setStyleSheet("QSpinBox::up-button:pressed {\n"
+"    margin-top: 4px;  /* 模拟按压下沉 */\n"
+"}\n"
+"QSpinBox::down-button:pressed {\n"
+"    margin-top: 4px;\n"
+"}")
+        self.spinBox_max_depth.setProperty("value", 4)
+        self.spinBox_max_depth.setObjectName("spinBox_max_depth")
+        self.verticalLayout_2.addWidget(self.spinBox_max_depth)
+        self.spinBox_random_state = QtWidgets.QSpinBox(self.widget)
+        self.spinBox_random_state.setMinimumSize(QtCore.QSize(110, 40))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.spinBox_random_state.setFont(font)
+        self.spinBox_random_state.setStyleSheet("QSpinBox::up-button:pressed {\n"
+"    margin-top: 4px;  /* 模拟按压下沉 */\n"
+"}\n"
+"QSpinBox::down-button:pressed {\n"
+"    margin-top: 4px;\n"
+"}")
+        self.spinBox_random_state.setProperty("value", 42)
+        self.spinBox_random_state.setObjectName("spinBox_random_state")
+        self.verticalLayout_2.addWidget(self.spinBox_random_state)
+        self.horizontalLayout.addLayout(self.verticalLayout_2)
         DT_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(DT_para)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 544, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 502, 23))
         self.menubar.setObjectName("menubar")
         DT_para.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(DT_para)
@@ -145,5 +169,5 @@ class Ui_DT_para(object):
         DT_para.setWindowTitle(_translate("DT_para", "决策树：参数设置"))
         self.pushButton.setText(_translate("DT_para", "确定"))
         self.pushButton_2.setText(_translate("DT_para", "取消"))
-        self.label.setText(_translate("DT_para", "DT_max_depth"))
-        self.label_2.setText(_translate("DT_para", "DT_random_state"))
+        self.label.setText(_translate("DT_para", "max_depth"))
+        self.label_2.setText(_translate("DT_para", "random_state"))
