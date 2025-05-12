@@ -12,6 +12,7 @@ import sys
 import os
 import scipy.io as sio
 from ALL_Algorithms.VA_para import Ui_VA_para
+from ALL_Algorithms.load_model_para import Ui_load_model_para
 from ALL_Algorithms.algorithms1_DT_para import Ui_DT_para
 from ALL_Algorithms.algorithms2_RF_para import Ui_RF_para
 from ALL_Algorithms.algorithms3_SVM_para import Ui_SVM_para   
@@ -75,23 +76,35 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
             return
 
     def save_VA_folder(self):
-        '''新内容取消的时候不会改变linedit'''
-        file_filter = "Data Files (*.csv *.xls *.xlsx *.mat);;Excel Files (*.xls *.xlsx);;MATLAB Files (*.mat);;CSV Files (*.csv);;All Files(*.*)"
-        initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
-        self.fileName, _ = QFileDialog.getSaveFileName(
-            self, "选取文件", initial_dir, file_filter
+        '''新内容取消的时候不会改变lineEdit'''
+        # 将初始目录设置为 data 文件夹
+        initial_dir = os.path.join(os.getcwd(), "data")  # 获取当前工作目录下的 data 文件夹路径
+        if not os.path.exists(initial_dir):  # 如果 data 文件夹不存在，则创建
+            os.makedirs(initial_dir)
+
+        self.fileName = QFileDialog.getExistingDirectory(
+            self, "选取文件夹", initial_dir
         )
 
         if not self.fileName:  # 用户取消选择
             return 
-        # 更新上次路径并显示到lineEdit
+        # 更新上次路径并显示到 lineEdit
         self.lastSelectedPath = self.fileName
         self.lineEdit_VA_outputpath.setText(self.fileName)
-        print("选择的文件:", self.fileName)
-        if not os.path.isfile(self.fileName):
-            self.lineEdit_VA_outputpath.setText("File path doesn't exist")
-            return
+        print("选择输出的文件夹:", self.fileName)
 
+class POP_load_model_para(QMainWindow, Ui_load_model_para, Ui_MainWindow):
+    def __init__(self, parent=None):
+        super(POP_load_model_para, self).__init__()
+        self.setupUi(self)
+        self.parent_window = parent#保存主窗口的引用
+    
+    def Confirm(self):
+         # 读取输入参数
+        global max_depth, random_state,method
+
+        if self.parent_window:
+            self.parent_window.lineEdit_Algorithm_name.setText("加载预训练模型")
 
 class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -301,6 +314,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
     def AL_VA_para(self):
     
         self.ui_pop = POP_VA_para(self)
+        self.ui_pop.show()
+
+    def AL_load_model_para(self):
+    
+        self.ui_pop = POP_load_model_para(self)
         self.ui_pop.show()
 
     def AL_DT_para(self):

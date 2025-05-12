@@ -2025,6 +2025,22 @@ QPushButton:pressed {
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_predict</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>AL_load_model_para()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>936</x>
+     <y>208</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1024</x>
+     <y>198</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>AL_DT_para()</slot>
@@ -2042,5 +2058,6 @@ QPushButton:pressed {
   <slot>AL_REMTW_para()</slot>
   <slot>AL_VA_para()</slot>
   <slot>save()</slot>
+  <slot>AL_load_model_para()</slot>
  </slots>
 </ui>
