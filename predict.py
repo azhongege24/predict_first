@@ -11,6 +11,7 @@ from PyQt5.QtGui import QPixmap
 import sys
 import os
 import scipy.io as sio
+from VibrationAnalyzer import VibrationAnalyzer
 from ALL_Algorithms.VA_para import Ui_VA_para
 from ALL_Algorithms.load_model_para import Ui_load_model_para
 from ALL_Algorithms.algorithms1_DT_para import Ui_DT_para
@@ -44,15 +45,18 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
     
     def Confirm(self):
          # 读取输入参数
-        global sampling_rate,VA_inpath,VA_outpath
-        sampling_rate = self.spinBox_sampling_rate.text()
+        global sampling_rate,VA_inpath,VA_outpath,num_groups
+        sampling_rate = int(self.spinBox_sampling_rate.text())
+        num_groups = int(self.spinBox_num_groups.text())
         VA_inpath = self.lineEdit_VA_inputpath.text()
         VA_outpath = self.lineEdit_VA_outputpath.text()
         if self.parent_window:
+            self.parent_window.vibration_analyzer = VibrationAnalyzer(sampling_rate=sampling_rate)
             self.parent_window.lineEdit_Algorithm_name.setText("Vibration Analysis")
             self.parent_window.lineEdit_state.setText("正在进行振动分析")
 
         print("sampling_rate:", sampling_rate) 
+        print("num_groups:", num_groups)
         print("VA_inpath:", VA_inpath)
         print("VA_outpath:", VA_outpath)
     
@@ -280,11 +284,33 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.current_page = 0
         self.figures = []  # 存储所有图表的列表
 
+        # 初始化 VibrationAnalyzer 为 None，等待用户输入采样率后再实例化
+        self.vibration_analyzer = None
+
 
 
         # 连接按钮信号
         self.pushButton_top.clicked.connect(self.show_previous_page)
         self.pushButton_bottom.clicked.connect(self.show_next_page)
+    
+    def handle_vibration_analysis(self):#测试阶段
+        """
+        振动分析按钮的槽函数
+        """
+        if self.vibration_analyzer is None:
+            self.lineEdit_state.setText("请先设置采样率！")
+            return
+
+        try:
+            # 调用 VibrationAnalyzer 的方法
+            vibration_data = self.vibration_analyzer.generate_test_data(num_samples=1000, num_groups=3)
+            result = self.vibration_analyzer.analyze_data(vibration_data)
+            print("分析结果:", result)
+
+            # 保存分析结果
+            self.vibration_analyzer.save_analysis_result(result)
+        except Exception as e:
+            print(f"振动分析失败: {str(e)}")
 
     def show_previous_page(self):
         """显示上一页"""

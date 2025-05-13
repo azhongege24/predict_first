@@ -94,25 +94,51 @@ class VibrationAnalyzer:
                 # 捕获异常并显示错误信息
                 print(f"Save failed: {str(e)}")
     @staticmethod
-    def generate_test_data(num_samples=1000, num_groups=3):
+    def generate_test_data(file_path=None, num_samples=1000, num_groups=3):
         """
-        生成测试数据
-        :param num_samples: 每组样本数
-        :param num_groups: 组数
+        生成测试数据或从外部文件加载数据
+        :param file_path: 外部数据文件路径 (可选)
+        :param num_samples: 每组样本数 (仅在生成测试数据时使用)
+        :param num_groups: 组数 (仅在生成测试数据时使用)
         :return: 单组或多组测试数据
         """
-        if num_groups == 1:
-            # 单组数据
-            t = np.linspace(0, 1, num_samples)
-            return 0.5 * np.sin(2 * np.pi * 50 * t) + 0.1 * np.random.normal(size=num_samples)
+        if file_path:
+            # 从外部文件加载数据
+            try:
+                if file_path.endswith(('.xls', '.xlsx')):
+                    # 读取 Excel 文件
+                    data = pd.read_excel(file_path)
+                elif file_path.endswith('.mat'):
+                    # 读取 MATLAB 文件
+                    mat_data = sio.loadmat(file_path)
+                    # 假设 MAT 文件中包含 'data' 键
+                    data = pd.DataFrame(mat_data['data'])
+                elif file_path.endswith('.csv'):
+                    # 读取 CSV 文件
+                    data = pd.read_csv(file_path)
+                else:
+                    raise ValueError("Unsupported file format. Please use .csv, .xls, .xlsx, or .mat")
+
+                print(f"成功加载数据文件: {file_path}")
+                return data
+            except Exception as e:
+                print(f"加载数据文件失败: {str(e)}")
+                return None
         else:
-            # 多组数据
-            data = {}
-            for i in range(num_groups):
+            # 生成测试数据
+            if num_groups == 1:
+                # 单组数据
                 t = np.linspace(0, 1, num_samples)
-                freq = 30 + i * 20
-                data[f'group_{i+1}'] = 0.5 * np.sin(2 * np.pi * freq * t) + 0.1 * np.random.normal(size=num_samples)
-            return data
+                return 0.5 * np.sin(2 * np.pi * 50 * t) + 0.1 * np.random.normal(size=num_samples)
+            else:
+                # 多组数据
+                data = {}
+                for i in range(num_groups):
+                    t = np.linspace(0, 1, num_samples)
+                    freq = 30 + i * 20
+                    data[f'group_{i+1}'] = 0.5 * np.sin(2 * np.pi * freq * t) + 0.1 * np.random.normal(size=num_samples)
+                return data
+            
     def visualize_data(self, vibration_data, psd_result=None):
         """
         可视化振动数据和 PSD 分析结果
