@@ -8,6 +8,8 @@ import pandas as pd
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QFileDialog, QGraphicsScene, QGraphicsView, QWidget, QCheckBox, QListWidgetItem
 from PyQt5.QtCore import Qt ,QSettings
 from PyQt5.QtGui import QPixmap
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import sys
 import os
 import scipy.io as sio
@@ -36,6 +38,7 @@ global max_depth, random_state,n_estimators,kernel, C, epsilon
 global hidden_layer_sizes, max_iter,method,n_jobs,alpha,beta
 method = 'NONE'  # 初始化方法为NONE
 # 读取输入参数
+VA_inpath = ""  # 设置一个默认值
 class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
     def __init__(self, parent=None):
         super(POP_VA_para, self).__init__()
@@ -48,10 +51,11 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         global sampling_rate,VA_inpath,VA_outpath,num_groups
         sampling_rate = int(self.spinBox_sampling_rate.text())
         num_groups = int(self.spinBox_num_groups.text())
-        VA_inpath = self.lineEdit_VA_inputpath.text()
+        VA_inpath = str(self.lineEdit_VA_inputpath.text())
         VA_outpath = self.lineEdit_VA_outputpath.text()
         if self.parent_window:
             self.parent_window.vibration_analyzer = VibrationAnalyzer(sampling_rate=sampling_rate)
+            self.parent_window.VA_inpath = VA_inpath  # 将路径传递给主窗口
             self.parent_window.lineEdit_Algorithm_name.setText("Vibration Analysis")
             self.parent_window.lineEdit_state.setText("正在进行振动分析")
 
@@ -286,6 +290,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
         # 初始化 VibrationAnalyzer 为 None，等待用户输入采样率后再实例化
         self.vibration_analyzer = None
+        self.VA_inpath = ""
 
 
 
@@ -303,15 +308,70 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
         try:
             # 调用 VibrationAnalyzer 的方法
-            vibration_data = self.vibration_analyzer.generate_test_data(num_samples=1000, num_groups=3)
+            vibration_data = self.vibration_analyzer.generate_test_data(file_path=VA_inpath,num_samples=1000, num_groups=3)
             result = self.vibration_analyzer.analyze_data(vibration_data)
             print("分析结果:", result)
 
             # 保存分析结果
             self.vibration_analyzer.save_analysis_result(result)
         except Exception as e:
-            print(f"振动分析失败: {str(e)}")
+            print(f"振动分析失败: {str(e)}")   
 
+    def preview_VA_data(self, file_path=None):
+        """
+        预览从外部文件导入的振动数据（单组或多组），并在 UI 的 QGraphicsView 上显示
+        :param file_path: 数据文件路径
+        """
+        try:
+            if not file_path:
+                file_path = self.VA_inpath
+            # 读取文件
+            if file_path.endswith('.csv'):
+                data = pd.read_csv(file_path)
+            elif file_path.endswith(('.xls', '.xlsx')):
+                data = pd.read_excel(file_path)
+            else:
+                raise ValueError("仅支持 CSV 或 Excel 文件格式")
+
+            # 创建 Matplotlib 图形
+            figure = Figure(figsize=(8, 4))
+            canvas = FigureCanvas(figure)
+            ax = figure.add_subplot(111)
+
+            # 判断数据结构
+            if 'group' in data.columns:
+                # 多组数据处理
+                groups = data['group'].unique()
+                for group in groups:
+                    group_data = data[data['group'] == group]
+                    ax.plot(group_data['frequency'], group_data['psd'], label=f'{group}')
+                ax.set_xlabel('Frequency (Hz)')
+                ax.set_ylabel('PSD')
+                ax.set_title('Group Data')
+                ax.legend()
+            elif 'frequency' in data.columns and 'psd' in data.columns:
+                # 单组数据处理
+                ax.plot(data['frequency'], data['psd'], label='Single Group')
+                ax.set_xlabel('Frequency (Hz)')
+                ax.set_ylabel('PSD')
+                ax.set_title('Single Group Data')
+                ax.legend()
+            else:
+                raise ValueError("文件格式不正确，缺少必要的列（frequency, psd 或 group）")
+
+            # 绘制图形
+            canvas.draw()
+
+            # 更新图形到界面
+            self.graphicscene = QGraphicsScene()
+            self.graphicscene.addWidget(canvas)
+            self.graphicsView.setScene(self.graphicscene)
+            self.graphicsView.setDragMode(QGraphicsView.ScrollHandDrag)
+            self.graphicsView.show()
+
+        except Exception as e:
+            print(f"数据预览失败: {str(e)}")
+        
     def show_previous_page(self):
         """显示上一页"""
         if self.current_page > 0:
@@ -829,12 +889,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 )
             self.lineEdit_DEVICE.setText("GPU")
            
-
-
     #单输出绘图的时候调用此函数，进行可视化展示,前五个算法的单输出画图展示
-
-
-
 
     def get_input(self):#取得输入的特征
         # 获取输入特征列表和标志位
