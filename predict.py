@@ -14,6 +14,7 @@ import sys
 import os
 import scipy.io as sio
 from VibrationAnalyzer import VibrationAnalyzer
+from ALL_Algorithms.VA_data_handle import preview_VAdata
 from ALL_Algorithms.VA_para import Ui_VA_para
 from ALL_Algorithms.load_model_para import Ui_load_model_para
 from ALL_Algorithms.algorithms1_DT_para import Ui_DT_para
@@ -317,61 +318,21 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         except Exception as e:
             print(f"振动分析失败: {str(e)}")   
 
-    def preview_VA_data(self, file_path=None):
+    def preview_VA_data(self):
         """
-        预览从外部文件导入的振动数据（单组或多组），并在 UI 的 QGraphicsView 上显示
-        :param file_path: 数据文件路径
+        预览振动数据
         """
+        if self.vibration_analyzer is None:
+            self.lineEdit_state.setText("请先设置采样率！")
+            return
+
         try:
-            if not file_path:
-                file_path = self.VA_inpath
-            # 读取文件
-            if file_path.endswith('.csv'):
-                data = pd.read_csv(file_path)
-            elif file_path.endswith(('.xls', '.xlsx')):
-                data = pd.read_excel(file_path)
-            else:
-                raise ValueError("仅支持 CSV 或 Excel 文件格式")
-
-            # 创建 Matplotlib 图形
-            figure = Figure(figsize=(8, 4))
-            canvas = FigureCanvas(figure)
-            ax = figure.add_subplot(111)
-
-            # 判断数据结构
-            if 'group' in data.columns:
-                # 多组数据处理
-                groups = data['group'].unique()
-                for group in groups:
-                    group_data = data[data['group'] == group]
-                    ax.plot(group_data['frequency'], group_data['psd'], label=f'{group}')
-                ax.set_xlabel('Frequency (Hz)')
-                ax.set_ylabel('PSD')
-                ax.set_title('Group Data')
-                ax.legend()
-            elif 'frequency' in data.columns and 'psd' in data.columns:
-                # 单组数据处理
-                ax.plot(data['frequency'], data['psd'], label='Single Group')
-                ax.set_xlabel('Frequency (Hz)')
-                ax.set_ylabel('PSD')
-                ax.set_title('Single Group Data')
-                ax.legend()
-            else:
-                raise ValueError("文件格式不正确，缺少必要的列（frequency, psd 或 group）")
-
-            # 绘制图形
-            canvas.draw()
-
-            # 更新图形到界面
-            self.graphicscene = QGraphicsScene()
-            self.graphicscene.addWidget(canvas)
-            self.graphicsView.setScene(self.graphicscene)
-            self.graphicsView.setDragMode(QGraphicsView.ScrollHandDrag)
-            self.graphicsView.show()
-
+            # 调用 VibrationAnalyzer 的方法
+            preview_VAdata(self, self.VA_inpath)
+            self.lineEdit_state.setText("数据预览成功")
         except Exception as e:
             print(f"数据预览失败: {str(e)}")
-        
+    
     def show_previous_page(self):
         """显示上一页"""
         if self.current_page > 0:
