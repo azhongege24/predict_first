@@ -1085,6 +1085,7 @@ class Ui_MainWindow(object):
         self.pushButton_8.clicked.connect(MainWindow.save) # type: ignore
         self.pushButton_predict.clicked.connect(MainWindow.AL_load_model_para) # type: ignore
         self.pushButton_6.clicked.connect(MainWindow.preview_VA_data) # type: ignore
+        self.pushButton_4.clicked.connect(MainWindow.handle_vibration_analysis) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

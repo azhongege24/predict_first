@@ -15,6 +15,7 @@ import os
 import scipy.io as sio
 from VibrationAnalyzer import VibrationAnalyzer
 from ALL_Algorithms.VA_data_handle import preview_VAdata
+from ALL_Algorithms.VA_data_handle import analyze_VA_psd
 from ALL_Algorithms.VA_para import Ui_VA_para
 from ALL_Algorithms.load_model_para import Ui_load_model_para
 from ALL_Algorithms.algorithms1_DT_para import Ui_DT_para
@@ -288,6 +289,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
         self.current_page = 0
         self.figures = []  # 存储所有图表的列表
+        # 在UI初始化代码中添加
+
 
         # 初始化 VibrationAnalyzer 为 None，等待用户输入采样率后再实例化
         self.vibration_analyzer = None
@@ -309,12 +312,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
         try:
             # 调用 VibrationAnalyzer 的方法
-            vibration_data = self.vibration_analyzer.generate_test_data(file_path=VA_inpath,num_samples=1000, num_groups=3)
-            result = self.vibration_analyzer.analyze_data(vibration_data)
-            print("分析结果:", result)
-
-            # 保存分析结果
-            self.vibration_analyzer.save_analysis_result(result)
+            analyze_VA_psd(self, self.VA_inpath,fs=sampling_rate)
+            self.lineEdit_state.setText("功率谱分析成功")
         except Exception as e:
             print(f"振动分析失败: {str(e)}")   
 

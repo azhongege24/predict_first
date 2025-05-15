@@ -2057,6 +2057,22 @@ QPushButton:pressed {
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>handle_vibration_analysis()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>83</x>
+     <y>409</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>240</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>AL_DT_para()</slot>
@@ -2076,5 +2092,6 @@ QPushButton:pressed {
   <slot>save()</slot>
   <slot>AL_load_model_para()</slot>
   <slot>preview_VA_data()</slot>
+  <slot>handle_vibration_analysis()</slot>
  </slots>
 </ui>

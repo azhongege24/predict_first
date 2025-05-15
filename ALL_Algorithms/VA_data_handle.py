@@ -6,16 +6,115 @@ from sklearn.metrics import r2_score
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT as NavigationToolbar
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
 from matplotlib import pyplot as plt
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy import signal
+from pathlib import Path
 
-    
+def analyze_VA_psd(self, file_path=None, fs=1000.0, nperseg=1024, scaling='density'):
+    """
+    振动数据功率谱分析（集成到主窗口显示）
+    :param file_path: 输入文件路径
+    :param fs: 采样频率(Hz)
+    :param nperseg: 分段长度
+    :param scaling: 'density'或'spectrum'
+    """
+    try:
+        if not file_path:
+            file_path = self.VA_inpath
+            
+        # 1. 数据加载
+        if file_path.endswith('.csv'):
+            data = pd.read_csv(file_path)
+        elif file_path.endswith(('.xls', '.xlsx')):
+            data = pd.read_excel(file_path)
+        else:
+            raise ValueError("仅支持CSV/Excel文件")
+
+        # 2. 检查数据列
+        if 'Time (s)' not in data.columns:
+            raise ValueError("缺少Time (s)列")
+            
+        vibration_cols = [col for col in data.columns 
+                         if col.startswith('Group')]
+        if not vibration_cols:
+            raise ValueError("未找到Group开头的振动数据列")
+
+        # 3. 创建Matplotlib图形（集成到UI）
+        self.figure = plt.figure(figsize=(7, 4), dpi=120)
+        self.canvas = FigureCanvasQTAgg(self.figure)
+        self.navi = NavigationToolbar(self.canvas, self.graphicsView)
+        ax = self.figure.add_subplot(111)
+
+        # 4. 计算并绘制PSD
+        psd_results = {}
+        colors = plt.cm.viridis(np.linspace(0, 1, len(vibration_cols)))
+        
+        for idx, col in enumerate(vibration_cols):
+            # Welch方法计算PSD
+            f, Pxx = signal.welch(
+                data[col],
+                fs=fs,
+                window='hann',
+                nperseg=nperseg,
+                scaling=scaling
+            )
+            
+            # 保存计算结果
+            psd_results[col] = {
+                'frequency': f,
+                'psd': Pxx,
+                'rms': np.sqrt(np.trapz(Pxx, f))
+            }
+            
+            # 在UI上绘制曲线
+            ax.semilogy(
+                f, Pxx,
+                color=colors[idx],
+                alpha=0.7,
+                linewidth=1.5,
+                label=f'{col.split(" ")[0]} (RMS={psd_results[col]["rms"]:.3f}g)'
+            )
+
+        # 5. 图形美化
+        ax.set_title(f'功率谱密度分析 ({scaling})')
+        ax.set_xlabel('Frequency [Hz]')
+        ax.set_ylabel('PSD [g²/Hz]' if scaling == 'density' else 'Power [g²]')
+        ax.grid(True, which='both', linestyle='--', alpha=0.5)
+        ax.legend()
+        
+        # 6. 显示到UI
+        self.canvas.draw()
+        self.graphicscene = QGraphicsScene()
+        self.graphicscene.addWidget(self.canvas)
+        self.graphicsView.setScene(self.graphicscene)
+        self.graphicsView.setDragMode(QGraphicsView.ScrollHandDrag)
+        self.graphicsView.show()
+
+        # 7. 返回计算结果（可选）
+        return {
+            'psd_data': psd_results,
+            'parameters': {
+                'fs': fs,
+                'nperseg': nperseg,
+                'scaling': scaling
+            }
+        }
+
+    except Exception as e:
+        print(f"PSD分析错误: {str(e)}")
+        return None
+     
 def preview_VAdata(self, file_path=None):
     """
-    预览从外部文件导入的振动数据（单组或多组），并在 UI 的 QGraphicsView 上显示
+    预览从外部文件导入的结构振动数据（单组或多组），并在 UI 的 QGraphicsView 上显示
     :param file_path: 数据文件路径
     """
     try:
         if not file_path:
             file_path = self.VA_inpath
+            
         # 读取文件
         if file_path.endswith('.csv'):
             data = pd.read_csv(file_path)
@@ -30,26 +129,29 @@ def preview_VAdata(self, file_path=None):
         self.navi = NavigationToolbar(self.canvas, self.graphicsView)
         ax = self.figure.add_subplot(111)
 
-        # 判断数据结构
-        if 'group' in data.columns:
-            # 多组数据处理
-            groups = data['group'].unique()
-            for group in groups:
-                group_data = data[data['group'] == group]
-                ax.plot(group_data['frequency'], group_data['psd'], label=f'{group}')
-            ax.set_xlabel('Frequency (Hz)')
-            ax.set_ylabel('PSD')
-            ax.set_title('Group Data')
-            ax.legend()
-        elif 'frequency' in data.columns and 'psd' in data.columns:
-            # 单组数据处理
-            ax.plot(data['frequency'], data['psd'], label='Single Group')
-            ax.set_xlabel('Frequency (Hz)')
-            ax.set_ylabel('PSD')
-            ax.set_title('Single Group Data')
-            ax.legend()
-        else:
-            raise ValueError("文件格式不正确，缺少必要的列（frequency, psd 或 group）")
+        # 检查数据列并绘制
+        if 'Time (s)' not in data.columns:
+            raise ValueError("文件格式不正确，缺少 Time (s) 列")
+            
+        # 获取所有振动数据列（排除时间列）
+        vibration_columns = [col for col in data.columns if col != 'Time (s)' and col.startswith('Group')]
+        
+        if not vibration_columns:
+            raise ValueError("未找到有效振动数据列（应以Group开头）")
+
+        # 绘制各振动组数据
+        for group_col in vibration_columns:
+            ax.plot(data['Time (s)'][:100], 
+                    data[group_col][:100], 
+                    color='g',  
+                    alpha=0.5,
+                    label=f'{group_col.split(" ")[0]}')  # 提取组名忽略单位
+
+        ax.set_xlabel('Time (s)')
+        ax.set_ylabel('Amplitude (g)')
+        ax.set_title('预览前一百个数据点')
+        ax.legend()
+        ax.grid(True)
 
         # 绘制图形
         self.canvas.draw()
@@ -62,59 +164,9 @@ def preview_VAdata(self, file_path=None):
         self.graphicsView.show()
 
     except Exception as e:
-        print(f"数据预览失败: {str(e)}")
+        # 这里添加您的异常处理逻辑（例如显示错误弹窗）
+        print(f"可视化错误: {str(e)}")
 
-    # def preview_VA_data(self, file_path=None):
-    #     """
-    #     预览从外部文件导入的振动数据（单组或多组），并在 UI 的 QGraphicsView 上显示
-    #     :param file_path: 数据文件路径
-    #     """
-    #     try:
-    #         if not file_path:
-    #             file_path = self.VA_inpath
-    #         # 读取文件
-    #         if file_path.endswith('.csv'):
-    #             data = pd.read_csv(file_path)
-    #         elif file_path.endswith(('.xls', '.xlsx')):
-    #             data = pd.read_excel(file_path)
-    #         else:
-    #             raise ValueError("仅支持 CSV 或 Excel 文件格式")
+    
 
-    #         # 创建 Matplotlib 图形
-    #         figure = Figure(figsize=(8, 4))
-    #         canvas = FigureCanvas(figure)
-    #         ax = figure.add_subplot(111)
-
-    #         # 判断数据结构
-    #         if 'group' in data.columns:
-    #             # 多组数据处理
-    #             groups = data['group'].unique()
-    #             for group in groups:
-    #                 group_data = data[data['group'] == group]
-    #                 ax.plot(group_data['frequency'], group_data['psd'], label=f'{group}')
-    #             ax.set_xlabel('Frequency (Hz)')
-    #             ax.set_ylabel('PSD')
-    #             ax.set_title('Group Data')
-    #             ax.legend()
-    #         elif 'frequency' in data.columns and 'psd' in data.columns:
-    #             # 单组数据处理
-    #             ax.plot(data['frequency'], data['psd'], label='Single Group')
-    #             ax.set_xlabel('Frequency (Hz)')
-    #             ax.set_ylabel('PSD')
-    #             ax.set_title('Single Group Data')
-    #             ax.legend()
-    #         else:
-    #             raise ValueError("文件格式不正确，缺少必要的列（frequency, psd 或 group）")
-
-    #         # 绘制图形
-    #         canvas.draw()
-
-    #         # 更新图形到界面
-    #         self.graphicscene = QGraphicsScene()
-    #         self.graphicscene.addWidget(canvas)
-    #         self.graphicsView.setScene(self.graphicscene)
-    #         self.graphicsView.setDragMode(QGraphicsView.ScrollHandDrag)
-    #         self.graphicsView.show()
-
-    #     except Exception as e:
-    #         print(f"数据预览失败: {str(e)}")
+    
