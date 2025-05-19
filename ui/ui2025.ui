@@ -1696,7 +1696,7 @@ qproperty-alignment: 'AlignCenter';
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_6">
+      <widget class="QPushButton" name="pushButton_preview_VA_data">
        <property name="maximumSize">
         <size>
          <width>16777215</width>
@@ -1728,7 +1728,7 @@ QPushButton:pressed {
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_4">
+      <widget class="QPushButton" name="pushButton_psd_analysis">
        <property name="maximumSize">
         <size>
          <width>16777215</width>
@@ -1760,7 +1760,7 @@ QPushButton:pressed {
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_5">
+      <widget class="QPushButton" name="pushButton_save_psd">
        <property name="maximumSize">
         <size>
          <width>16777215</width>
@@ -2038,38 +2038,6 @@ QPushButton:pressed {
     <hint type="destinationlabel">
      <x>1024</x>
      <y>198</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton_6</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>preview_VA_data()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>88</x>
-     <y>351</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>18</x>
-     <y>228</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton_4</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>handle_vibration_analysis()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>83</x>
-     <y>409</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>117</x>
-     <y>240</y>
     </hint>
    </hints>
   </connection>

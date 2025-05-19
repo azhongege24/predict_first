@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import r2_score
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT as NavigationToolbar
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView,QFileDialog
 from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
@@ -105,6 +105,43 @@ def analyze_VA_psd(self, file_path=None, fs=1000.0, nperseg=1024, scaling='densi
     except Exception as e:
         print(f"PSD分析错误: {str(e)}")
         return None
+def save_psd_result_util(parent, psd_result):
+    """
+    通用PSD保存工具函数
+    :param parent: 主窗口self（用于弹窗和控件）
+    :param psd_result: 分析结果字典
+    """
+    if not psd_result:
+        parent.lineEdit_state.setText("请先分析后再保存！")
+        return
+
+    file_save, _ = QFileDialog.getSaveFileName(
+        parent, "保存PSD结果", "",
+        "CSV Files (*.csv);;Excel Files (*.xlsx)"
+    )
+    if file_save:
+        try:
+            import pandas as pd
+            all_rows = []
+            for group, result in psd_result.items():
+                freq = result['frequency']
+                psd = result['psd']
+                rms = result['rms']
+                for f, p in zip(freq, psd):
+                    all_rows.append({
+                        'Group': group,
+                        'Frequency': f,
+                        'PSD': p,
+                        'RMS': rms
+                    })
+            df = pd.DataFrame(all_rows)
+            if file_save.endswith('.xlsx'):
+                df.to_excel(file_save, index=False)
+            else:
+                df.to_csv(file_save, index=False)
+            parent.lineEdit_state.setText("PSD结果保存成功")
+        except Exception as e:
+            parent.lineEdit_state.setText(f"保存失败: {str(e)}")
      
 def preview_VAdata(self, file_path=None):
     """

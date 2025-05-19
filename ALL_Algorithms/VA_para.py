@@ -66,13 +66,13 @@ class Ui_VA_para(object):
         self.pushButton_2.setObjectName("pushButton_2")
         self.horizontalLayout.addWidget(self.pushButton_2)
         self.widget = QtWidgets.QWidget(self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(30, 60, 454, 166))
+        self.widget.setGeometry(QtCore.QRect(60, 80, 447, 128))
         self.widget.setObjectName("widget")
-        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.widget)
-        self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.verticalLayout = QtWidgets.QVBoxLayout()
-        self.verticalLayout.setObjectName("verticalLayout")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.widget)
+        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.label = QtWidgets.QLabel(self.widget)
         self.label.setMaximumSize(QtCore.QSize(200, 40))
         self.label.setStyleSheet("QLabel {\n"
@@ -95,7 +95,7 @@ class Ui_VA_para(object):
 "    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
 "}")
         self.label.setObjectName("label")
-        self.verticalLayout.addWidget(self.label)
+        self.verticalLayout_2.addWidget(self.label)
         self.label_4 = QtWidgets.QLabel(self.widget)
         self.label_4.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
@@ -117,10 +117,10 @@ class Ui_VA_para(object):
 "    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
 "}")
         self.label_4.setObjectName("label_4")
-        self.verticalLayout.addWidget(self.label_4)
-        self.label_2 = QtWidgets.QLabel(self.widget)
-        self.label_2.setMaximumSize(QtCore.QSize(200, 40))
-        self.label_2.setStyleSheet("QLabel {\n"
+        self.verticalLayout_2.addWidget(self.label_4)
+        self.label_VA_data_path = QtWidgets.QLabel(self.widget)
+        self.label_VA_data_path.setMaximumSize(QtCore.QSize(200, 40))
+        self.label_VA_data_path.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
 "    padding: 4px 8px;\n"
@@ -139,34 +139,11 @@ class Ui_VA_para(object):
 "QLabel:pressed {\n"
 "    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
 "}")
-        self.label_2.setObjectName("label_2")
-        self.verticalLayout.addWidget(self.label_2)
-        self.label_3 = QtWidgets.QLabel(self.widget)
-        self.label_3.setMaximumSize(QtCore.QSize(200, 40))
-        self.label_3.setStyleSheet("QLabel {\n"
-"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
-"    border-radius: 8px;\n"
-"    padding: 4px 8px;\n"
-"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
-"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
-"    font: bold 16pt \"Times New Roman\";     \n"
-"    qproperty-alignment: \'AlignCenter\';\n"
-"    /* 强化阴影效果 */\n"
-"}\n"
-"\n"
-"QLabel:hover {\n"
-"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
-"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
-"}\n"
-"\n"
-"QLabel:pressed {\n"
-"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
-"}")
-        self.label_3.setObjectName("label_3")
-        self.verticalLayout.addWidget(self.label_3)
-        self.horizontalLayout_4.addLayout(self.verticalLayout)
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.label_VA_data_path.setObjectName("label_VA_data_path")
+        self.verticalLayout_2.addWidget(self.label_VA_data_path)
+        self.horizontalLayout_3.addLayout(self.verticalLayout_2)
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
         self.spinBox_sampling_rate = QtWidgets.QSpinBox(self.widget)
         self.spinBox_sampling_rate.setMinimumSize(QtCore.QSize(110, 40))
         self.spinBox_sampling_rate.setMaximumSize(QtCore.QSize(400, 16777215))
@@ -185,7 +162,7 @@ class Ui_VA_para(object):
         self.spinBox_sampling_rate.setMaximum(9999)
         self.spinBox_sampling_rate.setProperty("value", 1000)
         self.spinBox_sampling_rate.setObjectName("spinBox_sampling_rate")
-        self.verticalLayout_2.addWidget(self.spinBox_sampling_rate)
+        self.verticalLayout.addWidget(self.spinBox_sampling_rate)
         self.spinBox_num_groups = QtWidgets.QSpinBox(self.widget)
         self.spinBox_num_groups.setMinimumSize(QtCore.QSize(110, 40))
         self.spinBox_num_groups.setMaximumSize(QtCore.QSize(400, 16777215))
@@ -203,21 +180,21 @@ class Ui_VA_para(object):
 "}")
         self.spinBox_num_groups.setProperty("value", 1)
         self.spinBox_num_groups.setObjectName("spinBox_num_groups")
-        self.verticalLayout_2.addWidget(self.spinBox_num_groups)
+        self.verticalLayout.addWidget(self.spinBox_num_groups)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.lineEdit_VA_inputpath = QtWidgets.QLineEdit(self.widget)
-        self.lineEdit_VA_inputpath.setMinimumSize(QtCore.QSize(250, 30))
-        self.lineEdit_VA_inputpath.setMaximumSize(QtCore.QSize(9999, 16777215))
+        self.lineEdit_VA_data_path = QtWidgets.QLineEdit(self.widget)
+        self.lineEdit_VA_data_path.setMinimumSize(QtCore.QSize(250, 30))
+        self.lineEdit_VA_data_path.setMaximumSize(QtCore.QSize(9999, 16777215))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
         font.setPointSize(12)
         font.setBold(True)
         font.setWeight(75)
-        self.lineEdit_VA_inputpath.setFont(font)
-        self.lineEdit_VA_inputpath.setReadOnly(True)
-        self.lineEdit_VA_inputpath.setObjectName("lineEdit_VA_inputpath")
-        self.horizontalLayout_2.addWidget(self.lineEdit_VA_inputpath)
+        self.lineEdit_VA_data_path.setFont(font)
+        self.lineEdit_VA_data_path.setReadOnly(True)
+        self.lineEdit_VA_data_path.setObjectName("lineEdit_VA_data_path")
+        self.horizontalLayout_2.addWidget(self.lineEdit_VA_data_path)
         self.pushButton_3 = QtWidgets.QPushButton(self.widget)
         self.pushButton_3.setMinimumSize(QtCore.QSize(30, 30))
         self.pushButton_3.setMaximumSize(QtCore.QSize(30, 30))
@@ -229,33 +206,8 @@ class Ui_VA_para(object):
         self.pushButton_3.setFont(font)
         self.pushButton_3.setObjectName("pushButton_3")
         self.horizontalLayout_2.addWidget(self.pushButton_3)
-        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.lineEdit_VA_outputpath = QtWidgets.QLineEdit(self.widget)
-        self.lineEdit_VA_outputpath.setMinimumSize(QtCore.QSize(250, 30))
-        font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.lineEdit_VA_outputpath.setFont(font)
-        self.lineEdit_VA_outputpath.setReadOnly(True)
-        self.lineEdit_VA_outputpath.setObjectName("lineEdit_VA_outputpath")
-        self.horizontalLayout_3.addWidget(self.lineEdit_VA_outputpath)
-        self.pushButton_4 = QtWidgets.QPushButton(self.widget)
-        self.pushButton_4.setMinimumSize(QtCore.QSize(30, 30))
-        self.pushButton_4.setMaximumSize(QtCore.QSize(30, 30))
-        font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.pushButton_4.setFont(font)
-        self.pushButton_4.setObjectName("pushButton_4")
-        self.horizontalLayout_3.addWidget(self.pushButton_4)
-        self.verticalLayout_2.addLayout(self.horizontalLayout_3)
-        self.horizontalLayout_4.addLayout(self.verticalLayout_2)
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
+        self.horizontalLayout_3.addLayout(self.verticalLayout)
         VA_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(VA_para)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 550, 23))
@@ -270,7 +222,6 @@ class Ui_VA_para(object):
         self.pushButton.clicked.connect(VA_para.Confirm) # type: ignore
         self.pushButton.released.connect(VA_para.close) # type: ignore
         self.pushButton_2.clicked.connect(VA_para.close) # type: ignore
-        self.pushButton_4.clicked.connect(VA_para.save_VA_folder) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(VA_para)
 
     def retranslateUi(self, VA_para):
@@ -280,7 +231,5 @@ class Ui_VA_para(object):
         self.pushButton_2.setText(_translate("VA_para", "取消"))
         self.label.setText(_translate("VA_para", "sampling_rate"))
         self.label_4.setText(_translate("VA_para", "num_groups"))
-        self.label_2.setText(_translate("VA_para", "VA_inputpath"))
-        self.label_3.setText(_translate("VA_para", "VA_outputpath"))
+        self.label_VA_data_path.setText(_translate("VA_para", "VA_data_path"))
         self.pushButton_3.setText(_translate("VA_para", "..."))
-        self.pushButton_4.setText(_translate("VA_para", "..."))

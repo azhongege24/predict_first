@@ -13,9 +13,9 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import sys
 import os
 import scipy.io as sio
-from VibrationAnalyzer import VibrationAnalyzer
 from ALL_Algorithms.VA_data_handle import preview_VAdata
 from ALL_Algorithms.VA_data_handle import analyze_VA_psd
+from ALL_Algorithms.VA_data_handle import save_psd_result_util
 from ALL_Algorithms.VA_para import Ui_VA_para
 from ALL_Algorithms.load_model_para import Ui_load_model_para
 from ALL_Algorithms.algorithms1_DT_para import Ui_DT_para
@@ -40,7 +40,7 @@ global max_depth, random_state,n_estimators,kernel, C, epsilon
 global hidden_layer_sizes, max_iter,method,n_jobs,alpha,beta
 method = 'NONE'  # 初始化方法为NONE
 # 读取输入参数
-VA_inpath = ""  # 设置一个默认值
+VA_data_path = ""  # 设置一个默认值
 class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
     def __init__(self, parent=None):
         super(POP_VA_para, self).__init__()
@@ -50,21 +50,19 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
     
     def Confirm(self):
          # 读取输入参数
-        global sampling_rate,VA_inpath,VA_outpath,num_groups
+        global sampling_rate,VA_data_path,VA_outpath,num_groups
         sampling_rate = int(self.spinBox_sampling_rate.text())
         num_groups = int(self.spinBox_num_groups.text())
-        VA_inpath = str(self.lineEdit_VA_inputpath.text())
-        VA_outpath = self.lineEdit_VA_outputpath.text()
+        VA_data_path = str(self.lineEdit_VA_data_path.text())
         if self.parent_window:
-            self.parent_window.vibration_analyzer = VibrationAnalyzer(sampling_rate=sampling_rate)
-            self.parent_window.VA_inpath = VA_inpath  # 将路径传递给主窗口
+            self.parent_window.VA_data_path = VA_data_path  # 将路径传递给主窗口
             self.parent_window.lineEdit_Algorithm_name.setText("Vibration Analysis")
             self.parent_window.lineEdit_state.setText("正在进行振动分析")
 
         print("sampling_rate:", sampling_rate) 
         print("num_groups:", num_groups)
-        print("VA_inpath:", VA_inpath)
-        print("VA_outpath:", VA_outpath)
+        print("VA_data_path:", VA_data_path)
+
     
     def open_VA_folder(self):
         '''新内容取消的时候不会改变linedit'''
@@ -79,10 +77,10 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
 
         # 更新上次路径并显示到lineEdit
         self.lastSelectedPath = self.fileName
-        self.lineEdit_VA_inputpath.setText(self.fileName)
+        self.lineEdit_VA_data_path.setText(self.fileName)
         print("选择的文件:", self.fileName)
         if not os.path.isfile(self.fileName):
-            self.lineEdit_VA_inputpath.setText("File path doesn't exist")
+            self.lineEdit_VA_data_path.setText("File path doesn't exist")
             return
 
     def save_VA_folder(self):
@@ -286,6 +284,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.graphicscene = QGraphicsScene()
         self.lastSelectedPath = ""
         self.method = 'NONE'
+        self.psd_results = None
 
         self.current_page = 0
         self.figures = []  # 存储所有图表的列表
@@ -293,27 +292,31 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
 
         # 初始化 VibrationAnalyzer 为 None，等待用户输入采样率后再实例化
-        self.vibration_analyzer = None
-        self.VA_inpath = ""
+        self.VA_data_path = ""
 
 
 
         # 连接按钮信号
         self.pushButton_top.clicked.connect(self.show_previous_page)
         self.pushButton_bottom.clicked.connect(self.show_next_page)
+        self.pushButton_preview_VA_data.clicked.connect(self.preview_VA_data)
+        self.pushButton_psd_analysis.clicked.connect(self.handle_vibration_analysis)
+        self.pushButton_save_psd.clicked.connect(self.save_psd_result)
     
     def handle_vibration_analysis(self):#测试阶段
         """
         振动分析按钮的槽函数
         """
-        if self.vibration_analyzer is None:
-            self.lineEdit_state.setText("请先设置采样率！")
-            return
+
 
         try:
             # 调用 VibrationAnalyzer 的方法
-            analyze_VA_psd(self, self.VA_inpath,fs=sampling_rate)
-            self.lineEdit_state.setText("功率谱分析成功")
+            result = analyze_VA_psd(self, VA_data_path,fs=sampling_rate)
+            if result is not None:
+                self.psd_results = result['psd_data']  # 获取 PSD 数据
+                self.lineEdit_state.setText("功率谱分析成功")
+            else:
+                self.lineEdit_state.setText("分析失败")
         except Exception as e:
             print(f"振动分析失败: {str(e)}")   
 
@@ -321,16 +324,16 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         """
         预览振动数据
         """
-        if self.vibration_analyzer is None:
-            self.lineEdit_state.setText("请先设置采样率！")
-            return
 
         try:
             # 调用 VibrationAnalyzer 的方法
-            preview_VAdata(self, self.VA_inpath)
+            preview_VAdata(self, VA_data_path)
             self.lineEdit_state.setText("数据预览成功")
         except Exception as e:
             print(f"数据预览失败: {str(e)}")
+    # 主窗口类内
+    def save_psd_result(self):
+        save_psd_result_util(self, self.psd_results)   
     
     def show_previous_page(self):
         """显示上一页"""

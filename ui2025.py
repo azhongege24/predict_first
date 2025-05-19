@@ -994,9 +994,9 @@ class Ui_MainWindow(object):
 "}")
         self.label_9.setObjectName("label_9")
         self.verticalLayout_7.addWidget(self.label_9)
-        self.pushButton_6 = QtWidgets.QPushButton(self.layoutWidget7)
-        self.pushButton_6.setMaximumSize(QtCore.QSize(16777215, 40))
-        self.pushButton_6.setStyleSheet("QPushButton {\n"
+        self.pushButton_preview_VA_data = QtWidgets.QPushButton(self.layoutWidget7)
+        self.pushButton_preview_VA_data.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.pushButton_preview_VA_data.setStyleSheet("QPushButton {\n"
 "    border: 1px solid #8B5A2B;  \n"
 "    border-radius: 15px;\n"
 "    padding: 2px 4px;\n"
@@ -1013,11 +1013,11 @@ class Ui_MainWindow(object):
 "QPushButton:pressed {\n"
 "    background-color: #5C4033;  /* 深棕按压，模拟墨水质感 */\n"
 "}")
-        self.pushButton_6.setObjectName("pushButton_6")
-        self.verticalLayout_7.addWidget(self.pushButton_6)
-        self.pushButton_4 = QtWidgets.QPushButton(self.layoutWidget7)
-        self.pushButton_4.setMaximumSize(QtCore.QSize(16777215, 40))
-        self.pushButton_4.setStyleSheet("QPushButton {\n"
+        self.pushButton_preview_VA_data.setObjectName("pushButton_preview_VA_data")
+        self.verticalLayout_7.addWidget(self.pushButton_preview_VA_data)
+        self.pushButton_psd_analysis = QtWidgets.QPushButton(self.layoutWidget7)
+        self.pushButton_psd_analysis.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.pushButton_psd_analysis.setStyleSheet("QPushButton {\n"
 "    border: 1px solid #8B5A2B;  \n"
 "    border-radius: 15px;\n"
 "    padding: 2px 4px;\n"
@@ -1034,18 +1034,18 @@ class Ui_MainWindow(object):
 "QPushButton:pressed {\n"
 "    background-color: #5C4033;  /* 深棕按压，模拟墨水质感 */\n"
 "}")
-        self.pushButton_4.setObjectName("pushButton_4")
-        self.verticalLayout_7.addWidget(self.pushButton_4)
-        self.pushButton_5 = QtWidgets.QPushButton(self.layoutWidget7)
-        self.pushButton_5.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.pushButton_psd_analysis.setObjectName("pushButton_psd_analysis")
+        self.verticalLayout_7.addWidget(self.pushButton_psd_analysis)
+        self.pushButton_save_psd = QtWidgets.QPushButton(self.layoutWidget7)
+        self.pushButton_save_psd.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
         font.setFamily("微软雅黑")
         font.setPointSize(14)
         font.setBold(True)
         font.setItalic(False)
         font.setWeight(75)
-        self.pushButton_5.setFont(font)
-        self.pushButton_5.setStyleSheet("QPushButton {\n"
+        self.pushButton_save_psd.setFont(font)
+        self.pushButton_save_psd.setStyleSheet("QPushButton {\n"
 "    border: 1px solid #8B5A2B;  \n"
 "    border-radius: 15px;\n"
 "    padding: 2px 4px;\n"
@@ -1062,8 +1062,8 @@ class Ui_MainWindow(object):
 "QPushButton:pressed {\n"
 "    background-color: #5C4033;  /* 深棕按压，模拟墨水质感 */\n"
 "}")
-        self.pushButton_5.setObjectName("pushButton_5")
-        self.verticalLayout_7.addWidget(self.pushButton_5)
+        self.pushButton_save_psd.setObjectName("pushButton_save_psd")
+        self.verticalLayout_7.addWidget(self.pushButton_save_psd)
         MainWindow.setCentralWidget(self.centralwidget)
         self.toolBar = QtWidgets.QToolBar(MainWindow)
         self.toolBar.setObjectName("toolBar")
@@ -1084,8 +1084,7 @@ class Ui_MainWindow(object):
         self.pushButton_vibration_analysis.clicked.connect(MainWindow.AL_VA_para) # type: ignore
         self.pushButton_8.clicked.connect(MainWindow.save) # type: ignore
         self.pushButton_predict.clicked.connect(MainWindow.AL_load_model_para) # type: ignore
-        self.pushButton_6.clicked.connect(MainWindow.preview_VA_data) # type: ignore
-        self.pushButton_4.clicked.connect(MainWindow.handle_vibration_analysis) # type: ignore
+        self.pushButton_preview_VA_data.clicked.connect(MainWindow.preview_VA_data) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -1147,7 +1146,7 @@ class Ui_MainWindow(object):
         self.label_11.setText(_translate("MainWindow", "算法结果区"))
         self.pushButton_8.setText(_translate("MainWindow", "保存预测结果"))
         self.label_9.setText(_translate("MainWindow", "振动分析区"))
-        self.pushButton_6.setText(_translate("MainWindow", "预览导入数据"))
-        self.pushButton_4.setText(_translate("MainWindow", "功率谱分析"))
-        self.pushButton_5.setText(_translate("MainWindow", "保存振动数据"))
+        self.pushButton_preview_VA_data.setText(_translate("MainWindow", "预览导入数据"))
+        self.pushButton_psd_analysis.setText(_translate("MainWindow", "功率谱分析"))
+        self.pushButton_save_psd.setText(_translate("MainWindow", "保存振动数据"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))

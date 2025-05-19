@@ -103,15 +103,15 @@ QPushButton:pressed {
    <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>60</y>
-      <width>454</width>
-      <height>166</height>
+      <x>60</x>
+      <y>80</y>
+      <width>447</width>
+      <height>128</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QLabel" name="label">
          <property name="maximumSize">
@@ -175,7 +175,7 @@ QLabel:pressed {
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="label_VA_data_path">
          <property name="maximumSize">
           <size>
            <width>200</width>
@@ -204,48 +204,14 @@ QLabel:pressed {
 }</string>
          </property>
          <property name="text">
-          <string>VA_inputpath</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_3">
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>40</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QLabel {
-    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
-    border-radius: 8px;
-    padding: 4px 8px;
-    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
-    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
-    font: bold 16pt &quot;Times New Roman&quot;;     
-    qproperty-alignment: 'AlignCenter';
-    /* 强化阴影效果 */
-}
-
-QLabel:hover {
-    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */
-    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */
-}
-
-QLabel:pressed {
-    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */
-}</string>
-         </property>
-         <property name="text">
-          <string>VA_outputpath</string>
+          <string>VA_data_path</string>
          </property>
         </widget>
        </item>
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QSpinBox" name="spinBox_sampling_rate">
          <property name="minimumSize">
@@ -322,7 +288,7 @@ QSpinBox::down-button:pressed {
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLineEdit" name="lineEdit_VA_inputpath">
+          <widget class="QLineEdit" name="lineEdit_VA_data_path">
            <property name="minimumSize">
             <size>
              <width>250</width>
@@ -350,58 +316,6 @@ QSpinBox::down-button:pressed {
          </item>
          <item>
           <widget class="QPushButton" name="pushButton_3">
-           <property name="minimumSize">
-            <size>
-             <width>30</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>30</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Times New Roman</family>
-             <pointsize>12</pointsize>
-             <weight>75</weight>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>...</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QLineEdit" name="lineEdit_VA_outputpath">
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Times New Roman</family>
-             <pointsize>12</pointsize>
-             <weight>75</weight>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_4">
            <property name="minimumSize">
             <size>
              <width>30</width>
@@ -509,22 +423,6 @@ QSpinBox::down-button:pressed {
     <hint type="destinationlabel">
      <x>541</x>
      <y>318</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton_4</sender>
-   <signal>clicked()</signal>
-   <receiver>VA_para</receiver>
-   <slot>save_VA_folder()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>429</x>
-     <y>207</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>465</x>
-     <y>236</y>
     </hint>
    </hints>
   </connection>
