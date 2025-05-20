@@ -83,3 +83,62 @@ def remtw_plot_and_evaluate(self, remtw_model, method, input_columns, output_col
     self.lineEdit_R2.setText(str(round(R2, 5)))
     self.lineEdit_Algorithm_name.setText(f"当前算法: {method}")
 
+def test_remtw_plot_and_evaluate(remtw_model, method, input_columns, output_columns, MSE, R2):
+    """
+    绘制 ReMTW 模型的可视化结果，包括系数热力图和 Wasserstein Barycenter。
+    """
+    import time
+    start_time = time.time()
+
+    # 创建保存图像的目录
+    output_dir = "ReMTW_view"
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    # 1. 系数矩阵热力图
+    fig1 = plt.figure(figsize=(7, 4), dpi=120)
+    ax1 = fig1.add_subplot(111)
+    sns.heatmap(remtw_model.coef_, annot=True, fmt=".2f", cmap="coolwarm",
+                xticklabels=output_columns, yticklabels=input_columns, ax=ax1)
+    ax1.set_title("ReMTW Coefficient Matrix (W+ - W-)")
+    fig1_path = os.path.join(output_dir, "heatmap_coef.png")
+    fig1.savefig(fig1_path)
+    plt.close(fig1)
+
+    # 2. Wasserstein Barycenter
+    fig2 = plt.figure(figsize=(7, 4), dpi=120)
+    ax2 = fig2.add_subplot(111)
+    ax2.bar(range(len(remtw_model.barycenter_)), remtw_model.barycenter_)
+    ax2.set_title("Wasserstein Barycenter")
+    ax2.set_xlabel("Feature Index")
+    ax2.set_ylabel("Barycenter Value")
+    fig2_path = os.path.join(output_dir, "barycenter.png")
+    fig2.savefig(fig2_path)
+    plt.close(fig2)
+
+    print(f"运行时间: {time.time() - start_time:.2f} 秒")
+    print("保存的图片：", fig1_path, fig2_path)
+    print(f"MSE: {MSE:.5f}, R2: {R2:.5f}, 算法: {method}")
+
+
+if __name__ == "__main__":
+    # 示例数据
+    data_train = pd.DataFrame({
+        'feature1': np.random.rand(100),
+        'feature2': np.random.rand(100),
+        'task1': np.random.rand(100),
+        'task2': np.random.rand(100)
+    })
+    data_test = pd.DataFrame({
+        'feature1': np.random.rand(50),
+        'feature2': np.random.rand(50),
+        'task1': np.random.rand(50),
+        'task2': np.random.rand(50)
+    })
+
+    input_columns = ['feature1', 'feature2']
+    output_columns = ['task1', 'task2']
+
+    # 调用函数
+    model, X_test, y_test, y_pred, metrics = REMTW_Lasso(data_train, data_test, input_columns, output_columns)
+    test_remtw_plot_and_evaluate(model, "ReMTW", input_columns, output_columns, metrics['MSE'], metrics['R2'])   

@@ -133,4 +133,30 @@ def Group_Lasso(file_path='path to your data',input_num=22,output_num=16):
     print(f"最优alpha: {cv_model.best_params_['alpha']}")
 
 if __name__ == "__main__":
-    Group_Lasso(file_path='data/new_raw_data.csv',input_num=22,output_num=16)
+    # 示例数据
+    data_train = pd.DataFrame(np.random.rand(100, 22), columns=[f"feature_{i}" for i in range(22)])
+    data_train['target_0'] = np.random.rand(100)
+    data_train['target_1'] = np.random.rand(100)
+    data_train['target_2'] = np.random.rand(100)
+    data_train['target_3'] = np.random.rand(100)
+    data_train['target_4'] = np.random.rand(100)
+    data_train['target_5'] = np.random.rand(100)
+    data_train['target_6'] = np.random.rand(100)
+    data_train['target_7'] = np.random.rand(100)
+    data_train['target_8'] = np.random.rand(100)
+    data_train['target_9'] = np.random.rand(100)
+    data_train['target_10'] = np.random.rand(100)
+    data_train['target_11'] = np.random.rand(100)
+    data_train['target_12'] = np.random.rand(100)
+    data_train['target_13'] = np.random.rand(100)
+    data_train['target_14'] = np.random.rand(100)
+    data_train['target_15'] = np.random.rand(100)
+
+    input_columns = [f"feature_{i}" for i in range(22)]
+    output_columns = [f"target_{i}" for i in range(16)]
+
+    # 调用函数
+    model, X_test, y_test, y_pred, metrics = MTW_Lasso(data_train, data_test=data_train,
+                                                       input_columns=input_columns,
+                                                       output_columns=output_columns,
+                                                       model_type='MTW', alpha=1, beta=0.8, gpu=True)

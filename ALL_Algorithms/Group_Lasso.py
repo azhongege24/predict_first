@@ -183,39 +183,31 @@ def group_lasso_plot_and_evaluate(self, coef_shared, coef_specific, method, inpu
     #多任务Wasserstein的绘图函数
 
 if __name__ == "__main__":
-    # 模拟数据
-    np.random.seed(42)
-    data = pd.DataFrame({
-        'feature1': np.random.randn(100),
-        'feature2': np.random.randn(100),
-        'feature3': np.random.randn(100),
-        'target1': 2.5 * np.random.randn(100) + 3,
-        'target2': 1.8 * np.random.randn(100) + 5
+    # 示例数据
+    data_train = pd.DataFrame({
+        'feature1': np.random.rand(100),
+        'feature2': np.random.rand(100),
+        'output1': np.random.rand(100),
+        'output2': np.random.rand(100)
     })
 
-    # 定义输入和输出列
-    input_columns = ['feature1', 'feature2', 'feature3']
-    output_columns = ['target1', 'target2']
+    data_test = pd.DataFrame({
+        'feature1': np.random.rand(50),
+        'feature2': np.random.rand(50),
+        'output1': np.random.rand(50),
+        'output2': np.random.rand(50)
+    })
 
-    # 划分训练集和测试集
-    train_size = 70
-    data_train = data.iloc[:train_size]
-    data_test = data.iloc[train_size:]
+    input_columns = ['feature1', 'feature2']
+    output_columns = ['output1', 'output2']
 
-    # 调用 group_lasso_predictor 函数
-    grouplasso, X_test, y_test, y_pred, metrics = group_lasso_predictor(
-        data_train=data_train,
-        data_test=data_test,
-        input_columns=input_columns,
-        output_columns=output_columns,
+    model, X_test, y_test, y_pred, metrics = group_lasso_predictor(
+        data_train,
+        data_test,
+        input_columns,
+        output_columns,
         alpha=0.1,
         random_state=42,
         show_plots=True,
         show_prints=True
     )
-
-    # 打印结果
-    print("\n测试完成!")
-    print("MSE:", metrics['MSE'])
-    print("R²:", metrics['R2'])
-    print("预测值前5个样本:\n", pd.DataFrame(y_pred[:5], columns=output_columns))

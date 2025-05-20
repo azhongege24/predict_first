@@ -17,7 +17,8 @@ from ALL_Algorithms.VA_data_handle import preview_VAdata
 from ALL_Algorithms.VA_data_handle import analyze_VA_psd
 from ALL_Algorithms.VA_data_handle import save_psd_result_util
 from ALL_Algorithms.VA_para import Ui_VA_para
-from ALL_Algorithms.load_model_para import Ui_load_model_para
+from ALL_Algorithms.Load_model_para import Ui_Load_model_para
+from ALL_Algorithms.Load_pretrained_model import select_pretrained_model_path
 from ALL_Algorithms.algorithms1_DT_para import Ui_DT_para
 from ALL_Algorithms.algorithms2_RF_para import Ui_RF_para
 from ALL_Algorithms.algorithms3_SVM_para import Ui_SVM_para   
@@ -101,19 +102,28 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         self.lineEdit_VA_outputpath.setText(self.fileName)
         print("选择输出的文件夹:", self.fileName)
 
-class POP_load_model_para(QMainWindow, Ui_load_model_para, Ui_MainWindow):
+class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
     def __init__(self, parent=None):
-        super(POP_load_model_para, self).__init__()
+        super(POP_Load_model_para, self).__init__()
         self.setupUi(self)
-        self.parent_window = parent#保存主窗口的引用
-    
-    def Confirm(self):
-         # 读取输入参数
-        global max_depth, random_state,method
+        self.parent_window = parent
+        self.selected_model_path = None
 
+    def Confirm(self):
+        global loaded_model_path
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("加载预训练模型")
+        loaded_model_path = self.selected_model_path  # 这里只存路径
+        print("selected_model_path:", loaded_model_path)
 
+    def load_pretrained_model(self):
+        # 只选择路径，不加载模型
+        path = select_pretrained_model_path(self)
+        self.selected_model_path = path
+        print("Selected model path:", self.selected_model_path)
+        if self.parent_window is not None:
+            self.parent_window.selected_model_path = self.selected_model_path
+                
 class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):
     def __init__(self, parent=None):
         super(POP_DT_para, self).__init__()
@@ -285,6 +295,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.lastSelectedPath = ""
         self.method = 'NONE'
         self.psd_results = None
+        self.selected_model_path = None
 
         self.current_page = 0
         self.figures = []  # 存储所有图表的列表
@@ -302,6 +313,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.pushButton_preview_VA_data.clicked.connect(self.preview_VA_data)
         self.pushButton_psd_analysis.clicked.connect(self.handle_vibration_analysis)
         self.pushButton_save_psd.clicked.connect(self.save_psd_result)
+        
     
     def handle_vibration_analysis(self):#测试阶段
         """
@@ -334,7 +346,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
     # 主窗口类内
     def save_psd_result(self):
         save_psd_result_util(self, self.psd_results)   
-    
+
+
+
     def show_previous_page(self):
         """显示上一页"""
         if self.current_page > 0:
@@ -367,7 +381,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
     def AL_load_model_para(self):
     
-        self.ui_pop = POP_load_model_para(self)
+        self.ui_pop = POP_Load_model_para(self)
         self.ui_pop.show()
 
     def AL_DT_para(self):

@@ -204,6 +204,49 @@ def preview_VAdata(self, file_path=None):
         # 这里添加您的异常处理逻辑（例如显示错误弹窗）
         print(f"可视化错误: {str(e)}")
 
-    
+if __name__ == "__main__":
+    # 假设有一个测试数据文件 test.csv，内容包含 Time (s), Group1, Group2 ...
+    test_file = "va_data_test/test.csv"  # 你可以换成自己的数据文件路径
+
+    # 1. 直接用pandas读取数据
+    data = pd.read_csv(test_file)
+    # 2. 选出振动数据列
+    vibration_cols = [col for col in data.columns if col.startswith('Group')]
+    # 3. 计算PSD
+    from scipy import signal
+    fs = 1000.0
+    nperseg = 1024
+    scaling = 'density'
+    psd_results = {}
+    for col in vibration_cols:
+        f, Pxx = signal.welch(
+            data[col],
+            fs=fs,
+            window='hann',
+            nperseg=nperseg,
+            scaling=scaling
+        )
+        psd_results[col] = {
+            'frequency': f,
+            'psd': Pxx,
+            'rms': np.sqrt(np.trapz(Pxx, f))
+        }
+    # 4. 保存结果到文件
+    # 组装DataFrame
+    all_rows = []
+    for group, result in psd_results.items():
+        freq = result['frequency']
+        psd = result['psd']
+        rms = result['rms']
+        for f_val, p_val in zip(freq, psd):
+            all_rows.append({
+                'Group': group,
+                'Frequency': f_val,
+                'PSD': p_val,
+                'RMS': rms
+            })
+    df = pd.DataFrame(all_rows)
+    df.to_csv("va_data_test/psd_result_test.csv", index=False)
+    print("PSD分析和保存完成，结果已写入 psd_result_test.csv")
 
     

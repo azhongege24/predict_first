@@ -317,9 +317,7 @@ def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test,
 
 # 使用示例 ---------------------------------------------------
 if __name__ == "__main__":
-
-    # 生成示例数据
-    np.random.seed(42)
+    # 示例数据
     data_train = pd.DataFrame({
         'feature1': np.random.rand(100),
         'feature2': np.random.rand(100),
@@ -328,23 +326,18 @@ if __name__ == "__main__":
     })
     
     data_test = pd.DataFrame({
-        'feature1': np.random.rand(20),
-        'feature2': np.random.rand(20),
-        'target1': np.random.rand(20),
-        'target2': np.random.rand(20)
+        'feature1': np.random.rand(50),
+        'feature2': np.random.rand(50),
+        'target1': np.random.rand(50),
+        'target2': np.random.rand(50)
     })
     
     input_columns = ['feature1', 'feature2']
     output_columns = ['target1', 'target2']
     
     model, scaler, y_test, y_pred, metrics = multi_task_regression_predictor(
-        data_train,
-        data_test,
-        input_columns,
-        output_columns,
-        model_type='RF',
-        scale_features=True,
-        random_state=42
+        data_train, data_test, input_columns, output_columns, model_type='RF'
     )
     
-    print("模型评估指标：", metrics)
+    print("模型训练完成")
+    print("评估指标:", metrics)

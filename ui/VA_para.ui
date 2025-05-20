@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>550</width>
+    <width>614</width>
     <height>376</height>
    </rect>
   </property>
@@ -100,7 +100,7 @@ QPushButton:pressed {
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>60</x>
@@ -353,7 +353,7 @@ QSpinBox::down-button:pressed {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>550</width>
+     <width>614</width>
      <height>23</height>
     </rect>
    </property>
@@ -369,12 +369,12 @@ QSpinBox::down-button:pressed {
    <slot>open_VA_folder()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>452</x>
-     <y>181</y>
+     <x>503</x>
+     <y>227</y>
     </hint>
     <hint type="destinationlabel">
-     <x>662</x>
-     <y>141</y>
+     <x>510</x>
+     <y>180</y>
     </hint>
    </hints>
   </connection>
@@ -385,8 +385,8 @@ QSpinBox::down-button:pressed {
    <slot>Confirm()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>257</x>
-     <y>283</y>
+     <x>247</x>
+     <y>307</y>
     </hint>
     <hint type="destinationlabel">
      <x>306</x>
@@ -401,8 +401,8 @@ QSpinBox::down-button:pressed {
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>257</x>
-     <y>283</y>
+     <x>247</x>
+     <y>307</y>
     </hint>
     <hint type="destinationlabel">
      <x>342</x>
@@ -417,8 +417,8 @@ QSpinBox::down-button:pressed {
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>350</x>
-     <y>283</y>
+     <x>340</x>
+     <y>307</y>
     </hint>
     <hint type="destinationlabel">
      <x>541</x>

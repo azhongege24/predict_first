@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>load_model_para</class>
- <widget class="QMainWindow" name="load_model_para">
+ <class>Load_model_para</class>
+ <widget class="QMainWindow" name="Load_model_para">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -53,7 +53,7 @@ QLabel:pressed {
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit">
+      <widget class="QLineEdit" name="lineEdit_pretrained_model_path">
        <property name="minimumSize">
         <size>
          <width>100</width>
@@ -66,7 +66,7 @@ QLabel:pressed {
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="pushButton_load_model">
        <property name="minimumSize">
         <size>
          <width>30</width>
@@ -194,5 +194,74 @@ QPushButton:pressed {
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Load_model_para</receiver>
+   <slot>Confirm()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>251</x>
+     <y>271</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>132</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>Load_model_para</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>341</x>
+     <y>263</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>498</x>
+     <y>314</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Load_model_para</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>221</x>
+     <y>261</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>93</x>
+     <y>233</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_load_model</sender>
+   <signal>clicked()</signal>
+   <receiver>Load_model_para</receiver>
+   <slot>load_pretrained_model()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>474</x>
+     <y>172</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>491</x>
+     <y>90</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>Confirm()</slot>
+  <slot>load_pretrained_model()</slot>
+ </slots>
 </ui>

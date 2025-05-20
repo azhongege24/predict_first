@@ -1084,7 +1084,6 @@ class Ui_MainWindow(object):
         self.pushButton_vibration_analysis.clicked.connect(MainWindow.AL_VA_para) # type: ignore
         self.pushButton_8.clicked.connect(MainWindow.save) # type: ignore
         self.pushButton_predict.clicked.connect(MainWindow.AL_load_model_para) # type: ignore
-        self.pushButton_preview_VA_data.clicked.connect(MainWindow.preview_VA_data) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -1097,7 +1096,7 @@ class Ui_MainWindow(object):
         self.pushButton_dataset.setText(_translate("MainWindow", "数据集合"))
         self.pushButton_train.setText(_translate("MainWindow", "训练验模"))
         self.pushButton_predict.setText(_translate("MainWindow", "预测"))
-        self.label_version.setText(_translate("MainWindow", "v3.0 2025.05.13"))
+        self.label_version.setText(_translate("MainWindow", "v3.0 2025.05.20"))
         self.label_2.setText(_translate("MainWindow", "算法功能区"))
         self.pushButton_AL1.setToolTip(_translate("MainWindow", "<html><head/><body><p>决策树算法</p></body></html>"))
         self.pushButton_AL1.setText(_translate("MainWindow", "DT"))
