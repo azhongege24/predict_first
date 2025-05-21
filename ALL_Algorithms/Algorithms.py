@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import r2_score
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT as NavigationToolbar
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView,QMessageBox, QFileDialog
 from sklearn.multioutput import MultiOutputRegressor
 from sklearn.neural_network import MLPRegressor
 from sklearn.preprocessing import StandardScaler
@@ -15,6 +15,7 @@ from sklearn.metrics import mean_squared_error
 from sklearn.svm import SVR
 from tqdm import tqdm
 import shutil
+import joblib
 
 
 
@@ -90,6 +91,33 @@ def multi_task_regression_predictor(
     
     
     return model, scaler, y_test, y_pred, metrics
+
+def ask_and_save_model(parent, model, default_name="model.pkl"):
+    """
+    训练后询问是否保存模型，并保存到用户指定路径
+    :param parent: 父窗口self
+    :param model: 训练好的模型对象
+    :param default_name: 默认保存文件名
+    """
+    reply = QMessageBox.question(
+        parent,
+        "保存模型",
+        "是否保存训练好的模型？",
+        QMessageBox.Yes | QMessageBox.No,
+        QMessageBox.No
+    )
+    if reply == QMessageBox.Yes:
+        file_path, _ = QFileDialog.getSaveFileName(
+            parent,
+            "保存模型文件",
+            f"./trained_models/{default_name}",
+            "模型文件 (*.pkl *.joblib);;所有文件 (*)"
+        )
+        if file_path:
+            joblib.dump(model, file_path)
+            if hasattr(parent, "lineEdit_state"):
+                parent.lineEdit_state.setText("模型已保存: " + file_path)
+
 #单输出画图可视化函数
 def single_plot_and_evaluate(self, y_test, y_pred, method, data_test, 
                                 output_columns, N_start_test, N_end_test,MSE,R2):

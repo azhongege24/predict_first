@@ -18,7 +18,7 @@ class Ui_DT_para(object):
         self.centralwidget = QtWidgets.QWidget(DT_para)
         self.centralwidget.setObjectName("centralwidget")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(150, 200, 81, 41))
+        self.pushButton.setGeometry(QtCore.QRect(150, 220, 81, 41))
         self.pushButton.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
 "border-radius:15px;    /*设置圆角半径 */\n"
@@ -37,7 +37,7 @@ class Ui_DT_para(object):
 "}")
         self.pushButton.setObjectName("pushButton")
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(250, 200, 91, 41))
+        self.pushButton_2.setGeometry(QtCore.QRect(250, 220, 91, 41))
         self.pushButton_2.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
 "border-radius:15px;    /*设置圆角半径 */\n"
@@ -55,15 +55,15 @@ class Ui_DT_para(object):
 "    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
 "}")
         self.pushButton_2.setObjectName("pushButton_2")
-        self.widget = QtWidgets.QWidget(self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(110, 70, 272, 90))
-        self.widget.setObjectName("widget")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
+        self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget.setGeometry(QtCore.QRect(110, 70, 272, 136))
+        self.layoutWidget.setObjectName("layoutWidget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.label = QtWidgets.QLabel(self.widget)
+        self.label = QtWidgets.QLabel(self.layoutWidget)
         self.label.setMinimumSize(QtCore.QSize(100, 30))
         self.label.setMaximumSize(QtCore.QSize(150, 16777215))
         self.label.setStyleSheet("QLabel {\n"
@@ -87,7 +87,7 @@ class Ui_DT_para(object):
 "}")
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
-        self.label_2 = QtWidgets.QLabel(self.widget)
+        self.label_2 = QtWidgets.QLabel(self.layoutWidget)
         self.label_2.setMinimumSize(QtCore.QSize(100, 30))
         self.label_2.setMaximumSize(QtCore.QSize(150, 200))
         self.label_2.setStyleSheet("QLabel {\n"
@@ -111,10 +111,32 @@ class Ui_DT_para(object):
 "}")
         self.label_2.setObjectName("label_2")
         self.verticalLayout.addWidget(self.label_2)
+        self.label_3 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_3.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label_3.setObjectName("label_3")
+        self.verticalLayout.addWidget(self.label_3)
         self.horizontalLayout.addLayout(self.verticalLayout)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.spinBox_max_depth = QtWidgets.QSpinBox(self.widget)
+        self.spinBox_max_depth = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_max_depth.setMinimumSize(QtCore.QSize(110, 40))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -131,7 +153,7 @@ class Ui_DT_para(object):
         self.spinBox_max_depth.setProperty("value", 4)
         self.spinBox_max_depth.setObjectName("spinBox_max_depth")
         self.verticalLayout_2.addWidget(self.spinBox_max_depth)
-        self.spinBox_random_state = QtWidgets.QSpinBox(self.widget)
+        self.spinBox_random_state = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_random_state.setMinimumSize(QtCore.QSize(110, 40))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -148,6 +170,19 @@ class Ui_DT_para(object):
         self.spinBox_random_state.setProperty("value", 42)
         self.spinBox_random_state.setObjectName("spinBox_random_state")
         self.verticalLayout_2.addWidget(self.spinBox_random_state)
+        self.comboBox_scale_features = QtWidgets.QComboBox(self.layoutWidget)
+        self.comboBox_scale_features.setMinimumSize(QtCore.QSize(110, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(16)
+        font.setBold(True)
+        font.setWeight(75)
+        self.comboBox_scale_features.setFont(font)
+        self.comboBox_scale_features.setEditable(False)
+        self.comboBox_scale_features.setObjectName("comboBox_scale_features")
+        self.comboBox_scale_features.addItem("")
+        self.comboBox_scale_features.addItem("")
+        self.verticalLayout_2.addWidget(self.comboBox_scale_features)
         self.horizontalLayout.addLayout(self.verticalLayout_2)
         DT_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(DT_para)
@@ -171,3 +206,6 @@ class Ui_DT_para(object):
         self.pushButton_2.setText(_translate("DT_para", "取消"))
         self.label.setText(_translate("DT_para", "max_depth"))
         self.label_2.setText(_translate("DT_para", "random_state"))
+        self.label_3.setText(_translate("DT_para", "scale_features"))
+        self.comboBox_scale_features.setItemText(0, _translate("DT_para", "False"))
+        self.comboBox_scale_features.setItemText(1, _translate("DT_para", "True"))

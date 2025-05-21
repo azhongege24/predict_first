@@ -5,7 +5,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationTool
 import numpy as np
 from ui2025 import Ui_MainWindow #我新创建的界面类
 import pandas as pd
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QFileDialog, QGraphicsScene, QGraphicsView, QWidget, QCheckBox, QListWidgetItem
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton,QMessageBox, QFileDialog, QGraphicsScene, QGraphicsView, QWidget, QCheckBox, QListWidgetItem
 from PyQt5.QtCore import Qt ,QSettings
 from PyQt5.QtGui import QPixmap
 from matplotlib.figure import Figure
@@ -29,6 +29,7 @@ from ALL_Algorithms.algorithms7_MTW_para import Ui_MTW_para
 from ALL_Algorithms.algorithms8_REMTW_para import Ui_REMTW_para
 from PyQt5.QtCore import pyqtSlot
 from ALL_Algorithms.Algorithms import multi_task_regression_predictor
+from ALL_Algorithms.Algorithms import ask_and_save_model
 from ALL_Algorithms.Algorithms import single_plot_and_evaluate
 from ALL_Algorithms.Algorithms import Multi_output_plot_and_evaluate
 from ALL_Algorithms.Group_Lasso import group_lasso_predictor
@@ -37,7 +38,7 @@ from ALL_Algorithms.MTW import MTW_Lasso
 from ALL_Algorithms.MTW import mtw_plot_and_evaluate
 from ALL_Algorithms.ReMTW import REMTW_Lasso
 from ALL_Algorithms.ReMTW import remtw_plot_and_evaluate
-global max_depth, random_state,n_estimators,kernel, C, epsilon
+global max_depth, random_state,n_estimators,kernel, C, epsilon,scale_features
 global hidden_layer_sizes, max_iter,method,n_jobs,alpha,beta
 method = 'NONE'  # 初始化方法为NONE
 # 读取输入参数
@@ -132,7 +133,8 @@ class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):
     
     def Confirm(self):
          # 读取输入参数
-        global max_depth, random_state,method
+        global max_depth, random_state,method,scale_features
+        scale_features = self.comboBox_scale_features.currentText()=="True"
         max_depth = self.spinBox_max_depth.text()
         random_state = self.spinBox_random_state.text()
         method = 'DT'
@@ -141,6 +143,7 @@ class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):
 
         print("max_depth:", max_depth) 
         print("random_state:", random_state)
+        print("scale_features:", scale_features)
         
 class POP_RF_para(QMainWindow, Ui_RF_para, Ui_MainWindow):
     def __init__(self,parent=None):
@@ -613,10 +616,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 input_columns,
                 output_columns,
                 model_type='DT',
-                scale_features=False,
+                scale_features=True,
                 random_state=int(random_state),
                 max_depth=int(max_depth),
             )
+            ask_and_save_model(self,method,default_name='trained_model'+'_'+str(method)+'.pkl')    
 
             # `model` 是训练好的模型，`y_pred` 是预测结果
             print("预测结果:", y_pred)
