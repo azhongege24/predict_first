@@ -14,16 +14,17 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_RF_para(object):
     def setupUi(self, RF_para):
         RF_para.setObjectName("RF_para")
-        RF_para.resize(510, 358)
+        RF_para.resize(555, 447)
         self.centralwidget = QtWidgets.QWidget(RF_para)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(130, 210, 181, 71))
+        self.layoutWidget.setGeometry(QtCore.QRect(180, 280, 181, 71))
         self.layoutWidget.setObjectName("layoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.pushButton = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButton.setMinimumSize(QtCore.QSize(0, 40))
         self.pushButton.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
 "border-radius:15px;    /*设置圆角半径 */\n"
@@ -43,6 +44,7 @@ class Ui_RF_para(object):
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout.addWidget(self.pushButton)
         self.pushButton_2 = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
         self.pushButton_2.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
 "border-radius:15px;    /*设置圆角半径 */\n"
@@ -62,7 +64,7 @@ class Ui_RF_para(object):
         self.pushButton_2.setObjectName("pushButton_2")
         self.horizontalLayout.addWidget(self.pushButton_2)
         self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(90, 20, 261, 181))
+        self.layoutWidget1.setGeometry(QtCore.QRect(140, 50, 261, 182))
         self.layoutWidget1.setObjectName("layoutWidget1")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget1)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -193,6 +195,28 @@ class Ui_RF_para(object):
 "}")
         self.label_random_state.setObjectName("label_random_state")
         self.verticalLayout.addWidget(self.label_random_state)
+        self.label_2 = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_2.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label_2.setObjectName("label_2")
+        self.verticalLayout.addWidget(self.label_2)
         self.horizontalLayout_2.addLayout(self.verticalLayout)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -271,10 +295,21 @@ class Ui_RF_para(object):
         self.spinBox_random_state.setProperty("value", 42)
         self.spinBox_random_state.setObjectName("spinBox_random_state")
         self.verticalLayout_2.addWidget(self.spinBox_random_state)
+        self.comboBox_scale_features = QtWidgets.QComboBox(self.layoutWidget1)
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.comboBox_scale_features.setFont(font)
+        self.comboBox_scale_features.setObjectName("comboBox_scale_features")
+        self.comboBox_scale_features.addItem("")
+        self.comboBox_scale_features.addItem("")
+        self.verticalLayout_2.addWidget(self.comboBox_scale_features)
         self.horizontalLayout_2.addLayout(self.verticalLayout_2)
         RF_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(RF_para)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 510, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 555, 23))
         self.menubar.setObjectName("menubar")
         RF_para.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(RF_para)
@@ -296,3 +331,6 @@ class Ui_RF_para(object):
         self.label_max_depth.setText(_translate("RF_para", "max_depth"))
         self.label.setText(_translate("RF_para", "n_jobs"))
         self.label_random_state.setText(_translate("RF_para", "random_state"))
+        self.label_2.setText(_translate("RF_para", "scale_features"))
+        self.comboBox_scale_features.setItemText(0, _translate("RF_para", "False"))
+        self.comboBox_scale_features.setItemText(1, _translate("RF_para", "True"))

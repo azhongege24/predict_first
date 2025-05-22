@@ -6,7 +6,7 @@ import numpy as np
 from ui2025 import Ui_MainWindow #我新创建的界面类
 import pandas as pd
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton,QMessageBox, QFileDialog, QGraphicsScene, QGraphicsView, QWidget, QCheckBox, QListWidgetItem
-from PyQt5.QtCore import Qt ,QSettings
+from PyQt5.QtCore import Qt ,QSettings,QTimer
 from PyQt5.QtGui import QPixmap
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -152,7 +152,8 @@ class POP_RF_para(QMainWindow, Ui_RF_para, Ui_MainWindow):
         self.parent_window = parent#保存主窗口的引用
     def Confirm(self):
         # 读取输入参数
-        global max_depth, random_state,n_estimators,method
+        global max_depth, random_state,n_estimators,method,scale_features
+        scale_features = self.comboBox_scale_features.currentText()=="True"
         max_depth = self.spinBox_max_depth.text()
         random_state = self.spinBox_random_state.text()
         n_estimators = self.spinBox_n_estimators.text()
@@ -163,6 +164,7 @@ class POP_RF_para(QMainWindow, Ui_RF_para, Ui_MainWindow):
         print("n_estimators:", n_estimators)
         print("max_depth:", max_depth)
         print("random_state:", random_state)
+        print("scale_features:", scale_features)
 
 class POP_SVM_para(QMainWindow, Ui_SVM_para, Ui_MainWindow):
     def __init__(self,parent=None):
@@ -171,13 +173,14 @@ class POP_SVM_para(QMainWindow, Ui_SVM_para, Ui_MainWindow):
         self.parent_window = parent#保存主窗口的引用
     def Confirm(self):
         # 读取输入参数
-        global kernel, C, epsilon,n_jobs,method,random_state,max_iter
+        global kernel, C, epsilon,n_jobs,method,random_state,max_iter,scale_features
         kernel = self.comboBox_kernel.currentText()
         C = self.spinBox_C.text()
         epsilon = self.doubleSpinBox_epsilon.text()
         n_jobs = self.spinBox_n_jobs.text()
         random_state = self.spinBox_random_state.text()
         max_iter = self.spinBox_max_iter.text()
+        scale_features = self.comboBox_scale_features.currentText()=="True"
         method = 'SVM'
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("Support Vector Machine")
@@ -185,6 +188,9 @@ class POP_SVM_para(QMainWindow, Ui_SVM_para, Ui_MainWindow):
         print("kernel:", kernel)
         print("C:", C)
         print("epsilon:", epsilon)
+        print("random_state:", random_state)
+        print("max_iter:", max_iter)
+        print("scale_features:", scale_features)
          
 class POP_MLP_para(QMainWindow, Ui_MLP_para, Ui_MainWindow):
     def __init__(self,parent=None):
@@ -194,17 +200,19 @@ class POP_MLP_para(QMainWindow, Ui_MLP_para, Ui_MainWindow):
     
     def Confirm(self):
          # 读取输入参数
-        global hidden_layer_sizes, max_iter,random_state,method
+        global hidden_layer_sizes, max_iter,random_state,method,scale_features
         input_text = self.lineEdit_hidden_layer_sizes.text()
         hidden_layer_sizes = tuple(map(int, input_text.split(','))) # 解析为元组
         random_state = self.spinBox_random_state.text()
+        scale_features = self.comboBox_scale_features.currentText()=="True"
         method = 'MLP'
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("Multi-layer Perceptron")
         max_iter = self.spinBox_max_iter.text()
         print("random_state:", random_state)
         print("hidden_layer_sizes:", hidden_layer_sizes)
-        print("max_iter:", max_iter)    
+        print("max_iter:", max_iter)   
+        print("scale_features:", scale_features) 
 
 class POP_ET_para(QMainWindow, Ui_ET_para, Ui_MainWindow):
     def __init__(self,parent=None):
@@ -214,11 +222,12 @@ class POP_ET_para(QMainWindow, Ui_ET_para, Ui_MainWindow):
     
     def Confirm(self):
         # 读取输入参数
-        global n_estimators,max_depth,n_jobs,random_state,method
+        global n_estimators,max_depth,n_jobs,random_state,method,scale_features
         n_estimators = self.spinBox_n_estimators.text()
         max_depth = self.spinBox_max_depth.text()
         n_jobs = self.spinBox_n_jobs.text()
         random_state = self.spinBox_random_state.text()
+        scale_features = self.comboBox_scale_features.currentText()=="True"
         method = 'ET'   
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("Extra Trees")   
@@ -226,6 +235,7 @@ class POP_ET_para(QMainWindow, Ui_ET_para, Ui_MainWindow):
         print("max_depth:", max_depth)  
         print("n_jobs:", n_jobs)
         print("random_state:", random_state)
+        print("scale_features:", scale_features)
 
 class POP_GL_para(QMainWindow, Ui_GL_para, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -616,11 +626,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 input_columns,
                 output_columns,
                 model_type='DT',
-                scale_features=True,
+                scale_features=scale_features,
                 random_state=int(random_state),
                 max_depth=int(max_depth),
             )
-            ask_and_save_model(self,method,default_name='trained_model'+'_'+str(method)+'.pkl')    
+            # ask_and_save_model(self,method,default_name='trained_model'+'_'+str(method)+'.pkl')    
 
             # `model` 是训练好的模型，`y_pred` 是预测结果
             print("预测结果:", y_pred)
@@ -642,7 +652,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                         N_end_test,metrics['MSE'],
                                         metrics['R2'])
             self.lineEdit_DEVICE.setText("CPU")
-        
+            #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
+            QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
 
         if method =='RF':
             self.new_model = 1
@@ -652,7 +663,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 input_columns,
                 output_columns,
                 model_type='RF',
-                scale_features=False,
+                scale_features=scale_features,
                 random_state=int(random_state),
                 max_depth=int(max_depth),
                 n_estimators=int(n_estimators),
@@ -676,7 +687,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                           N_start_test, N_end_test,
                                           metrics['MSE'],metrics['R2'])
             self.lineEdit_DEVICE.setText("CPU")
-        
+            #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
+            QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
+   
+
         if method =='SVM':
             self.new_model = 1
             model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
@@ -685,7 +699,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 input_columns,
                 output_columns,
                 model_type='SVM',
-                scale_features=False,
+                scale_features=scale_features,
                 random_state=int(random_state),
                 kernel=str(kernel),
                 C=float(C),
@@ -712,6 +726,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                            N_start_test, N_end_test,
                                            metrics['MSE'],metrics['R2'])
             self.lineEdit_DEVICE.setText("CPU")
+            #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
+            QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
+
+
 
 
         if method == 'MLP':
@@ -722,7 +740,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 input_columns,
                 output_columns,
                 model_type='MLP',
-                scale_features=False,
+                scale_features=scale_features,
                 random_state=int(random_state),
                 max_iter=int(max_iter),
                 mlp_hidden_layers=tuple(hidden_layer_sizes),
@@ -747,6 +765,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                          N_start_test, N_end_test,
                                                          metrics['MSE'],metrics['R2'])
             self.lineEdit_DEVICE.setText("CPU")
+            #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
+            QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
+
         
         if method == 'ET':
             self.new_model = 1
@@ -756,7 +777,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 input_columns,
                 output_columns,
                 model_type='ET',
-                scale_features=False,
+                scale_features=scale_features,
                 n_jobs=int(n_jobs),
                 random_state=int(random_state),
                 max_depth=int(max_depth),
@@ -780,6 +801,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                            output_columns, N_start_test, N_end_test,
                                            metrics['MSE'],metrics['R2'])
             self.lineEdit_DEVICE.setText("CPU")
+            #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
+            QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
 
         
         if method == 'GL':

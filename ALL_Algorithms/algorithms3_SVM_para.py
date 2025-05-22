@@ -14,11 +14,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_SVM_para(object):
     def setupUi(self, SVM_para):
         SVM_para.setObjectName("SVM_para")
-        SVM_para.resize(537, 420)
+        SVM_para.resize(546, 475)
         self.centralwidget = QtWidgets.QWidget(SVM_para)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(140, 290, 241, 51))
+        self.layoutWidget.setGeometry(QtCore.QRect(130, 350, 241, 51))
         self.layoutWidget.setObjectName("layoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -64,7 +64,7 @@ class Ui_SVM_para(object):
         self.pushButton_2.setObjectName("pushButton_2")
         self.horizontalLayout.addWidget(self.pushButton_2)
         self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(90, 40, 341, 238))
+        self.layoutWidget1.setGeometry(QtCore.QRect(90, 20, 341, 278))
         self.layoutWidget1.setObjectName("layoutWidget1")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget1)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -217,6 +217,28 @@ class Ui_SVM_para(object):
 "}")
         self.label.setObjectName("label")
         self.verticalLayout_2.addWidget(self.label)
+        self.label_4 = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_4.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label_4.setObjectName("label_4")
+        self.verticalLayout_2.addWidget(self.label_4)
         self.horizontalLayout_2.addLayout(self.verticalLayout_2)
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
@@ -330,10 +352,22 @@ class Ui_SVM_para(object):
         self.spinBox_n_jobs.setProperty("value", -1)
         self.spinBox_n_jobs.setObjectName("spinBox_n_jobs")
         self.verticalLayout.addWidget(self.spinBox_n_jobs)
+        self.comboBox_scale_features = QtWidgets.QComboBox(self.layoutWidget1)
+        self.comboBox_scale_features.setMinimumSize(QtCore.QSize(0, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.comboBox_scale_features.setFont(font)
+        self.comboBox_scale_features.setObjectName("comboBox_scale_features")
+        self.comboBox_scale_features.addItem("")
+        self.comboBox_scale_features.addItem("")
+        self.verticalLayout.addWidget(self.comboBox_scale_features)
         self.horizontalLayout_2.addLayout(self.verticalLayout)
         SVM_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(SVM_para)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 537, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 546, 23))
         self.menubar.setObjectName("menubar")
         SVM_para.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(SVM_para)
@@ -357,7 +391,10 @@ class Ui_SVM_para(object):
         self.label_2_C.setText(_translate("SVM_para", "C"))
         self.label_3.setText(_translate("SVM_para", "kernel"))
         self.label.setText(_translate("SVM_para", "TextLabel"))
+        self.label_4.setText(_translate("SVM_para", "scale_features"))
         self.comboBox_kernel.setItemText(0, _translate("SVM_para", "rbf"))
         self.comboBox_kernel.setItemText(1, _translate("SVM_para", "linear"))
         self.comboBox_kernel.setItemText(2, _translate("SVM_para", "poly"))
         self.comboBox_kernel.setItemText(3, _translate("SVM_para", "sigmoid"))
+        self.comboBox_scale_features.setItemText(0, _translate("SVM_para", "False"))
+        self.comboBox_scale_features.setItemText(1, _translate("SVM_para", "True"))

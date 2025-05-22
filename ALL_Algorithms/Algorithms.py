@@ -37,7 +37,7 @@ def multi_task_regression_predictor(
     mlp_hidden_layers: tuple = (100, 50), # MLP隐藏层结构
 
 ):
-
+    
     
     # 返回：
     # model : 训练好的回归模型
@@ -87,6 +87,7 @@ def multi_task_regression_predictor(
     mse = mean_squared_error(y_test, y_pred, multioutput='uniform_average')
     r2 = r2_score(y_test, y_pred, multioutput='uniform_average')
     metrics = {'MSE': mse, 'R2': r2}
+
     
     
     
@@ -116,7 +117,7 @@ def ask_and_save_model(parent, model, default_name="model.pkl"):
         if file_path:
             joblib.dump(model, file_path)
             if hasattr(parent, "lineEdit_state"):
-                parent.lineEdit_state.setText("模型已保存: " + file_path)
+                parent.lineEdit_state.setText("模型已保存 " )
 
 #单输出画图可视化函数
 def single_plot_and_evaluate(self, y_test, y_pred, method, data_test, 

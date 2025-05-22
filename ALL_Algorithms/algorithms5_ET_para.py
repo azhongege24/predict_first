@@ -17,15 +17,15 @@ class Ui_ET_para(object):
         ET_para.resize(563, 427)
         self.centralwidget = QtWidgets.QWidget(ET_para)
         self.centralwidget.setObjectName("centralwidget")
-        self.widget = QtWidgets.QWidget(self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(140, 90, 271, 158))
-        self.widget.setObjectName("widget")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
+        self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget.setGeometry(QtCore.QRect(140, 30, 271, 198))
+        self.layoutWidget.setObjectName("layoutWidget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.label = QtWidgets.QLabel(self.widget)
+        self.label = QtWidgets.QLabel(self.layoutWidget)
         self.label.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -47,7 +47,7 @@ class Ui_ET_para(object):
 "}")
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
-        self.label_2 = QtWidgets.QLabel(self.widget)
+        self.label_2 = QtWidgets.QLabel(self.layoutWidget)
         self.label_2.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -69,7 +69,7 @@ class Ui_ET_para(object):
 "}")
         self.label_2.setObjectName("label_2")
         self.verticalLayout.addWidget(self.label_2)
-        self.label_3 = QtWidgets.QLabel(self.widget)
+        self.label_3 = QtWidgets.QLabel(self.layoutWidget)
         self.label_3.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -91,7 +91,7 @@ class Ui_ET_para(object):
 "}")
         self.label_3.setObjectName("label_3")
         self.verticalLayout.addWidget(self.label_3)
-        self.label_4 = QtWidgets.QLabel(self.widget)
+        self.label_4 = QtWidgets.QLabel(self.layoutWidget)
         self.label_4.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -113,10 +113,32 @@ class Ui_ET_para(object):
 "}")
         self.label_4.setObjectName("label_4")
         self.verticalLayout.addWidget(self.label_4)
+        self.label_5 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_5.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label_5.setObjectName("label_5")
+        self.verticalLayout.addWidget(self.label_5)
         self.horizontalLayout.addLayout(self.verticalLayout)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.spinBox_n_estimators = QtWidgets.QSpinBox(self.widget)
+        self.spinBox_n_estimators = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_n_estimators.setMinimumSize(QtCore.QSize(80, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -134,7 +156,7 @@ class Ui_ET_para(object):
         self.spinBox_n_estimators.setProperty("value", 100)
         self.spinBox_n_estimators.setObjectName("spinBox_n_estimators")
         self.verticalLayout_2.addWidget(self.spinBox_n_estimators)
-        self.spinBox_max_depth = QtWidgets.QSpinBox(self.widget)
+        self.spinBox_max_depth = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_max_depth.setMinimumSize(QtCore.QSize(80, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -151,7 +173,7 @@ class Ui_ET_para(object):
         self.spinBox_max_depth.setProperty("value", 4)
         self.spinBox_max_depth.setObjectName("spinBox_max_depth")
         self.verticalLayout_2.addWidget(self.spinBox_max_depth)
-        self.spinBox_n_jobs = QtWidgets.QSpinBox(self.widget)
+        self.spinBox_n_jobs = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_n_jobs.setMinimumSize(QtCore.QSize(80, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -169,7 +191,7 @@ class Ui_ET_para(object):
         self.spinBox_n_jobs.setProperty("value", -1)
         self.spinBox_n_jobs.setObjectName("spinBox_n_jobs")
         self.verticalLayout_2.addWidget(self.spinBox_n_jobs)
-        self.spinBox_random_state = QtWidgets.QSpinBox(self.widget)
+        self.spinBox_random_state = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_random_state.setMinimumSize(QtCore.QSize(80, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -186,14 +208,26 @@ class Ui_ET_para(object):
         self.spinBox_random_state.setProperty("value", 42)
         self.spinBox_random_state.setObjectName("spinBox_random_state")
         self.verticalLayout_2.addWidget(self.spinBox_random_state)
+        self.comboBox_scale_features = QtWidgets.QComboBox(self.layoutWidget)
+        self.comboBox_scale_features.setMinimumSize(QtCore.QSize(0, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.comboBox_scale_features.setFont(font)
+        self.comboBox_scale_features.setObjectName("comboBox_scale_features")
+        self.comboBox_scale_features.addItem("")
+        self.comboBox_scale_features.addItem("")
+        self.verticalLayout_2.addWidget(self.comboBox_scale_features)
         self.horizontalLayout.addLayout(self.verticalLayout_2)
-        self.widget1 = QtWidgets.QWidget(self.centralwidget)
-        self.widget1.setGeometry(QtCore.QRect(200, 270, 151, 42))
-        self.widget1.setObjectName("widget1")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget1)
+        self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget1.setGeometry(QtCore.QRect(200, 260, 151, 42))
+        self.layoutWidget1.setObjectName("layoutWidget1")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget1)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.pushButton = QtWidgets.QPushButton(self.widget1)
+        self.pushButton = QtWidgets.QPushButton(self.layoutWidget1)
         self.pushButton.setMinimumSize(QtCore.QSize(0, 40))
         self.pushButton.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
@@ -213,7 +247,7 @@ class Ui_ET_para(object):
 "}")
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout_2.addWidget(self.pushButton)
-        self.pushButton_2 = QtWidgets.QPushButton(self.widget1)
+        self.pushButton_2 = QtWidgets.QPushButton(self.layoutWidget1)
         self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
         self.pushButton_2.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
@@ -255,5 +289,8 @@ class Ui_ET_para(object):
         self.label_2.setText(_translate("ET_para", "max_depth"))
         self.label_3.setText(_translate("ET_para", "n_jobs"))
         self.label_4.setText(_translate("ET_para", "random_state"))
+        self.label_5.setText(_translate("ET_para", "scale_features"))
+        self.comboBox_scale_features.setItemText(0, _translate("ET_para", "False"))
+        self.comboBox_scale_features.setItemText(1, _translate("ET_para", "True"))
         self.pushButton.setText(_translate("ET_para", "确认"))
         self.pushButton_2.setText(_translate("ET_para", "取消"))

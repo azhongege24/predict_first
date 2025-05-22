@@ -26,7 +26,7 @@
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>210</y>
+      <y>270</y>
       <width>211</width>
       <height>42</height>
      </rect>
@@ -96,13 +96,13 @@ QPushButton:pressed {
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>120</x>
       <y>70</y>
       <width>362</width>
-      <height>118</height>
+      <height>158</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -192,6 +192,34 @@ QLabel:pressed {
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
+    border-radius: 8px;
+    padding: 4px 8px;
+    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
+    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
+    font: bold 16pt &quot;Times New Roman&quot;;     
+    qproperty-alignment: 'AlignCenter';
+    /* 强化阴影效果 */
+}
+
+QLabel:hover {
+    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */
+    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */
+}
+
+QLabel:pressed {
+    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */
+}</string>
+         </property>
+         <property name="text">
+          <string>scale_features</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
@@ -260,6 +288,26 @@ QSpinBox::down-button:pressed {
          <property name="value">
           <number>42</number>
          </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_scale_features">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <item>
+          <property name="text">
+           <string>False</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>True</string>
+          </property>
+         </item>
         </widget>
        </item>
       </layout>

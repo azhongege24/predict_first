@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>510</width>
-    <height>358</height>
+    <width>555</width>
+    <height>447</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>210</y>
+      <x>180</x>
+      <y>280</y>
       <width>181</width>
       <height>71</height>
      </rect>
@@ -26,6 +26,12 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="pushButton">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>40</height>
+        </size>
+       </property>
        <property name="styleSheet">
         <string notr="true">QPushButton{
 border:1px solid red;   /*边框的粗细，颜色*/
@@ -51,6 +57,12 @@ QPushButton:pressed {
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_2">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>40</height>
+        </size>
+       </property>
        <property name="styleSheet">
         <string notr="true">QPushButton{
 border:1px solid red;   /*边框的粗细，颜色*/
@@ -79,10 +91,10 @@ QPushButton:pressed {
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>20</y>
+      <x>140</x>
+      <y>50</y>
       <width>261</width>
-      <height>181</height>
+      <height>182</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -284,6 +296,34 @@ QLabel:pressed {
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
+    border-radius: 8px;
+    padding: 4px 8px;
+    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
+    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
+    font: bold 16pt &quot;Times New Roman&quot;;     
+    qproperty-alignment: 'AlignCenter';
+    /* 强化阴影效果 */
+}
+
+QLabel:hover {
+    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */
+    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */
+}
+
+QLabel:pressed {
+    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */
+}</string>
+         </property>
+         <property name="text">
+          <string>scale_features</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
@@ -437,6 +477,28 @@ QSpinBox::down-button:pressed {
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_scale_features">
+         <property name="font">
+          <font>
+           <family>Times New Roman</family>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <item>
+          <property name="text">
+           <string>False</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>True</string>
+          </property>
+         </item>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>
@@ -447,7 +509,7 @@ QSpinBox::down-button:pressed {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>510</width>
+     <width>555</width>
      <height>23</height>
     </rect>
    </property>
@@ -463,8 +525,8 @@ QSpinBox::down-button:pressed {
    <slot>Confirm()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>178</x>
-     <y>276</y>
+     <x>229</x>
+     <y>357</y>
     </hint>
     <hint type="destinationlabel">
      <x>69</x>
@@ -479,8 +541,8 @@ QSpinBox::down-button:pressed {
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>148</x>
-     <y>263</y>
+     <x>199</x>
+     <y>357</y>
     </hint>
     <hint type="destinationlabel">
      <x>63</x>
@@ -495,8 +557,8 @@ QSpinBox::down-button:pressed {
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>253</x>
-     <y>271</y>
+     <x>359</x>
+     <y>357</y>
     </hint>
     <hint type="destinationlabel">
      <x>434</x>
