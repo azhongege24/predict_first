@@ -33,7 +33,8 @@ def multi_task_regression_predictor(
     C=1.0,
     epsilon=0.1,
     n_jobs=-1,
-    max_iter=500,                   # MLP最大迭代次数
+    max_iter=500, 
+    alpha=0.0001,# MLP最大迭代次数
     mlp_hidden_layers: tuple = (100, 50), # MLP隐藏层结构
 
 ):
@@ -65,7 +66,7 @@ def multi_task_regression_predictor(
         'DT': DecisionTreeRegressor(max_depth=max_depth, random_state=random_state),
         'RF': RandomForestRegressor(n_estimators=n_estimators, max_depth=max_depth, n_jobs=n_jobs, random_state=random_state),
         'SVM': MultiOutputRegressor(SVR(kernel=kernel, C=C, epsilon=epsilon), n_jobs=n_jobs),
-        'MLP': MLPRegressor(hidden_layer_sizes=mlp_hidden_layers, max_iter=max_iter, random_state=random_state),
+        'MLP': MLPRegressor(hidden_layer_sizes=mlp_hidden_layers, max_iter=max_iter,alpha=alpha, random_state=random_state),
         'ET': ExtraTreesRegressor(n_estimators=n_estimators, max_depth=max_depth, n_jobs=n_jobs, random_state=random_state)
     }
     

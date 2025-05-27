@@ -38,6 +38,8 @@ from ALL_Algorithms.MTW import MTW_Lasso
 from ALL_Algorithms.MTW import mtw_plot_and_evaluate
 from ALL_Algorithms.ReMTW import REMTW_Lasso
 from ALL_Algorithms.ReMTW import remtw_plot_and_evaluate
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 global max_depth, random_state,n_estimators,kernel, C, epsilon,scale_features
 global hidden_layer_sizes, max_iter,method,n_jobs,alpha,beta
 method = 'NONE'  # 初始化方法为NONE
@@ -173,23 +175,22 @@ class POP_SVM_para(QMainWindow, Ui_SVM_para, Ui_MainWindow):
         self.parent_window = parent#保存主窗口的引用
     def Confirm(self):
         # 读取输入参数
-        global kernel, C, epsilon,n_jobs,method,random_state,max_iter,scale_features
+        global kernel, C, epsilon,n_jobs,method,random_state,scale_features
         kernel = self.comboBox_kernel.currentText()
         C = self.spinBox_C.text()
         epsilon = self.doubleSpinBox_epsilon.text()
         n_jobs = self.spinBox_n_jobs.text()
         random_state = self.spinBox_random_state.text()
-        max_iter = self.spinBox_max_iter.text()
         scale_features = self.comboBox_scale_features.currentText()=="True"
         method = 'SVM'
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("Support Vector Machine")
-        print("n_jobs:", n_jobs)
+
         print("kernel:", kernel)
         print("C:", C)
         print("epsilon:", epsilon)
+        print("n_jobs:", n_jobs)
         print("random_state:", random_state)
-        print("max_iter:", max_iter)
         print("scale_features:", scale_features)
          
 class POP_MLP_para(QMainWindow, Ui_MLP_para, Ui_MainWindow):
@@ -200,12 +201,13 @@ class POP_MLP_para(QMainWindow, Ui_MLP_para, Ui_MainWindow):
     
     def Confirm(self):
          # 读取输入参数
-        global hidden_layer_sizes, max_iter,random_state,method,scale_features
+        global hidden_layer_sizes, max_iter,random_state,method,scale_features, mlp_alpha
         input_text = self.lineEdit_hidden_layer_sizes.text()
         hidden_layer_sizes = tuple(map(int, input_text.split(','))) # 解析为元组
         random_state = self.spinBox_random_state.text()
         scale_features = self.comboBox_scale_features.currentText()=="True"
         method = 'MLP'
+        mlp_alpha = self.doubleSpinBox_mlp_alpha.text()  # 获取MLP的alpha参数
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("Multi-layer Perceptron")
         max_iter = self.spinBox_max_iter.text()
@@ -705,7 +707,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 C=float(C),
                 epsilon=float(epsilon),
                 n_jobs=n_jobs,
-                max_iter=int(max_iter),
+                max_iter=-1,#SVM不需要这个参数
             )
             # `model` 是训练好的模型，`y_pred` 是预测结果
             print("预测结果:", y_pred)
@@ -743,6 +745,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 scale_features=scale_features,
                 random_state=int(random_state),
                 max_iter=int(max_iter),
+                alpha=float(mlp_alpha),
                 mlp_hidden_layers=tuple(hidden_layer_sizes),
                 
             )

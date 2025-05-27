@@ -70,7 +70,7 @@ class Ui_MLP_para(object):
         self.pushButton_2.setObjectName("pushButton_2")
         self.horizontalLayout_2.addWidget(self.pushButton_2)
         self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(120, 70, 362, 158))
+        self.layoutWidget1.setGeometry(QtCore.QRect(120, 70, 362, 198))
         self.layoutWidget1.setObjectName("layoutWidget1")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget1)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -121,6 +121,28 @@ class Ui_MLP_para(object):
 "}")
         self.label_max_iter.setObjectName("label_max_iter")
         self.verticalLayout.addWidget(self.label_max_iter)
+        self.label_2 = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_2.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label_2.setObjectName("label_2")
+        self.verticalLayout.addWidget(self.label_2)
         self.label_random_state = QtWidgets.QLabel(self.layoutWidget1)
         self.label_random_state.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
@@ -190,6 +212,24 @@ class Ui_MLP_para(object):
         self.spinBox_max_iter.setProperty("value", 500)
         self.spinBox_max_iter.setObjectName("spinBox_max_iter")
         self.verticalLayout_2.addWidget(self.spinBox_max_iter)
+        self.doubleSpinBox_mlp_alpha = QtWidgets.QDoubleSpinBox(self.layoutWidget1)
+        self.doubleSpinBox_mlp_alpha.setMinimumSize(QtCore.QSize(0, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.doubleSpinBox_mlp_alpha.setFont(font)
+        self.doubleSpinBox_mlp_alpha.setStyleSheet("QDoubleSpinBox::up-button:pressed {\n"
+"    margin-top: 4px;  /* 模拟按压下沉 */\n"
+"}\n"
+"QDoubleSpinBox::down-button:pressed {\n"
+"    margin-top: 4px;\n"
+"}")
+        self.doubleSpinBox_mlp_alpha.setDecimals(4)
+        self.doubleSpinBox_mlp_alpha.setProperty("value", 0.0001)
+        self.doubleSpinBox_mlp_alpha.setObjectName("doubleSpinBox_mlp_alpha")
+        self.verticalLayout_2.addWidget(self.doubleSpinBox_mlp_alpha)
         self.spinBox_random_state = QtWidgets.QSpinBox(self.layoutWidget1)
         self.spinBox_random_state.setMinimumSize(QtCore.QSize(80, 30))
         self.spinBox_random_state.setStyleSheet("QSpinBox::up-button:pressed {\n"
@@ -230,6 +270,7 @@ class Ui_MLP_para(object):
         self.pushButton_2.setText(_translate("MLP_para", "取消"))
         self.label_hidden_layer_sizes.setText(_translate("MLP_para", "hidden_layer_sizes"))
         self.label_max_iter.setText(_translate("MLP_para", "max_iter"))
+        self.label_2.setText(_translate("MLP_para", "mlp_alpha"))
         self.label_random_state.setText(_translate("MLP_para", "random_state"))
         self.label.setText(_translate("MLP_para", "scale_features"))
         self.lineEdit_hidden_layer_sizes.setText(_translate("MLP_para", "100,50"))
