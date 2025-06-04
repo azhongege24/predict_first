@@ -41,7 +41,7 @@ from ALL_Algorithms.ReMTW import remtw_plot_and_evaluate
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 global max_depth, random_state,n_estimators,kernel, C, epsilon,scale_features
-global hidden_layer_sizes, max_iter,method,n_jobs,alpha,beta
+global hidden_layer_sizes, max_iter,method,n_jobs,alpha,beta,tol
 method = 'NONE'  # 初始化方法为NONE
 # 读取输入参数
 VA_data_path = ""  # 设置一个默认值
@@ -247,8 +247,10 @@ class POP_GL_para(QMainWindow, Ui_GL_para, Ui_MainWindow):
     
     def Confirm(self):
          # 读取输入参数
-        global  random_state,alpha,method
+        global  random_state,alpha,method,max_iter,tol
         alpha = self.doubleSpinBox_alpha.text()
+        max_iter = self.spinBox_max_iter.text()
+        tol = self.doubleSpinBox_tol.text()
         random_state = self.spinBox_random_state.text()
         method = 'GL'
         if self.parent_window:
@@ -256,6 +258,8 @@ class POP_GL_para(QMainWindow, Ui_GL_para, Ui_MainWindow):
 
         print("alpha:", alpha) 
         print("random_state:", random_state)
+        print("max_iter:", max_iter)
+        print("tol:", tol)
 
 class POP_MTW_para(QMainWindow, Ui_MTW_para, Ui_MainWindow):#mtw算法改
     def __init__(self,parent=None):
@@ -817,6 +821,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 output_columns=output_columns,
                 alpha=float(alpha),
                 random_state=int(random_state),
+                max_iter=int(max_iter),
+                tol=float(tol),
                 show_plots=False,
                 show_prints=True
             )

@@ -8,7 +8,7 @@ from matplotlib import rcParams
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# 设置中文显示
+# 设置中文显示 matplotlib
 rcParams['font.sans-serif'] = ['SimHei']
 rcParams['axes.unicode_minus'] = False
 
@@ -18,6 +18,8 @@ def group_lasso_predictor(
     input_columns,
     output_columns,
     alpha=0.1,
+    max_iter=2000,
+    tol=1e-4,
     random_state=42,
     show_plots=False,
     show_prints=False
@@ -80,8 +82,8 @@ def group_lasso_predictor(
         alpha=alpha,
         fit_intercept=True,
         normalize=False,
-        max_iter=2000,
-        tol=1e-4
+        max_iter=max_iter,
+        tol=tol
     )
 
     if show_prints:

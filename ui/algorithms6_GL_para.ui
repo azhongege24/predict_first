@@ -88,13 +88,13 @@ QPushButton:pressed {
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>160</x>
-      <y>70</y>
+      <x>170</x>
+      <y>40</y>
       <width>281</width>
-      <height>118</height>
+      <height>158</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -180,7 +180,35 @@ QLabel:pressed {
 }</string>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string>max_iter</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
+    border-radius: 8px;
+    padding: 4px 8px;
+    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
+    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
+    font: bold 16pt &quot;Times New Roman&quot;;     
+    qproperty-alignment: 'AlignCenter';
+    /* 强化阴影效果 */
+}
+
+QLabel:hover {
+    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */
+    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */
+}
+
+QLabel:pressed {
+    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */
+}</string>
+         </property>
+         <property name="text">
+          <string>tol</string>
          </property>
         </widget>
        </item>
@@ -200,6 +228,8 @@ QLabel:pressed {
           <font>
            <family>Times New Roman</family>
            <pointsize>12</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="styleSheet">
@@ -248,7 +278,7 @@ QDoubleSpinBox::down-button:pressed {
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="spinBox_3">
+        <widget class="QSpinBox" name="spinBox_max_iter">
          <property name="minimumSize">
           <size>
            <width>80</width>
@@ -259,6 +289,8 @@ QDoubleSpinBox::down-button:pressed {
           <font>
            <family>Times New Roman</family>
            <pointsize>12</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="styleSheet">
@@ -268,6 +300,47 @@ QDoubleSpinBox::down-button:pressed {
 QSpinBox::down-button:pressed {
     margin-top: 4px;
 }</string>
+         </property>
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+         <property name="value">
+          <number>2000</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="doubleSpinBox_tol">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Times New Roman</family>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QDoubleSpinBox::up-button:pressed {
+    margin-top: 4px;  /* 模拟按压下沉 */
+}
+QDoubleSpinBox::down-button:pressed {
+    margin-top: 4px;
+}</string>
+         </property>
+         <property name="decimals">
+          <number>5</number>
+         </property>
+         <property name="singleStep">
+          <double>0.000010000000000</double>
+         </property>
+         <property name="value">
+          <double>0.000100000000000</double>
          </property>
         </widget>
        </item>
