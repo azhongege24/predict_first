@@ -16,7 +16,7 @@ def MTW_Lasso(data_train,
               data_test,
               input_columns,
               output_columns,
-              model_type='MTW',alpha=1,beta=0.8,gpu=True):
+              model_type='MTW',alpha=1,beta=0.8,max_iter=2000,tol=1e-4,gpu=True):
     #转换输入数据的格式
 
     X_train = data_train[input_columns].values
@@ -29,7 +29,7 @@ def MTW_Lasso(data_train,
     y_train_3d = y_train.T  # 转置为 
     X_test_3d = np.repeat(X_test[np.newaxis, :, :], n_tasks, axis=0)  # 复制为三维
 
-    model = MTW(alpha=alpha, beta=beta,gpu=gpu)  # 加强正则化
+    model = MTW(alpha=alpha, beta=beta,gpu=gpu,max_iter=max_iter, tol=tol)  # 加强正则化
     model.fit(X_train_3d, y_train_3d)  # 训练模型
     y_pred = model.predict(X_test_3d).T  # 转置回 (n_samples, n_tasks)
     mse = mean_squared_error(y_test, y_pred)

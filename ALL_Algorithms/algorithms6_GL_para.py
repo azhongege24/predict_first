@@ -115,8 +115,8 @@ class Ui_GL_para(object):
 "}")
         self.label_2.setObjectName("label_2")
         self.verticalLayout.addWidget(self.label_2)
-        self.label_3 = QtWidgets.QLabel(self.layoutWidget1)
-        self.label_3.setStyleSheet("QLabel {\n"
+        self.label_max_iter = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_max_iter.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
 "    padding: 4px 8px;\n"
@@ -135,10 +135,10 @@ class Ui_GL_para(object):
 "QLabel:pressed {\n"
 "    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
 "}")
-        self.label_3.setObjectName("label_3")
-        self.verticalLayout.addWidget(self.label_3)
-        self.label_4 = QtWidgets.QLabel(self.layoutWidget1)
-        self.label_4.setStyleSheet("QLabel {\n"
+        self.label_max_iter.setObjectName("label_max_iter")
+        self.verticalLayout.addWidget(self.label_max_iter)
+        self.label_tol = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_tol.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
 "    padding: 4px 8px;\n"
@@ -157,8 +157,8 @@ class Ui_GL_para(object):
 "QLabel:pressed {\n"
 "    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
 "}")
-        self.label_4.setObjectName("label_4")
-        self.verticalLayout.addWidget(self.label_4)
+        self.label_tol.setObjectName("label_tol")
+        self.verticalLayout.addWidget(self.label_tol)
         self.horizontalLayout_2.addLayout(self.verticalLayout)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -257,5 +257,5 @@ class Ui_GL_para(object):
         self.pushButton_2.setText(_translate("GL_para", "取消"))
         self.label.setText(_translate("GL_para", "random_state"))
         self.label_2.setText(_translate("GL_para", "alpha"))
-        self.label_3.setText(_translate("GL_para", "max_iter"))
-        self.label_4.setText(_translate("GL_para", "tol"))
+        self.label_max_iter.setText(_translate("GL_para", "max_iter"))
+        self.label_tol.setText(_translate("GL_para", "tol"))

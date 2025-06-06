@@ -269,11 +269,13 @@ class POP_MTW_para(QMainWindow, Ui_MTW_para, Ui_MainWindow):#mtw算法改
     
     def Confirm(self):
          # 读取输入参数
-        global alpha,beta,random_state,method
+        global alpha,beta,random_state,method,max_iter,tol
         
         alpha = self.doubleSpinBox_alpha.text()
         beta = self.doubleSpinBox_beta.text()
         random_state = self.spinBox_random_state.text()
+        max_iter = self.spinBox_max_iter.text()
+        tol = self.doubleSpinBox_tol.text()
         method = 'MTW'
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("Multitask Wasserstein ")
@@ -281,6 +283,8 @@ class POP_MTW_para(QMainWindow, Ui_MTW_para, Ui_MainWindow):#mtw算法改
         print("random_state:", random_state)
         print("alpha:", alpha)
         print("beta:", beta)
+        print("max_iter:", max_iter)
+        print("tol:", tol)
 
 class POP_REMTW_para(QMainWindow, Ui_REMTW_para, Ui_MainWindow):#remtw算法改
     def __init__(self,parent=None):
@@ -853,6 +857,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 output_columns=output_columns,
                 alpha=float(alpha),
                 beta=float(beta),
+                max_iter=int(max_iter),
+                tol=float(tol),
                 model_type='MTW',
                 gpu =True,              
             )
