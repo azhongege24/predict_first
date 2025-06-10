@@ -11,7 +11,7 @@ def REMTW_Lasso(data_train,
               data_test,
               input_columns,
               output_columns,
-              model_type='REMTW',alpha=0.2,beta=0.1,gpu=True):
+              model_type='REMTW',alpha=0.2,beta=0.1,gpu=True,tol =1e-4,max_iter=2000):
     #转换输入数据的格式
 
     X_train = data_train[input_columns].values
@@ -24,7 +24,7 @@ def REMTW_Lasso(data_train,
     y_train_3d = y_train.T  # 转置为 
     X_test_3d = np.repeat(X_test[np.newaxis, :, :], n_tasks, axis=0)  # 复制为三维
 
-    model = ReMTW(alpha=alpha, beta=beta,gpu=gpu)  # 加强正则化
+    model = ReMTW(alpha=alpha, beta=beta,gpu=gpu,tol=tol,max_iter=max_iter)  # 加强正则化
     model.fit(X_train_3d, y_train_3d)  # 训练模型
     y_pred = model.predict(X_test_3d).T  # 转置回 (n_samples, n_tasks)
     mse = mean_squared_error(y_test, y_pred)

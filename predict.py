@@ -294,10 +294,12 @@ class POP_REMTW_para(QMainWindow, Ui_REMTW_para, Ui_MainWindow):#remtw算法改
     
     def Confirm(self):
          # 读取输入参数
-        global alpha,beta,random_state,method
+        global alpha,beta,random_state,method,tol,max_iter
         
         alpha = self.doubleSpinBox_alpha.text()
         beta = self.doubleSpinBox_beta.text()
+        tol = self.doubleSpinBox_tol.text()
+        max_iter = self.spinBox_max_iter.text()
         random_state = self.spinBox_random_state.text()
         method = 'REMTW'
         if self.parent_window:
@@ -306,6 +308,8 @@ class POP_REMTW_para(QMainWindow, Ui_REMTW_para, Ui_MainWindow):#remtw算法改
         print("random_state:", random_state)
         print("alpha:", alpha)
         print("beta:", beta)
+        print("max_iter:", max_iter)
+        print("tol:", tol)
         
 class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_MainWindow界面类
     def __init__(self, parent=None):
@@ -888,6 +892,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 output_columns=output_columns,
                 alpha=float(alpha),
                 beta=float(beta),
+                tol =float(tol),
+                max_iter=int(max_iter),
                 model_type='REMTW',
                 gpu =True,              
             )
