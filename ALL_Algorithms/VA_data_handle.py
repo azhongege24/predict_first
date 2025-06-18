@@ -177,10 +177,11 @@ def preview_VAdata(self, file_path=None):
             raise ValueError("未找到有效振动数据列（应以Group开头）")
 
         # 绘制各振动组数据
-        for group_col in vibration_columns:
+        cmap = plt.get_cmap('tab10')#10种常用颜色
+        for i,group_col in enumerate(vibration_columns) :
             ax.plot(data['Time (s)'][:100], 
                     data[group_col][:100], 
-                    color='g',  
+                    color=cmap(i%10), #循环颜色 
                     alpha=0.5,
                     label=f'{group_col.split(" ")[0]}')  # 提取组名忽略单位
 
