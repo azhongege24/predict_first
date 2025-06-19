@@ -14,11 +14,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_VA_para(object):
     def setupUi(self, VA_para):
         VA_para.setObjectName("VA_para")
-        VA_para.resize(550, 376)
+        VA_para.resize(579, 336)
         self.centralwidget = QtWidgets.QWidget(VA_para)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(160, 260, 191, 42))
+        self.layoutWidget.setGeometry(QtCore.QRect(180, 200, 191, 42))
         self.layoutWidget.setObjectName("layoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -65,15 +65,15 @@ class Ui_VA_para(object):
 "}")
         self.pushButton_2.setObjectName("pushButton_2")
         self.horizontalLayout.addWidget(self.pushButton_2)
-        self.widget = QtWidgets.QWidget(self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(60, 80, 447, 128))
-        self.widget.setObjectName("widget")
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.widget)
+        self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget1.setGeometry(QtCore.QRect(62, 81, 461, 82))
+        self.layoutWidget1.setObjectName("layoutWidget1")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.layoutWidget1)
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.label = QtWidgets.QLabel(self.widget)
+        self.label = QtWidgets.QLabel(self.layoutWidget1)
         self.label.setMaximumSize(QtCore.QSize(200, 40))
         self.label.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
@@ -96,29 +96,7 @@ class Ui_VA_para(object):
 "}")
         self.label.setObjectName("label")
         self.verticalLayout_2.addWidget(self.label)
-        self.label_4 = QtWidgets.QLabel(self.widget)
-        self.label_4.setStyleSheet("QLabel {\n"
-"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
-"    border-radius: 8px;\n"
-"    padding: 4px 8px;\n"
-"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
-"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
-"    font: bold 16pt \"Times New Roman\";     \n"
-"    qproperty-alignment: \'AlignCenter\';\n"
-"    /* 强化阴影效果 */\n"
-"}\n"
-"\n"
-"QLabel:hover {\n"
-"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
-"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
-"}\n"
-"\n"
-"QLabel:pressed {\n"
-"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
-"}")
-        self.label_4.setObjectName("label_4")
-        self.verticalLayout_2.addWidget(self.label_4)
-        self.label_VA_data_path = QtWidgets.QLabel(self.widget)
+        self.label_VA_data_path = QtWidgets.QLabel(self.layoutWidget1)
         self.label_VA_data_path.setMaximumSize(QtCore.QSize(200, 40))
         self.label_VA_data_path.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
@@ -144,7 +122,7 @@ class Ui_VA_para(object):
         self.horizontalLayout_3.addLayout(self.verticalLayout_2)
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.spinBox_sampling_rate = QtWidgets.QSpinBox(self.widget)
+        self.spinBox_sampling_rate = QtWidgets.QSpinBox(self.layoutWidget1)
         self.spinBox_sampling_rate.setMinimumSize(QtCore.QSize(110, 40))
         self.spinBox_sampling_rate.setMaximumSize(QtCore.QSize(400, 16777215))
         font = QtGui.QFont()
@@ -163,27 +141,9 @@ class Ui_VA_para(object):
         self.spinBox_sampling_rate.setProperty("value", 1000)
         self.spinBox_sampling_rate.setObjectName("spinBox_sampling_rate")
         self.verticalLayout.addWidget(self.spinBox_sampling_rate)
-        self.spinBox_num_groups = QtWidgets.QSpinBox(self.widget)
-        self.spinBox_num_groups.setMinimumSize(QtCore.QSize(110, 40))
-        self.spinBox_num_groups.setMaximumSize(QtCore.QSize(400, 16777215))
-        font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.spinBox_num_groups.setFont(font)
-        self.spinBox_num_groups.setStyleSheet("QSpinBox::up-button:pressed {\n"
-"    margin-top: 4px;  /* 模拟按压下沉 */\n"
-"}\n"
-"QSpinBox::down-button:pressed {\n"
-"    margin-top: 4px;\n"
-"}")
-        self.spinBox_num_groups.setProperty("value", 1)
-        self.spinBox_num_groups.setObjectName("spinBox_num_groups")
-        self.verticalLayout.addWidget(self.spinBox_num_groups)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.lineEdit_VA_data_path = QtWidgets.QLineEdit(self.widget)
+        self.lineEdit_VA_data_path = QtWidgets.QLineEdit(self.layoutWidget1)
         self.lineEdit_VA_data_path.setMinimumSize(QtCore.QSize(250, 30))
         self.lineEdit_VA_data_path.setMaximumSize(QtCore.QSize(9999, 16777215))
         font = QtGui.QFont()
@@ -195,7 +155,7 @@ class Ui_VA_para(object):
         self.lineEdit_VA_data_path.setReadOnly(True)
         self.lineEdit_VA_data_path.setObjectName("lineEdit_VA_data_path")
         self.horizontalLayout_2.addWidget(self.lineEdit_VA_data_path)
-        self.pushButton_3 = QtWidgets.QPushButton(self.widget)
+        self.pushButton_3 = QtWidgets.QPushButton(self.layoutWidget1)
         self.pushButton_3.setMinimumSize(QtCore.QSize(30, 30))
         self.pushButton_3.setMaximumSize(QtCore.QSize(30, 30))
         font = QtGui.QFont()
@@ -210,7 +170,7 @@ class Ui_VA_para(object):
         self.horizontalLayout_3.addLayout(self.verticalLayout)
         VA_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(VA_para)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 550, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 579, 23))
         self.menubar.setObjectName("menubar")
         VA_para.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(VA_para)
@@ -230,6 +190,5 @@ class Ui_VA_para(object):
         self.pushButton.setText(_translate("VA_para", "确认"))
         self.pushButton_2.setText(_translate("VA_para", "取消"))
         self.label.setText(_translate("VA_para", "sampling_rate"))
-        self.label_4.setText(_translate("VA_para", "num_groups"))
         self.label_VA_data_path.setText(_translate("VA_para", "VA_data_path"))
         self.pushButton_3.setText(_translate("VA_para", "..."))

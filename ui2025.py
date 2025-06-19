@@ -859,7 +859,7 @@ class Ui_MainWindow(object):
         self.lineEdit_dataset_nums.setObjectName("lineEdit_dataset_nums")
         self.horizontalLayout_2.addWidget(self.lineEdit_dataset_nums)
         self.label_8 = QtWidgets.QLabel(self.centralwidget)
-        self.label_8.setGeometry(QtCore.QRect(71, 387, 54, 12))
+        self.label_8.setGeometry(QtCore.QRect(71, 417, 54, 12))
         self.label_8.setText("")
         self.label_8.setObjectName("label_8")
         self.label_10 = QtWidgets.QLabel(self.centralwidget)
@@ -879,56 +879,87 @@ class Ui_MainWindow(object):
 "}")
         self.label_10.setObjectName("label_10")
         self.layoutWidget6 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget6.setGeometry(QtCore.QRect(10, 500, 131, 191))
+        self.layoutWidget6.setGeometry(QtCore.QRect(12, 293, 126, 171))
         self.layoutWidget6.setObjectName("layoutWidget6")
-        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.layoutWidget6)
-        self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_6.setSpacing(12)
-        self.verticalLayout_6.setObjectName("verticalLayout_6")
-        self.label_7 = QtWidgets.QLabel(self.layoutWidget6)
-        self.label_7.setMinimumSize(QtCore.QSize(88, 34))
-        self.label_7.setMaximumSize(QtCore.QSize(16777215, 30))
-        self.label_7.setStyleSheet("QLabel {\n"
+        self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.layoutWidget6)
+        self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_7.setObjectName("verticalLayout_7")
+        self.label_9 = QtWidgets.QLabel(self.layoutWidget6)
+        self.label_9.setMinimumSize(QtCore.QSize(88, 44))
+        self.label_9.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.label_9.setStyleSheet("QLabel {\n"
 "\n"
 "    color:white;    \n"
 "    padding: 2px 4px;  \n"
 "    background-color:#5F9EA0; \n"
 "    font: 14pt \"楷体\";  /* 推荐使用无衬线字体更清晰  */\n"
 "    min-width: 80px;\n"
-"    min-height: 30px;\n"
+"    min-height: 40px;\n"
 "    font-weight: bold;\n"
 "qproperty-alignment: \'AlignCenter\'; \n"
 "}")
-        self.label_7.setObjectName("label_7")
-        self.verticalLayout_6.addWidget(self.label_7)
-        self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
-        self.pushButton_top = QtWidgets.QPushButton(self.layoutWidget6)
-        self.pushButton_top.setMinimumSize(QtCore.QSize(0, 30))
-        self.pushButton_top.setMaximumSize(QtCore.QSize(40, 30))
+        self.label_9.setObjectName("label_9")
+        self.verticalLayout_7.addWidget(self.label_9)
+        self.pushButton_psd_analysis = QtWidgets.QPushButton(self.layoutWidget6)
+        self.pushButton_psd_analysis.setMinimumSize(QtCore.QSize(90, 46))
+        self.pushButton_psd_analysis.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.pushButton_psd_analysis.setStyleSheet("QPushButton {\n"
+"    border: 1px solid #8B5A2B;  \n"
+"    border-radius: 15px;\n"
+"    padding: 2px 4px;\n"
+"    background-color: #D2B48C;  /* 浅卡其色，柔和自然 */\n"
+"    color: #5C4033;            /* 深棕文字，类似学术皮革色 */\n"
+"    font: bold 14pt \"微软雅黑\"; /* 中文黑体更正式 */\n"
+"    min-width: 80px;\n"
+"    min-height: 40px;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: #A0522D;  /* 悬停转为红棕，温暖但不刺眼 */\n"
+"    color: #FFFFFF;\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color: #5C4033;  /* 深棕按压，模拟墨水质感 */\n"
+"}")
+        self.pushButton_psd_analysis.setObjectName("pushButton_psd_analysis")
+        self.verticalLayout_7.addWidget(self.pushButton_psd_analysis)
+        self.pushButton_save_psd = QtWidgets.QPushButton(self.layoutWidget6)
+        self.pushButton_save_psd.setMinimumSize(QtCore.QSize(90, 46))
+        self.pushButton_save_psd.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(12)
+        font.setFamily("微软雅黑")
+        font.setPointSize(14)
         font.setBold(True)
+        font.setItalic(False)
         font.setWeight(75)
-        self.pushButton_top.setFont(font)
-        self.pushButton_top.setObjectName("pushButton_top")
-        self.horizontalLayout_8.addWidget(self.pushButton_top)
-        self.pushButton_bottom = QtWidgets.QPushButton(self.layoutWidget6)
-        self.pushButton_bottom.setMinimumSize(QtCore.QSize(0, 30))
-        self.pushButton_bottom.setMaximumSize(QtCore.QSize(40, 30))
-        font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.pushButton_bottom.setFont(font)
-        self.pushButton_bottom.setObjectName("pushButton_bottom")
-        self.horizontalLayout_8.addWidget(self.pushButton_bottom)
-        self.verticalLayout_6.addLayout(self.horizontalLayout_8)
-        self.verticalLayout_4 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.label_11 = QtWidgets.QLabel(self.layoutWidget6)
+        self.pushButton_save_psd.setFont(font)
+        self.pushButton_save_psd.setStyleSheet("QPushButton {\n"
+"    border: 1px solid #8B5A2B;  \n"
+"    border-radius: 15px;\n"
+"    padding: 2px 4px;\n"
+"    background-color: #D2B48C;  /* 浅卡其色，柔和自然 */\n"
+"    color: #5C4033;            /* 深棕文字，类似学术皮革色 */\n"
+"    font: bold 14pt \"微软雅黑\"; /* 中文黑体更正式 */\n"
+"    min-width: 80px;\n"
+"    min-height: 40px;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: #A0522D;  /* 悬停转为红棕，温暖但不刺眼 */\n"
+"    color: #FFFFFF;\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color: #5C4033;  /* 深棕按压，模拟墨水质感 */\n"
+"}")
+        self.pushButton_save_psd.setObjectName("pushButton_save_psd")
+        self.verticalLayout_7.addWidget(self.pushButton_save_psd)
+        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.widget.setGeometry(QtCore.QRect(10, 570, 131, 101))
+        self.widget.setObjectName("widget")
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.widget)
+        self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_6.setObjectName("verticalLayout_6")
+        self.label_11 = QtWidgets.QLabel(self.widget)
+        self.label_11.setMinimumSize(QtCore.QSize(88, 34))
+        self.label_11.setMaximumSize(QtCore.QSize(16777215, 30))
         self.label_11.setStyleSheet("QLabel {\n"
 "\n"
 "    color:white;    \n"
@@ -941,8 +972,10 @@ class Ui_MainWindow(object):
 "qproperty-alignment: \'AlignCenter\'; \n"
 "}")
         self.label_11.setObjectName("label_11")
-        self.verticalLayout_4.addWidget(self.label_11)
-        self.pushButton_8 = QtWidgets.QPushButton(self.layoutWidget6)
+        self.verticalLayout_6.addWidget(self.label_11)
+        self.pushButton_8 = QtWidgets.QPushButton(self.widget)
+        self.pushButton_8.setMinimumSize(QtCore.QSize(87, 44))
+        self.pushButton_8.setMaximumSize(QtCore.QSize(16777215, 40))
         self.pushButton_8.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */\n"
 "    border-radius: 8px;                      /* 适中圆角更显严谨 */\n"
@@ -971,99 +1004,54 @@ class Ui_MainWindow(object):
 "    border-color: rgb(210, 220, 230);\n"
 "}")
         self.pushButton_8.setObjectName("pushButton_8")
-        self.verticalLayout_4.addWidget(self.pushButton_8)
-        self.verticalLayout_6.addLayout(self.verticalLayout_4)
-        self.layoutWidget7 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget7.setGeometry(QtCore.QRect(10, 250, 131, 241))
-        self.layoutWidget7.setObjectName("layoutWidget7")
-        self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.layoutWidget7)
-        self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_7.setObjectName("verticalLayout_7")
-        self.label_9 = QtWidgets.QLabel(self.layoutWidget7)
-        self.label_9.setMaximumSize(QtCore.QSize(16777215, 50))
-        self.label_9.setStyleSheet("QLabel {\n"
+        self.verticalLayout_6.addWidget(self.pushButton_8)
+        self.widget1 = QtWidgets.QWidget(self.centralwidget)
+        self.widget1.setGeometry(QtCore.QRect(10, 480, 131, 74))
+        self.widget1.setObjectName("widget1")
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.widget1)
+        self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.label_7 = QtWidgets.QLabel(self.widget1)
+        self.label_7.setMinimumSize(QtCore.QSize(88, 34))
+        self.label_7.setMaximumSize(QtCore.QSize(16777215, 30))
+        self.label_7.setStyleSheet("QLabel {\n"
 "\n"
 "    color:white;    \n"
 "    padding: 2px 4px;  \n"
 "    background-color:#5F9EA0; \n"
 "    font: 14pt \"楷体\";  /* 推荐使用无衬线字体更清晰  */\n"
 "    min-width: 80px;\n"
-"    min-height: 40px;\n"
+"    min-height: 30px;\n"
 "    font-weight: bold;\n"
 "qproperty-alignment: \'AlignCenter\'; \n"
 "}")
-        self.label_9.setObjectName("label_9")
-        self.verticalLayout_7.addWidget(self.label_9)
-        self.pushButton_preview_VA_data = QtWidgets.QPushButton(self.layoutWidget7)
-        self.pushButton_preview_VA_data.setMaximumSize(QtCore.QSize(16777215, 40))
-        self.pushButton_preview_VA_data.setStyleSheet("QPushButton {\n"
-"    border: 1px solid #8B5A2B;  \n"
-"    border-radius: 15px;\n"
-"    padding: 2px 4px;\n"
-"    background-color: #D2B48C;  /* 浅卡其色，柔和自然 */\n"
-"    color: #5C4033;            /* 深棕文字，类似学术皮革色 */\n"
-"    font: bold 14pt \"微软雅黑\"; /* 中文黑体更正式 */\n"
-"    min-width: 80px;\n"
-"    min-height: 40px;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: #A0522D;  /* 悬停转为红棕，温暖但不刺眼 */\n"
-"    color: #FFFFFF;\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color: #5C4033;  /* 深棕按压，模拟墨水质感 */\n"
-"}")
-        self.pushButton_preview_VA_data.setObjectName("pushButton_preview_VA_data")
-        self.verticalLayout_7.addWidget(self.pushButton_preview_VA_data)
-        self.pushButton_psd_analysis = QtWidgets.QPushButton(self.layoutWidget7)
-        self.pushButton_psd_analysis.setMaximumSize(QtCore.QSize(16777215, 40))
-        self.pushButton_psd_analysis.setStyleSheet("QPushButton {\n"
-"    border: 1px solid #8B5A2B;  \n"
-"    border-radius: 15px;\n"
-"    padding: 2px 4px;\n"
-"    background-color: #D2B48C;  /* 浅卡其色，柔和自然 */\n"
-"    color: #5C4033;            /* 深棕文字，类似学术皮革色 */\n"
-"    font: bold 14pt \"微软雅黑\"; /* 中文黑体更正式 */\n"
-"    min-width: 80px;\n"
-"    min-height: 40px;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: #A0522D;  /* 悬停转为红棕，温暖但不刺眼 */\n"
-"    color: #FFFFFF;\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color: #5C4033;  /* 深棕按压，模拟墨水质感 */\n"
-"}")
-        self.pushButton_psd_analysis.setObjectName("pushButton_psd_analysis")
-        self.verticalLayout_7.addWidget(self.pushButton_psd_analysis)
-        self.pushButton_save_psd = QtWidgets.QPushButton(self.layoutWidget7)
-        self.pushButton_save_psd.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.label_7.setObjectName("label_7")
+        self.verticalLayout_4.addWidget(self.label_7)
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+        self.pushButton_top = QtWidgets.QPushButton(self.widget1)
+        self.pushButton_top.setMinimumSize(QtCore.QSize(0, 30))
+        self.pushButton_top.setMaximumSize(QtCore.QSize(40, 30))
         font = QtGui.QFont()
-        font.setFamily("微软雅黑")
-        font.setPointSize(14)
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
         font.setBold(True)
-        font.setItalic(False)
         font.setWeight(75)
-        self.pushButton_save_psd.setFont(font)
-        self.pushButton_save_psd.setStyleSheet("QPushButton {\n"
-"    border: 1px solid #8B5A2B;  \n"
-"    border-radius: 15px;\n"
-"    padding: 2px 4px;\n"
-"    background-color: #D2B48C;  /* 浅卡其色，柔和自然 */\n"
-"    color: #5C4033;            /* 深棕文字，类似学术皮革色 */\n"
-"    font: bold 14pt \"微软雅黑\"; /* 中文黑体更正式 */\n"
-"    min-width: 80px;\n"
-"    min-height: 40px;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: #A0522D;  /* 悬停转为红棕，温暖但不刺眼 */\n"
-"    color: #FFFFFF;\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color: #5C4033;  /* 深棕按压，模拟墨水质感 */\n"
-"}")
-        self.pushButton_save_psd.setObjectName("pushButton_save_psd")
-        self.verticalLayout_7.addWidget(self.pushButton_save_psd)
+        self.pushButton_top.setFont(font)
+        self.pushButton_top.setObjectName("pushButton_top")
+        self.horizontalLayout_8.addWidget(self.pushButton_top)
+        self.pushButton_bottom = QtWidgets.QPushButton(self.widget1)
+        self.pushButton_bottom.setMinimumSize(QtCore.QSize(0, 30))
+        self.pushButton_bottom.setMaximumSize(QtCore.QSize(40, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.pushButton_bottom.setFont(font)
+        self.pushButton_bottom.setObjectName("pushButton_bottom")
+        self.horizontalLayout_8.addWidget(self.pushButton_bottom)
+        self.verticalLayout_4.addLayout(self.horizontalLayout_8)
         MainWindow.setCentralWidget(self.centralwidget)
         self.toolBar = QtWidgets.QToolBar(MainWindow)
         self.toolBar.setObjectName("toolBar")
@@ -1137,15 +1125,14 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "数据集:"))
         self.lineEdit_dataset_file.setText(_translate("MainWindow", "Please select a Dataset！"))
         self.label_10.setText(_translate("MainWindow", "实验数据调控区"))
+        self.label_9.setText(_translate("MainWindow", "振动分析区"))
+        self.pushButton_psd_analysis.setText(_translate("MainWindow", "功率谱分析"))
+        self.pushButton_save_psd.setText(_translate("MainWindow", "保存振动数据"))
+        self.label_11.setText(_translate("MainWindow", "算法结果区"))
+        self.pushButton_8.setText(_translate("MainWindow", "保存预测结果"))
         self.label_7.setText(_translate("MainWindow", "上下翻页"))
         self.pushButton_top.setToolTip(_translate("MainWindow", "<html><head/><body><p>上翻页</p></body></html>"))
         self.pushButton_top.setText(_translate("MainWindow", "↑"))
         self.pushButton_bottom.setToolTip(_translate("MainWindow", "<html><head/><body><p>下翻页</p></body></html>"))
         self.pushButton_bottom.setText(_translate("MainWindow", "↓"))
-        self.label_11.setText(_translate("MainWindow", "算法结果区"))
-        self.pushButton_8.setText(_translate("MainWindow", "保存预测结果"))
-        self.label_9.setText(_translate("MainWindow", "振动分析区"))
-        self.pushButton_preview_VA_data.setText(_translate("MainWindow", "预览导入数据"))
-        self.pushButton_psd_analysis.setText(_translate("MainWindow", "功率谱分析"))
-        self.pushButton_save_psd.setText(_translate("MainWindow", "保存振动数据"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))

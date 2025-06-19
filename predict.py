@@ -56,15 +56,14 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
          # 读取输入参数
         global sampling_rate,VA_data_path,VA_outpath,num_groups
         sampling_rate = int(self.spinBox_sampling_rate.text())
-        num_groups = int(self.spinBox_num_groups.text())
         VA_data_path = str(self.lineEdit_VA_data_path.text())
         if self.parent_window:
             self.parent_window.VA_data_path = VA_data_path  # 将路径传递给主窗口
             self.parent_window.lineEdit_Algorithm_name.setText("Vibration Analysis")
             self.parent_window.lineEdit_state.setText("正在进行振动分析")
+            self.parent_window.preview_VA_data()  # 预览数据
 
         print("sampling_rate:", sampling_rate) 
-        print("num_groups:", num_groups)
         print("VA_data_path:", VA_data_path)
 
     
@@ -337,7 +336,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         # 连接按钮信号
         self.pushButton_top.clicked.connect(self.show_previous_page)
         self.pushButton_bottom.clicked.connect(self.show_next_page)
-        self.pushButton_preview_VA_data.clicked.connect(self.preview_VA_data)
+        # self.pushButton_preview_VA_data.clicked.connect(self.preview_VA_data)  这个现在没用了，直接导入振动数据文件的时候，确认便就会预览
         self.pushButton_psd_analysis.clicked.connect(self.handle_vibration_analysis)
         self.pushButton_save_psd.clicked.connect(self.save_psd_result)
         
