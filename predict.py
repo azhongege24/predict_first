@@ -322,6 +322,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.method = 'NONE'
         self.psd_results = None
         self.selected_model_path = None
+        self.model = None  # 用于存储训练好的模型
 
         self.current_page = 0
         self.figures = []  # 存储所有图表的列表
@@ -339,7 +340,15 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         # self.pushButton_preview_VA_data.clicked.connect(self.preview_VA_data)  这个现在没用了，直接导入振动数据文件的时候，确认便就会预览
         self.pushButton_psd_analysis.clicked.connect(self.handle_vibration_analysis)
         self.pushButton_save_psd.clicked.connect(self.save_psd_result)
-        
+        self.pushButton_save_pretrained_model.clicked.connect(
+                    lambda: self.ask_and_save_model(self.model, method)
+                ) # 保存预训练模型
+    def ask_and_save_model(self, model, method):
+        try:
+            ask_and_save_model(self, self.model, default_name='trained_model_' + str(method) + '.pkl')
+        except Exception as e:
+            QMessageBox.warning(self, "保存模型失败", str(e))
+            
     
     def handle_vibration_analysis(self):#测试阶段
         """
@@ -643,6 +652,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 random_state=int(random_state),
                 max_depth=int(max_depth),
             )
+            self.model = model  # 保存训练好的模型
             # ask_and_save_model(self,method,default_name='trained_model'+'_'+str(method)+'.pkl')    
 
             # `model` 是训练好的模型，`y_pred` 是预测结果
@@ -666,7 +676,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                         metrics['R2'])
             self.lineEdit_DEVICE.setText("CPU")
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
-            QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
+            # QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
 
         if method =='RF':
             self.new_model = 1

@@ -951,13 +951,13 @@ class Ui_MainWindow(object):
 "}")
         self.pushButton_save_psd.setObjectName("pushButton_save_psd")
         self.verticalLayout_7.addWidget(self.pushButton_save_psd)
-        self.widget = QtWidgets.QWidget(self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(10, 570, 131, 101))
-        self.widget.setObjectName("widget")
-        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.widget)
+        self.layoutWidget7 = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget7.setGeometry(QtCore.QRect(10, 570, 131, 151))
+        self.layoutWidget7.setObjectName("layoutWidget7")
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.layoutWidget7)
         self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
-        self.label_11 = QtWidgets.QLabel(self.widget)
+        self.label_11 = QtWidgets.QLabel(self.layoutWidget7)
         self.label_11.setMinimumSize(QtCore.QSize(88, 34))
         self.label_11.setMaximumSize(QtCore.QSize(16777215, 30))
         self.label_11.setStyleSheet("QLabel {\n"
@@ -973,7 +973,7 @@ class Ui_MainWindow(object):
 "}")
         self.label_11.setObjectName("label_11")
         self.verticalLayout_6.addWidget(self.label_11)
-        self.pushButton_8 = QtWidgets.QPushButton(self.widget)
+        self.pushButton_8 = QtWidgets.QPushButton(self.layoutWidget7)
         self.pushButton_8.setMinimumSize(QtCore.QSize(87, 44))
         self.pushButton_8.setMaximumSize(QtCore.QSize(16777215, 40))
         self.pushButton_8.setStyleSheet("QPushButton {\n"
@@ -1005,13 +1005,43 @@ class Ui_MainWindow(object):
 "}")
         self.pushButton_8.setObjectName("pushButton_8")
         self.verticalLayout_6.addWidget(self.pushButton_8)
-        self.widget1 = QtWidgets.QWidget(self.centralwidget)
-        self.widget1.setGeometry(QtCore.QRect(10, 480, 131, 74))
-        self.widget1.setObjectName("widget1")
-        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.widget1)
+        self.pushButton_save_pretrained_model = QtWidgets.QPushButton(self.layoutWidget7)
+        self.pushButton_save_pretrained_model.setStyleSheet("QPushButton {\n"
+"    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */\n"
+"    border-radius: 8px;                      /* 适中圆角更显严谨 */\n"
+"    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */\n"
+"    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */\n"
+"    font: bold 14pt \"微软雅黑\";\n"
+"    min-width: 85px;\n"
+"    min-height: 42px;\n"
+" \n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(220, 230, 240);    /* 悬停时轻微加深背景 */\n"
+"    border-color: rgb(40, 60, 80);          /* 加深边框模拟金属反光 */\n"
+"    color: rgb(20, 40, 60);                 /* 文字颜色同步加深 */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: rgb(60, 75, 90);      /* 按压状态与边框同色 */\n"
+"    color: rgb(230, 235, 240);              /* 浅灰白文字确保可读性 */\n"
+"}\n"
+"\n"
+"QPushButton:disabled {\n"
+"    background-color: rgb(250, 250, 250);    /* 禁用状态极浅灰 */\n"
+"    color: rgb(180, 190, 200);              /* 灰蓝文字表示不可用 */\n"
+"    border-color: rgb(210, 220, 230);\n"
+"}")
+        self.pushButton_save_pretrained_model.setObjectName("pushButton_save_pretrained_model")
+        self.verticalLayout_6.addWidget(self.pushButton_save_pretrained_model)
+        self.layoutWidget8 = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget8.setGeometry(QtCore.QRect(10, 480, 131, 74))
+        self.layoutWidget8.setObjectName("layoutWidget8")
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.layoutWidget8)
         self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.label_7 = QtWidgets.QLabel(self.widget1)
+        self.label_7 = QtWidgets.QLabel(self.layoutWidget8)
         self.label_7.setMinimumSize(QtCore.QSize(88, 34))
         self.label_7.setMaximumSize(QtCore.QSize(16777215, 30))
         self.label_7.setStyleSheet("QLabel {\n"
@@ -1029,7 +1059,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.addWidget(self.label_7)
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
-        self.pushButton_top = QtWidgets.QPushButton(self.widget1)
+        self.pushButton_top = QtWidgets.QPushButton(self.layoutWidget8)
         self.pushButton_top.setMinimumSize(QtCore.QSize(0, 30))
         self.pushButton_top.setMaximumSize(QtCore.QSize(40, 30))
         font = QtGui.QFont()
@@ -1040,7 +1070,7 @@ class Ui_MainWindow(object):
         self.pushButton_top.setFont(font)
         self.pushButton_top.setObjectName("pushButton_top")
         self.horizontalLayout_8.addWidget(self.pushButton_top)
-        self.pushButton_bottom = QtWidgets.QPushButton(self.widget1)
+        self.pushButton_bottom = QtWidgets.QPushButton(self.layoutWidget8)
         self.pushButton_bottom.setMinimumSize(QtCore.QSize(0, 30))
         self.pushButton_bottom.setMaximumSize(QtCore.QSize(40, 30))
         font = QtGui.QFont()
@@ -1130,6 +1160,7 @@ class Ui_MainWindow(object):
         self.pushButton_save_psd.setText(_translate("MainWindow", "保存振动数据"))
         self.label_11.setText(_translate("MainWindow", "算法结果区"))
         self.pushButton_8.setText(_translate("MainWindow", "保存预测结果"))
+        self.pushButton_save_pretrained_model.setText(_translate("MainWindow", "保存训练模型"))
         self.label_7.setText(_translate("MainWindow", "上下翻页"))
         self.pushButton_top.setToolTip(_translate("MainWindow", "<html><head/><body><p>上翻页</p></body></html>"))
         self.pushButton_top.setText(_translate("MainWindow", "↑"))
