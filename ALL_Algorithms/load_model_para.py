@@ -14,11 +14,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Load_model_para(object):
     def setupUi(self, Load_model_para):
         Load_model_para.setObjectName("Load_model_para")
-        Load_model_para.resize(587, 409)
+        Load_model_para.resize(520, 271)
         self.centralwidget = QtWidgets.QWidget(Load_model_para)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(100, 120, 391, 42))
+        self.layoutWidget.setGeometry(QtCore.QRect(20, 70, 441, 42))
         self.layoutWidget.setObjectName("layoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -46,7 +46,13 @@ class Ui_Load_model_para(object):
         self.label.setObjectName("label")
         self.horizontalLayout.addWidget(self.label)
         self.lineEdit_pretrained_model_path = QtWidgets.QLineEdit(self.layoutWidget)
-        self.lineEdit_pretrained_model_path.setMinimumSize(QtCore.QSize(100, 40))
+        self.lineEdit_pretrained_model_path.setMinimumSize(QtCore.QSize(150, 40))
+        font = QtGui.QFont()
+        font.setFamily("楷体")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lineEdit_pretrained_model_path.setFont(font)
         self.lineEdit_pretrained_model_path.setReadOnly(True)
         self.lineEdit_pretrained_model_path.setObjectName("lineEdit_pretrained_model_path")
         self.horizontalLayout.addWidget(self.lineEdit_pretrained_model_path)
@@ -62,7 +68,7 @@ class Ui_Load_model_para(object):
         self.pushButton_load_model.setObjectName("pushButton_load_model")
         self.horizontalLayout.addWidget(self.pushButton_load_model)
         self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(180, 220, 231, 42))
+        self.layoutWidget1.setGeometry(QtCore.QRect(150, 140, 171, 42))
         self.layoutWidget1.setObjectName("layoutWidget1")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget1)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -111,7 +117,7 @@ class Ui_Load_model_para(object):
         self.horizontalLayout_2.addWidget(self.pushButton_3)
         Load_model_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(Load_model_para)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 587, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 520, 23))
         self.menubar.setObjectName("menubar")
         Load_model_para.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(Load_model_para)
@@ -121,8 +127,8 @@ class Ui_Load_model_para(object):
         self.retranslateUi(Load_model_para)
         self.pushButton_2.clicked.connect(Load_model_para.Confirm) # type: ignore
         self.pushButton_3.clicked.connect(Load_model_para.close) # type: ignore
+        self.pushButton_2.clicked.connect(Load_model_para.close) # type: ignore
         self.pushButton_load_model.clicked.connect(Load_model_para.load_pretrained_model) # type: ignore
-        self.pushButton_2.released.connect(Load_model_para.close) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(Load_model_para)
 
     def retranslateUi(self, Load_model_para):

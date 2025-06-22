@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>587</width>
-    <height>409</height>
+    <width>520</width>
+    <height>271</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,9 +17,9 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>120</y>
-      <width>391</width>
+      <x>20</x>
+      <y>70</y>
+      <width>441</width>
       <height>42</height>
      </rect>
     </property>
@@ -56,9 +56,20 @@ QLabel:pressed {
       <widget class="QLineEdit" name="lineEdit_pretrained_model_path">
        <property name="minimumSize">
         <size>
-         <width>100</width>
+         <width>150</width>
          <height>40</height>
         </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>黑体</family>
+         <pointsize>12</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
        </property>
        <property name="readOnly">
         <bool>true</bool>
@@ -97,9 +108,9 @@ QLabel:pressed {
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>220</y>
-      <width>231</width>
+      <x>150</x>
+      <y>140</y>
+      <width>171</width>
       <height>42</height>
      </rect>
     </property>
@@ -186,7 +197,7 @@ QPushButton:pressed {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>587</width>
+     <width>520</width>
      <height>23</height>
     </rect>
    </property>
