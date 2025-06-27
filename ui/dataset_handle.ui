@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>dataset_handle</class>
+ <widget class="QMainWindow" name="dataset_handle">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>953</width>
+    <height>735</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>数据集处理板块</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>30</y>
+      <width>351</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>楷体</family>
+      <pointsize>20</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>数据集管理/试验数据合并</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>120</y>
+      <width>751</width>
+      <height>501</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="pushButton_3">
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
+    border-radius: 8px;                      /* 适中圆角更显严谨 */
+    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */
+    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */
+    font: bold 14pt &quot;微软雅黑&quot;;
+    min-width: 85px;
+    min-height: 42px;
+ 
+}
+
+QPushButton:hover {
+    background-color: rgb(220, 230, 240);    /* 悬停时轻微加深背景 */
+    border-color: rgb(40, 60, 80);          /* 加深边框模拟金属反光 */
+    color: rgb(20, 40, 60);                 /* 文字颜色同步加深 */
+}
+
+QPushButton:pressed {
+    background-color: rgb(60, 75, 90);      /* 按压状态与边框同色 */
+    color: rgb(230, 235, 240);              /* 浅灰白文字确保可读性 */
+}
+
+QPushButton:disabled {
+    background-color: rgb(250, 250, 250);    /* 禁用状态极浅灰 */
+    color: rgb(180, 190, 200);              /* 灰蓝文字表示不可用 */
+    border-color: rgb(210, 220, 230);
+}</string>
+         </property>
+         <property name="text">
+          <string>添加实验数据</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_2">
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
+    border-radius: 8px;                      /* 适中圆角更显严谨 */
+    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */
+    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */
+    font: bold 14pt &quot;微软雅黑&quot;;
+    min-width: 85px;
+    min-height: 42px;
+ 
+}
+
+QPushButton:hover {
+    background-color: rgb(220, 230, 240);    /* 悬停时轻微加深背景 */
+    border-color: rgb(40, 60, 80);          /* 加深边框模拟金属反光 */
+    color: rgb(20, 40, 60);                 /* 文字颜色同步加深 */
+}
+
+QPushButton:pressed {
+    background-color: rgb(60, 75, 90);      /* 按压状态与边框同色 */
+    color: rgb(230, 235, 240);              /* 浅灰白文字确保可读性 */
+}
+
+QPushButton:disabled {
+    background-color: rgb(250, 250, 250);    /* 禁用状态极浅灰 */
+    color: rgb(180, 190, 200);              /* 灰蓝文字表示不可用 */
+    border-color: rgb(210, 220, 230);
+}</string>
+         </property>
+         <property name="text">
+          <string>批量导入</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_4">
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
+    border-radius: 8px;                      /* 适中圆角更显严谨 */
+    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */
+    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */
+    font: bold 14pt &quot;微软雅黑&quot;;
+    min-width: 85px;
+    min-height: 42px;
+ 
+}
+
+QPushButton:hover {
+    background-color: rgb(220, 230, 240);    /* 悬停时轻微加深背景 */
+    border-color: rgb(40, 60, 80);          /* 加深边框模拟金属反光 */
+    color: rgb(20, 40, 60);                 /* 文字颜色同步加深 */
+}
+
+QPushButton:pressed {
+    background-color: rgb(60, 75, 90);      /* 按压状态与边框同色 */
+    color: rgb(230, 235, 240);              /* 浅灰白文字确保可读性 */
+}
+
+QPushButton:disabled {
+    background-color: rgb(250, 250, 250);    /* 禁用状态极浅灰 */
+    color: rgb(180, 190, 200);              /* 灰蓝文字表示不可用 */
+    border-color: rgb(210, 220, 230);
+}</string>
+         </property>
+         <property name="text">
+          <string>保存数据集</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
+    border-radius: 8px;                      /* 适中圆角更显严谨 */
+    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */
+    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */
+    font: bold 14pt &quot;微软雅黑&quot;;
+    min-width: 85px;
+    min-height: 42px;
+ 
+}
+
+QPushButton:hover {
+    background-color: rgb(220, 230, 240);    /* 悬停时轻微加深背景 */
+    border-color: rgb(40, 60, 80);          /* 加深边框模拟金属反光 */
+    color: rgb(20, 40, 60);                 /* 文字颜色同步加深 */
+}
+
+QPushButton:pressed {
+    background-color: rgb(60, 75, 90);      /* 按压状态与边框同色 */
+    color: rgb(230, 235, 240);              /* 浅灰白文字确保可读性 */
+}
+
+QPushButton:disabled {
+    background-color: rgb(250, 250, 250);    /* 禁用状态极浅灰 */
+    color: rgb(180, 190, 200);              /* 灰蓝文字表示不可用 */
+    border-color: rgb(210, 220, 230);
+}</string>
+         </property>
+         <property name="text">
+          <string>插值设置</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QGraphicsView" name="graphicsView"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>953</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
