@@ -322,7 +322,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.method = 'NONE'
         self.psd_results = None
         self.selected_model_path = None
-        self.model = None  # 用于存储训练好的模型
+        self.trained_model = None  # 用于存储训练好的模型
 
         self.current_page = 0
         self.figures = []  # 存储所有图表的列表
@@ -341,11 +341,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.pushButton_psd_analysis.clicked.connect(self.handle_vibration_analysis)
         self.pushButton_save_psd.clicked.connect(self.save_psd_result)
         self.pushButton_save_pretrained_model.clicked.connect(
-                    lambda: self.ask_and_save_model(self.model, method)
+                    lambda: self.ask_and_save_model(self.trained_model, method)
                 ) # 保存预训练模型
-    def ask_and_save_model(self, model, method):
+    def ask_and_save_model(self, trained_model, method):
         try:
-            ask_and_save_model(self, self.model, default_name='trained_model_' + str(method) + '.pkl')
+            ask_and_save_model(self, trained_model, default_name='trained_model_' + str(method) + '.pkl')
         except Exception as e:
             QMessageBox.warning(self, "保存模型失败", str(e))
             
@@ -652,7 +652,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 random_state=int(random_state),
                 max_depth=int(max_depth),
             )
-            self.model = model  # 保存训练好的模型
+            self.trained_model = model  # 保存训练好的模型
             # ask_and_save_model(self,method,default_name='trained_model'+'_'+str(method)+'.pkl')    
 
             # `model` 是训练好的模型，`y_pred` 是预测结果
@@ -691,6 +691,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 max_depth=int(max_depth),
                 n_estimators=int(n_estimators),
             )
+            self.trained_model = model  # 保存训练好的模型
             # `model` 是训练好的模型，`y_pred` 是预测结果
             print("预测结果:", y_pred)
             print("真实值:", y_test)
@@ -711,7 +712,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                           metrics['MSE'],metrics['R2'])
             self.lineEdit_DEVICE.setText("CPU")
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
-            QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
+            # QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
    
 
         if method =='SVM':
@@ -730,6 +731,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 n_jobs=n_jobs,
                 max_iter=-1,#SVM不需要这个参数
             )
+            self.trained_model = model  # 保存训练好的模型
             # `model` 是训练好的模型，`y_pred` 是预测结果
             print("预测结果:", y_pred)
             print("真实值:", y_test)
@@ -750,7 +752,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                            metrics['MSE'],metrics['R2'])
             self.lineEdit_DEVICE.setText("CPU")
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
-            QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
+            # QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
 
 
 
@@ -770,6 +772,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 mlp_hidden_layers=tuple(hidden_layer_sizes),
                 
             )
+            self.trained_model = model  # 保存训练好的模型
             # `model` 是训练好的模型，`y_pred` 是预测结果
             print("预测结果:", y_pred)
             print("真实值:", y_test)
@@ -790,7 +793,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                          metrics['MSE'],metrics['R2'])
             self.lineEdit_DEVICE.setText("CPU")
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
-            QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
+            # QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
 
         
         if method == 'ET':
@@ -807,6 +810,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 max_depth=int(max_depth),
                 n_estimators=int(n_estimators),
             )
+            self.trained_model = model  # 保存训练好的模型
             # `model` 是训练好的模型，`y_pred` 是预测结果
             print("预测结果:", y_pred)
             print("真实值:", y_test)
@@ -826,7 +830,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                            metrics['MSE'],metrics['R2'])
             self.lineEdit_DEVICE.setText("CPU")
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
-            QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
+            # QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
 
         
         if method == 'GL':
@@ -843,7 +847,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 show_plots=False,
                 show_prints=True
             )
-
+            self.trained_model = model  # 保存训练好的模型
             # 打印结果
             print("预测结果:", y_pred)
             print("真实值:", y_test)
@@ -875,7 +879,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 model_type='MTW',
                 gpu =True,              
             )
-
+            self.trained_model = model  # 保存训练好的模型
             # 打印结果
             print("预测结果:", y_pred)
             print("真实值:", y_test)
@@ -906,7 +910,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 model_type='REMTW',
                 gpu =True,              
             )
-
+            self.trained_model = model  # 保存训练好的模型
             # 打印结果
             print("预测结果:", y_pred)
             print("真实值:", y_test)
