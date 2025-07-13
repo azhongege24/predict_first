@@ -27,6 +27,7 @@ from ALL_Algorithms.algorithms5_ET_para import Ui_ET_para
 from ALL_Algorithms.algorithms6_GL_para import Ui_GL_para  
 from ALL_Algorithms.algorithms7_MTW_para import Ui_MTW_para
 from ALL_Algorithms.algorithms8_REMTW_para import Ui_REMTW_para
+from ALL_Algorithms.Dataset_handle import Ui_dataset_handle
 from PyQt5.QtCore import pyqtSlot
 from ALL_Algorithms.Algorithms import multi_task_regression_predictor
 from ALL_Algorithms.Algorithms import ask_and_save_model
@@ -125,6 +126,44 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         print("Selected model path:", self.selected_model_path)
         if self.parent_window is not None:
             self.parent_window.selected_model_path = self.selected_model_path
+class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
+    def __init__(self, parent=None):
+        super(POP_DatasetHandleWindow, self).__init__()
+        self.setupUi(self)
+        self.datasets = []
+        self.parent_window = parent
+        # 绑定按钮-目前还没绑定具体的要求功能
+        self.pushButton_add.clicked.connect(lambda:self.add_dataset)
+        self.pushButton_merge.clicked.connect(lambda:self.merge_and_interpolate)
+        self.pushButton_save.clicked.connect(lambda:self.save_merged_dataset)
+
+    def add_dataset(self):
+        file_path, _ = QFileDialog.getOpenFileName(self, "选择试验数据文件")
+        if file_path:
+            df = pd.read_csv(file_path)  # 可根据实际类型判断
+            self.datasets.append(df)
+            self.listWidget_files.addItem(file_path)
+
+    def merge_and_interpolate(self):
+        if not self.datasets:
+            QMessageBox.warning(self, "提示", "请先添加数据")
+            return
+        base_index = self.datasets[0].index
+        aligned = [df.reindex(base_index).interpolate(method='linear') for df in self.datasets]
+        self.merged_data = pd.concat(aligned, ignore_index=True)
+        self.textEdit_status.setText("合并并插值完成")
+
+    def save_merged_dataset(self):
+        if not hasattr(self, 'merged_data'):
+            QMessageBox.warning(self, "提示", "请先合并数据")
+            return
+        file_path, _ = QFileDialog.getSaveFileName(self, "保存合并数据集", "", "CSV Files (*.csv);;Excel Files (*.xlsx)")
+        if file_path:
+            if file_path.endswith('.csv'):
+                self.merged_data.to_csv(file_path, index=False)
+            else:
+                self.merged_data.to_excel(file_path, index=False)
+            self.textEdit_status.setText("数据集保存成功")     
                 
 class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -340,6 +379,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         # self.pushButton_preview_VA_data.clicked.connect(self.preview_VA_data)  这个现在没用了，直接导入振动数据文件的时候，确认便就会预览
         self.pushButton_psd_analysis.clicked.connect(self.handle_vibration_analysis)
         self.pushButton_save_psd.clicked.connect(self.save_psd_result)
+        self.pushButton_dataset.clicked.connect(self.AL_dataset_handle)  # 打开数据集处理窗口
         self.pushButton_save_pretrained_model.clicked.connect(
                     lambda: self.ask_and_save_model(self.trained_model, method)
                 ) # 保存预训练模型
@@ -419,6 +459,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.ui_pop = POP_Load_model_para(self)
         self.ui_pop.show()
 
+    def AL_dataset_handle(self):
+        """
+        打开数据集处理窗口
+        """
+        self.ui_pop = POP_DatasetHandleWindow(self)
+        self.ui_pop.show()
+    
     def AL_DT_para(self):
       
         self.ui_pop = POP_DT_para(self)

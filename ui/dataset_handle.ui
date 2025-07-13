@@ -35,7 +35,7 @@
      <string>数据集管理/试验数据合并</string>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>120</x>
@@ -48,7 +48,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="pushButton_add">
          <property name="styleSheet">
           <string notr="true">QPushButton {
     border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
@@ -84,7 +84,7 @@ QPushButton:disabled {
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="pushButton_merge">
          <property name="styleSheet">
           <string notr="true">QPushButton {
     border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
@@ -120,7 +120,7 @@ QPushButton:disabled {
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_4">
+        <widget class="QPushButton" name="pushButton_save">
          <property name="styleSheet">
           <string notr="true">QPushButton {
     border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
