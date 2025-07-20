@@ -131,18 +131,38 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
         super(POP_DatasetHandleWindow, self).__init__()
         self.setupUi(self)
         self.datasets = []
+        self.merged_data = None  # 用于存储合并后的数据
         self.parent_window = parent
         # 绑定按钮-目前还没绑定具体的要求功能
-        self.pushButton_add.clicked.connect(lambda:self.add_dataset)
-        self.pushButton_merge.clicked.connect(lambda:self.merge_and_interpolate)
-        self.pushButton_save.clicked.connect(lambda:self.save_merged_dataset)
+        self.pushButton_add.clicked.connect(self.add_dataset)
+        self.pushButton_merge.clicked.connect(self.merge_and_interpolate)
+        self.pushButton_save.clicked.connect(self.save_merged_dataset)
 
     def add_dataset(self):
-        file_path, _ = QFileDialog.getOpenFileName(self, "选择试验数据文件")
+        file_path, _ = QFileDialog.getOpenFileName(self, "选择试验数据文件", "./data")
         if file_path:
             df = pd.read_csv(file_path)  # 可根据实际类型判断
+
             self.datasets.append(df)
             self.listWidget_files.addItem(file_path)
+            self.textEdit_status.append(f"已添加数据集: {file_path}")
+            self.preview_table_in_graphicsview(df)  # 预览数据
+    #预览数据       
+    def preview_table_in_graphicsview(self, df):
+        fig, ax = plt.subplots(figsize=(8, 2))
+        ax.axis('off')
+        table = ax.table(cellText=df.head(5).values,
+                        colLabels=df.columns,
+                        loc='center')
+        plt.tight_layout()
+        img_path = "./data/photo/preview_table.png"
+        plt.savefig(img_path)
+        plt.close(fig)
+        pixmap = QPixmap(img_path)
+        scene = QGraphicsScene()
+        scene.addPixmap(pixmap)
+        self.graphicsView_dataset_handle.setScene(scene)
+        self.graphicsView_dataset_handle.show()
 
     def merge_and_interpolate(self):
         if not self.datasets:
@@ -157,12 +177,12 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
         if not hasattr(self, 'merged_data'):
             QMessageBox.warning(self, "提示", "请先合并数据")
             return
-        file_path, _ = QFileDialog.getSaveFileName(self, "保存合并数据集", "", "CSV Files (*.csv);;Excel Files (*.xlsx)")
+        file_path, _ = QFileDialog.getSaveFileName(self, "保存合并数据集", "", "CSV (UTF-8) (*.csv);;Excel Files (*.xlsx)")
         if file_path:
             if file_path.endswith('.csv'):
-                self.merged_data.to_csv(file_path, index=False)
+                self.merged_data.to_csv(file_path, encoding="utf-8-sig",index=False)
             else:
-                self.merged_data.to_excel(file_path, index=False)
+                self.merged_data.to_excel(file_path, encoding="utf-8-sig",index=False)
             self.textEdit_status.setText("数据集保存成功")     
                 
 class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):

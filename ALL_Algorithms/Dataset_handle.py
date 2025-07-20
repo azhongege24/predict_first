@@ -14,11 +14,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_dataset_handle(object):
     def setupUi(self, dataset_handle):
         dataset_handle.setObjectName("dataset_handle")
-        dataset_handle.resize(953, 735)
+        dataset_handle.resize(1212, 677)
         self.centralwidget = QtWidgets.QWidget(dataset_handle)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(320, 30, 351, 51))
+        self.label.setGeometry(QtCore.QRect(410, 0, 351, 51))
         font = QtGui.QFont()
         font.setFamily("楷体")
         font.setPointSize(20)
@@ -26,14 +26,15 @@ class Ui_dataset_handle(object):
         font.setWeight(50)
         self.label.setFont(font)
         self.label.setObjectName("label")
+        self.graphicsView_dataset_handle = QtWidgets.QGraphicsView(self.centralwidget)
+        self.graphicsView_dataset_handle.setGeometry(QtCore.QRect(280, 120, 911, 391))
+        self.graphicsView_dataset_handle.setObjectName("graphicsView_dataset_handle")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(120, 120, 751, 501))
+        self.layoutWidget.setGeometry(QtCore.QRect(110, 120, 171, 391))
         self.layoutWidget.setObjectName("layoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
         self.pushButton_add = QtWidgets.QPushButton(self.layoutWidget)
         self.pushButton_add.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */\n"
@@ -63,7 +64,7 @@ class Ui_dataset_handle(object):
 "    border-color: rgb(210, 220, 230);\n"
 "}")
         self.pushButton_add.setObjectName("pushButton_add")
-        self.horizontalLayout.addWidget(self.pushButton_add)
+        self.verticalLayout.addWidget(self.pushButton_add)
         self.pushButton_merge = QtWidgets.QPushButton(self.layoutWidget)
         self.pushButton_merge.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */\n"
@@ -93,7 +94,7 @@ class Ui_dataset_handle(object):
 "    border-color: rgb(210, 220, 230);\n"
 "}")
         self.pushButton_merge.setObjectName("pushButton_merge")
-        self.horizontalLayout.addWidget(self.pushButton_merge)
+        self.verticalLayout.addWidget(self.pushButton_merge)
         self.pushButton_save = QtWidgets.QPushButton(self.layoutWidget)
         self.pushButton_save.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */\n"
@@ -123,7 +124,7 @@ class Ui_dataset_handle(object):
 "    border-color: rgb(210, 220, 230);\n"
 "}")
         self.pushButton_save.setObjectName("pushButton_save")
-        self.horizontalLayout.addWidget(self.pushButton_save)
+        self.verticalLayout.addWidget(self.pushButton_save)
         self.pushButton = QtWidgets.QPushButton(self.layoutWidget)
         self.pushButton.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */\n"
@@ -153,14 +154,30 @@ class Ui_dataset_handle(object):
 "    border-color: rgb(210, 220, 230);\n"
 "}")
         self.pushButton.setObjectName("pushButton")
-        self.horizontalLayout.addWidget(self.pushButton)
-        self.verticalLayout.addLayout(self.horizontalLayout)
-        self.graphicsView = QtWidgets.QGraphicsView(self.layoutWidget)
-        self.graphicsView.setObjectName("graphicsView")
-        self.verticalLayout.addWidget(self.graphicsView)
+        self.verticalLayout.addWidget(self.pushButton)
+        self.listWidget_files = QtWidgets.QListWidget(self.layoutWidget)
+        self.listWidget_files.setMinimumSize(QtCore.QSize(40, 0))
+        self.listWidget_files.setMaximumSize(QtCore.QSize(9999, 100))
+        self.listWidget_files.setObjectName("listWidget_files")
+        self.verticalLayout.addWidget(self.listWidget_files)
+        self.textEdit_status = QtWidgets.QTextEdit(self.layoutWidget)
+        self.textEdit_status.setMaximumSize(QtCore.QSize(999, 80))
+        font = QtGui.QFont()
+        font.setFamily("楷体")
+        font.setPointSize(12)
+        self.textEdit_status.setFont(font)
+        self.textEdit_status.setObjectName("textEdit_status")
+        self.verticalLayout.addWidget(self.textEdit_status)
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(650, 80, 141, 31))
+        font = QtGui.QFont()
+        font.setFamily("黑体")
+        font.setPointSize(14)
+        self.label_2.setFont(font)
+        self.label_2.setObjectName("label_2")
         dataset_handle.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(dataset_handle)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 953, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1212, 23))
         self.menubar.setObjectName("menubar")
         dataset_handle.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(dataset_handle)
@@ -175,6 +192,7 @@ class Ui_dataset_handle(object):
         dataset_handle.setWindowTitle(_translate("dataset_handle", "数据集处理板块"))
         self.label.setText(_translate("dataset_handle", "数据集管理/试验数据合并"))
         self.pushButton_add.setText(_translate("dataset_handle", "添加实验数据"))
-        self.pushButton_merge.setText(_translate("dataset_handle", "批量导入"))
+        self.pushButton_merge.setText(_translate("dataset_handle", "合并数据"))
         self.pushButton_save.setText(_translate("dataset_handle", "保存数据集"))
         self.pushButton.setText(_translate("dataset_handle", "插值设置"))
+        self.label_2.setText(_translate("dataset_handle", "导入数据集预览"))
