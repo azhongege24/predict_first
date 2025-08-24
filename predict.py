@@ -126,34 +126,95 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         print("Selected model path:", self.selected_model_path)
         if self.parent_window is not None:
             self.parent_window.selected_model_path = self.selected_model_path
+
+import pandas as pd
+import matplotlib.pyplot as plt
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QGraphicsScene
+from PyQt5.QtGui import QPixmap
+
 class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
     def __init__(self, parent=None):
         super(POP_DatasetHandleWindow, self).__init__()
         self.setupUi(self)
-        self.datasets = []
-        self.merged_data = None  # 用于存储合并后的数据
+        self.datasets = []         # 存储每次试验的DataFrame
+        self.merged_data = None    # 合并后的总数据集
         self.parent_window = parent
-        # 绑定按钮-目前还没绑定具体的要求功能
+        self.interpolate_method = 'linear'  # 默认插值方式
+
+        # 绑定按钮
         self.pushButton_add.clicked.connect(self.add_dataset)
         self.pushButton_merge.clicked.connect(self.merge_and_interpolate)
         self.pushButton_save.clicked.connect(self.save_merged_dataset)
+        self.pushButton.clicked.connect(self.set_interpolate_method)
 
     def add_dataset(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "选择试验数据文件", "./data")
         if file_path:
-            df = pd.read_csv(file_path)  # 可根据实际类型判断
+            try:
+                # 文件类型判断
+                if file_path.endswith('.csv'):
+                    try:
+                        df = pd.read_csv(file_path, encoding='utf-8')
+                    except UnicodeDecodeError:
+                        df = pd.read_csv(file_path, encoding='gbk')
+                elif file_path.endswith(('.xls', '.xlsx')):
+                    df = pd.read_excel(file_path)
+                else:
+                    QMessageBox.warning(self, "提示", "不支持的文件类型")
+                    return
 
-            self.datasets.append(df)
-            self.listWidget_files.addItem(file_path)
-            self.textEdit_status.append(f"已添加数据集: {file_path}")
-            self.preview_table_in_graphicsview(df)  # 预览数据
-    #预览数据       
+                self.datasets.append(df)
+                self.listWidget_files.addItem(file_path)
+                self.textEdit_status.append(f"已添加数据集: {file_path}")
+                self.preview_table_in_graphicsview(df)
+            except Exception as e:
+                QMessageBox.warning(self, "读取失败", str(e))
+
+    def merge_and_interpolate(self):
+        if not self.datasets:
+            QMessageBox.warning(self, "提示", "请先添加数据")
+            return
+        try:
+            # 以第一个数据集的索引为基准
+            base_index = self.datasets[0].index
+            aligned = [df.reindex(base_index).interpolate(method=self.interpolate_method, axis=0) for df in self.datasets]
+            self.merged_data = pd.concat(aligned, ignore_index=True)
+            self.textEdit_status.append("合并并插值完成")
+            # 预览合并后的数据
+            self.preview_table_in_graphicsview(self.merged_data)
+        except Exception as e:
+            QMessageBox.warning(self, "合并失败", str(e))
+
+    def save_merged_dataset(self):
+        if self.merged_data is None:
+            QMessageBox.warning(self, "提示", "请先合并数据")
+            return
+        file_path, _ = QFileDialog.getSaveFileName(self, "保存合并数据集", "", "CSV Files (*.csv);;Excel Files (*.xlsx)")
+        if file_path:
+            try:
+                if file_path.endswith('.csv'):
+                    self.merged_data.to_csv(file_path, index=False)
+                else:
+                    self.merged_data.to_excel(file_path, index=False)
+                self.textEdit_status.append("数据集保存成功")
+            except Exception as e:
+                QMessageBox.warning(self, "保存失败", str(e))
+
+    def set_interpolate_method(self):
+        # 简单弹窗选择插值方式
+        methods = ['linear', 'nearest', 'spline', 'quadratic']
+        method, ok = QFileDialog.getItem(self, "选择插值方式", "插值方法：", methods, 0, False)
+        if ok and method:
+            self.interpolate_method = method
+            self.textEdit_status.append(f"插值方式已设置为: {method}")
+
     def preview_table_in_graphicsview(self, df):
+        # 预览前10行数据到QGraphicsView
         fig, ax = plt.subplots(figsize=(8, 2))
         ax.axis('off')
-        table = ax.table(cellText=df.head(5).values,
-                        colLabels=df.columns,
-                        loc='center')
+        table = ax.table(cellText=df.head(10).values,
+                         colLabels=df.columns,
+                         loc='center')
         plt.tight_layout()
         img_path = "./data/photo/preview_table.png"
         plt.savefig(img_path)
@@ -162,28 +223,7 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
         scene = QGraphicsScene()
         scene.addPixmap(pixmap)
         self.graphicsView_dataset_handle.setScene(scene)
-        self.graphicsView_dataset_handle.show()
-
-    def merge_and_interpolate(self):
-        if not self.datasets:
-            QMessageBox.warning(self, "提示", "请先添加数据")
-            return
-        base_index = self.datasets[0].index
-        aligned = [df.reindex(base_index).interpolate(method='linear') for df in self.datasets]
-        self.merged_data = pd.concat(aligned, ignore_index=True)
-        self.textEdit_status.setText("合并并插值完成")
-
-    def save_merged_dataset(self):
-        if not hasattr(self, 'merged_data'):
-            QMessageBox.warning(self, "提示", "请先合并数据")
-            return
-        file_path, _ = QFileDialog.getSaveFileName(self, "保存合并数据集", "", "CSV (UTF-8) (*.csv);;Excel Files (*.xlsx)")
-        if file_path:
-            if file_path.endswith('.csv'):
-                self.merged_data.to_csv(file_path, encoding="utf-8-sig",index=False)
-            else:
-                self.merged_data.to_excel(file_path, encoding="utf-8-sig",index=False)
-            self.textEdit_status.setText("数据集保存成功")     
+        self.graphicsView_dataset_handle.show()          
                 
 class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):
     def __init__(self, parent=None):
