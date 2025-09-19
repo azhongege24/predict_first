@@ -170,7 +170,7 @@ class Ui_MainWindow(object):
 "}")
         self.label_version.setObjectName("label_version")
         self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(1031, 237, 131, 481))
+        self.layoutWidget1.setGeometry(QtCore.QRect(1031, 237, 131, 504))
         self.layoutWidget1.setObjectName("layoutWidget1")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget1)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -375,8 +375,32 @@ class Ui_MainWindow(object):
 "}")
         self.pushButton_3.setObjectName("pushButton_3")
         self.verticalLayout.addWidget(self.pushButton_3)
+        self.pushButton_4 = QtWidgets.QPushButton(self.layoutWidget1)
+        self.pushButton_4.setStyleSheet("QPushButton {\n"
+"    border: 1px solid #2b8cbe;           /* 科技蓝边框 */\n"
+"    border-radius: 15px;\n"
+"    padding: 2px 4px;\n"
+"    background-color: #e0f3f8;           /* 浅蓝灰背景 */\n"
+"    color: #0c2c84;                     /* 深蓝字体 */\n"
+"    font: bold 18pt \"楷体\";\n"
+"    min-width: 80px;\n"
+"    min-height: 40px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #7bccc4;          /* 悬浮时：蓝绿色 */\n"
+"    border-color: #0868ac;              /* 加深边框 */\n"
+"    color: #f7fcfd;                     /* 悬停文字改为白色 */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #4eb3d3;          /* 按压时：科技蓝 */\n"
+"    border-color: #084081;              /* 深蓝边框 */\n"
+"}")
+        self.pushButton_4.setObjectName("pushButton_4")
+        self.verticalLayout.addWidget(self.pushButton_4)
         self.layoutWidget2 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget2.setGeometry(QtCore.QRect(1170, 237, 251, 481))
+        self.layoutWidget2.setGeometry(QtCore.QRect(1170, 237, 251, 501))
         self.layoutWidget2.setObjectName("layoutWidget2")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.layoutWidget2)
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -1114,7 +1138,7 @@ class Ui_MainWindow(object):
         self.pushButton_dataset.setText(_translate("MainWindow", "数据集合"))
         self.pushButton_train.setText(_translate("MainWindow", "训练验模"))
         self.pushButton_predict.setText(_translate("MainWindow", "预测"))
-        self.label_version.setText(_translate("MainWindow", "v3.0 2025.09.08"))
+        self.label_version.setText(_translate("MainWindow", "v3.0 2025.09.19"))
         self.label_2.setText(_translate("MainWindow", "算法功能区"))
         self.pushButton_AL1.setToolTip(_translate("MainWindow", "<html><head/><body><p>决策树算法</p></body></html>"))
         self.pushButton_AL1.setText(_translate("MainWindow", "DT"))
@@ -1132,6 +1156,7 @@ class Ui_MainWindow(object):
         self.pushButton_2.setText(_translate("MainWindow", "MTW"))
         self.pushButton_3.setToolTip(_translate("MainWindow", "<html><head/><body><p>Reweighted Multitask Wasserstein：基于Wasserstein距离正则化和L0.5稀疏约束的多任务回归模型</p></body></html>"))
         self.pushButton_3.setText(_translate("MainWindow", "REMTW"))
+        self.pushButton_4.setText(_translate("MainWindow", "MMOE"))
         self.label_3.setText(_translate("MainWindow", "输入特征"))
         self.pushButton_inputall.setText(_translate("MainWindow", "全选"))
         self.label_4.setText(_translate("MainWindow", "输出特征"))

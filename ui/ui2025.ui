@@ -249,7 +249,7 @@ font: 16 px  &quot;Times New Roman&quot;;
 }</string>
     </property>
     <property name="text">
-     <string>v3.0 2025.09.08</string>
+     <string>v3.0 2025.09.19</string>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">
@@ -258,7 +258,7 @@ font: 16 px  &quot;Times New Roman&quot;;
       <x>1031</x>
       <y>237</y>
       <width>131</width>
-      <height>481</height>
+      <height>504</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -555,6 +555,36 @@ QPushButton:pressed {
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_4">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: 1px solid #2b8cbe;           /* 科技蓝边框 */
+    border-radius: 15px;
+    padding: 2px 4px;
+    background-color: #e0f3f8;           /* 浅蓝灰背景 */
+    color: #0c2c84;                     /* 深蓝字体 */
+    font: bold 18pt &quot;楷体&quot;;
+    min-width: 80px;
+    min-height: 40px;
+}
+
+QPushButton:hover {
+    background-color: #7bccc4;          /* 悬浮时：蓝绿色 */
+    border-color: #0868ac;              /* 加深边框 */
+    color: #f7fcfd;                     /* 悬停文字改为白色 */
+}
+
+QPushButton:pressed {
+    background-color: #4eb3d3;          /* 按压时：科技蓝 */
+    border-color: #084081;              /* 深蓝边框 */
+}</string>
+       </property>
+       <property name="text">
+        <string>MMOE</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="layoutWidget">
@@ -563,7 +593,7 @@ QPushButton:pressed {
       <x>1170</x>
       <y>237</y>
       <width>251</width>
-      <height>481</height>
+      <height>501</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
