@@ -2,6 +2,12 @@ import os
 import time
 import numpy as np
 import pandas as pd
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+from tqdm import tqdm
+import copy
 from sklearn.metrics import r2_score
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT as NavigationToolbar
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView,QMessageBox, QFileDialog
@@ -36,6 +42,15 @@ def multi_task_regression_predictor(
     max_iter=500, 
     alpha=0.0001,# MLP最大迭代次数
     mlp_hidden_layers: tuple = (100, 50), # MLP隐藏层结构
+    #MMOE特有参数
+    mmoe_num_experts :int = 5,
+    mmoe_expert_hidden :int = 64,
+    mmoe_learning_rate : float = 0.001,
+    mmoe_dropout_rate : float = 0.1,
+    mmoe_epochs : int = 100,
+    mmoe_batch_size : int = 32,
+    mmoe_lambda_balance : float = 0.1,
+    
 
 ):
     
@@ -61,13 +76,24 @@ def multi_task_regression_predictor(
     
 
     
-    # 模型选择与初始化
+    # 模型选择与初始化+新增了MMOE模型
     model_mapping = {
         'DT': DecisionTreeRegressor(max_depth=max_depth, random_state=random_state),
         'RF': RandomForestRegressor(n_estimators=n_estimators, max_depth=max_depth, n_jobs=n_jobs, random_state=random_state),
         'SVM': MultiOutputRegressor(SVR(kernel=kernel, C=C, epsilon=epsilon), n_jobs=n_jobs),
         'MLP': MLPRegressor(hidden_layer_sizes=mlp_hidden_layers, max_iter=max_iter,alpha=alpha, random_state=random_state),
-        'ET': ExtraTreesRegressor(n_estimators=n_estimators, max_depth=max_depth, n_jobs=n_jobs, random_state=random_state)
+        'ET': ExtraTreesRegressor(n_estimators=n_estimators, max_depth=max_depth, n_jobs=n_jobs, random_state=random_state),
+        'MMoE': MMoERegressor(
+            input_dim = len(input_columns),
+            output_dim = len(output_columns),
+            num_experts = mmoe_num_experts,
+            expert_hidden = mmoe_expert_hidden,
+            learning_rate = mmoe_learning_rate,
+            dropout_rate = mmoe_dropout_rate,
+            num_epochs = mmoe_epochs,
+            batch_size = mmoe_batch_size,
+            lambda_balance= mmoe_lambda_balance
+        )
     }
     
     if model_type not in model_mapping:
@@ -75,23 +101,31 @@ def multi_task_regression_predictor(
     
     model = model_mapping[model_type]
     
-    # 模型训练
-    print("开始训练模型...")
-    with tqdm(total=1, desc="训练进度", unit="step") as pbar:  # 使用 tqdm 显示进度
-        model.fit(X_train, y_train)
-        pbar.update(1)  # 更新进度
-    # 预测与评估
-    y_pred = model.predict(X_test)
     
+    print("开始训练模型...")
+    # 模型训练
+    if model_type == 'MMoE':
+        #MMoE模型开始训练
+        with tqdm(total = mmoe_epochs, desc ="MMoE训练进度", unit="epoch" ) as pbar:
+            model.fit(X_train , y_train , verbose = False)
+            pbar.update(mmoe_epochs)
+    else:
+    #其他模型开始训练
+        with tqdm(total=1, desc="训练进度", unit="step") as pbar:  # 使用 tqdm 显示进度
+            model.fit(X_train, y_train)
+            pbar.update(1)  # 更新进度
+            
+    # 预测与评估
+    if model_type == 'MMoE':
+        y_pred = model.predict(X_test)
+    else:
+        y_pred = model.predict(X_test)    
     
     # 计算指标
     mse = mean_squared_error(y_test, y_pred, multioutput='uniform_average')
     r2 = r2_score(y_test, y_pred, multioutput='uniform_average')
     metrics = {'MSE': mse, 'R2': r2}
-
-    
-    
-    
+ 
     return model, scaler, y_test, y_pred, metrics
 
 def ask_and_save_model(parent, model, default_name="model.pkl"):
@@ -345,6 +379,163 @@ def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test,
         f'当前生成数据: {", ".join(output_columns)} [{N_start_test}:{N_end_test}]')
     return self.data_save
 
+#新增的MMOE多专家混合系统
+class Expert(nn.Module):
+    def __init__(self, input_dim ,hidden_dim, dropout_rate = 0.1):
+        super(Expert, self).__init__()
+        self.net = nn.Sequential(
+            nn.Linear(input_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Dropout(dropout_rate),
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Dropout(dropout_rate)
+            )
+    def forward(self,x):
+        return self.net(x)
+class MMoE(nn.Module):
+    def __init__(self, input_dim,output_dim,num_experts=5,num_tasks=1,
+                 expert_hidden=64, dropout_rate =0.1):
+        super(MMoE, self).__init__()
+        self.num_experts = num_experts
+        self.num_tasks = num_tasks
+        self.input_dim = input_dim
+        self.out_dim = output_dim
+        #专家网络
+        self.experts = nn.ModuleList([
+            Expert(input_dim,expert_hidden,dropout_rate) for _ in range(num_experts)
+            ])
+        self.gates = nn.ModuleList([
+            nn.Sequential(
+                nn.Linear(input_dim,num_experts),
+                nn.Softmax(dim=1)
+            ) for _ in range(num_tasks)
+        ])
+        self.task_layers = nn.ModuleList([
+            nn.Linear(expert_hidden,output_dim) for _ in range(num_tasks)
+        ])
+    
+    def forward(self,x):
+        #计算所有专家的输出
+        expert_outputs = torch.stack([expert(x) for expert in self.experts],dim = 1) # [batch, experts, hidden]
+        #计算每个任务的，门控权重和最终输出
+        outputs =[]
+        cv_losses=[]
+        for i in range(self.num_tasks):
+            #计算门控权重
+            gate_weights = self.gates[i](x) #[batch, experts]
+            #计算加权专家输出
+            weighted_expert =(expert_outputs * gate_weights.unsqueeze(-1)).sum(dim = 1) #[batch, hidden]
+            #通过特定任务层
+            task_output = self.task_layers[i](weighted_expert)#[batch, output_dim]
+            outputs.append(task_output)
+            #计算专家使用的变异系数损失
+            importance = gate_weights.mean(dim = 0) #[experts]
+            cv_loss = torch.std(importance)/(torch.mean(importance)+1e-8)
+            cv_losses.append(cv_loss)
+        
+        # 对于单任务，直接返回输出和损失
+        if self.num_tasks == 1:
+            return outputs[0],cv_losses[0]
+        else:
+            return outputs,cv_losses
+
+class MMoERegressor:
+    def __init__(self,input_dim,output_dim,num_experts = 5,expert_hidden = 64,
+                 learning_rate = 0.001, dropout_rate = 0.1,
+                 num_epochs = 100, batch_size =32,device = None,
+                 lambda_balance = 0.1
+                 ):
+        self.input_dim = input_dim
+        self.output_dim = output_dim
+        self.num_experts = num_experts
+        self.expert_hidden = expert_hidden
+        self.learning_rate = learning_rate
+        self.dropout_rate = dropout_rate
+        self.num_epochs = num_epochs
+        self.batch_size = batch_size
+        self.device = device if device else ('cuda' if torch.cuda.is_available()else 'cpu')
+        self.lambda_balance = lambda_balance
+        self.model = None
+        self.scaler = None
+        self.loss_history = []
+    
+    def fit(self,X,y, verbose = True):
+        #数据预处理
+        if self.scaler is None:
+            self.scaler = StandardScaler()
+            x_scaled = self.scaler.fit_transform(X)
+        else:
+            x_scaled = self.scaler.transform(X)
+    
+        #转换为pytorch张量
+        X_tensor = torch.FloatTensor(x_scaled).to(self.device)
+        #处理y的形状
+        if len(y.shape) ==1:
+            y_tensor = torch.FloatTensor(y).unsqueeze(1).to(self.device)
+            num_tasks = 1
+        else:
+            y_tensor = torch.FloatTensor(y).to(self.device)
+            num_tasks = y.shape[1]
+        #创建数据加载器
+        dataset = torch.utils.data.TensorDataset(X_tensor,y_tensor)
+        dataloader = torch.utils.data.DataLoader(dataset,batch_size=self.batch_size,shuffle=True)
+        #初始化模型
+        self.model = MMoE(input_dim=self.input_dim,
+            output_dim=self.output_dim,
+            num_experts=self.num_experts,
+            num_tasks=num_tasks,
+            expert_hidden=self.expert_hidden,
+            dropout_rate=self.dropout_rate
+        ).to(self.device)
+        
+        #定义优化器和损失函数
+        optimizer = optim.Adam(self.model.parameters(),lr = self.learning_rate)
+        criterion = nn.MSELoss()
+        
+        # 训练循环
+        self.model.train()
+        for epoch in range(self.num_epochs):
+            epoch_loss = 0.0
+            for batch_X,batch_y in dataloader:
+                optimizer.zero_grad()
+                #前向传播
+                predictions, cv_losses = self.model(batch_X)
+                #计算损失（主损失和平衡损失）
+                main_loss = criterion(predictions,batch_y)
+                balance_loss = cv_losses *self.lambda_balance
+                total_loss = main_loss + balance_loss
+                #反向传播
+                total_loss.backward()
+                optimizer.step()
+                
+                epoch_loss += total_loss.item()
+            avg_loss = epoch_loss/len(dataloader)
+            self.loss_history.append(avg_loss)
+            if verbose and (epoch + 1)%10 == 0:
+                print(f'Epoch {epoch +1}/{self.num_epochs}, Loss:{avg_loss:.4f}')
+        return self
+    
+    def predict(self,X):
+        if self.model is None:
+            raise ValueError("Model has not been trained yet. Call fit() first.")
+        
+        #数据预处理
+        X_scaled = self.scaler.transform(X)
+        X_tensor = torch.FloatTensor(X_scaled).to(self.device)
+        
+        #预测
+        self.model.eval()
+        with torch.nograd():
+            predictions, _ = self.model(X_tensor)
+            return predictions.cpu().numpy()
+    
+    def get_loss_history(self):
+        #返回训练历史损失
+        return self.loss_history
+    
+    
+    
 # 使用示例 ---------------------------------------------------
 if __name__ == "__main__":
     # 示例数据
