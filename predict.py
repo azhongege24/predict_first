@@ -27,6 +27,7 @@ from ALL_Algorithms.algorithms5_ET_para import Ui_ET_para
 from ALL_Algorithms.algorithms6_GL_para import Ui_GL_para  
 from ALL_Algorithms.algorithms7_MTW_para import Ui_MTW_para
 from ALL_Algorithms.algorithms8_REMTW_para import Ui_REMTW_para
+from ALL_Algorithms.algorithms9_MMoE_para import Ui_MMoE_para
 from ALL_Algorithms.Dataset_handle import Ui_dataset_handle
 from PyQt5.QtCore import pyqtSlot
 from ALL_Algorithms.Algorithms import multi_task_regression_predictor

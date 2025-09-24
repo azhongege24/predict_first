@@ -14,16 +14,66 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Load_model_para(object):
     def setupUi(self, Load_model_para):
         Load_model_para.setObjectName("Load_model_para")
-        Load_model_para.resize(520, 271)
+        Load_model_para.resize(526, 300)
         self.centralwidget = QtWidgets.QWidget(Load_model_para)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(20, 70, 441, 42))
+        self.layoutWidget.setGeometry(QtCore.QRect(170, 180, 171, 42))
         self.layoutWidget.setObjectName("layoutWidget")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget)
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.pushButton_2 = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton_2.setMaximumSize(QtCore.QSize(80, 16777215))
+        self.pushButton_2.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.horizontalLayout_2.addWidget(self.pushButton_2)
+        self.pushButton_3 = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButton_3.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton_3.setMaximumSize(QtCore.QSize(80, 16777215))
+        self.pushButton_3.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton_3.setObjectName("pushButton_3")
+        self.horizontalLayout_2.addWidget(self.pushButton_3)
+        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.widget.setGeometry(QtCore.QRect(60, 50, 385, 92))
+        self.widget.setObjectName("widget")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.widget)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.label = QtWidgets.QLabel(self.layoutWidget)
+        self.label = QtWidgets.QLabel(self.widget)
         self.label.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -45,18 +95,19 @@ class Ui_Load_model_para(object):
 "}")
         self.label.setObjectName("label")
         self.horizontalLayout.addWidget(self.label)
-        self.lineEdit_pretrained_model_path = QtWidgets.QLineEdit(self.layoutWidget)
+        self.lineEdit_pretrained_model_path = QtWidgets.QLineEdit(self.widget)
         self.lineEdit_pretrained_model_path.setMinimumSize(QtCore.QSize(150, 40))
         font = QtGui.QFont()
-        font.setFamily("楷体")
+        font.setFamily("黑体")
         font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
+        font.setBold(False)
+        font.setWeight(50)
         self.lineEdit_pretrained_model_path.setFont(font)
+        self.lineEdit_pretrained_model_path.setText("")
         self.lineEdit_pretrained_model_path.setReadOnly(True)
         self.lineEdit_pretrained_model_path.setObjectName("lineEdit_pretrained_model_path")
         self.horizontalLayout.addWidget(self.lineEdit_pretrained_model_path)
-        self.pushButton_load_model = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButton_load_model = QtWidgets.QPushButton(self.widget)
         self.pushButton_load_model.setMinimumSize(QtCore.QSize(30, 30))
         self.pushButton_load_model.setMaximumSize(QtCore.QSize(30, 30))
         font = QtGui.QFont()
@@ -67,57 +118,54 @@ class Ui_Load_model_para(object):
         self.pushButton_load_model.setFont(font)
         self.pushButton_load_model.setObjectName("pushButton_load_model")
         self.horizontalLayout.addWidget(self.pushButton_load_model)
-        self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(150, 140, 171, 42))
-        self.layoutWidget1.setObjectName("layoutWidget1")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget1)
-        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.pushButton_2 = QtWidgets.QPushButton(self.layoutWidget1)
-        self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
-        self.pushButton_2.setMaximumSize(QtCore.QSize(80, 16777215))
-        self.pushButton_2.setStyleSheet("QPushButton{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
+        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.label_2 = QtWidgets.QLabel(self.widget)
+        self.label_2.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
 "\n"
-"font:bold;\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
 "}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
-"}")
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.horizontalLayout_2.addWidget(self.pushButton_2)
-        self.pushButton_3 = QtWidgets.QPushButton(self.layoutWidget1)
-        self.pushButton_3.setMinimumSize(QtCore.QSize(0, 40))
-        self.pushButton_3.setMaximumSize(QtCore.QSize(80, 16777215))
-        self.pushButton_3.setStyleSheet("QPushButton{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
 "\n"
-"font:bold;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
 "}")
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.horizontalLayout_2.addWidget(self.pushButton_3)
+        self.label_2.setObjectName("label_2")
+        self.horizontalLayout_3.addWidget(self.label_2)
+        self.lineEdit = QtWidgets.QLineEdit(self.widget)
+        self.lineEdit.setMinimumSize(QtCore.QSize(150, 40))
+        font = QtGui.QFont()
+        font.setFamily("黑体")
+        font.setPointSize(12)
+        self.lineEdit.setFont(font)
+        self.lineEdit.setObjectName("lineEdit")
+        self.horizontalLayout_3.addWidget(self.lineEdit)
+        self.pushButton = QtWidgets.QPushButton(self.widget)
+        self.pushButton.setMinimumSize(QtCore.QSize(30, 30))
+        self.pushButton.setMaximumSize(QtCore.QSize(30, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.pushButton.setFont(font)
+        self.pushButton.setObjectName("pushButton")
+        self.horizontalLayout_3.addWidget(self.pushButton)
+        self.verticalLayout.addLayout(self.horizontalLayout_3)
         Load_model_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(Load_model_para)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 520, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 526, 23))
         self.menubar.setObjectName("menubar")
         Load_model_para.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(Load_model_para)
@@ -134,7 +182,9 @@ class Ui_Load_model_para(object):
     def retranslateUi(self, Load_model_para):
         _translate = QtCore.QCoreApplication.translate
         Load_model_para.setWindowTitle(_translate("Load_model_para", "加载预训练模型：参数设置"))
-        self.label.setText(_translate("Load_model_para", "加载预训练模型"))
-        self.pushButton_load_model.setText(_translate("Load_model_para", "..."))
         self.pushButton_2.setText(_translate("Load_model_para", "确认"))
         self.pushButton_3.setText(_translate("Load_model_para", "取消"))
+        self.label.setText(_translate("Load_model_para", "加载预训练模型"))
+        self.pushButton_load_model.setText(_translate("Load_model_para", "..."))
+        self.label_2.setText(_translate("Load_model_para", "导入预测数据    "))
+        self.pushButton.setText(_translate("Load_model_para", "..."))

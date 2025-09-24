@@ -150,9 +150,86 @@ def ask_and_save_model(parent, model, default_name="model.pkl"):
             "模型文件 (*.pkl *.joblib);;所有文件 (*)"
         )
         if file_path:
-            joblib.dump(model, file_path)
-            if hasattr(parent, "lineEdit_state"):
-                parent.lineEdit_state.setText("模型已保存 " )
+            if hasattr(model,'__class__') and model.__class__.name == 'MMoERegressor':
+                # 保存pytorch模型
+                torch.save({
+                    'model_state_dict': model.model.state_dict(),
+                    'scaler': model.scaler,
+                    'input_dim' :model.input_dim,
+                    'output_dim': model.output_dim,
+                    'num_experts': model.num_experts,
+                    'expert_hidden': model.expert_hidden,
+                    'loss_history': model.loss_history
+                },file_path.replace('.pkl','.pt'))
+                if hasattr(parent, "lineEdit_state"):
+                    parent.lineEdit_state.setText("模型已保存")
+                
+            else: 
+                joblib.dump(model, file_path)
+                if hasattr(parent, "lineEdit_state"):
+                    parent.lineEdit_state.setText("模型已保存 " )
+
+#新增加载模型代码功能
+def load_model(model_path, model_type=None):
+    """
+    通用模型加载函数，支持多种模型类型
+    
+    :param model_path: 模型文件路径
+    :param model_type: 模型类型 ('DT', 'RF', 'SVM', 'MLP', 'ET', 'MMoE')，
+                      如果为None则尝试自动识别
+    :return: 加载的模型对象
+    """
+    try:
+        # 对于scikit-learn的模型，通常用joblib保存
+        if model_type in ['DT', 'RF', 'SVM', 'MLP', 'ET'] or model_type is None:
+            try:
+                # 尝试用joblib加载（scikit-learn模型常用方式）
+                model = joblib.load(model_path)
+                
+                # 验证模型类型是否匹配
+                if model_type == 'DT' and not isinstance(model, DecisionTreeRegressor):
+                    raise ValueError(f"模型类型不匹配，预期DecisionTreeRegressor，实际是{type(model)}")
+                elif model_type == 'RF' and not isinstance(model, RandomForestRegressor):
+                    raise ValueError(f"模型类型不匹配，预期RandomForestRegressor，实际是{type(model)}")
+                elif model_type == 'SVM' and not isinstance(model, MultiOutputRegressor):
+                    raise ValueError(f"模型类型不匹配，预期MultiOutputRegressor(SVR)，实际是{type(model)}")
+                elif model_type == 'MLP' and not isinstance(model, MLPRegressor):
+                    raise ValueError(f"模型类型不匹配，预期MLPRegressor，实际是{type(model)}")
+                elif model_type == 'ET' and not isinstance(model, ExtraTreesRegressor):
+                    raise ValueError(f"模型类型不匹配，预期ExtraTreesRegressor，实际是{type(model)}")
+                
+                print(f"成功加载{model_type if model_type else 'scikit-learn'}模型")
+                return model
+            except:
+                # 如果joblib加载失败，尝试用torch加载（可能是MMoE模型）
+                pass
+        
+        # 对于MMoE模型，用torch加载
+        if model_type == 'MMoE' or model_type is None:
+            checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
+            
+            # 创建MMoE模型实例
+            model = MMoERegressor(
+                input_dim=checkpoint['input_dim'],
+                output_dim=checkpoint['output_dim'],
+                num_experts=checkpoint['num_experts'],
+                expert_hidden=checkpoint['expert_hidden']
+            )
+            
+            # 加载模型状态
+            model.model.load_state_dict(checkpoint['model_state_dict'])
+            model.scaler = checkpoint.get('scaler')
+            model.loss_history = checkpoint.get('loss_history', [])
+            
+            print("成功加载MMoE模型")
+            return model
+        
+        raise ValueError(f"不支持的模型类型: {model_type}")
+        
+    except Exception as e:
+        print(f"加载模型时出错: {str(e)}")
+        return None
+    
 
 #单输出画图可视化函数
 def single_plot_and_evaluate(self, y_test, y_pred, method, data_test, 
