@@ -117,7 +117,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
     def Confirm(self):
         global loaded_model_path
         if self.parent_window:
-            self.parent_window.lineEdit_Algorithm_name.setText("加载预训练模型")
+            self.parent_window.lineEdit_Algorithm_name.setText("已加载预训练模型")
         loaded_model_path = self.selected_model_path  # 这里只存路径
         print("selected_model_path:", loaded_model_path)
 
@@ -128,6 +128,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         print("Selected model path:", self.selected_model_path)
         if self.parent_window is not None:
             self.parent_window.selected_model_path = self.selected_model_path
+            
     def load_predict_data(self):
         file_filter = "CSV Files (*.csv);;Excel Files (*.xls *.xlsx);;MATLAB Files (*.mat);;All Files (*.*)"
         file_path, _ = QFileDialog.getOpenFileName(self, "选择需要预测的新数据文件", "", file_filter)
@@ -148,8 +149,16 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
             else:
                 QMessageBox.warning(self, "提示", "不支持的文件类型")
                 return
-            self.lineEdit_state.setText("新数据加载成功")
+            
+            # 将数据传递给父窗口
+            if self.parent_window:
+                self.parent_window.predict_data = self.predict_data
+                self.parent_window.lineEdit_dataset_file.setText(file_path)  # 更新文件路径显示
+                self.parent_window.lineEdit_dataset_nums.setText(f'({self.predict_data.shape[0]} Samples * {self.predict_data.shape[1]} Features)')
+            
+            self.parent_window.lineEdit_state.setText("新数据加载成功")
             print("新数据 shape:", self.predict_data.shape)
+            
         except Exception as e:
             QMessageBox.warning(self, "加载失败", str(e))
 
@@ -467,6 +476,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.fileName = ''
         self.new_model = 0
         self.data_load = 0
+        self.predict_data = 0
         self.graphicscene = QGraphicsScene()
         self.lastSelectedPath = ""
         self.method = 'NONE'
