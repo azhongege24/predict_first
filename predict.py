@@ -112,6 +112,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         self.setupUi(self)
         self.parent_window = parent
         self.selected_model_path = None
+        self.predict_data = None
 
     def Confirm(self):
         global loaded_model_path
@@ -127,6 +128,30 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         print("Selected model path:", self.selected_model_path)
         if self.parent_window is not None:
             self.parent_window.selected_model_path = self.selected_model_path
+    def load_predict_data(self):
+        file_filter = "CSV Files (*.csv);;Excel Files (*.xls *.xlsx);;MATLAB Files (*.mat);;All Files (*.*)"
+        file_path, _ = QFileDialog.getOpenFileName(self, "选择需要预测的新数据文件", "", file_filter)
+        if not file_path:
+            return
+        try:
+            if file_path.endswith('.csv'):
+                try:
+                    self.predict_data = pd.read_csv(file_path, encoding='utf-8')
+                except UnicodeDecodeError:
+                    self.predict_data = pd.read_csv(file_path, encoding='gbk')
+            elif file_path.endswith(('.xls', '.xlsx')):
+                self.predict_data = pd.read_excel(file_path)
+            elif file_path.endswith('.mat'):
+                mat_data = sio.loadmat(file_path)
+                keys = [k for k in mat_data.keys() if not k.startswith('__')]
+                self.predict_data = pd.DataFrame({k: mat_data[k].squeeze() for k in keys})
+            else:
+                QMessageBox.warning(self, "提示", "不支持的文件类型")
+                return
+            self.lineEdit_state.setText("新数据加载成功")
+            print("新数据 shape:", self.predict_data.shape)
+        except Exception as e:
+            QMessageBox.warning(self, "加载失败", str(e))
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -409,7 +434,32 @@ class POP_REMTW_para(QMainWindow, Ui_REMTW_para, Ui_MainWindow):#remtw算法改
         print("beta:", beta)
         print("max_iter:", max_iter)
         print("tol:", tol)
+     
+class POP_MMoE_para(QMainWindow, Ui_MMoE_para, Ui_MainWindow):#remtw算法改
+    def __init__(self,parent=None):
+        super(POP_MMoE_para, self).__init__()
+        self.setupUi(self)
+        self.parent_window = parent#保存主窗口的引用
+    
+    def Confirm(self):
+         # 读取输入参数
+        global alpha,beta,random_state,method,tol,max_iter
         
+        alpha = self.doubleSpinBox_alpha.text()
+        beta = self.doubleSpinBox_beta.text()
+        tol = self.doubleSpinBox_tol.text()
+        max_iter = self.spinBox_max_iter.text()
+        random_state = self.spinBox_random_state.text()
+        method = 'REMTW'
+        if self.parent_window:
+            self.parent_window.lineEdit_Algorithm_name.setText("Reweighted Multitask Wasserstein ")
+        
+        print("random_state:", random_state)
+        print("alpha:", alpha)
+        print("beta:", beta)
+        print("max_iter:", max_iter)
+        print("tol:", tol)
+   
 class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_MainWindow界面类
     def __init__(self, parent=None):
         super(MyMainWindow, self).__init__(parent)  # 初始化父类
@@ -565,6 +615,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
     def AL_REMTW_para(self):  
             
                 self.ui_pop = POP_REMTW_para(self)
+                self.ui_pop.show()
+
+    def AL_MMoE_para(self):  
+            
+                self.ui_pop = POP_MMoE_para(self)
                 self.ui_pop.show()
 
     def get_gpu_util(self):

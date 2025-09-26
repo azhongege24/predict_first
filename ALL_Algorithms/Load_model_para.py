@@ -65,15 +65,15 @@ class Ui_Load_model_para(object):
 "}")
         self.pushButton_3.setObjectName("pushButton_3")
         self.horizontalLayout_2.addWidget(self.pushButton_3)
-        self.widget = QtWidgets.QWidget(self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(60, 50, 385, 92))
-        self.widget.setObjectName("widget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.widget)
+        self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget1.setGeometry(QtCore.QRect(60, 50, 385, 92))
+        self.layoutWidget1.setObjectName("layoutWidget1")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget1)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.label = QtWidgets.QLabel(self.widget)
+        self.label = QtWidgets.QLabel(self.layoutWidget1)
         self.label.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -95,7 +95,7 @@ class Ui_Load_model_para(object):
 "}")
         self.label.setObjectName("label")
         self.horizontalLayout.addWidget(self.label)
-        self.lineEdit_pretrained_model_path = QtWidgets.QLineEdit(self.widget)
+        self.lineEdit_pretrained_model_path = QtWidgets.QLineEdit(self.layoutWidget1)
         self.lineEdit_pretrained_model_path.setMinimumSize(QtCore.QSize(150, 40))
         font = QtGui.QFont()
         font.setFamily("黑体")
@@ -107,7 +107,7 @@ class Ui_Load_model_para(object):
         self.lineEdit_pretrained_model_path.setReadOnly(True)
         self.lineEdit_pretrained_model_path.setObjectName("lineEdit_pretrained_model_path")
         self.horizontalLayout.addWidget(self.lineEdit_pretrained_model_path)
-        self.pushButton_load_model = QtWidgets.QPushButton(self.widget)
+        self.pushButton_load_model = QtWidgets.QPushButton(self.layoutWidget1)
         self.pushButton_load_model.setMinimumSize(QtCore.QSize(30, 30))
         self.pushButton_load_model.setMaximumSize(QtCore.QSize(30, 30))
         font = QtGui.QFont()
@@ -121,7 +121,7 @@ class Ui_Load_model_para(object):
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.label_2 = QtWidgets.QLabel(self.widget)
+        self.label_2 = QtWidgets.QLabel(self.layoutWidget1)
         self.label_2.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -143,7 +143,7 @@ class Ui_Load_model_para(object):
 "}")
         self.label_2.setObjectName("label_2")
         self.horizontalLayout_3.addWidget(self.label_2)
-        self.lineEdit = QtWidgets.QLineEdit(self.widget)
+        self.lineEdit = QtWidgets.QLineEdit(self.layoutWidget1)
         self.lineEdit.setMinimumSize(QtCore.QSize(150, 40))
         font = QtGui.QFont()
         font.setFamily("黑体")
@@ -151,7 +151,7 @@ class Ui_Load_model_para(object):
         self.lineEdit.setFont(font)
         self.lineEdit.setObjectName("lineEdit")
         self.horizontalLayout_3.addWidget(self.lineEdit)
-        self.pushButton = QtWidgets.QPushButton(self.widget)
+        self.pushButton = QtWidgets.QPushButton(self.layoutWidget1)
         self.pushButton.setMinimumSize(QtCore.QSize(30, 30))
         self.pushButton.setMaximumSize(QtCore.QSize(30, 30))
         font = QtGui.QFont()
@@ -177,6 +177,7 @@ class Ui_Load_model_para(object):
         self.pushButton_3.clicked.connect(Load_model_para.close) # type: ignore
         self.pushButton_2.clicked.connect(Load_model_para.close) # type: ignore
         self.pushButton_load_model.clicked.connect(Load_model_para.load_pretrained_model) # type: ignore
+        self.pushButton.clicked.connect(Load_model_para.load_predict_data) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(Load_model_para)
 
     def retranslateUi(self, Load_model_para):

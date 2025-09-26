@@ -100,7 +100,7 @@ QPushButton:pressed {
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>60</x>
@@ -349,9 +349,26 @@ QLabel:pressed {
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Load_model_para</receiver>
+   <slot>load_predict_data()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>431</x>
+     <y>151</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>456</x>
+     <y>182</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>Confirm()</slot>
   <slot>load_pretrained_model()</slot>
+  <slot>load_predict_data()</slot>
  </slots>
 </ui>

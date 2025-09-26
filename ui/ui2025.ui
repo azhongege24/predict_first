@@ -1902,8 +1902,8 @@ qproperty-alignment: 'AlignCenter';
    <slot>AL_DT_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1033</x>
-     <y>340</y>
+     <x>1034</x>
+     <y>335</y>
     </hint>
     <hint type="destinationlabel">
      <x>1023</x>
@@ -1934,8 +1934,8 @@ qproperty-alignment: 'AlignCenter';
    <slot>AL_SVM_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1033</x>
-     <y>448</y>
+     <x>1034</x>
+     <y>439</y>
     </hint>
     <hint type="destinationlabel">
      <x>1045</x>
@@ -1950,8 +1950,8 @@ qproperty-alignment: 'AlignCenter';
    <slot>AL_MLP_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1045</x>
-     <y>493</y>
+     <x>1046</x>
+     <y>543</y>
     </hint>
     <hint type="destinationlabel">
      <x>1043</x>
@@ -1966,8 +1966,8 @@ qproperty-alignment: 'AlignCenter';
    <slot>AL_ET_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1033</x>
-     <y>556</y>
+     <x>1034</x>
+     <y>491</y>
     </hint>
     <hint type="destinationlabel">
      <x>1016</x>
@@ -2119,6 +2119,22 @@ qproperty-alignment: 'AlignCenter';
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>AL_MMoE_para()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1098</x>
+     <y>576</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1119</x>
+     <y>791</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>AL_DT_para()</slot>
@@ -2140,5 +2156,6 @@ qproperty-alignment: 'AlignCenter';
   <slot>preview_VA_data()</slot>
   <slot>handle_vibration_analysis()</slot>
   <slot>ask_and_save_model()</slot>
+  <slot>AL_MMoE_para()</slot>
  </slots>
 </ui>
