@@ -210,6 +210,18 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
         files, _ = QFileDialog.getOpenFileNames(
             self, "选择输入特征文件", initial_dir, file_filter
         )
+        
+        if files:
+            self.lastSelectedPath = os.path.dirname(files[0])
+            for file in files:
+                if file not in self.input_files:
+                    self.input_files.append(file)
+                    self.listWidget_input_files.addItem(os.path.basename(file))
+        #更新状态显示
+        self.parent_window.lineEdit_state.setText(f"已加载 {len(self.input_files)} 个输入特征文件")
+        self.update_combined_info()
+        
+        
     def add_output_features(self):
          file_filter = "文本文件 (*.txt);;所有文件 (*.*)"
    
