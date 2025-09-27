@@ -113,7 +113,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         self.parent_window = parent
         self.selected_model_path = None
         self.predict_data = None
-
+        self.lastSelectedPath = ""
     def Confirm(self):
         global loaded_model_path
         if self.parent_window:
@@ -132,7 +132,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
     def load_predict_data(self):
         file_filter = "Data Files (*.csv *.xls *.xlsx *.mat);;Excel Files (*.xls *.xlsx);;MATLAB Files (*.mat);;CSV Files (*.csv);;All Files(*.*)"
         initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
-        file_path, _ = QFileDialog.getOpenFileName(self, "选择需要预测的新数据文件", "", file_filter)
+        file_path, _ = QFileDialog.getOpenFileName(self, "选择需要预测的新数据文件", initial_dir, file_filter)
         if not file_path:
             return
         try:
@@ -191,91 +191,28 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
         self.datasets = []         # 存储每次试验的DataFrame
         self.merged_data = None    # 合并后的总数据集
         self.parent_window = parent
-        self.interpolate_method = 'linear'  # 默认插值方式
+        
+        self.input_files = []      # 存储输入特征文件路径
+        self.output_files = []     # 存储输出特征文件路径
+        self.lastSelectedPath = None  # 上次选择的路径
 
         # 绑定按钮
-        self.pushButton_add.clicked.connect(self.add_dataset)
-        self.pushButton_merge.clicked.connect(self.merge_and_interpolate)
-        self.pushButton_save.clicked.connect(self.save_merged_dataset)
-        self.pushButton.clicked.connect(self.set_interpolate_method)
-
-    def add_dataset(self):
-        file_path, _ = QFileDialog.getOpenFileName(self, "选择试验数据文件", "./data")
-        if file_path:
-            try:
-                # 文件类型判断
-                if file_path.endswith('.csv'):
-                    try:
-                        df = pd.read_csv(file_path, encoding='utf-8')
-                    except UnicodeDecodeError:
-                        df = pd.read_csv(file_path, encoding='gbk')
-                elif file_path.endswith(('.xls', '.xlsx')):
-                    df = pd.read_excel(file_path)
-                else:
-                    QMessageBox.warning(self, "提示", "不支持的文件类型")
-                    return
-
-                self.datasets.append(df)
-                self.listWidget_files.addItem(file_path)
-                self.textEdit_status.append(f"已添加数据集: {file_path}")
-                self.preview_table_in_graphicsview(df)
-            except Exception as e:
-                QMessageBox.warning(self, "读取失败", str(e))
-
-    def merge_and_interpolate(self):
-        if not self.datasets:
-            QMessageBox.warning(self, "提示", "请先添加数据")
-            return
-        try:
-            # 以第一个数据集的索引为基准
-            base_index = self.datasets[0].index
-            aligned = [df.reindex(base_index).interpolate(method=self.interpolate_method, axis=0) for df in self.datasets]
-            self.merged_data = pd.concat(aligned, ignore_index=True)
-            self.textEdit_status.append("合并并插值完成")
-            # 预览合并后的数据
-            self.preview_table_in_graphicsview(self.merged_data)
-        except Exception as e:
-            QMessageBox.warning(self, "合并失败", str(e))
-
-    def save_merged_dataset(self):
-        if self.merged_data is None:
-            QMessageBox.warning(self, "提示", "请先合并数据")
-            return
-        file_path, _ = QFileDialog.getSaveFileName(self, "保存合并数据集", "", "CSV Files (*.csv);;Excel Files (*.xlsx)")
-        if file_path:
-            try:
-                if file_path.endswith('.csv'):
-                    self.merged_data.to_csv(file_path, index=False)
-                else:
-                    self.merged_data.to_excel(file_path, index=False)
-                self.textEdit_status.append("数据集保存成功")
-            except Exception as e:
-                QMessageBox.warning(self, "保存失败", str(e))
-
-    def set_interpolate_method(self):
-        # 简单弹窗选择插值方式
-        methods = ['linear', 'nearest', 'spline', 'quadratic']
-        method, ok = QFileDialog.getItem(self, "选择插值方式", "插值方法：", methods, 0, False)
-        if ok and method:
-            self.interpolate_method = method
-            self.textEdit_status.append(f"插值方式已设置为: {method}")
-
-    def preview_table_in_graphicsview(self, df):
-        # 预览前10行数据到QGraphicsView
-        fig, ax = plt.subplots(figsize=(8, 2))
-        ax.axis('off')
-        table = ax.table(cellText=df.head(10).values,
-                         colLabels=df.columns,
-                         loc='center')
-        plt.tight_layout()
-        img_path = "./data/photo/preview_table.png"
-        plt.savefig(img_path)
-        plt.close(fig)
-        pixmap = QPixmap(img_path)
-        scene = QGraphicsScene()
-        scene.addPixmap(pixmap)
-        self.graphicsView_dataset_handle.setScene(scene)
-        self.graphicsView_dataset_handle.show()          
+        self.pushButton_add_input_features.connect(self.add_input_features)
+        self.pushButton_add_output_features.clicked.connect(self.add_output_features)
+        self.pushButton_save_file.clicked.connect(self.save_combined_data)
+        
+        # 初始化列表控件
+        self.listWidget_input_files.clear()
+        self.listWidget_output_files.clear()
+    def add_input_features(self):
+        file_filter = "文本文件(*.txt);;所有文件(*.*)"
+        initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
+        files, _ = QFileDialog.getOpenFileNames(
+            self, "选择输入特征文件", initial_dir, file_filter
+        )
+    def add_output_features(self):
+         file_filter = "文本文件 (*.txt);;所有文件 (*.*)"
+   
                 
 class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):
     def __init__(self, parent=None):
