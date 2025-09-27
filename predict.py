@@ -130,32 +130,49 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
             self.parent_window.selected_model_path = self.selected_model_path
             
     def load_predict_data(self):
-        file_filter = "CSV Files (*.csv);;Excel Files (*.xls *.xlsx);;MATLAB Files (*.mat);;All Files (*.*)"
+        file_filter = "Data Files (*.csv *.xls *.xlsx *.mat);;Excel Files (*.xls *.xlsx);;MATLAB Files (*.mat);;CSV Files (*.csv);;All Files(*.*)"
+        initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
         file_path, _ = QFileDialog.getOpenFileName(self, "选择需要预测的新数据文件", "", file_filter)
         if not file_path:
             return
         try:
-            if file_path.endswith('.csv'):
-                try:
-                    self.predict_data = pd.read_csv(file_path, encoding='utf-8')
-                except UnicodeDecodeError:
-                    self.predict_data = pd.read_csv(file_path, encoding='gbk')
-            elif file_path.endswith(('.xls', '.xlsx')):
+            if file_path.endswith(('.xls', '.xlsx')):
                 self.predict_data = pd.read_excel(file_path)
             elif file_path.endswith('.mat'):
                 mat_data = sio.loadmat(file_path)
-                keys = [k for k in mat_data.keys() if not k.startswith('__')]
-                self.predict_data = pd.DataFrame({k: mat_data[k].squeeze() for k in keys})
-            else:
-                QMessageBox.warning(self, "提示", "不支持的文件类型")
-                return
+                all_keys = list(mat_data.keys())
+                feature_keys = all_keys[3:]
+                df = pd.DataFrame({
+                    key: mat_data[key].squeeze()  # 压缩单维度，如 (n,1)→n
+                    for key in feature_keys
+                })
+                columns = df.columns.tolist()
+
+                new_columns = columns[1:] + [columns[0]]
+
+                self.predict_data = df[new_columns]
+
+            else:  # 默认处理CSV
+                self.predict_data = pd.read_csv(file_path,encoding='utf-8')
+            #公共数据处理流程
+            self.predict_data = self.predict_data.dropna()
+            self.predict_data.columns = self.predict_data.columns.astype(str)
+            self.columns = self.predict_data.columns.tolist()#确保是字符串
             
-            # 将数据传递给父窗口
-            if self.parent_window:
-                self.parent_window.predict_data = self.predict_data
-                self.parent_window.lineEdit_dataset_file.setText(file_path)  # 更新文件路径显示
-                self.parent_window.lineEdit_dataset_nums.setText(f'({self.predict_data.shape[0]} Samples * {self.predict_data.shape[1]} Features)')
+            #显示数据信息
+            self.parent_window.listWidget_inputfeature.clear()
+            self.parent_window.listWidget_outputfeature.clear()
+            self.parent_window.add_listitem(self.columns[:-1], self.parent_window.listWidget_inputfeature)
+            self.parent_window.add_listitem(self.columns[-1:], self.parent_window.listWidget_outputfeature)
             
+            self.shape = self.predict_data.shape
+            self.parent_window.lineEdit_dataset_nums.setText(f'({self.shape[0]} Samples * {self.shape[1]} Features)')
+            
+            
+            self.parent_window.spinBox_train_end.setValue(self.shape[0]*0.9)
+            self.parent_window.spinBox_test_start.setValue(self.shape[0]*0.9+1)
+            self.parent_window.spinBox_test_end.setValue(self.shape[0])
+            self.parent_window.data_load = 1
             self.parent_window.lineEdit_state.setText("新数据加载成功")
             print("新数据 shape:", self.predict_data.shape)
             
