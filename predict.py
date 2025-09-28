@@ -223,8 +223,147 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
         
         
     def add_output_features(self):
-         file_filter = "文本文件 (*.txt);;所有文件 (*.*)"
-   
+        file_filter = "文本文件 (*.txt);;所有文件 (*.*)"
+        initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
+        
+        files, _ = QFileDialog.getOpenFileNames(
+            self, "选择输出特征文件", initial_dir, file_filter
+        )
+        
+        if files:
+            # 更新上次路径（使用第一个文件的目录）
+            self.lastSelectedPath = os.path.dirname(files[0])
+            
+            for file in files:
+                if file not in self.output_files:
+                    self.output_files.append(file)
+                    # 在列表控件中显示文件名
+                    self.listWidget_output_files.addItem(os.path.basename(file))
+        self.parent_window.lineEdit_state.setText(f"已加载 {len(self.output_files)} 个输入特征文件")
+        self.update_combined_info()
+    
+    def update_combined_info(self):
+        #更新合并信息
+        if self.input_files and self.output_files:
+            #尝试获取行信息
+            try:
+                sample_df = pd.read_csv(self.input_files[0],header=None)
+                sample_count = len(sample_df)
+                input_count = len(self.input_files)
+                output_count = len([pd.read_csv(f,header=None).shape[1]for f in self.output_files])
+                self.parent_window.lineEdit_state.setText(
+                    f"预计合并结果: {sample_count} 样本 × {input_count + output_count} 特征 "
+                    f"(输入: {input_count}, 输出: {output_count})")
+            except:
+                self.parent_window.lineEdit_state.setText("点击保存按钮开始合并数据...")
+        else:
+            self.label_info.setText("请选择输入和输出特征文件")
+    
+    def combine_data(self):
+        #合并输入输出数据
+        if not self.input_files or not self.output_files:
+            QMessageBox.warning(self, "警告", "请先选择输入和输出特征文件！")
+            return None
+        
+        try:
+        #读取所有输入文件
+            input_dfs = []
+            for i , file_path in enumerate(self.input_files,1):
+                df = pd.read_csv(file_path,header=None)
+                if df.shape[1] >1:
+                    df = df.iloc[:,0]
+                df.name =f"input{i}"
+        
+            #读取所有输出文件
+            output_dfs = []
+            output_counter = 1
+            for file_path in self.output_files:
+                df = pd.read_csv(file_path,header =None)
+                #处理多列输出
+                for col_idx in range(df.shape[1]):
+                    col_df = df.iloc[:,col_idx]
+                    col_df.name = f"output{output_counter}"
+                    output_dfs.append(col_df)
+                    output_counter += 1
+                    
+            #检查数据行数一致性
+            all_dfs = input_dfs + output_dfs
+            row_counts = [len(df) for  df in all_dfs]
+            
+            
+            if len(set(row_counts)) > 1:
+                min_rows = min(row_counts)
+                #截取到最小行数
+                input_dfs = [df.head(min_rows) for df in input_dfs]
+                output_dfs = [df.head(min_rows) for df in output_dfs]
+                warnings_msg = "警告: 文件行数不一致，已截取到最小行数: {min_rows}" 
+                self.parent_window.lineEdit_state.setText(warnings_msg)
+            
+            #创建合并后的dataframe
+            combined_df = pd.DataFrame()
+            
+            #添加输入特征
+            for i , df in enumerate(input_dfs,1):
+                combined_df[f"input{i}"] = df.reset_index(drop = True)
+            #添加输出特征
+            for j, df in enumerate(output_dfs , 1):
+                combined_df[f"output{j}"] = df.reset_index(drop = True)
+            
+            return combined_df
+    
+        except Exception as e:
+            QMessageBox.critical(self, "错误", f"数据合并失败:\n{str(e)}")
+            return None
+    
+    def save_combined_data(self):
+        "保存合并后的数据"
+        combined_df = self.combine_data()
+        if combined_df is None:
+            return
+        #选择保存的路径
+        file_filter = "CSV文件 (*.csv);;Excel文件 (*.xlsx);;所有文件 (*.*)"
+        initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
+        
+        save_path, _ = QFileDialog.getSaveFileName(
+            self, "保存合并数据", initial_dir, file_filter
+        )
+        if not save_path:
+            return
+        
+        try:   
+        #根据文件拓展名选择保存方式
+            if save_path.endswith('.xls','.xlsx'):
+                combined_df.to_excel(save_path,index=False)
+            else:
+                combined_df.to_csv(save_path,index = False)
+            #更新上次路径
+            self.lastSelectedPath = os.path.dirname(save_path)
+            
+            #显示成功信息
+            success_msg = (
+                f"数据保存成功!\n"
+                f"文件: {os.path.basename(save_path)}\n"
+                f"数据形状: {combined_df.shape}\n"
+                f"输入特征: {len(self.input_files)}\n"
+                f"输出特征: {sum([pd.read_csv(f, header=None).shape[1] for f in self.output_files])}"
+            )
+            QMessageBox.information(self,"成功",success_msg)
+            self.parent_window.lineEdit_state.setText(f"数据已保存: {os.path.basename(save_path)}")
+        except Exception as e:
+            QMessageBox.critical(self, "错误", f"文件保存失败:\n{str(e)}")
+    
+    def clear_file_lists(self):
+        """清空文件列表--可选"""
+        self.input_files.clear()
+        self.output_files.clear()
+        self.listWidget_input_files.clear()
+        self.listWidget_output_files.clear()
+        self.label_info.setText("请选择输入和输出特征文件")
+        self.label_status.setText("就绪")   
+    
+        
+    
+                
                 
 class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):
     def __init__(self, parent=None):
