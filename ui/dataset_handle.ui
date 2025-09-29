@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>846</width>
-    <height>348</height>
+    <height>468</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,31 +17,44 @@
    <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>50</y>
-      <width>703</width>
-      <height>250</height>
+      <x>51</x>
+      <y>52</y>
+      <width>688</width>
+      <height>318</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QVBoxLayout" name="verticalLayout_4">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QPushButton" name="pushButton_add_input_features">
-         <property name="minimumSize">
-          <size>
-           <width>87</width>
-           <height>50</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton {
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QPushButton" name="pushButton_add_input_features">
+             <property name="minimumSize">
+              <size>
+               <width>152</width>
+               <height>44</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>微软雅黑</family>
+               <pointsize>13</pointsize>
+               <weight>75</weight>
+               <italic>false</italic>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
     border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
     border-radius: 8px;                      /* 适中圆角更显严谨 */
     background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */
     color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */
-    font: bold 14pt &quot;微软雅黑&quot;;
-    min-width: 85px;
+    font: bold 13pt &quot;微软雅黑&quot;;
+    min-width: 150px;
     min-height: 42px;
  
 }
@@ -62,151 +75,301 @@ QPushButton:disabled {
     color: rgb(180, 190, 200);              /* 灰蓝文字表示不可用 */
     border-color: rgb(210, 220, 230);
 }</string>
-         </property>
-         <property name="text">
-          <string>1.导入输入特征文件</string>
-         </property>
-        </widget>
+             </property>
+             <property name="text">
+              <string>导入输入特征文件</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_add_output_features">
+             <property name="minimumSize">
+              <size>
+               <width>152</width>
+               <height>44</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
+    border-radius: 8px;                      /* 适中圆角更显严谨 */
+    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */
+    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */
+    font: bold 13pt &quot;微软雅黑&quot;;
+    min-width: 150px;
+    min-height: 42px;
+ 
+}
+
+QPushButton:hover {
+    background-color: rgb(220, 230, 240);    /* 悬停时轻微加深背景 */
+    border-color: rgb(40, 60, 80);          /* 加深边框模拟金属反光 */
+    color: rgb(20, 40, 60);                 /* 文字颜色同步加深 */
+}
+
+QPushButton:pressed {
+    background-color: rgb(60, 75, 90);      /* 按压状态与边框同色 */
+    color: rgb(230, 235, 240);              /* 浅灰白文字确保可读性 */
+}
+
+QPushButton:disabled {
+    background-color: rgb(250, 250, 250);    /* 禁用状态极浅灰 */
+    color: rgb(180, 190, 200);              /* 灰蓝文字表示不可用 */
+    border-color: rgb(210, 220, 230);
+}</string>
+             </property>
+             <property name="text">
+              <string>导入输出特征文件</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_save_file">
+             <property name="minimumSize">
+              <size>
+               <width>152</width>
+               <height>44</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
+    border-radius: 8px;                      /* 适中圆角更显严谨 */
+    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */
+    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */
+    font: bold 13pt &quot;微软雅黑&quot;;
+    min-width: 150px;
+    min-height: 42px;
+ 
+}
+
+QPushButton:hover {
+    background-color: rgb(220, 230, 240);    /* 悬停时轻微加深背景 */
+    border-color: rgb(40, 60, 80);          /* 加深边框模拟金属反光 */
+    color: rgb(20, 40, 60);                 /* 文字颜色同步加深 */
+}
+
+QPushButton:pressed {
+    background-color: rgb(60, 75, 90);      /* 按压状态与边框同色 */
+    color: rgb(230, 235, 240);              /* 浅灰白文字确保可读性 */
+}
+
+QPushButton:disabled {
+    background-color: rgb(250, 250, 250);    /* 禁用状态极浅灰 */
+    color: rgb(180, 190, 200);              /* 灰蓝文字表示不可用 */
+    border-color: rgb(210, 220, 230);
+}</string>
+             </property>
+             <property name="text">
+              <string>整合保存数据文件</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_clear_file_lists">
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
+    border-radius: 8px;                      /* 适中圆角更显严谨 */
+    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */
+    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */
+    font: bold 13pt &quot;微软雅黑&quot;;
+    min-width: 150px;
+    min-height: 42px;
+ 
+}
+
+QPushButton:hover {
+    background-color: rgb(220, 230, 240);    /* 悬停时轻微加深背景 */
+    border-color: rgb(40, 60, 80);          /* 加深边框模拟金属反光 */
+    color: rgb(20, 40, 60);                 /* 文字颜色同步加深 */
+}
+
+QPushButton:pressed {
+    background-color: rgb(60, 75, 90);      /* 按压状态与边框同色 */
+    color: rgb(230, 235, 240);              /* 浅灰白文字确保可读性 */
+}
+
+QPushButton:disabled {
+    background-color: rgb(250, 250, 250);    /* 禁用状态极浅灰 */
+    color: rgb(180, 190, 200);              /* 灰蓝文字表示不可用 */
+    border-color: rgb(210, 220, 230);
+}</string>
+             </property>
+             <property name="text">
+              <string>清空文件列表</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QLabel" name="label">
+               <property name="styleSheet">
+                <string notr="true">QLabel {
+    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
+    border-radius: 8px;                      /* 适中圆角更显严谨 */
+    
+    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */
+    font: bold 13pt &quot;微软雅黑&quot;;
+    min-width: 85px;
+    min-height: 30px;
+    qproperty-alignment: AlignCenter;        /* 水平和垂直方向都居中对齐 */
+}</string>
+               </property>
+               <property name="text">
+                <string>输入特征文件</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_2">
+               <property name="styleSheet">
+                <string notr="true">QLabel {
+    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
+    border-radius: 8px;                      /* 适中圆角更显严谨 */
+   
+    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */
+    font: bold 13pt &quot;微软雅黑&quot;;
+    min-width: 85px;
+    min-height: 30px;
+    qproperty-alignment: AlignCenter;        /* 水平和垂直方向都居中对齐 */
+}</string>
+               </property>
+               <property name="text">
+                <string>输出特征文件</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <widget class="QListWidget" name="listWidget_input_files"/>
+             </item>
+             <item>
+              <widget class="QListWidget" name="listWidget_output_files"/>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_add_output_features">
-         <property name="minimumSize">
-          <size>
-           <width>87</width>
-           <height>50</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton {
-    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
-    border-radius: 8px;                      /* 适中圆角更显严谨 */
-    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */
-    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */
-    font: bold 14pt &quot;微软雅黑&quot;;
-    min-width: 85px;
-    min-height: 42px;
- 
-}
-
-QPushButton:hover {
-    background-color: rgb(220, 230, 240);    /* 悬停时轻微加深背景 */
-    border-color: rgb(40, 60, 80);          /* 加深边框模拟金属反光 */
-    color: rgb(20, 40, 60);                 /* 文字颜色同步加深 */
-}
-
-QPushButton:pressed {
-    background-color: rgb(60, 75, 90);      /* 按压状态与边框同色 */
-    color: rgb(230, 235, 240);              /* 浅灰白文字确保可读性 */
-}
-
-QPushButton:disabled {
-    background-color: rgb(250, 250, 250);    /* 禁用状态极浅灰 */
-    color: rgb(180, 190, 200);              /* 灰蓝文字表示不可用 */
-    border-color: rgb(210, 220, 230);
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="minimumSize">
+            <size>
+             <width>150</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>微软雅黑</family>
+             <pointsize>14</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QLabel {
+    
+    qproperty-alignment: AlignCenter;        /* 水平和垂直方向都居中对齐 */
 }</string>
-         </property>
-         <property name="text">
-          <string>2.导入输出特征文件</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_save_file">
-         <property name="minimumSize">
-          <size>
-           <width>87</width>
-           <height>50</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton {
-    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
-    border-radius: 8px;                      /* 适中圆角更显严谨 */
-    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */
-    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */
-    font: bold 14pt &quot;微软雅黑&quot;;
-    min-width: 85px;
-    min-height: 42px;
- 
-}
-
-QPushButton:hover {
-    background-color: rgb(220, 230, 240);    /* 悬停时轻微加深背景 */
-    border-color: rgb(40, 60, 80);          /* 加深边框模拟金属反光 */
-    color: rgb(20, 40, 60);                 /* 文字颜色同步加深 */
-}
-
-QPushButton:pressed {
-    background-color: rgb(60, 75, 90);      /* 按压状态与边框同色 */
-    color: rgb(230, 235, 240);              /* 浅灰白文字确保可读性 */
-}
-
-QPushButton:disabled {
-    background-color: rgb(250, 250, 250);    /* 禁用状态极浅灰 */
-    color: rgb(180, 190, 200);              /* 灰蓝文字表示不可用 */
-    border-color: rgb(210, 220, 230);
-}</string>
-         </property>
-         <property name="text">
-          <string>3.整合保存数据文件</string>
-         </property>
-        </widget>
+           </property>
+           <property name="text">
+            <string>状态栏：</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_status">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>微软雅黑</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_status_2">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>微软雅黑</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QLabel" name="label">
-           <property name="styleSheet">
-            <string notr="true">QLabel {
-    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
-    border-radius: 8px;                      /* 适中圆角更显严谨 */
-    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */
-    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */
-    font: bold 12pt &quot;微软雅黑&quot;;
-    min-width: 85px;
-    min-height: 42px;
+        <widget class="QLabel" name="label_4">
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>微软雅黑</family>
+           <pointsize>14</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    
     qproperty-alignment: AlignCenter;        /* 水平和垂直方向都居中对齐 */
 }</string>
-           </property>
-           <property name="text">
-            <string>输入特征文件</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_2">
-           <property name="styleSheet">
-            <string notr="true">QLabel {
-    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
-    border-radius: 8px;                      /* 适中圆角更显严谨 */
-    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */
-    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */
-    font: bold 12pt &quot;微软雅黑&quot;;
-    min-width: 85px;
-    min-height: 42px;
-    qproperty-alignment: AlignCenter;        /* 水平和垂直方向都居中对齐 */
-}</string>
-           </property>
-           <property name="text">
-            <string>输出特征文件</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+         </property>
+         <property name="text">
+          <string>信息栏：</string>
+         </property>
+        </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QListWidget" name="listWidget_input_files"/>
-         </item>
-         <item>
-          <widget class="QListWidget" name="listWidget_output_files"/>
-         </item>
-        </layout>
+        <widget class="QLineEdit" name="lineEdit_info">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>微软雅黑</family>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

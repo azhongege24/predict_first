@@ -179,10 +179,6 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         except Exception as e:
             QMessageBox.warning(self, "加载失败", str(e))
 
-import pandas as pd
-import matplotlib.pyplot as plt
-from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QGraphicsScene
-from PyQt5.QtGui import QPixmap
 
 class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -196,20 +192,21 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
         self.output_files = []     # 存储输出特征文件路径
         self.lastSelectedPath = None  # 上次选择的路径
 
-        # 绑定按钮
-        self.pushButton_add_input_features.connect(self.add_input_features)
+        # 绑定按钮（确保UI控件名与代码一致）
+        self.pushButton_add_input_features.clicked.connect(self.add_input_features)
         self.pushButton_add_output_features.clicked.connect(self.add_output_features)
         self.pushButton_save_file.clicked.connect(self.save_combined_data)
+        self.pushButton_clear_file_lists.clicked.connect(self.clear_file_lists)
         
         # 初始化列表控件
         self.listWidget_input_files.clear()
         self.listWidget_output_files.clear()
+
     def add_input_features(self):
-        file_filter = "文本文件(*.txt);;所有文件(*.*)"
+        """添加输入特征文件（支持多选，空格分隔的.txt）"""
+        file_filter = "文本文件 (*.txt);;所有文件 (*.*)"
         initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
-        files, _ = QFileDialog.getOpenFileNames(
-            self, "选择输入特征文件", initial_dir, file_filter
-        )
+        files, _ = QFileDialog.getOpenFileNames(self, "选择输入特征文件", initial_dir, file_filter)
         
         if files:
             self.lastSelectedPath = os.path.dirname(files[0])
@@ -217,149 +214,156 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
                 if file not in self.input_files:
                     self.input_files.append(file)
                     self.listWidget_input_files.addItem(os.path.basename(file))
-        #更新状态显示
-        self.parent_window.lineEdit_state.setText(f"已加载 {len(self.input_files)} 个输入特征文件")
+        
+        # 更新状态显示
+        self.lineEdit_status.setText(f"已加载 {len(self.input_files)} 个输入特征文件")
         self.update_combined_info()
-        
-        
+
     def add_output_features(self):
+        """添加输出特征文件（支持多选，空格分隔的多列.txt）"""
         file_filter = "文本文件 (*.txt);;所有文件 (*.*)"
         initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
-        
-        files, _ = QFileDialog.getOpenFileNames(
-            self, "选择输出特征文件", initial_dir, file_filter
-        )
+        files, _ = QFileDialog.getOpenFileNames(self, "选择输出特征文件", initial_dir, file_filter)
         
         if files:
-            # 更新上次路径（使用第一个文件的目录）
             self.lastSelectedPath = os.path.dirname(files[0])
-            
             for file in files:
                 if file not in self.output_files:
                     self.output_files.append(file)
-                    # 在列表控件中显示文件名
                     self.listWidget_output_files.addItem(os.path.basename(file))
-        self.parent_window.lineEdit_state.setText(f"已加载 {len(self.output_files)} 个输入特征文件")
+        
+        # 更新状态显示
+        self.lineEdit_status_2.setText(f"已加载 {len(self.output_files)} 个输出特征文件")
         self.update_combined_info()
-    
+
     def update_combined_info(self):
-        #更新合并信息
+        """更新合并信息（修正输出特征列数计算）"""
         if self.input_files and self.output_files:
-            #尝试获取行信息
             try:
-                sample_df = pd.read_csv(self.input_files[0],header=None)
+                # 读取输入文件（指定空格分隔，避免多列解析错误）
+                sample_df = pd.read_csv(self.input_files[0], header=None, sep="\s+")
                 sample_count = len(sample_df)
                 input_count = len(self.input_files)
-                output_count = len([pd.read_csv(f,header=None).shape[1]for f in self.output_files])
-                self.parent_window.lineEdit_state.setText(
+                
+                # 计算所有输出文件的总列数（修正列表推导式求和）
+                output_count = sum([pd.read_csv(f, header=None, sep="\s+").shape[1] for f in self.output_files])
+                
+                self.lineEdit_info.setText(
                     f"预计合并结果: {sample_count} 样本 × {input_count + output_count} 特征 "
-                    f"(输入: {input_count}, 输出: {output_count})")
-            except:
-                self.parent_window.lineEdit_state.setText("点击保存按钮开始合并数据...")
+                    f"(输入: {input_count}, 输出: {output_count})"
+                )
+            except Exception as e:
+                self.lineEdit_info.setText(f"预览失败：{str(e)[:50]}...")
         else:
-            self.label_info.setText("请选择输入和输出特征文件")
-    
+            self.lineEdit_info.setText("请选择输入和输出特征文件")
+
     def combine_data(self):
-        #合并输入输出数据
+        """合并输入输出数据（核心修复：补全列表添加、分隔符、行数校验）"""
         if not self.input_files or not self.output_files:
             QMessageBox.warning(self, "警告", "请先选择输入和输出特征文件！")
             return None
         
         try:
-        #读取所有输入文件
+            # ---------------------- 1. 读取输入文件（修复：添加到input_dfs列表）----------------------
             input_dfs = []
-            for i , file_path in enumerate(self.input_files,1):
-                df = pd.read_csv(file_path,header=None)
-                if df.shape[1] >1:
-                    df = df.iloc[:,0]
-                df.name =f"input{i}"
-        
-            #读取所有输出文件
+            for i, file_path in enumerate(self.input_files, 1):
+                # 关键：指定sep="\s+"（匹配任意空格），避免多列数据解析为1列
+                df = pd.read_csv(file_path, header=None, sep="\s+")
+                # 若输入文件是多列，仅取第一列（按原逻辑保留，可根据需求调整）
+                if df.shape[1] > 1:
+                    df = df.iloc[:, 0]
+                df.name = f"input{i}"
+                input_dfs.append(df)  # 修复：将处理后的输入数据加入列表
+
+            # ---------------------- 2. 读取输出文件（修复：加入all_dfs校验行数）----------------------
             output_dfs = []
             output_counter = 1
             for file_path in self.output_files:
-                df = pd.read_csv(file_path,header =None)
-                #处理多列输出
+                # 关键：指定sep="\s+"，正确解析多列输出
+                df = pd.read_csv(file_path, header=None, sep="\s+")
+                # 拆分多列为单独特征（如output1、output2...）
                 for col_idx in range(df.shape[1]):
-                    col_df = df.iloc[:,col_idx]
+                    col_df = df.iloc[:, col_idx].reset_index(drop=True)  # 重置索引避免行数错位
                     col_df.name = f"output{output_counter}"
                     output_dfs.append(col_df)
                     output_counter += 1
-                    
-            #检查数据行数一致性
-            all_dfs = input_dfs + output_dfs
-            row_counts = [len(df) for  df in all_dfs]
-            
+
+            # ---------------------- 3. 校验所有数据行数一致性（修复：包含输出文件）----------------------
+            all_dfs = input_dfs + output_dfs  # 修复：加入输出数据参与行数校验
+            row_counts = [len(df) for df in all_dfs]
             
             if len(set(row_counts)) > 1:
                 min_rows = min(row_counts)
-                #截取到最小行数
-                input_dfs = [df.head(min_rows) for df in input_dfs]
-                output_dfs = [df.head(min_rows) for df in output_dfs]
-                warnings_msg = "警告: 文件行数不一致，已截取到最小行数: {min_rows}" 
-                self.parent_window.lineEdit_state.setText(warnings_msg)
-            
-            #创建合并后的dataframe
+                # 截取到最小行数（避免索引越界）
+                input_dfs = [df.head(min_rows).reset_index(drop=True) for df in input_dfs]
+                output_dfs = [df.head(min_rows).reset_index(drop=True) for df in output_dfs]
+                warning_msg = f"警告: 文件行数不一致，已截取到最小行数: {min_rows}"
+                self.lineEdit_info.setText(warning_msg)
+
+            # ---------------------- 4. 合并数据（确保索引对齐）----------------------
             combined_df = pd.DataFrame()
-            
-            #添加输入特征
-            for i , df in enumerate(input_dfs,1):
-                combined_df[f"input{i}"] = df.reset_index(drop = True)
-            #添加输出特征
-            for j, df in enumerate(output_dfs , 1):
-                combined_df[f"output{j}"] = df.reset_index(drop = True)
-            
+            # 添加输入特征
+            for df in input_dfs:
+                combined_df[df.name] = df
+            # 添加输出特征
+            for df in output_dfs:
+                combined_df[df.name] = df
+
             return combined_df
-    
+
         except Exception as e:
             QMessageBox.critical(self, "错误", f"数据合并失败:\n{str(e)}")
             return None
-    
+
     def save_combined_data(self):
-        "保存合并后的数据"
+        """保存合并数据（修复Excel判断语法、兼容大数值）"""
         combined_df = self.combine_data()
         if combined_df is None:
             return
-        #选择保存的路径
+        
+        # 选择保存路径
         file_filter = "CSV文件 (*.csv);;Excel文件 (*.xlsx);;所有文件 (*.*)"
         initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
+        save_path, _ = QFileDialog.getSaveFileName(self, "保存合并数据", initial_dir, file_filter)
         
-        save_path, _ = QFileDialog.getSaveFileName(
-            self, "保存合并数据", initial_dir, file_filter
-        )
         if not save_path:
             return
         
-        try:   
-        #根据文件拓展名选择保存方式
-            if save_path.endswith('.xls','.xlsx'):
-                combined_df.to_excel(save_path,index=False)
+        try:
+            # 修复：endswith多后缀需用元组，且优先保存为xlsx（兼容大数值）
+            if save_path.endswith(('.xls', '.xlsx')):
+                # 用openpyxl引擎保存，避免大数值科学计数法
+                combined_df.to_excel(save_path, index=False, engine="openpyxl")
             else:
-                combined_df.to_csv(save_path,index = False)
-            #更新上次路径
+                # CSV保存时禁用科学计数法
+                combined_df.to_csv(save_path, index=False, float_format="%.6f")
+            
             self.lastSelectedPath = os.path.dirname(save_path)
             
-            #显示成功信息
+            # 计算输出特征总列数（用于成功提示）
+            output_total_cols = sum([pd.read_csv(f, header=None, sep="\s+").shape[1] for f in self.output_files])
             success_msg = (
                 f"数据保存成功!\n"
                 f"文件: {os.path.basename(save_path)}\n"
                 f"数据形状: {combined_df.shape}\n"
-                f"输入特征: {len(self.input_files)}\n"
-                f"输出特征: {sum([pd.read_csv(f, header=None).shape[1] for f in self.output_files])}"
+                f"输入特征: {len(self.input_files)} 列\n"
+                f"输出特征: {output_total_cols} 列"
             )
-            QMessageBox.information(self,"成功",success_msg)
-            self.parent_window.lineEdit_state.setText(f"数据已保存: {os.path.basename(save_path)}")
+            QMessageBox.information(self, "成功", success_msg)
+            self.lineEdit_info.setText(f"数据已保存: {os.path.basename(save_path)}")
+
         except Exception as e:
             QMessageBox.critical(self, "错误", f"文件保存失败:\n{str(e)}")
-    
+
     def clear_file_lists(self):
-        """清空文件列表--可选"""
+        """清空文件列表"""
         self.input_files.clear()
         self.output_files.clear()
         self.listWidget_input_files.clear()
         self.listWidget_output_files.clear()
-        self.label_info.setText("请选择输入和输出特征文件")
-        self.label_status.setText("就绪")   
+        self.lineEdit_info.setText("请选择输入和输出特征文件")
+        self.lineEdit_status.setText("就绪")
+        self.lineEdit_status_2.setText("就绪")   
     
         
     

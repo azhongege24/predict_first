@@ -14,26 +14,37 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_dataset_handle(object):
     def setupUi(self, dataset_handle):
         dataset_handle.setObjectName("dataset_handle")
-        dataset_handle.resize(846, 348)
+        dataset_handle.resize(846, 468)
         self.centralwidget = QtWidgets.QWidget(dataset_handle)
         self.centralwidget.setObjectName("centralwidget")
         self.widget = QtWidgets.QWidget(self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(50, 50, 703, 250))
+        self.widget.setGeometry(QtCore.QRect(51, 52, 688, 318))
         self.widget.setObjectName("widget")
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.widget)
-        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.widget)
+        self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
         self.pushButton_add_input_features = QtWidgets.QPushButton(self.widget)
-        self.pushButton_add_input_features.setMinimumSize(QtCore.QSize(87, 50))
+        self.pushButton_add_input_features.setMinimumSize(QtCore.QSize(152, 44))
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑")
+        font.setPointSize(13)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.pushButton_add_input_features.setFont(font)
         self.pushButton_add_input_features.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */\n"
 "    border-radius: 8px;                      /* 适中圆角更显严谨 */\n"
 "    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */\n"
 "    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */\n"
-"    font: bold 14pt \"微软雅黑\";\n"
-"    min-width: 85px;\n"
+"    font: bold 13pt \"微软雅黑\";\n"
+"    min-width: 150px;\n"
 "    min-height: 42px;\n"
 " \n"
 "}\n"
@@ -57,14 +68,14 @@ class Ui_dataset_handle(object):
         self.pushButton_add_input_features.setObjectName("pushButton_add_input_features")
         self.verticalLayout.addWidget(self.pushButton_add_input_features)
         self.pushButton_add_output_features = QtWidgets.QPushButton(self.widget)
-        self.pushButton_add_output_features.setMinimumSize(QtCore.QSize(87, 50))
+        self.pushButton_add_output_features.setMinimumSize(QtCore.QSize(152, 44))
         self.pushButton_add_output_features.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */\n"
 "    border-radius: 8px;                      /* 适中圆角更显严谨 */\n"
 "    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */\n"
 "    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */\n"
-"    font: bold 14pt \"微软雅黑\";\n"
-"    min-width: 85px;\n"
+"    font: bold 13pt \"微软雅黑\";\n"
+"    min-width: 150px;\n"
 "    min-height: 42px;\n"
 " \n"
 "}\n"
@@ -88,14 +99,14 @@ class Ui_dataset_handle(object):
         self.pushButton_add_output_features.setObjectName("pushButton_add_output_features")
         self.verticalLayout.addWidget(self.pushButton_add_output_features)
         self.pushButton_save_file = QtWidgets.QPushButton(self.widget)
-        self.pushButton_save_file.setMinimumSize(QtCore.QSize(87, 50))
+        self.pushButton_save_file.setMinimumSize(QtCore.QSize(152, 44))
         self.pushButton_save_file.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */\n"
 "    border-radius: 8px;                      /* 适中圆角更显严谨 */\n"
 "    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */\n"
 "    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */\n"
-"    font: bold 14pt \"微软雅黑\";\n"
-"    min-width: 85px;\n"
+"    font: bold 13pt \"微软雅黑\";\n"
+"    min-width: 150px;\n"
 "    min-height: 42px;\n"
 " \n"
 "}\n"
@@ -118,6 +129,36 @@ class Ui_dataset_handle(object):
 "}")
         self.pushButton_save_file.setObjectName("pushButton_save_file")
         self.verticalLayout.addWidget(self.pushButton_save_file)
+        self.pushButton_clear_file_lists = QtWidgets.QPushButton(self.widget)
+        self.pushButton_clear_file_lists.setStyleSheet("QPushButton {\n"
+"    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */\n"
+"    border-radius: 8px;                      /* 适中圆角更显严谨 */\n"
+"    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */\n"
+"    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */\n"
+"    font: bold 13pt \"微软雅黑\";\n"
+"    min-width: 150px;\n"
+"    min-height: 42px;\n"
+" \n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(220, 230, 240);    /* 悬停时轻微加深背景 */\n"
+"    border-color: rgb(40, 60, 80);          /* 加深边框模拟金属反光 */\n"
+"    color: rgb(20, 40, 60);                 /* 文字颜色同步加深 */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: rgb(60, 75, 90);      /* 按压状态与边框同色 */\n"
+"    color: rgb(230, 235, 240);              /* 浅灰白文字确保可读性 */\n"
+"}\n"
+"\n"
+"QPushButton:disabled {\n"
+"    background-color: rgb(250, 250, 250);    /* 禁用状态极浅灰 */\n"
+"    color: rgb(180, 190, 200);              /* 灰蓝文字表示不可用 */\n"
+"    border-color: rgb(210, 220, 230);\n"
+"}")
+        self.pushButton_clear_file_lists.setObjectName("pushButton_clear_file_lists")
+        self.verticalLayout.addWidget(self.pushButton_clear_file_lists)
         self.horizontalLayout_3.addLayout(self.verticalLayout)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -127,11 +168,11 @@ class Ui_dataset_handle(object):
         self.label.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */\n"
 "    border-radius: 8px;                      /* 适中圆角更显严谨 */\n"
-"    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */\n"
+"    \n"
 "    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */\n"
-"    font: bold 12pt \"微软雅黑\";\n"
+"    font: bold 13pt \"微软雅黑\";\n"
 "    min-width: 85px;\n"
-"    min-height: 42px;\n"
+"    min-height: 30px;\n"
 "    qproperty-alignment: AlignCenter;        /* 水平和垂直方向都居中对齐 */\n"
 "}")
         self.label.setObjectName("label")
@@ -140,11 +181,11 @@ class Ui_dataset_handle(object):
         self.label_2.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */\n"
 "    border-radius: 8px;                      /* 适中圆角更显严谨 */\n"
-"    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */\n"
+"   \n"
 "    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */\n"
-"    font: bold 12pt \"微软雅黑\";\n"
+"    font: bold 13pt \"微软雅黑\";\n"
 "    min-width: 85px;\n"
-"    min-height: 42px;\n"
+"    min-height: 30px;\n"
 "    qproperty-alignment: AlignCenter;        /* 水平和垂直方向都居中对齐 */\n"
 "}")
         self.label_2.setObjectName("label_2")
@@ -160,6 +201,66 @@ class Ui_dataset_handle(object):
         self.horizontalLayout.addWidget(self.listWidget_output_files)
         self.verticalLayout_2.addLayout(self.horizontalLayout)
         self.horizontalLayout_3.addLayout(self.verticalLayout_2)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_3)
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.label_3 = QtWidgets.QLabel(self.widget)
+        self.label_3.setMinimumSize(QtCore.QSize(150, 0))
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_3.setFont(font)
+        self.label_3.setStyleSheet("QLabel {\n"
+"    \n"
+"    qproperty-alignment: AlignCenter;        /* 水平和垂直方向都居中对齐 */\n"
+"}")
+        self.label_3.setObjectName("label_3")
+        self.horizontalLayout_4.addWidget(self.label_3)
+        self.lineEdit_status = QtWidgets.QLineEdit(self.widget)
+        self.lineEdit_status.setMinimumSize(QtCore.QSize(100, 30))
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑")
+        font.setPointSize(12)
+        self.lineEdit_status.setFont(font)
+        self.lineEdit_status.setObjectName("lineEdit_status")
+        self.horizontalLayout_4.addWidget(self.lineEdit_status)
+        self.lineEdit_status_2 = QtWidgets.QLineEdit(self.widget)
+        self.lineEdit_status_2.setMinimumSize(QtCore.QSize(100, 30))
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑")
+        font.setPointSize(12)
+        self.lineEdit_status_2.setFont(font)
+        self.lineEdit_status_2.setObjectName("lineEdit_status_2")
+        self.horizontalLayout_4.addWidget(self.lineEdit_status_2)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_4)
+        self.verticalLayout_4.addLayout(self.verticalLayout_3)
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+        self.label_4 = QtWidgets.QLabel(self.widget)
+        self.label_4.setMinimumSize(QtCore.QSize(150, 0))
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_4.setFont(font)
+        self.label_4.setStyleSheet("QLabel {\n"
+"    \n"
+"    qproperty-alignment: AlignCenter;        /* 水平和垂直方向都居中对齐 */\n"
+"}")
+        self.label_4.setObjectName("label_4")
+        self.horizontalLayout_5.addWidget(self.label_4)
+        self.lineEdit_info = QtWidgets.QLineEdit(self.widget)
+        self.lineEdit_info.setMinimumSize(QtCore.QSize(100, 30))
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑")
+        font.setPointSize(12)
+        self.lineEdit_info.setFont(font)
+        self.lineEdit_info.setObjectName("lineEdit_info")
+        self.horizontalLayout_5.addWidget(self.lineEdit_info)
+        self.verticalLayout_4.addLayout(self.horizontalLayout_5)
         dataset_handle.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(dataset_handle)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 846, 23))
@@ -175,8 +276,11 @@ class Ui_dataset_handle(object):
     def retranslateUi(self, dataset_handle):
         _translate = QtCore.QCoreApplication.translate
         dataset_handle.setWindowTitle(_translate("dataset_handle", "数据集处理板块"))
-        self.pushButton_add_input_features.setText(_translate("dataset_handle", "1.导入输入特征文件"))
-        self.pushButton_add_output_features.setText(_translate("dataset_handle", "2.导入输出特征文件"))
-        self.pushButton_save_file.setText(_translate("dataset_handle", "3.整合保存数据文件"))
+        self.pushButton_add_input_features.setText(_translate("dataset_handle", "导入输入特征文件"))
+        self.pushButton_add_output_features.setText(_translate("dataset_handle", "导入输出特征文件"))
+        self.pushButton_save_file.setText(_translate("dataset_handle", "整合保存数据文件"))
+        self.pushButton_clear_file_lists.setText(_translate("dataset_handle", "清空文件列表"))
         self.label.setText(_translate("dataset_handle", "输入特征文件"))
         self.label_2.setText(_translate("dataset_handle", "输出特征文件"))
+        self.label_3.setText(_translate("dataset_handle", "状态栏："))
+        self.label_4.setText(_translate("dataset_handle", "信息栏："))
