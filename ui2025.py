@@ -170,7 +170,7 @@ class Ui_MainWindow(object):
 "}")
         self.label_version.setObjectName("label_version")
         self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(1031, 237, 131, 504))
+        self.layoutWidget1.setGeometry(QtCore.QRect(1021, 237, 141, 591))
         self.layoutWidget1.setObjectName("layoutWidget1")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget1)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -205,7 +205,7 @@ class Ui_MainWindow(object):
 "padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
 "background-color:rgb(168, 249, 124);    /*背景颜色*/\n"
 "color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
+"    font: 16pt \"楷体\";\n"
 "min-width:80px;    /*设置最小宽度*/\n"
 "min-height:40px;    /*设置最小高度*/\n"
 "font:bold;\n"
@@ -226,7 +226,7 @@ class Ui_MainWindow(object):
 "padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
 "background-color:rgb(168, 249, 124);    /*背景颜色*/\n"
 "color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
+"    font: 16pt \"楷体\";\n"
 "min-width:80px;    /*设置最小宽度*/\n"
 "min-height:40px;    /*设置最小高度*/\n"
 "font:bold;\n"
@@ -247,7 +247,7 @@ class Ui_MainWindow(object):
 "padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
 "background-color:rgb(168, 249, 124);    /*背景颜色*/\n"
 "color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
+"    font: 16pt \"楷体\";\n"
 "min-width:80px;    /*设置最小宽度*/\n"
 "min-height:40px;    /*设置最小高度*/\n"
 "font:bold;\n"
@@ -268,7 +268,7 @@ class Ui_MainWindow(object):
 "padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
 "background-color:rgb(168, 249, 124);    /*背景颜色*/\n"
 "color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
+"    font: 16pt \"楷体\";\n"
 "min-width:80px;    /*设置最小宽度*/\n"
 "min-height:40px;    /*设置最小高度*/\n"
 "font:bold;\n"
@@ -289,7 +289,7 @@ class Ui_MainWindow(object):
 "padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
 "background-color:rgb(168, 249, 124);    /*背景颜色*/\n"
 "color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
+"    font: 16pt \"楷体\";\n"
 "min-width:80px;    /*设置最小宽度*/\n"
 "min-height:40px;    /*设置最小高度*/\n"
 "font:bold;\n"
@@ -306,11 +306,11 @@ class Ui_MainWindow(object):
         self.pushButton_4 = QtWidgets.QPushButton(self.layoutWidget1)
         self.pushButton_4.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
+"border-radius:14px;    /*设置圆角半径 */\n"
 "padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
 "background-color:rgb(168, 249, 124);    /*背景颜色*/\n"
 "color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
+"    font: 14pt \"楷体\";\n"
 "min-width:80px;    /*设置最小宽度*/\n"
 "min-height:40px;    /*设置最小高度*/\n"
 "font:bold;\n"
@@ -325,13 +325,20 @@ class Ui_MainWindow(object):
         self.pushButton_4.setObjectName("pushButton_4")
         self.verticalLayout.addWidget(self.pushButton_4)
         self.pushButton = QtWidgets.QPushButton(self.layoutWidget1)
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.pushButton.setFont(font)
         self.pushButton.setStyleSheet("QPushButton {\n"
 "    border: 1px solid #2b8cbe;           /* 科技蓝边框 */\n"
 "    border-radius: 15px;\n"
 "    padding: 2px 4px;\n"
 "    background-color: #e0f3f8;           /* 浅蓝灰背景 */\n"
 "    color: #0c2c84;                     /* 深蓝字体 */\n"
-"    font: bold 18pt \"楷体\";\n"
+"    font: bold 14pt ;\n"
 "    min-width: 80px;\n"
 "    min-height: 40px;\n"
 "}\n"
@@ -349,13 +356,20 @@ class Ui_MainWindow(object):
         self.pushButton.setObjectName("pushButton")
         self.verticalLayout.addWidget(self.pushButton)
         self.pushButton_2 = QtWidgets.QPushButton(self.layoutWidget1)
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.pushButton_2.setFont(font)
         self.pushButton_2.setStyleSheet("QPushButton {\n"
 "    border: 1px solid #2b8cbe;           /* 科技蓝边框 */\n"
 "    border-radius: 15px;\n"
 "    padding: 2px 4px;\n"
 "    background-color: #e0f3f8;           /* 浅蓝灰背景 */\n"
 "    color: #0c2c84;                     /* 深蓝字体 */\n"
-"    font: bold 18pt \"楷体\";\n"
+"    font: bold 14pt;\n"
 "    min-width: 80px;\n"
 "    min-height: 40px;\n"
 "}\n"
@@ -373,13 +387,20 @@ class Ui_MainWindow(object):
         self.pushButton_2.setObjectName("pushButton_2")
         self.verticalLayout.addWidget(self.pushButton_2)
         self.pushButton_3 = QtWidgets.QPushButton(self.layoutWidget1)
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.pushButton_3.setFont(font)
         self.pushButton_3.setStyleSheet("QPushButton {\n"
 "    border: 1px solid #2b8cbe;           /* 科技蓝边框 */\n"
 "    border-radius: 15px;\n"
 "    padding: 2px 4px;\n"
 "    background-color: #e0f3f8;           /* 浅蓝灰背景 */\n"
 "    color: #0c2c84;                     /* 深蓝字体 */\n"
-"    font: bold 18pt \"楷体\";\n"
+"    font: bold 12pt;\n"
 "    min-width: 80px;\n"
 "    min-height: 40px;\n"
 "}\n"
@@ -397,7 +418,7 @@ class Ui_MainWindow(object):
         self.pushButton_3.setObjectName("pushButton_3")
         self.verticalLayout.addWidget(self.pushButton_3)
         self.layoutWidget2 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget2.setGeometry(QtCore.QRect(1170, 237, 251, 501))
+        self.layoutWidget2.setGeometry(QtCore.QRect(1170, 237, 251, 581))
         self.layoutWidget2.setObjectName("layoutWidget2")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.layoutWidget2)
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -471,7 +492,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addWidget(self.pushButton_outputall)
         self.horizontalLayout_3.addLayout(self.verticalLayout_3)
         self.layoutWidget3 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget3.setGeometry(QtCore.QRect(1030, 150, 370, 72))
+        self.layoutWidget3.setGeometry(QtCore.QRect(1030, 150, 391, 72))
         self.layoutWidget3.setObjectName("layoutWidget3")
         self.verticalLayout_testdata = QtWidgets.QVBoxLayout(self.layoutWidget3)
         self.verticalLayout_testdata.setContentsMargins(0, 0, 0, 0)
@@ -1136,25 +1157,29 @@ class Ui_MainWindow(object):
         self.pushButton_dataset.setText(_translate("MainWindow", "数据集合"))
         self.pushButton_train.setText(_translate("MainWindow", "训练验模"))
         self.pushButton_predict.setText(_translate("MainWindow", "预测"))
-        self.label_version.setText(_translate("MainWindow", "v3.0 2025.09.22"))
-        self.label_2.setText(_translate("MainWindow", "算法功能区"))
+        self.label_version.setText(_translate("MainWindow", "v3.0 2025.09.30"))
+        self.label_2.setText(_translate("MainWindow", "算法模型"))
         self.pushButton_AL1.setToolTip(_translate("MainWindow", "<html><head/><body><p>决策树算法</p></body></html>"))
-        self.pushButton_AL1.setText(_translate("MainWindow", "DT"))
+        self.pushButton_AL1.setText(_translate("MainWindow", "决策树"))
         self.pushButton_AL2.setToolTip(_translate("MainWindow", "<html><head/><body><p>随机森林算法</p></body></html>"))
-        self.pushButton_AL2.setText(_translate("MainWindow", "RF"))
+        self.pushButton_AL2.setText(_translate("MainWindow", "随机森林"))
         self.pushButton_AL3.setToolTip(_translate("MainWindow", "<html><head/><body><p>支持向量机算法</p></body></html>"))
-        self.pushButton_AL3.setText(_translate("MainWindow", "SVM"))
+        self.pushButton_AL3.setText(_translate("MainWindow", "支持向量机"))
         self.pushButton_AL5.setToolTip(_translate("MainWindow", "<html><head/><body><p>极端树算法</p></body></html>"))
-        self.pushButton_AL5.setText(_translate("MainWindow", "ET"))
+        self.pushButton_AL5.setText(_translate("MainWindow", "极端树"))
         self.pushButton_AL4.setToolTip(_translate("MainWindow", "<html><head/><body><p>多层感知机算法</p></body></html>"))
-        self.pushButton_AL4.setText(_translate("MainWindow", "MLP"))
-        self.pushButton_4.setText(_translate("MainWindow", "MMOE"))
+        self.pushButton_AL4.setText(_translate("MainWindow", "多层感知机"))
+        self.pushButton_4.setText(_translate("MainWindow", "多门控\n"
+"混合专家"))
         self.pushButton.setToolTip(_translate("MainWindow", "<html><head/><body><p>GroupLasso：基于 L1/L2混合范数正则化的多任务学习模型</p></body></html>"))
-        self.pushButton.setText(_translate("MainWindow", "GL"))
+        self.pushButton.setText(_translate("MainWindow", "GroupLasso"))
         self.pushButton_2.setToolTip(_translate("MainWindow", "<html><head/><body><p>Multitask Wasserstein：基于Wasserstein距离正则化的稀疏多任务回归模型</p></body></html>"))
-        self.pushButton_2.setText(_translate("MainWindow", "MTW"))
+        self.pushButton_2.setText(_translate("MainWindow", "Multitask \n"
+"Wasserstein"))
         self.pushButton_3.setToolTip(_translate("MainWindow", "<html><head/><body><p>Reweighted Multitask Wasserstein：基于Wasserstein距离正则化和L0.5稀疏约束的多任务回归模型</p></body></html>"))
-        self.pushButton_3.setText(_translate("MainWindow", "REMTW"))
+        self.pushButton_3.setText(_translate("MainWindow", "Reweighted\n"
+"Multitask\n"
+"Wasserstein"))
         self.label_3.setText(_translate("MainWindow", "输入特征"))
         self.pushButton_inputall.setText(_translate("MainWindow", "全选"))
         self.label_4.setText(_translate("MainWindow", "输出特征"))

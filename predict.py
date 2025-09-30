@@ -157,13 +157,19 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
             #公共数据处理流程
             self.predict_data = self.predict_data.dropna()
             self.predict_data.columns = self.predict_data.columns.astype(str)
-            self.columns = self.predict_data.columns.tolist()#确保是字符串
+            self.predict_columns = self.predict_data.columns.tolist()#确保是字符串
+            predict_input_columns = [col for col in self.predict_columns if"input" in col.lower()]
+            predict_output_columns = [col for col in self.predict_columns if"output" in col.lower()]
             
+            if not predict_input_columns:
+                print("数据中未找到以'input'命名的输入特征列")
+            if not predict_output_columns:
+                print("数据中未找到以'output'命名的输出特征列")
             #显示数据信息
             self.parent_window.listWidget_inputfeature.clear()
             self.parent_window.listWidget_outputfeature.clear()
-            self.parent_window.add_listitem(self.columns[:-1], self.parent_window.listWidget_inputfeature)
-            self.parent_window.add_listitem(self.columns[-1:], self.parent_window.listWidget_outputfeature)
+            self.parent_window.add_listitem(predict_input_columns, self.parent_window.listWidget_inputfeature)
+            self.parent_window.add_listitem(predict_output_columns, self.parent_window.listWidget_outputfeature)
             
             self.shape = self.predict_data.shape
             self.parent_window.lineEdit_dataset_nums.setText(f'({self.shape[0]} Samples * {self.shape[1]} Features)')
@@ -775,11 +781,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 self.lineEdit_Algorithm_name.setText(f"Save failed: {str(e)}")#尝试一下，三种格式的接入   
 
     def openfolder(self):
-      
         '''新内容取消的时候不会改变linedit'''
         file_filter = "Data Files (*.csv *.xls *.xlsx *.mat);;Excel Files (*.xls *.xlsx);;MATLAB Files (*.mat);;CSV Files (*.csv);;All Files(*.*)"
-        # 使用上次路径作为初始目录，如果不存在则使用"../"
-        # initial_dir = self.lastSelectedPath if self.lastSelectedPath else "./"原来的打开路径
+        # 使用上次路径作为初始目录，如果不存在则使用"data/"
         initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
         self.fileName, _ = QFileDialog.getOpenFileName(
             self, "选取文件", initial_dir, file_filter
@@ -798,8 +802,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             self.lineEdit_dataset_file.setText("File path doesn't exist")
             return
 
-
-
         try:
             # 根据文件扩展名选择读取方式
             if self.fileName.endswith(('.xls', '.xlsx')):
@@ -815,35 +817,46 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 columns = df.columns.tolist()
 
                 new_columns = columns[1:] + [columns[0]]
-
                 self.data = df[new_columns]
 
             else:  # 默认处理CSV
-                self.data = pd.read_csv(self.fileName,encoding='utf-8')
+                self.data = pd.read_csv(self.fileName, encoding='utf-8')
 
             # 公共数据处理流程
-            self.data = self.data.dropna()#删除缺失值
-            # self.columns = self.data.columns.tolist()
-            self.data.columns = self.data.columns.astype(str)
-            self.columns = self.data.columns.tolist()  # 确保是字符串列表
+            self.data = self.data.dropna()  # 删除缺失值
+            self.data.columns = self.data.columns.astype(str)  # 确保列名为字符串
+            self.columns = self.data.columns.tolist()  # 获取所有列名列表
+
+            # 关键修改：根据列名前缀区分输入和输出特征
+            # 筛选出输入特征列（包含"input"前缀）
+            input_columns = [col for col in self.columns if "input" in col.lower()]
+            # 筛选出输出特征列（包含"output"前缀）
+            output_columns = [col for col in self.columns if "output" in col.lower()]
+
+            # 如果没有找到符合命名规则的列，给出警告
+            if not input_columns:
+                print("警告：未找到以'input'命名的输入特征列")
+            if not output_columns:
+                print("警告：未找到以'output'命名的输出特征列")
 
             # 显示数据信息
             self.listWidget_inputfeature.clear()
             self.listWidget_outputfeature.clear()
-            self.add_listitem(self.columns[:-1], self.listWidget_inputfeature)
-            self.add_listitem(self.columns[-1:], self.listWidget_outputfeature)
+            # 使用新的分类方式添加到列表控件
+            self.add_listitem(input_columns, self.listWidget_inputfeature)
+            self.add_listitem(output_columns, self.listWidget_outputfeature)
+            
             self.shape = self.data.shape
             self.lineEdit_dataset_nums.setText(f'({self.shape[0]} Samples * {self.shape[1]} Features)')
 
-            self.spinBox_train_end.setValue(self.shape[0]*0.9)
-            self.spinBox_test_start.setValue(self.shape[0]*0.9+1)
+            self.spinBox_train_end.setValue(self.shape[0] * 0.9)
+            self.spinBox_test_start.setValue(self.shape[0] * 0.9 + 1)
             self.spinBox_test_end.setValue(self.shape[0])
             self.data_load = 1
 
         except Exception as e:
             self.lineEdit_dataset_nums.setText(f"Error: {str(e)}")
             return   
-        
     def add_listitem(self, columns, list):
         """
         :param list: 要插入的选项文字数据列表 list[str] eg：['城市','小区','小区ID']
