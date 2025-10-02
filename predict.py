@@ -13,6 +13,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import sys
 import os
 import scipy.io as sio
+import torch
 from ALL_Algorithms.VA_data_handle import preview_VAdata
 from ALL_Algorithms.VA_data_handle import analyze_VA_psd
 from ALL_Algorithms.VA_data_handle import save_psd_result_util
@@ -44,6 +45,8 @@ import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 global max_depth, random_state,n_estimators,kernel, C, epsilon,scale_features
 global hidden_layer_sizes, max_iter,method,n_jobs,alpha,beta,tol
+global mmoe_num_experts,mmoe_expert_hidden,mmoe_learning_rate,mmoe_dropout_rate
+global mmoe_epochs,mmoe_batch_size,mmoe_lambda_balance
 method = 'NONE'  # 初始化方法为NONE
 # 读取输入参数
 VA_data_path = ""  # 设置一个默认值
@@ -567,22 +570,29 @@ class POP_MMoE_para(QMainWindow, Ui_MMoE_para, Ui_MainWindow):#remtw算法改
     
     def Confirm(self):
          # 读取输入参数
-        global alpha,beta,random_state,method,tol,max_iter
-        
+        global alpha,beta,random_state,method,tol,max_iter,mmoe_num_experts,mmoe_expert_hidden
+        global mmoe_learning_rate,mmoe_dropout_rate,mmoe_epochs,mmoe_batch_size,mmoe_lambda_balance
         alpha = self.doubleSpinBox_alpha.text()
-        beta = self.doubleSpinBox_beta.text()
-        tol = self.doubleSpinBox_tol.text()
         max_iter = self.spinBox_max_iter.text()
         random_state = self.spinBox_random_state.text()
-        method = 'REMTW'
+        mmoe_num_experts = self.spinBox_num_experts.text()
+        mmoe_expert_hidden = self.spinBox_expert_hidden.text()  # 专家网络隐藏层大小（整数）
+        mmoe_learning_rate = self.doubleSpinBox_learning_rate.text()  # 学习率（浮点数）
+        mmoe_dropout_rate = self.doubleSpinBox_dropout_rate.text()  # Dropout率（浮点数）
+        mmoe_epochs = self.spinBox_epochs.text()  # 训练轮数（整数）
+        mmoe_batch_size = self.spinBox_batch_size.text()  # 批处理大小（整数）
+        mmoe_lambda_balance = self.doubleSpinBox_lambda_balance.text()  # 平衡系数（浮点数）
+        
+        method = 'MMoE'
         if self.parent_window:
-            self.parent_window.lineEdit_Algorithm_name.setText("Reweighted Multitask Wasserstein ")
+            self.parent_window.lineEdit_Algorithm_name.setText("Multi-gate Mixture-of-Experts")
         
         print("random_state:", random_state)
         print("alpha:", alpha)
         print("beta:", beta)
         print("max_iter:", max_iter)
         print("tol:", tol)
+        
    
 class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_MainWindow界面类
     def __init__(self, parent=None):
@@ -1221,7 +1231,45 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     R2=metrics['R2']
                 )
             self.lineEdit_DEVICE.setText("GPU")
-           
+        if method == 'MMoE':
+            self.new_model = 1
+            model, scaler, y_test, y_pred, metrics = multi_task_regression_predictor(
+                data_train,
+                data_test,
+                input_columns,
+                output_columns,
+                model_type='MMoE',
+                scale_features=scale_features,
+                random_state=int(random_state),
+                max_iter=int(max_iter),
+                alpha=float(alpha),
+                # 下面参数可根据你的界面设置传入
+                mmoe_num_experts=5,
+                mmoe_expert_hidden=64,
+                mmoe_learning_rate=0.001,
+                mmoe_dropout_rate=0.1,
+                mmoe_epochs=100,
+                mmoe_batch_size=32,
+                mmoe_lambda_balance=0.1
+            )
+            self.trained_model = model  # 保存训练好的模型
+            print("MMoE预测结果:", y_pred)
+            print("MMoE真实值:", y_test)
+            print("MMoE评估指标:", metrics)
+            # 多输出绘图
+            if len(output_columns) > 1:
+                self.data_save = Multi_output_plot_and_evaluate(
+                    self, y_test, y_pred, method, data_test,
+                    output_columns, N_start_test, N_end_test,
+                    metrics['MSE'], metrics['R2']
+                )
+            else:
+                self.data_save = single_plot_and_evaluate(
+                    self, y_test, y_pred, method, data_test,
+                    output_columns, N_start_test, N_end_test,
+                    metrics['MSE'], metrics['R2']
+                )
+            self.lineEdit_DEVICE.setText("GPU" if torch.cuda.is_available() else "CPU")
     #单输出绘图的时候调用此函数，进行可视化展示,前五个算法的单输出画图展示
 
     def get_input(self):#取得输入的特征
