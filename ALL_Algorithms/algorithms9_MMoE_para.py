@@ -14,42 +14,511 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MMoE_para(object):
     def setupUi(self, MMoE_para):
         MMoE_para.setObjectName("MMoE_para")
-        MMoE_para.resize(563, 279)
+        MMoE_para.resize(464, 574)
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        MMoE_para.setFont(font)
         self.centralwidget = QtWidgets.QWidget(MMoE_para)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(170, 50, 201, 141))
+        self.layoutWidget.setGeometry(QtCore.QRect(80, 20, 322, 444))
         self.layoutWidget.setObjectName("layoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.verticalLayout = QtWidgets.QVBoxLayout()
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.label = QtWidgets.QLabel(self.layoutWidget)
-        self.label.setObjectName("label")
-        self.verticalLayout.addWidget(self.label)
-        self.label_2 = QtWidgets.QLabel(self.layoutWidget)
-        self.label_2.setObjectName("label_2")
-        self.verticalLayout.addWidget(self.label_2)
-        self.label_3 = QtWidgets.QLabel(self.layoutWidget)
-        self.label_3.setObjectName("label_3")
-        self.verticalLayout.addWidget(self.label_3)
-        self.horizontalLayout.addLayout(self.verticalLayout)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.spinBox = QtWidgets.QSpinBox(self.layoutWidget)
-        self.spinBox.setObjectName("spinBox")
-        self.verticalLayout_2.addWidget(self.spinBox)
-        self.spinBox_2 = QtWidgets.QSpinBox(self.layoutWidget)
-        self.spinBox_2.setObjectName("spinBox_2")
-        self.verticalLayout_2.addWidget(self.spinBox_2)
-        self.spinBox_3 = QtWidgets.QSpinBox(self.layoutWidget)
-        self.spinBox_3.setObjectName("spinBox_3")
-        self.verticalLayout_2.addWidget(self.spinBox_3)
+        self.label = QtWidgets.QLabel(self.layoutWidget)
+        self.label.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label.setObjectName("label")
+        self.verticalLayout_2.addWidget(self.label)
+        self.label_4 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_4.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label_4.setObjectName("label_4")
+        self.verticalLayout_2.addWidget(self.label_4)
+        self.label_5 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_5.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label_5.setObjectName("label_5")
+        self.verticalLayout_2.addWidget(self.label_5)
+        self.label_6 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_6.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label_6.setObjectName("label_6")
+        self.verticalLayout_2.addWidget(self.label_6)
+        self.label_7 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_7.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label_7.setObjectName("label_7")
+        self.verticalLayout_2.addWidget(self.label_7)
+        self.label_2 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_2.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label_2.setObjectName("label_2")
+        self.verticalLayout_2.addWidget(self.label_2)
+        self.label_3 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_3.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label_3.setObjectName("label_3")
+        self.verticalLayout_2.addWidget(self.label_3)
+        self.label_8 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_8.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label_8.setObjectName("label_8")
+        self.verticalLayout_2.addWidget(self.label_8)
+        self.label_9 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_9.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label_9.setObjectName("label_9")
+        self.verticalLayout_2.addWidget(self.label_9)
+        self.label_10 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_10.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label_10.setObjectName("label_10")
+        self.verticalLayout_2.addWidget(self.label_10)
+        self.label_11 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_11.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label_11.setObjectName("label_11")
+        self.verticalLayout_2.addWidget(self.label_11)
         self.horizontalLayout.addLayout(self.verticalLayout_2)
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.doubleSpinBox_alpha = QtWidgets.QDoubleSpinBox(self.layoutWidget)
+        self.doubleSpinBox_alpha.setMinimumSize(QtCore.QSize(80, 35))
+        self.doubleSpinBox_alpha.setStyleSheet("/* 仅对QDoubleSpinBox应用字体样式 */\n"
+"QDoubleSpinBox {\n"
+"       font: bold 12pt \"Times New Roman\"; \n"
+"}\n"
+"\n"
+"/* 按钮按压效果 */\n"
+"QDoubleSpinBox::up-button:pressed {\n"
+"    margin-top: 4px;\n"
+"}\n"
+"QDoubleSpinBox::down-button:pressed {\n"
+"    margin-top: 4px;\n"
+"}")
+        self.doubleSpinBox_alpha.setReadOnly(False)
+        self.doubleSpinBox_alpha.setProperty("value", 0.5)
+        self.doubleSpinBox_alpha.setObjectName("doubleSpinBox_alpha")
+        self.verticalLayout.addWidget(self.doubleSpinBox_alpha)
+        self.spinBox_max_iter = QtWidgets.QSpinBox(self.layoutWidget)
+        self.spinBox_max_iter.setMinimumSize(QtCore.QSize(0, 35))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.spinBox_max_iter.setFont(font)
+        self.spinBox_max_iter.setStyleSheet("QSpinBox::up-button:pressed {\n"
+"    margin-top: 4px;  /* 模拟按压下沉 */\n"
+"}\n"
+"QSpinBox::down-button:pressed {\n"
+"    margin-top: 4px;\n"
+"}")
+        self.spinBox_max_iter.setReadOnly(False)
+        self.spinBox_max_iter.setMaximum(99999)
+        self.spinBox_max_iter.setProperty("value", 1000)
+        self.spinBox_max_iter.setObjectName("spinBox_max_iter")
+        self.verticalLayout.addWidget(self.spinBox_max_iter)
+        self.spinBox_random_state = QtWidgets.QSpinBox(self.layoutWidget)
+        self.spinBox_random_state.setMinimumSize(QtCore.QSize(80, 35))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.spinBox_random_state.setFont(font)
+        self.spinBox_random_state.setStyleSheet("QSpinBox::up-button:pressed {\n"
+"    margin-top: 4px;  /* 模拟按压下沉 */\n"
+"}\n"
+"QSpinBox::down-button:pressed {\n"
+"    margin-top: 4px;\n"
+"}")
+        self.spinBox_random_state.setReadOnly(False)
+        self.spinBox_random_state.setProperty("value", 42)
+        self.spinBox_random_state.setObjectName("spinBox_random_state")
+        self.verticalLayout.addWidget(self.spinBox_random_state)
+        self.spinBox_mmoe_num_experts = QtWidgets.QSpinBox(self.layoutWidget)
+        self.spinBox_mmoe_num_experts.setMinimumSize(QtCore.QSize(0, 35))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.spinBox_mmoe_num_experts.setFont(font)
+        self.spinBox_mmoe_num_experts.setStyleSheet("QSpinBox::up-button:pressed {\n"
+"    margin-top: 4px;  /* 模拟按压下沉 */\n"
+"}\n"
+"QSpinBox::down-button:pressed {\n"
+"    margin-top: 4px;\n"
+"}")
+        self.spinBox_mmoe_num_experts.setReadOnly(False)
+        self.spinBox_mmoe_num_experts.setMaximum(99999)
+        self.spinBox_mmoe_num_experts.setProperty("value", 5)
+        self.spinBox_mmoe_num_experts.setObjectName("spinBox_mmoe_num_experts")
+        self.verticalLayout.addWidget(self.spinBox_mmoe_num_experts)
+        self.spinBox_mmoe_expert_hidden = QtWidgets.QSpinBox(self.layoutWidget)
+        self.spinBox_mmoe_expert_hidden.setMinimumSize(QtCore.QSize(0, 35))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.spinBox_mmoe_expert_hidden.setFont(font)
+        self.spinBox_mmoe_expert_hidden.setStyleSheet("QSpinBox::up-button:pressed {\n"
+"    margin-top: 4px;  /* 模拟按压下沉 */\n"
+"}\n"
+"QSpinBox::down-button:pressed {\n"
+"    margin-top: 4px;\n"
+"}")
+        self.spinBox_mmoe_expert_hidden.setReadOnly(False)
+        self.spinBox_mmoe_expert_hidden.setMaximum(99999)
+        self.spinBox_mmoe_expert_hidden.setProperty("value", 64)
+        self.spinBox_mmoe_expert_hidden.setObjectName("spinBox_mmoe_expert_hidden")
+        self.verticalLayout.addWidget(self.spinBox_mmoe_expert_hidden)
+        self.doubleSpinBox_mmoe_learning_rate = QtWidgets.QDoubleSpinBox(self.layoutWidget)
+        self.doubleSpinBox_mmoe_learning_rate.setMinimumSize(QtCore.QSize(80, 35))
+        self.doubleSpinBox_mmoe_learning_rate.setStyleSheet("/* 仅对QDoubleSpinBox应用字体样式 */\n"
+"QDoubleSpinBox {\n"
+"       font: bold 12pt \"Times New Roman\"; \n"
+"}\n"
+"\n"
+"/* 按钮按压效果 */\n"
+"QDoubleSpinBox::up-button:pressed {\n"
+"    margin-top: 4px;\n"
+"}\n"
+"QDoubleSpinBox::down-button:pressed {\n"
+"    margin-top: 4px;\n"
+"}")
+        self.doubleSpinBox_mmoe_learning_rate.setReadOnly(False)
+        self.doubleSpinBox_mmoe_learning_rate.setDecimals(4)
+        self.doubleSpinBox_mmoe_learning_rate.setProperty("value", 0.001)
+        self.doubleSpinBox_mmoe_learning_rate.setObjectName("doubleSpinBox_mmoe_learning_rate")
+        self.verticalLayout.addWidget(self.doubleSpinBox_mmoe_learning_rate)
+        self.doubleSpinBox_mmoe_dropout_rate = QtWidgets.QDoubleSpinBox(self.layoutWidget)
+        self.doubleSpinBox_mmoe_dropout_rate.setMinimumSize(QtCore.QSize(80, 35))
+        self.doubleSpinBox_mmoe_dropout_rate.setStyleSheet("/* 仅对QDoubleSpinBox应用字体样式 */\n"
+"QDoubleSpinBox {\n"
+"       font: bold 12pt \"Times New Roman\"; \n"
+"}\n"
+"\n"
+"/* 按钮按压效果 */\n"
+"QDoubleSpinBox::up-button:pressed {\n"
+"    margin-top: 4px;\n"
+"}\n"
+"QDoubleSpinBox::down-button:pressed {\n"
+"    margin-top: 4px;\n"
+"}")
+        self.doubleSpinBox_mmoe_dropout_rate.setReadOnly(False)
+        self.doubleSpinBox_mmoe_dropout_rate.setDecimals(2)
+        self.doubleSpinBox_mmoe_dropout_rate.setProperty("value", 0.1)
+        self.doubleSpinBox_mmoe_dropout_rate.setObjectName("doubleSpinBox_mmoe_dropout_rate")
+        self.verticalLayout.addWidget(self.doubleSpinBox_mmoe_dropout_rate)
+        self.spinBox_mmoe_epochs = QtWidgets.QSpinBox(self.layoutWidget)
+        self.spinBox_mmoe_epochs.setMinimumSize(QtCore.QSize(0, 35))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.spinBox_mmoe_epochs.setFont(font)
+        self.spinBox_mmoe_epochs.setStyleSheet("QSpinBox::up-button:pressed {\n"
+"    margin-top: 4px;  /* 模拟按压下沉 */\n"
+"}\n"
+"QSpinBox::down-button:pressed {\n"
+"    margin-top: 4px;\n"
+"}")
+        self.spinBox_mmoe_epochs.setReadOnly(False)
+        self.spinBox_mmoe_epochs.setMaximum(99999)
+        self.spinBox_mmoe_epochs.setProperty("value", 100)
+        self.spinBox_mmoe_epochs.setObjectName("spinBox_mmoe_epochs")
+        self.verticalLayout.addWidget(self.spinBox_mmoe_epochs)
+        self.spinBox_mmoe_batch_size = QtWidgets.QSpinBox(self.layoutWidget)
+        self.spinBox_mmoe_batch_size.setMinimumSize(QtCore.QSize(0, 35))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.spinBox_mmoe_batch_size.setFont(font)
+        self.spinBox_mmoe_batch_size.setStyleSheet("QSpinBox::up-button:pressed {\n"
+"    margin-top: 4px;  /* 模拟按压下沉 */\n"
+"}\n"
+"QSpinBox::down-button:pressed {\n"
+"    margin-top: 4px;\n"
+"}")
+        self.spinBox_mmoe_batch_size.setReadOnly(False)
+        self.spinBox_mmoe_batch_size.setMaximum(99999)
+        self.spinBox_mmoe_batch_size.setProperty("value", 32)
+        self.spinBox_mmoe_batch_size.setObjectName("spinBox_mmoe_batch_size")
+        self.verticalLayout.addWidget(self.spinBox_mmoe_batch_size)
+        self.doubleSpinBox_mmoe_lambda_balance = QtWidgets.QDoubleSpinBox(self.layoutWidget)
+        self.doubleSpinBox_mmoe_lambda_balance.setMinimumSize(QtCore.QSize(80, 35))
+        self.doubleSpinBox_mmoe_lambda_balance.setStyleSheet("/* 仅对QDoubleSpinBox应用字体样式 */\n"
+"QDoubleSpinBox {\n"
+"       font: bold 12pt \"Times New Roman\"; \n"
+"}\n"
+"\n"
+"/* 按钮按压效果 */\n"
+"QDoubleSpinBox::up-button:pressed {\n"
+"    margin-top: 4px;\n"
+"}\n"
+"QDoubleSpinBox::down-button:pressed {\n"
+"    margin-top: 4px;\n"
+"}")
+        self.doubleSpinBox_mmoe_lambda_balance.setReadOnly(False)
+        self.doubleSpinBox_mmoe_lambda_balance.setProperty("value", 0.1)
+        self.doubleSpinBox_mmoe_lambda_balance.setObjectName("doubleSpinBox_mmoe_lambda_balance")
+        self.verticalLayout.addWidget(self.doubleSpinBox_mmoe_lambda_balance)
+        self.comboBox_mmoe_scale_features = QtWidgets.QComboBox(self.layoutWidget)
+        self.comboBox_mmoe_scale_features.setMinimumSize(QtCore.QSize(0, 30))
+        self.comboBox_mmoe_scale_features.setObjectName("comboBox_mmoe_scale_features")
+        self.comboBox_mmoe_scale_features.addItem("")
+        self.comboBox_mmoe_scale_features.addItem("")
+        self.verticalLayout.addWidget(self.comboBox_mmoe_scale_features)
+        self.horizontalLayout.addLayout(self.verticalLayout)
+        self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget1.setGeometry(QtCore.QRect(140, 480, 191, 42))
+        self.layoutWidget1.setObjectName("layoutWidget1")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget1)
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.pushButton_3 = QtWidgets.QPushButton(self.layoutWidget1)
+        self.pushButton_3.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton_3.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton_3.setObjectName("pushButton_3")
+        self.horizontalLayout_2.addWidget(self.pushButton_3)
+        self.pushButton_2 = QtWidgets.QPushButton(self.layoutWidget1)
+        self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton_2.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.horizontalLayout_2.addWidget(self.pushButton_2)
         MMoE_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MMoE_para)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 563, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 464, 23))
         self.menubar.setObjectName("menubar")
         MMoE_para.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MMoE_para)
@@ -57,11 +526,26 @@ class Ui_MMoE_para(object):
         MMoE_para.setStatusBar(self.statusbar)
 
         self.retranslateUi(MMoE_para)
+        self.pushButton_3.clicked.connect(MMoE_para.Confirm) # type: ignore
+        self.pushButton_3.released.connect(MMoE_para.close) # type: ignore
+        self.pushButton_2.clicked.connect(MMoE_para.close) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MMoE_para)
 
     def retranslateUi(self, MMoE_para):
         _translate = QtCore.QCoreApplication.translate
-        MMoE_para.setWindowTitle(_translate("MMoE_para", "MMoE"))
-        self.label.setText(_translate("MMoE_para", "TextLabel"))
-        self.label_2.setText(_translate("MMoE_para", "TextLabel"))
-        self.label_3.setText(_translate("MMoE_para", "TextLabel"))
+        MMoE_para.setWindowTitle(_translate("MMoE_para", "MMoE参数设置"))
+        self.label.setText(_translate("MMoE_para", "alpha"))
+        self.label_4.setText(_translate("MMoE_para", "max_iter"))
+        self.label_5.setText(_translate("MMoE_para", "random_state"))
+        self.label_6.setText(_translate("MMoE_para", "mmoe_num_experts"))
+        self.label_7.setText(_translate("MMoE_para", "mmoe_expert_hidden"))
+        self.label_2.setText(_translate("MMoE_para", "mmoe_learning_rate"))
+        self.label_3.setText(_translate("MMoE_para", "mmoe_dropout_rate"))
+        self.label_8.setText(_translate("MMoE_para", "mmoe_epochs"))
+        self.label_9.setText(_translate("MMoE_para", "mmoe_batch_size"))
+        self.label_10.setText(_translate("MMoE_para", "mmoe_lambda_balance"))
+        self.label_11.setText(_translate("MMoE_para", "scale_features"))
+        self.comboBox_mmoe_scale_features.setItemText(0, _translate("MMoE_para", "False"))
+        self.comboBox_mmoe_scale_features.setItemText(1, _translate("MMoE_para", "True"))
+        self.pushButton_3.setText(_translate("MMoE_para", "确认"))
+        self.pushButton_2.setText(_translate("MMoE_para", "取消"))

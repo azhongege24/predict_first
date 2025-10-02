@@ -430,8 +430,8 @@ QDoubleSpinBox::down-button:pressed {
    <slot>Confirm()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>161</x>
-     <y>231</y>
+     <x>162</x>
+     <y>284</y>
     </hint>
     <hint type="destinationlabel">
      <x>136</x>
@@ -446,8 +446,8 @@ QDoubleSpinBox::down-button:pressed {
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>184</x>
-     <y>221</y>
+     <x>185</x>
+     <y>284</y>
     </hint>
     <hint type="destinationlabel">
      <x>146</x>
@@ -462,8 +462,8 @@ QDoubleSpinBox::down-button:pressed {
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>267</x>
-     <y>213</y>
+     <x>319</x>
+     <y>284</y>
     </hint>
     <hint type="destinationlabel">
      <x>357</x>

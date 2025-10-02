@@ -46,7 +46,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 global max_depth, random_state,n_estimators,kernel, C, epsilon,scale_features
 global hidden_layer_sizes, max_iter,method,n_jobs,alpha,beta,tol
 global mmoe_num_experts,mmoe_expert_hidden,mmoe_learning_rate,mmoe_dropout_rate
-global mmoe_epochs,mmoe_batch_size,mmoe_lambda_balance
+global mmoe_epochs,mmoe_batch_size,mmoe_lambda_balance,mmoe_scale_features
 method = 'NONE'  # 初始化方法为NONE
 # 读取输入参数
 VA_data_path = ""  # 设置一个默认值
@@ -571,27 +571,36 @@ class POP_MMoE_para(QMainWindow, Ui_MMoE_para, Ui_MainWindow):#remtw算法改
     def Confirm(self):
          # 读取输入参数
         global alpha,beta,random_state,method,tol,max_iter,mmoe_num_experts,mmoe_expert_hidden
-        global mmoe_learning_rate,mmoe_dropout_rate,mmoe_epochs,mmoe_batch_size,mmoe_lambda_balance
+        global mmoe_learning_rate,mmoe_dropout_rate,mmoe_epochs,mmoe_batch_size,mmoe_lambda_balance,mmoe_scale_features
         alpha = self.doubleSpinBox_alpha.text()
         max_iter = self.spinBox_max_iter.text()
         random_state = self.spinBox_random_state.text()
-        mmoe_num_experts = self.spinBox_num_experts.text()
-        mmoe_expert_hidden = self.spinBox_expert_hidden.text()  # 专家网络隐藏层大小（整数）
-        mmoe_learning_rate = self.doubleSpinBox_learning_rate.text()  # 学习率（浮点数）
-        mmoe_dropout_rate = self.doubleSpinBox_dropout_rate.text()  # Dropout率（浮点数）
-        mmoe_epochs = self.spinBox_epochs.text()  # 训练轮数（整数）
-        mmoe_batch_size = self.spinBox_batch_size.text()  # 批处理大小（整数）
-        mmoe_lambda_balance = self.doubleSpinBox_lambda_balance.text()  # 平衡系数（浮点数）
-        
+        mmoe_num_experts = self.spinBox_mmoe_num_experts.text()
+        mmoe_expert_hidden = self.spinBox_mmoe_expert_hidden.text()  # 专家网络隐藏层大小（整数）
+        mmoe_learning_rate = self.doubleSpinBox_mmoe_learning_rate.text()  # 学习率（浮点数）
+        mmoe_dropout_rate = self.doubleSpinBox_mmoe_dropout_rate.text()  # Dropout率（浮点数）
+        mmoe_epochs = self.spinBox_mmoe_epochs.text()  # 训练轮数（整数）
+        mmoe_batch_size = self.spinBox_mmoe_batch_size.text()  # 批处理大小（整数）
+        mmoe_lambda_balance = self.doubleSpinBox_mmoe_lambda_balance.text()  # 平衡系数（浮点数）
+        mmoe_scale_features = self.comboBox_mmoe_scale_features.currentText()=="True"
         method = 'MMoE'
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("Multi-gate Mixture-of-Experts")
         
-        print("random_state:", random_state)
-        print("alpha:", alpha)
-        print("beta:", beta)
-        print("max_iter:", max_iter)
-        print("tol:", tol)
+        # 打印所有参数值，方便调试
+        print(f"算法名称: {method}")
+        print(f"alpha: {alpha}")
+        print(f"max_iter: {max_iter}")
+        print(f"random_state: {random_state}")
+        print(f"专家数量(mmoe_num_experts): {mmoe_num_experts}")
+        print(f"专家网络隐藏层大小(mmoe_expert_hidden): {mmoe_expert_hidden}")
+        print(f"学习率(mmoe_learning_rate): {mmoe_learning_rate}")
+        print(f"Dropout率(mmoe_dropout_rate): {mmoe_dropout_rate}")
+        print(f"训练轮数(mmoe_epochs): {mmoe_epochs}")
+        print(f"批处理大小(mmoe_batch_size): {mmoe_batch_size}")
+        print(f"平衡系数(mmoe_lambda_balance): {mmoe_lambda_balance}")
+        print(f"是否标准化输入特征(mmoe_scale_features): {mmoe_scale_features}")
+
         
    
 class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_MainWindow界面类
@@ -1233,24 +1242,24 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             self.lineEdit_DEVICE.setText("GPU")
         if method == 'MMoE':
             self.new_model = 1
-            model, scaler, y_test, y_pred, metrics = multi_task_regression_predictor(
+            model, mmoe_scale_features, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
                 input_columns,
                 output_columns,
                 model_type='MMoE',
-                scale_features=scale_features,
+                scale_features=False,
                 random_state=int(random_state),
                 max_iter=int(max_iter),
                 alpha=float(alpha),
                 # 下面参数可根据你的界面设置传入
-                mmoe_num_experts=5,
-                mmoe_expert_hidden=64,
-                mmoe_learning_rate=0.001,
-                mmoe_dropout_rate=0.1,
-                mmoe_epochs=100,
-                mmoe_batch_size=32,
-                mmoe_lambda_balance=0.1
+                mmoe_num_experts=int(mmoe_num_experts),
+                mmoe_expert_hidden=int(mmoe_expert_hidden),
+                mmoe_learning_rate=float(mmoe_learning_rate),
+                mmoe_dropout_rate=float(mmoe_dropout_rate),
+                mmoe_epochs=int(mmoe_epochs),
+                mmoe_batch_size=int(mmoe_batch_size),
+                mmoe_lambda_balance=float(mmoe_lambda_balance)
             )
             self.trained_model = model  # 保存训练好的模型
             print("MMoE预测结果:", y_pred)
