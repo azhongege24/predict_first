@@ -1145,6 +1145,8 @@ class Ui_MainWindow(object):
         self.pushButton_8.clicked.connect(MainWindow.save) # type: ignore
         self.pushButton_predict.clicked.connect(MainWindow.AL_load_model_para) # type: ignore
         self.pushButton_4.clicked.connect(MainWindow.AL_MMoE_para) # type: ignore
+        self.pushButton_inputall.clicked.connect(MainWindow.change_CheckBox_input) # type: ignore
+        self.pushButton_outputall.clicked.connect(MainWindow.change_CheckBox_output) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

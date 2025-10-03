@@ -894,6 +894,37 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             item.setCheckState(Qt.Checked)
             item.checkState()
             list.addItem(item) 
+    def change_CheckBox_input(self):
+        count = self.listWidget_inputfeature.count()
+        count_isChecked = 0
+        for index in range(count):
+            item = self.listWidget_inputfeature.item(index)
+            if item.checkState() == Qt.Checked:
+                count_isChecked += 1
+        if count_isChecked == count:
+            for index in range(count):
+                item = self.listWidget_inputfeature.item(index)
+                item.setCheckState(Qt.Unchecked)
+        else:
+            for index in range(count):
+                item = self.listWidget_inputfeature.item(index)
+                item.setCheckState(Qt.Checked)
+
+    def change_CheckBox_output(self):
+        count = self.listWidget_outputfeature.count()
+        count_isChecked = 0
+        for index in range(count):
+            item = self.listWidget_outputfeature.item(index)
+            if item.checkState() == Qt.Checked:
+                count_isChecked += 1
+        if count_isChecked == count:
+            for index in range(count):
+                item = self.listWidget_outputfeature.item(index)
+                item.setCheckState(Qt.Unchecked)
+        else:
+            for index in range(count):
+                item = self.listWidget_outputfeature.item(index)
+                item.setCheckState(Qt.Checked)
     
 
 

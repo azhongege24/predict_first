@@ -2045,8 +2045,8 @@ qproperty-alignment: 'AlignCenter';
    <slot>AL_GL_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1033</x>
-     <y>610</y>
+     <x>1034</x>
+     <y>689</y>
     </hint>
     <hint type="destinationlabel">
      <x>982</x>
@@ -2077,8 +2077,8 @@ qproperty-alignment: 'AlignCenter';
    <slot>AL_MTW_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1033</x>
-     <y>664</y>
+     <x>1034</x>
+     <y>751</y>
     </hint>
     <hint type="destinationlabel">
      <x>976</x>
@@ -2093,8 +2093,8 @@ qproperty-alignment: 'AlignCenter';
    <slot>AL_REMTW_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1071</x>
-     <y>718</y>
+     <x>1072</x>
+     <y>827</y>
     </hint>
     <hint type="destinationlabel">
      <x>1143</x>
@@ -2157,12 +2157,44 @@ qproperty-alignment: 'AlignCenter';
    <slot>AL_MMoE_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1098</x>
-     <y>576</y>
+     <x>1099</x>
+     <y>632</y>
     </hint>
     <hint type="destinationlabel">
      <x>1119</x>
      <y>791</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_inputall</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_CheckBox_input()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1248</x>
+     <y>812</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1221</x>
+     <y>857</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_outputall</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_CheckBox_output()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1364</x>
+     <y>802</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1367</x>
+     <y>855</y>
     </hint>
    </hints>
   </connection>
@@ -2188,5 +2220,7 @@ qproperty-alignment: 'AlignCenter';
   <slot>handle_vibration_analysis()</slot>
   <slot>ask_and_save_model()</slot>
   <slot>AL_MMoE_para()</slot>
+  <slot>change_CheckBox_input()</slot>
+  <slot>change_CheckBox_output()</slot>
  </slots>
 </ui>
