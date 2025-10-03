@@ -70,9 +70,11 @@ def multi_task_regression_predictor(
     scaler = None    # 特征标准化(返回scaler用于后续预测)
   
     if scale_features:
+        
         scaler = StandardScaler()
         X_train = scaler.fit_transform(X_train)
         X_test = scaler.transform(X_test)
+        
     
 
     
@@ -119,7 +121,19 @@ def multi_task_regression_predictor(
     if model_type == 'MMoE':
         y_pred = model.predict(X_test)
     else:
-        y_pred = model.predict(X_test)    
+        y_pred = model.predict(X_test)  
+    
+    # 关键：强制转换为float64类型，确保np.isnan可处理
+    y_test = np.asarray(y_test, dtype=np.float64)
+    y_pred = np.asarray(y_pred, dtype=np.float64)
+    
+
+ 
+
+    print("y_test 包含NaN:", np.isnan(y_test).any())
+    print("y_test 包含无穷大:", np.isinf(y_test).any())
+    print("y_pred 包含NaN:", np.isnan(y_pred).any())
+    print("y_pred 包含无穷大:", np.isinf(y_pred).any())  
     
     # 计算指标
     mse = mean_squared_error(y_test, y_pred, multioutput='uniform_average')

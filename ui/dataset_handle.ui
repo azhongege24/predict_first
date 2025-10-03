@@ -14,13 +14,13 @@
    <string>数据集处理板块</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>51</x>
       <y>52</y>
       <width>688</width>
-      <height>318</height>
+      <height>328</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_4">

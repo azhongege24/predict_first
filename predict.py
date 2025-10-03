@@ -325,31 +325,34 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
             return None
 
     def save_combined_data(self):
-        """保存合并数据（修复Excel判断语法、兼容大数值）"""
+        """保存合并数据（增加异常值剔除功能）"""
         combined_df = self.combine_data()
         if combined_df is None:
             return
-        
+
+        # ----------- 异常值剔除部分 -----------
+        # 1. 剔除包含 #NAME? 的行
+        combined_df = combined_df[~combined_df.apply(lambda row: row.astype(str).str.contains('#NAME\?').any(), axis=1)]
+        # 2. 剔除 inf/-inf/NaN 行
+        combined_df = combined_df.replace([np.inf, -np.inf], np.nan)
+        combined_df = combined_df.dropna(axis=0, how='any')
+
         # 选择保存路径
         file_filter = "CSV文件 (*.csv);;Excel文件 (*.xlsx);;所有文件 (*.*)"
         initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
         save_path, _ = QFileDialog.getSaveFileName(self, "保存合并数据", initial_dir, file_filter)
-        
+
         if not save_path:
             return
-        
+
         try:
-            # 修复：endswith多后缀需用元组，且优先保存为xlsx（兼容大数值）
             if save_path.endswith(('.xls', '.xlsx')):
-                # 用openpyxl引擎保存，避免大数值科学计数法
                 combined_df.to_excel(save_path, index=False, engine="openpyxl")
             else:
-                # CSV保存时禁用科学计数法
                 combined_df.to_csv(save_path, index=False, float_format="%.6f")
-            
+
             self.lastSelectedPath = os.path.dirname(save_path)
-            
-            # 计算输出特征总列数（用于成功提示）
+
             output_total_cols = sum([pd.read_csv(f, header=None, sep="\s+").shape[1] for f in self.output_files])
             success_msg = (
                 f"数据保存成功!\n"
@@ -973,6 +976,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             print("预测结果:", y_pred)
             print("真实值:", y_test)
             print("评估指标:", metrics)
+            # 检查测试数据
+
             if len(output_columns) > 1:
                 self.data_save=Multi_output_plot_and_evaluate(self,y_test, 
                                                y_pred, method,
