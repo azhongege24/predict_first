@@ -23,6 +23,14 @@ from tqdm import tqdm
 import shutil
 import joblib
 
+#带有符号的对数变换
+def signed_log1p(arr):
+    arr = np.asarray(arr, dtype=np.float64)  # 强制转为 numpy 数组
+    return np.sign(arr) * np.log1p(np.abs(arr))
+
+def signed_expm1(arr):
+    arr = np.asarray(arr, dtype=np.float64)  # 强制转为 numpy 数组
+    return np.sign(arr) * np.expm1(np.abs(arr))
 
 
 def multi_task_regression_predictor(
@@ -66,7 +74,17 @@ def multi_task_regression_predictor(
     y_train = data_train[output_columns].values
     X_test = data_test[input_columns].values
     y_test = data_test[output_columns].values
-
+    
+    # 找到 output12 的列索引
+    if 'output12' in output_columns:
+        idx = output_columns.index('output12')
+        if y_train.ndim == 1:
+            y_train = signed_log1p(y_train)
+            y_test = signed_log1p(y_test)
+        else:
+            y_train[:, idx] = signed_log1p(y_train[:, idx])
+            y_test[:, idx] = signed_log1p(y_test[:, idx])
+        
     scaler = None    # 特征标准化(返回scaler用于后续预测)
   
     if scale_features:
@@ -123,23 +141,43 @@ def multi_task_regression_predictor(
     else:
         y_pred = model.predict(X_test)  
     
-    # 关键：强制转换为float64类型，确保np.isnan可处理
-    y_test = np.asarray(y_test, dtype=np.float64)
-    y_pred = np.asarray(y_pred, dtype=np.float64)
+
     
-
- 
-
-    print("y_test 包含NaN:", np.isnan(y_test).any())
-    print("y_test 包含无穷大:", np.isinf(y_test).any())
-    print("y_pred 包含NaN:", np.isnan(y_pred).any())
-    print("y_pred 包含无穷大:", np.isinf(y_pred).any())  
+    # # 关键：强制转换为float64类型，确保np.isnan可处理
+    # y_test = np.asarray(y_test, dtype=np.float64)
+    # y_pred = np.asarray(y_pred, dtype=np.float64)
+    # print("y_test 包含NaN:", np.isnan(y_test).any())
+    # print("y_test 包含无穷大:", np.isinf(y_test).any())
+    # print("y_pred 包含NaN:", np.isnan(y_pred).any())
+    # print("y_pred 包含无穷大:", np.isinf(y_pred).any())  
+    
+    # if 'output12' in output_columns:
+    #     idx = output_columns.index('output12')
+    #     # 兼容一维和二维
+    #     if y_pred.ndim == 1:
+    #         y_pred = signed_expm1(y_pred)
+    #         y_test = signed_expm1(y_test)
+    #     else:
+    #         y_pred[:, idx] = signed_expm1(y_pred[:, idx])
+    #         y_test[:, idx] = signed_expm1(y_test[:, idx])
     
     # 计算指标
     mse = mean_squared_error(y_test, y_pred, multioutput='uniform_average')
     r2 = r2_score(y_test, y_pred, multioutput='uniform_average')
     metrics = {'MSE': mse, 'R2': r2}
- 
+    
+    #现在是这么个情况就是：目前进行带符号的对数变换，能够跑通，但是评估后如果还原会出现无穷大的值。这个会报错，图也画不出来，各项指标也不行。
+    # 所以目前就这样解决的，希望后期能有更好的解决方法，至少程序可以跑通了
+    # if 'output12' in output_columns:
+    #     idx = output_columns.index('output12')
+    #     # 兼容一维和二维
+    #     if y_pred.ndim == 1:
+    #         y_pred = signed_expm1(y_pred)
+    #         y_test = signed_expm1(y_test)
+    #     else:
+    #         y_pred[:, idx] = signed_expm1(y_pred[:, idx])
+    #         y_test[:, idx] = signed_expm1(y_test[:, idx])
+    
     return model, scaler, y_test, y_pred, metrics
 
 def ask_and_save_model(parent, model, default_name="model.pkl"):
@@ -243,7 +281,11 @@ def load_model(model_path, model_type=None):
     except Exception as e:
         print(f"加载模型时出错: {str(e)}")
         return None
-    
+#过滤异常值
+def filter_extreme(arr, threshold=1e10):
+    arr = np.asarray(arr, dtype=np.float64)
+    mask = np.isfinite(arr) & (np.abs(arr) < threshold)
+    return arr[mask], mask
 
 #单输出画图可视化函数
 def single_plot_and_evaluate(self, y_test, y_pred, method, data_test, 
@@ -259,6 +301,7 @@ def single_plot_and_evaluate(self, y_test, y_pred, method, data_test,
     :param N_start_test: 测试集起始索引
     :param N_end_test: 测试集结束索引
     """
+    
     self.end_time = time.time()
     print(f"运行时间: {self.end_time - self.start_time:.2f} 秒")
 
