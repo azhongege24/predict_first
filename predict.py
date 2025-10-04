@@ -14,6 +14,7 @@ import sys
 import os
 import scipy.io as sio
 import torch
+import joblib
 from ALL_Algorithms.VA_data_handle import preview_VAdata
 from ALL_Algorithms.VA_data_handle import analyze_VA_psd
 from ALL_Algorithms.VA_data_handle import save_psd_result_util
@@ -67,7 +68,7 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
             self.parent_window.lineEdit_Algorithm_name.setText("Vibration Analysis")
             self.parent_window.lineEdit_state.setText("正在进行振动分析")
             self.parent_window.preview_VA_data()  # 预览数据
-
+        
         print("sampling_rate:", sampling_rate) 
         print("VA_data_path:", VA_data_path)
 
@@ -122,6 +123,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("已加载预训练模型")
         loaded_model_path = self.selected_model_path  # 这里只存路径
+        self.parent_window.predict_with_loaded_model()
         print("selected_model_path:", loaded_model_path)
 
     def load_pretrained_model(self):
@@ -173,7 +175,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
             self.parent_window.listWidget_outputfeature.clear()
             self.parent_window.add_listitem(predict_input_columns, self.parent_window.listWidget_inputfeature)
             self.parent_window.add_listitem(predict_output_columns, self.parent_window.listWidget_outputfeature)
-            
+            self.parent_window.predict_data = self.predict_data
             self.shape = self.predict_data.shape
             self.parent_window.lineEdit_dataset_nums.setText(f'({self.shape[0]} Samples * {self.shape[1]} Features)')
             
@@ -613,7 +615,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.fileName = ''
         self.new_model = 0
         self.data_load = 0
-        self.predict_data = 0
+        self.predict_data = None
         self.graphicscene = QGraphicsScene()
         self.lastSelectedPath = ""
         self.method = 'NONE'
@@ -641,9 +643,18 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.pushButton_save_pretrained_model.clicked.connect(
                     lambda: self.ask_and_save_model(self.trained_model, method)
                 ) # 保存预训练模型
+
+    
     def ask_and_save_model(self, trained_model, method):
         try:
-            ask_and_save_model(self, trained_model, default_name='trained_model_' + str(method) + '.pkl')
+            file_filter = "模型文件 (*.pkl);;所有文件 (*.*)"
+            initial_dir = self.lastSelectedPath if hasattr(self, 'lastSelectedPath') else "data/"
+            save_path, _ = QFileDialog.getSaveFileName(self, "保存预训练模型", initial_dir, file_filter)
+            if not save_path:
+                return
+            # 只保存模型对象，不保存列表或其它内容
+            joblib.dump(trained_model, save_path)
+            QMessageBox.information(self, "保存成功", f"模型已保存到: {save_path}")
         except Exception as e:
             QMessageBox.warning(self, "保存模型失败", str(e))
             
@@ -879,6 +890,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         except Exception as e:
             self.lineEdit_dataset_nums.setText(f"Error: {str(e)}")
             return   
+    
     def add_listitem(self, columns, list):
         """
         :param list: 要插入的选项文字数据列表 list[str] eg：['城市','小区','小区ID']
@@ -894,6 +906,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             item.setCheckState(Qt.Checked)
             item.checkState()
             list.addItem(item) 
+    
     def change_CheckBox_input(self):
         count = self.listWidget_inputfeature.count()
         count_isChecked = 0
@@ -926,7 +939,38 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 item = self.listWidget_outputfeature.item(index)
                 item.setCheckState(Qt.Checked)
     
+    def predict_with_loaded_model(self):
+        # 1. 加载模型（如果还没加载）
+        
+        if not hasattr(self, 'trained_model') or self.trained_model is None:
+            if hasattr(self, 'selected_model_path') and self.selected_model_path:
+                self.trained_model = joblib.load(self.selected_model_path)
+            else:
+                QMessageBox.warning(self, "错误", "请先加载预训练模型！")
+                return
 
+        # 2. 获取预测数据
+        if not hasattr(self, 'predict_data') or self.predict_data is None:
+            QMessageBox.warning(self, "错误", "请先加载待预测数据！")
+            return
+
+        # 3. 获取输入特征列
+        input_columns = [col for col in self.predict_data.columns if "input" in col.lower()]
+        if not input_columns:
+            QMessageBox.warning(self, "错误", "预测数据未找到输入特征列！")
+            return
+
+        X_pred = self.predict_data[input_columns].values
+
+        # 4. 预测
+        y_pred = self.trained_model.predict(X_pred)
+
+        # 5. 保存或展示结果
+        output_columns = [f"output{i+1}" for i in range(y_pred.shape[1])] if y_pred.ndim > 1 else ["output"]
+        result_df = pd.DataFrame(y_pred, columns=output_columns)
+        self.data_save = result_df
+        QMessageBox.information(self, "预测完成", "已完成新数据预测，可保存结果！")
+        print("预测结果:", result_df)
 
     def All_Methods_Begin(self):
         global method
