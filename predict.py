@@ -159,7 +159,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
 
             else:  # 默认处理CSV
                 self.predict_data = pd.read_csv(file_path,encoding='utf-8')
-            #公共数据处理流程  
+            #公共数据处理流程   
             self.predict_data = self.predict_data.dropna()
             self.predict_data = self.predict_data[self.spinBox_predict_start.value():self.spinBox_predict_end.value()]
             self.predict_data.columns = self.predict_data.columns.astype(str)
