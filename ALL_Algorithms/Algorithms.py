@@ -534,7 +534,7 @@ class MMoE(nn.Module):
         self.num_experts = num_experts
         self.num_tasks = num_tasks
         self.input_dim = input_dim
-        self.out_dim = output_dim
+        # self.out_dim = output_dim
         #专家网络
         self.experts = nn.ModuleList([
             Expert(input_dim,expert_hidden,dropout_rate) for _ in range(num_experts)
@@ -545,8 +545,12 @@ class MMoE(nn.Module):
                 nn.Softmax(dim=1)
             ) for _ in range(num_tasks)
         ])
+        # self.task_layers = nn.ModuleList([
+        #     nn.Linear(expert_hidden,output_dim) for _ in range(num_tasks)
+        # ])
         self.task_layers = nn.ModuleList([
-            nn.Linear(expert_hidden,output_dim) for _ in range(num_tasks)
+            nn.Linear(expert_hidden, 1)  # 关键修改：输出维度固定为1
+            for _ in range(num_tasks)
         ])
     
     def forward(self,x):
@@ -572,7 +576,13 @@ class MMoE(nn.Module):
         if self.num_tasks == 1:
             return outputs[0],cv_losses[0]
         else:
-            return outputs,cv_losses
+            # return outputs,cv_losses
+            
+             # 将输出列表拼接为张量 (batch_size, num_tasks, output_dim)
+            outputs_tensor = torch.cat(outputs, dim=1)  # 假设output_dim=1，拼接后为(batch, num_tasks)
+            # 将损失列表转换为张量并求和（或取平均）
+            cv_losses_tensor = torch.stack(cv_losses).mean()  # 多任务损失取平均
+            return outputs_tensor, cv_losses_tensor
 
 class MMoERegressor:
     def __init__(self,input_dim,output_dim,num_experts = 5,expert_hidden = 64,
@@ -633,6 +643,9 @@ class MMoERegressor:
             epoch_loss = 0.0
             for batch_X,batch_y in dataloader:
                 optimizer.zero_grad()
+                # 强制转换为Tensor，确保类型正确
+                batch_X = batch_X if isinstance(batch_X, torch.Tensor) else torch.FloatTensor(batch_X).to(self.device)
+                batch_y = batch_y if isinstance(batch_y, torch.Tensor) else torch.FloatTensor(batch_y).to(self.device)
                 #前向传播
                 predictions, cv_losses = self.model(batch_X)
                 #计算损失（主损失和平衡损失）
@@ -660,7 +673,7 @@ class MMoERegressor:
         
         #预测
         self.model.eval()
-        with torch.nograd():
+        with torch.no_grad():
             predictions, _ = self.model(X_tensor)
             return predictions.cpu().numpy()
     
