@@ -159,34 +159,39 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
 
             else:  # 默认处理CSV
                 self.predict_data = pd.read_csv(file_path,encoding='utf-8')
-            #公共数据处理流程
+            #公共数据处理流程  
             self.predict_data = self.predict_data.dropna()
+            self.predict_data = self.predict_data[self.spinBox_predict_start.value():self.spinBox_predict_end.value()]
             self.predict_data.columns = self.predict_data.columns.astype(str)
             self.predict_columns = self.predict_data.columns.tolist()#确保是字符串
-            predict_input_columns = [col for col in self.predict_columns if"input" in col.lower()]
-            predict_output_columns = [col for col in self.predict_columns if"output" in col.lower()]
+            self.predict_input_columns = [col for col in self.predict_columns if"input" in col.lower()]
+            self.predict_output_columns = [col for col in self.predict_columns if"output" in col.lower()]
             
-            if not predict_input_columns:
+            if not self.predict_input_columns:
                 print("数据中未找到以'input'命名的输入特征列")
-            if not predict_output_columns:
+            if not self.predict_output_columns:
                 print("数据中未找到以'output'命名的输出特征列")
             #显示数据信息
-            self.parent_window.listWidget_inputfeature.clear()
-            self.parent_window.listWidget_outputfeature.clear()
-            self.parent_window.add_listitem(predict_input_columns, self.parent_window.listWidget_inputfeature)
-            self.parent_window.add_listitem(predict_output_columns, self.parent_window.listWidget_outputfeature)
-            self.parent_window.predict_data = self.predict_data
-            self.shape = self.predict_data.shape
-            self.parent_window.lineEdit_dataset_nums.setText(f'({self.shape[0]} Samples * {self.shape[1]} Features)')
-            
-            
-            self.parent_window.spinBox_train_end.setValue(self.shape[0]*0.9)
-            self.parent_window.spinBox_test_start.setValue(self.shape[0]*0.9+1)
-            self.parent_window.spinBox_test_end.setValue(self.shape[0])
-            self.parent_window.data_load = 1
-            self.parent_window.lineEdit_state.setText("新数据加载成功")
+            if self.parent_window:
+                self.parent_window.listWidget_inputfeature.clear()
+                self.parent_window.listWidget_outputfeature.clear()
+                self.parent_window.add_listitem(self.predict_input_columns, self.parent_window.listWidget_inputfeature)
+                self.parent_window.add_listitem(self.predict_output_columns, self.parent_window.listWidget_outputfeature)
+                
+                self.parent_window.predict_data = self.predict_data
+                self.parent_window.predict_input_cols = self.predict_input_columns  # 输入特征列
+                self.parent_window.predict_output_cols = self.predict_output_columns  # 真实值列
+                
+                self.shape = self.predict_data.shape
+                self.parent_window.lineEdit_dataset_nums.setText(f'({self.shape[0]} Samples * {self.shape[1]} Features)')
+                self.parent_window.lineEdit_state.setText("新数据加载成功（包含真实值，可进行评估）")
+                
+                self.spinBox_predict_end.setValue(self.shape[0]*0.9)
+                self.parent_window.data_load = 1
+          
             print("新数据 shape:", self.predict_data.shape)
-            
+            print("输入特征列:", self.predict_input_columns)
+            print("真实值列:", self.predict_output_columns)
         except Exception as e:
             QMessageBox.warning(self, "加载失败", str(e))
 
@@ -616,6 +621,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.new_model = 0
         self.data_load = 0
         self.predict_data = None
+        self.predict_input_cols = []
+        self.predict_output_cols = []
         self.graphicscene = QGraphicsScene()
         self.lastSelectedPath = ""
         self.method = 'NONE'
@@ -939,39 +946,75 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 item = self.listWidget_outputfeature.item(index)
                 item.setCheckState(Qt.Checked)
     
+    # 在主窗口类（如Ui_MainWindow的子类）中添加
     def predict_with_loaded_model(self):
-        # 1. 加载模型（如果还没加载）
-        
-        if not hasattr(self, 'trained_model') or self.trained_model is None:
-            if hasattr(self, 'selected_model_path') and self.selected_model_path:
-                self.trained_model = joblib.load(self.selected_model_path)
-            else:
-                QMessageBox.warning(self, "错误", "请先加载预训练模型！")
-                return
-
-        # 2. 获取预测数据
+        if not hasattr(self, 'selected_model_path') or not self.selected_model_path:
+            QMessageBox.warning(self, "警告", "请先选择预训练模型")
+            return
         if not hasattr(self, 'predict_data') or self.predict_data is None:
-            QMessageBox.warning(self, "错误", "请先加载待预测数据！")
+            QMessageBox.warning(self, "警告", "请先加载预测数据")
             return
-
-        # 3. 获取输入特征列
-        input_columns = [col for col in self.predict_data.columns if "input" in col.lower()]
-        if not input_columns:
-            QMessageBox.warning(self, "错误", "预测数据未找到输入特征列！")
+        if not hasattr(self, 'predict_input_cols') or not hasattr(self, 'predict_output_cols'):
+            QMessageBox.warning(self, "警告", "数据中未找到有效的输入/输出列")
             return
-
-        X_pred = self.predict_data[input_columns].values
-
-        # 4. 预测
-        y_pred = self.trained_model.predict(X_pred)
-
-        # 5. 保存或展示结果
-        output_columns = [f"output{i+1}" for i in range(y_pred.shape[1])] if y_pred.ndim > 1 else ["output"]
-        result_df = pd.DataFrame(y_pred, columns=output_columns)
-        self.data_save = result_df
-        QMessageBox.information(self, "预测完成", "已完成新数据预测，可保存结果！")
-        print("预测结果:", result_df)
-
+        
+        try:
+            # 1. 加载模型
+            from ALL_Algorithms.Algorithms import load_model
+            model = load_model(self.selected_model_path)
+            if model is None:
+                raise ValueError("模型加载失败")
+            self.start_time = time.time()
+            # 2. 准备输入特征和真实值
+            X = self.predict_data[self.predict_input_cols].values  # 输入特征
+            y_test = self.predict_data[self.predict_output_cols].values  # 真实值（用于评估）
+            
+            # 3. 模型预测
+            if hasattr(model, 'predict'):
+                y_pred = model.predict(X)
+            else:
+                raise ValueError("加载的模型不支持predict方法")
+            
+            # 4. 计算评估指标
+            from sklearn.metrics import mean_squared_error, r2_score
+            mse = mean_squared_error(y_test, y_pred, multioutput='uniform_average')
+            r2 = r2_score(y_test, y_pred, multioutput='uniform_average')
+            
+            # 5. 可视化结果（根据输出维度选择单输出/多输出可视化）
+            method_name = os.path.basename(self.selected_model_path).split('.')[0]  # 从模型文件名提取方法名
+            if y_test.ndim == 1 or y_test.shape[1] == 1:
+                # 单输出可视化
+                single_plot_and_evaluate(self,
+                    y_test=y_test.ravel(),  # 转为一维
+                    y_pred=y_pred.ravel(),
+                    method=method_name,
+                    data_test=self.predict_data,
+                    output_columns=self.predict_output_cols,
+                    N_start_test=0,
+                    N_end_test=len(y_test),
+                    MSE=mse,
+                    R2=r2
+                )
+            else:
+                # 多输出可视化
+                Multi_output_plot_and_evaluate(self,
+                    y_test=y_test,
+                    y_pred=y_pred,
+                    method=method_name,
+                    data_test=self.predict_data,
+                    output_columns=self.predict_output_cols,
+                    N_start_test=0,
+                    N_end_test=len(y_test),
+                    MSE=mse,
+                    R2=r2
+                )
+            
+            self.lineEdit_state.setText(f"预测完成！MSE: {mse:.4f}, R²: {r2:.4f}")
+            
+        except Exception as e:
+            QMessageBox.critical(self, "预测失败", f"预测过程出错：{str(e)}")
+            print(f"预测错误：{e}")
+        
     def All_Methods_Begin(self):
         global method
 

@@ -14,11 +14,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Load_model_para(object):
     def setupUi(self, Load_model_para):
         Load_model_para.setObjectName("Load_model_para")
-        Load_model_para.resize(526, 300)
+        Load_model_para.resize(580, 326)
         self.centralwidget = QtWidgets.QWidget(Load_model_para)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(170, 180, 171, 42))
+        self.layoutWidget.setGeometry(QtCore.QRect(200, 230, 171, 42))
         self.layoutWidget.setObjectName("layoutWidget")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -66,10 +66,12 @@ class Ui_Load_model_para(object):
         self.pushButton_3.setObjectName("pushButton_3")
         self.horizontalLayout_2.addWidget(self.pushButton_3)
         self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(60, 50, 385, 92))
+        self.layoutWidget1.setGeometry(QtCore.QRect(100, 60, 387, 132))
         self.layoutWidget1.setObjectName("layoutWidget1")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget1)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.layoutWidget1)
+        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -163,9 +165,69 @@ class Ui_Load_model_para(object):
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout_3.addWidget(self.pushButton)
         self.verticalLayout.addLayout(self.horizontalLayout_3)
+        self.verticalLayout_2.addLayout(self.verticalLayout)
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.label_train_feature = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_train_feature.setMinimumSize(QtCore.QSize(0, 30))
+        self.label_train_feature.setStyleSheet("QLabel{\n"
+"\n"
+"   text-align: center;    \n"
+" qproperty-alignment: \'AlignCenter\';   \n"
+"\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 12pt \"华文楷体\";\n"
+"\n"
+"font:bold 16px;        /*设置按钮文字和大小*/\n"
+"}")
+        self.label_train_feature.setObjectName("label_train_feature")
+        self.horizontalLayout_4.addWidget(self.label_train_feature)
+        self.spinBox_predict_start = QtWidgets.QSpinBox(self.layoutWidget1)
+        self.spinBox_predict_start.setMinimumSize(QtCore.QSize(120, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(False)
+        font.setItalic(False)
+        font.setWeight(50)
+        self.spinBox_predict_start.setFont(font)
+        self.spinBox_predict_start.setStyleSheet("")
+        self.spinBox_predict_start.setObjectName("spinBox_predict_start")
+        self.horizontalLayout_4.addWidget(self.spinBox_predict_start)
+        self.label_5 = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_5.setMaximumSize(QtCore.QSize(10, 16777215))
+        self.label_5.setStyleSheet("QLabel{\n"
+"\n"
+"   text-align: center;    \n"
+" qproperty-alignment: \'AlignCenter\';   \n"
+"\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 12pt \"华文楷体\";\n"
+"\n"
+"font:bold 16px;        /*设置按钮文字和大小*/\n"
+"}")
+        self.label_5.setObjectName("label_5")
+        self.horizontalLayout_4.addWidget(self.label_5)
+        self.spinBox_predict_end = QtWidgets.QSpinBox(self.layoutWidget1)
+        self.spinBox_predict_end.setMinimumSize(QtCore.QSize(120, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(False)
+        font.setItalic(False)
+        font.setWeight(50)
+        self.spinBox_predict_end.setFont(font)
+        self.spinBox_predict_end.setStyleSheet("")
+        self.spinBox_predict_end.setMaximum(999999)
+        self.spinBox_predict_end.setProperty("value", 1000)
+        self.spinBox_predict_end.setObjectName("spinBox_predict_end")
+        self.horizontalLayout_4.addWidget(self.spinBox_predict_end)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_4)
         Load_model_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(Load_model_para)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 526, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 580, 23))
         self.menubar.setObjectName("menubar")
         Load_model_para.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(Load_model_para)
@@ -189,3 +251,5 @@ class Ui_Load_model_para(object):
         self.pushButton_load_model.setText(_translate("Load_model_para", "..."))
         self.label_2.setText(_translate("Load_model_para", "导入预测数据    "))
         self.pushButton.setText(_translate("Load_model_para", "..."))
+        self.label_train_feature.setText(_translate("Load_model_para", "预测样本数:"))
+        self.label_5.setText(_translate("Load_model_para", ":"))
