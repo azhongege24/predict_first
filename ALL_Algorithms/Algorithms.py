@@ -164,7 +164,7 @@ def multi_task_regression_predictor(
     # 计算指标
     mse = mean_squared_error(y_test, y_pred, multioutput='uniform_average')
     r2 = r2_score(y_test, y_pred, multioutput='uniform_average')
-    metrics = {'MSE': mse, 'R2': r2}
+    metrics = {'MSE': mse, 'R2': r2, 'RMSE': np.sqrt(mse), 'MAE': np.mean(np.abs(y_test - y_pred))}
     
     #现在是这么个情况就是：目前进行带符号的对数变换，能够跑通，但是评估后如果还原会出现无穷大的值。这个会报错，图也画不出来，各项指标也不行。
     # 所以目前就这样解决的，希望后期能有更好的解决方法，至少程序可以跑通了
@@ -289,7 +289,7 @@ def filter_extreme(arr, threshold=1e10):
 
 #单输出画图可视化函数
 def single_plot_and_evaluate(self, y_test, y_pred, method, data_test, 
-                                output_columns, N_start_test, N_end_test,MSE,R2):
+                                output_columns, N_start_test, N_end_test,MSE,RMSE,MAE,R2):
     """
     绘制真实值与预测值的散点图，计算评估指标，并更新界面控件。
 
@@ -319,11 +319,17 @@ def single_plot_and_evaluate(self, y_test, y_pred, method, data_test,
     # 绘制垂直连接线段
     for i in range(len(y_test)):
         ax.plot([i, i], [y_test[i], y_pred[i]],
-                color='#2F5597', linestyle='-', linewidth=2.5, alpha=0.9, solid_capstyle='round', zorder=0)
+                color='#2F5597', linestyle='-', linewidth=2.5, alpha=0.5, solid_capstyle='round', zorder=0)
 
+    # 新增：绘制理想预测线（y=x参考线）
+    min_val = min(min(y_test), min(y_pred))
+    max_val = max(max(y_test), max(y_pred))
+    ax.plot([min_val, max_val], [min_val, max_val], 'k--', alpha=0.6, label='理想预测线')
+    
+    
     # 优化显示设置
     plt.grid(linestyle='--', alpha=0.5)
-    plt.legend()
+    plt.legend(fontsize=10, loc='upper left')
     ax.set_xlim(-5, len(y_test) + 5)
     ax.set_facecolor('#f8f9fa')
     ax.spines['top'].set_visible(False)
@@ -341,6 +347,8 @@ def single_plot_and_evaluate(self, y_test, y_pred, method, data_test,
     # 更新界面控件
     self.lineEdit_state.setText('Finish!')
     self.lineEdit_MSE.setText(str(round(MSE, 5)))
+    self.lineEdit_RMSE.setText(str(round(RMSE, 5)))  # 假设新增了RMSE控件
+    self.lineEdit_MAE.setText(str(round(MAE, 5)))    # 假设新增了MAE控件
     self.lineEdit_R2.setText(str(round(R2, 5)))
 
     # 保存预测结果到 DataFrame
@@ -349,81 +357,10 @@ def single_plot_and_evaluate(self, y_test, y_pred, method, data_test,
         f'当前生成数据: {output_columns[0]} [ {N_start_test}:{N_end_test} ]'
     )
     return self.data_save
-def multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test, 
-                                   output_columns, N_start_test, N_end_test, MSE, R2):
-    """
-    绘制多输出特征的真实值与预测值的散点图，计算评估指标，并更新界面控件。
-
-    :param y_test: 测试集真实值 (二维数组)
-    :param y_pred: 测试集预测值 (二维数组)
-    :param method: 当前使用的算法名称
-    :param data_test: 测试集数据
-    :param output_columns: 输出特征列名
-    :param N_start_test: 测试集起始索引
-    :param N_end_test: 测试集结束索引
-    :param MSE: 均方误差
-    :param R2: R² 分数
-    """
-    self.end_time = time.time()
-    print(f"运行时间: {self.end_time - self.start_time:.2f} 秒")
-
-       # 创建保存图像的目录
-    output_dir = "MultiOutput_view"
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-    
-        # 清空之前的图像
-    self.figures = []
-
-
-    # 创建绘图
-    self.figure = plt.figure(figsize=(10, 6), dpi=120)
-    self.canvas = FigureCanvasQTAgg(self.figure)
-    self.navi = NavigationToolbar(self.canvas, self.graphicsView)
-
-    num_outputs = y_test.shape[1]  # 输出特征数量
-    for i in range(num_outputs):
-        ax = self.figure.add_subplot(num_outputs, 1, i + 1)  # 创建子图
-        ax.scatter(np.arange(len(y_test[:, i])), y_test[:, i], c='b', marker='o', s=10, label='True', alpha=0.8)
-        ax.scatter(np.arange(len(y_test[:, i])), y_pred[:, i], c='r', marker='X', s=20, label='Pred_' + method, alpha=0.8)
-
-        # 绘制垂直连接线段
-        for j in range(len(y_test[:, i])):
-            ax.plot([j, j], [y_test[j, i], y_pred[j, i]],
-                    color='#2F5597', linestyle='-', linewidth=2.5, alpha=0.9, solid_capstyle='round', zorder=0)
-
-        # 优化显示设置
-        ax.grid(linestyle='--', alpha=0.5)
-        ax.legend()
-        ax.set_xlim(-5, len(y_test[:, i]) + 5)
-        ax.set_facecolor('#f8f9fa')
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        ax.set_title(f"Output: {output_columns[i]}")
-
-    self.canvas.draw()
-
-    # 更新图形到界面
-    self.graphicscene = QGraphicsScene()
-    self.graphicscene.addWidget(self.canvas)
-    self.graphicsView.setScene(self.graphicscene)
-    self.graphicsView.setDragMode(QGraphicsView.ScrollHandDrag)
-    self.graphicsView.show()
-
-    # 更新界面控件
-    self.lineEdit_state.setText('Finish!')
-    self.lineEdit_MSE.setText(str(round(MSE, 5)))
-    self.lineEdit_R2.setText(str(round(R2, 5)))
-
-    # 保存预测结果到 DataFrame
-    self.data_save = pd.DataFrame(y_pred, index=data_test.index.values, columns=output_columns)
-    self.lineEdit_Algorithm_name.setText(
-        f'当前生成数据: {", ".join(output_columns)} [ {N_start_test}:{N_end_test} ]'
-    )
 
 #新的翻页多输出结果可视化
 def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test, 
-                                   output_columns, N_start_test, N_end_test, MSE, R2):
+                                   output_columns, N_start_test, N_end_test, MSE,RMSE,MAE, R2):
     """
     多输出回归模型的分页可视化函数
     
@@ -503,6 +440,8 @@ def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test,
     # 更新界面控件
     self.lineEdit_state.setText('Finish!')
     self.lineEdit_MSE.setText(str(round(MSE, 5)))
+    self.lineEdit_RMSE.setText(str(round(RMSE, 5)))  # 假设新增了RMSE控件
+    self.lineEdit_MAE.setText(str(round(MAE, 5)))    # 假设新增了MAE控件
     self.lineEdit_R2.setText(str(round(R2, 5)))
     
     # 保存预测结果到 DataFrame

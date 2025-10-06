@@ -31,11 +31,13 @@ def REMTW_Lasso(data_train,
     r2 = r2_score(y_test, y_pred)
     metrics = {
         'MSE': mse,
-        'R2': r2
+        'R2': r2,
+        'RMSE': np.sqrt(mse),
+        'MAE': np.mean(np.abs(y_test - y_pred))
     }
     return model, X_test, y_test, y_pred, metrics
 
-def remtw_plot_and_evaluate(self, remtw_model, method, input_columns, output_columns, MSE, R2):
+def remtw_plot_and_evaluate(self, remtw_model, method, input_columns, output_columns, MSE,RMSE,MAE, R2):
     """
     绘制 ReMTW 模型的可视化结果，包括系数热力图和 Wasserstein Barycenter。
     """
@@ -80,6 +82,8 @@ def remtw_plot_and_evaluate(self, remtw_model, method, input_columns, output_col
     # 更新界面控件
     self.lineEdit_state.setText('Finish!')
     self.lineEdit_MSE.setText(str(round(MSE, 5)))
+    self.lineEdit_RMSE.setText(str(round(RMSE, 5)))
+    self.lineEdit_MAE.setText(str(round(MAE, 5)))
     self.lineEdit_R2.setText(str(round(R2, 5)))
     self.lineEdit_Algorithm_name.setText(f"当前算法: {method}")
 

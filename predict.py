@@ -978,10 +978,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 raise ValueError("加载的模型不支持predict方法")
             
             # 4. 计算评估指标
-            from sklearn.metrics import mean_squared_error, r2_score
+            from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
             mse = mean_squared_error(y_test, y_pred, multioutput='uniform_average')
             r2 = r2_score(y_test, y_pred, multioutput='uniform_average')
-            
+            rmse = np.sqrt(mse)  # 新增RMSE
+            mae = mean_absolute_error(y_test, y_pred, multioutput='uniform_average')  # 新增MAE
             # 5. 可视化结果（根据输出维度选择单输出/多输出可视化）
             method_name = os.path.basename(self.selected_model_path).split('.')[0]  # 从模型文件名提取方法名
             if y_test.ndim == 1 or y_test.shape[1] == 1:
@@ -995,6 +996,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     N_start_test=0,
                     N_end_test=len(y_test),
                     MSE=mse,
+                    RMSE=rmse,  # 新增
+                    MAE=mae,    # 新增
                     R2=r2
                 )
             else:
@@ -1089,6 +1092,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 random_state=int(random_state),
                 max_depth=int(max_depth),
             )
+            
             self.trained_model = model  # 保存训练好的模型
             # ask_and_save_model(self,method,default_name='trained_model'+'_'+str(method)+'.pkl')    
 
@@ -1106,12 +1110,17 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                 N_start_test,
                                                   N_end_test,
                                                   metrics['MSE'],
+                                                  metrics['RMSE'],
+                                                  metrics['MAE'],
                                                   metrics['R2'])
             if len(output_columns) == 1:
                 self.data_save=single_plot_and_evaluate(self,y_test, y_pred,
                                         method, data_test,
                                         output_columns, N_start_test, 
-                                        N_end_test,metrics['MSE'],
+                                        N_end_test,
+                                        metrics['MSE'],
+                                        metrics['RMSE'],
+                                        metrics['MAE'],
                                         metrics['R2'])
             self.lineEdit_DEVICE.setText("CPU")
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
@@ -1143,12 +1152,17 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                 N_start_test,
                                                   N_end_test,
                                                   metrics['MSE'],
+                                                  metrics['RMSE'],
+                                                  metrics['MAE'],
                                                   metrics['R2'])
             if len(output_columns) == 1:
                 self.data_save=single_plot_and_evaluate(self,y_test, y_pred, method,
                                           data_test, output_columns, 
                                           N_start_test, N_end_test,
-                                          metrics['MSE'],metrics['R2'])
+                                          metrics['MSE'],
+                                        metrics['RMSE'],
+                                        metrics['MAE'],
+                                        metrics['R2'])
             self.lineEdit_DEVICE.setText("CPU")
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
             # QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
@@ -1183,12 +1197,17 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                 N_start_test,
                                                   N_end_test,
                                                   metrics['MSE'],
+                                                  metrics['RMSE'],
+                                                  metrics['MAE'],
                                                   metrics['R2'])
             if len(output_columns) == 1:
                 self.data_save=single_plot_and_evaluate(self,y_test, y_pred, method, 
                                          data_test, output_columns,
                                            N_start_test, N_end_test,
-                                           metrics['MSE'],metrics['R2'])
+                                           metrics['MSE'],
+                                                  metrics['RMSE'],
+                                                  metrics['MAE'],
+                                                  metrics['R2'])
             self.lineEdit_DEVICE.setText("CPU")
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
             # QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
@@ -1220,11 +1239,16 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                 N_start_test,
                                                   N_end_test,
                                                   metrics['MSE'],
+                                                  metrics['RMSE'],
+                                                  metrics['MAE'],
                                                   metrics['R2'])
             if len(output_columns) == 1:
                 self.data_save=single_plot_and_evaluate(self,y_test, y_pred, method, data_test,
                                            output_columns, N_start_test, N_end_test,
-                                           metrics['MSE'],metrics['R2'])
+                                           metrics['MSE'],
+                                            metrics['RMSE'],
+                                            metrics['MAE'],
+                                            metrics['R2'])
             self.lineEdit_DEVICE.setText("CPU")
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
             # QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
@@ -1258,12 +1282,17 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                 N_start_test,
                                                   N_end_test,
                                                   metrics['MSE'],
+                                                  metrics['RMSE'],
+                                                  metrics['MAE'],
                                                   metrics['R2'])
             if len(output_columns) == 1:    
                 self.data_save=single_plot_and_evaluate(self,y_test, y_pred, method,
                                                          data_test, output_columns, 
                                                          N_start_test, N_end_test,
-                                                         metrics['MSE'],metrics['R2'])
+                                                         metrics['MSE'],
+                                                        metrics['RMSE'],
+                                                        metrics['MAE'],
+                                                        metrics['R2'])
             self.lineEdit_DEVICE.setText("CPU")
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
             # QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
@@ -1300,6 +1329,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     input_columns=input_columns,
                     output_columns=output_columns,
                     MSE=metrics['MSE'],
+                    RMSE = metrics['RMSE'],
+                    MAE = metrics['MAE'],
                     R2=metrics['R2']
                 )
             self.lineEdit_DEVICE.setText("CPU")
@@ -1331,6 +1362,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     input_columns=input_columns,
                     output_columns=output_columns,
                     MSE=metrics['MSE'],
+                    RMSE = metrics['RMSE'],
+                    MAE = metrics['MAE'],
                     R2=metrics['R2']
                 )
             self.lineEdit_DEVICE.setText("GPU")
@@ -1362,6 +1395,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     input_columns=input_columns,
                     output_columns=output_columns,
                     MSE=metrics['MSE'],
+                    RMSE = metrics['RMSE'],
+                    MAE = metrics['MAE'],
                     R2=metrics['R2']
                 )
             self.lineEdit_DEVICE.setText("GPU")
@@ -1395,13 +1430,19 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 self.data_save = Multi_output_plot_and_evaluate(
                     self, y_test, y_pred, method, data_test,
                     output_columns, N_start_test, N_end_test,
-                    metrics['MSE'], metrics['R2']
+                    metrics['MSE'],
+                    metrics['RMSE'],
+                    metrics['MAE'],
+                    metrics['R2']
                 )
             else:
                 self.data_save = single_plot_and_evaluate(
                     self, y_test, y_pred, method, data_test,
                     output_columns, N_start_test, N_end_test,
-                    metrics['MSE'], metrics['R2']
+                    metrics['MSE'],
+                    metrics['RMSE'],
+                    metrics['MAE'],
+                    metrics['R2']
                 )
             self.lineEdit_DEVICE.setText("GPU" if torch.cuda.is_available() else "CPU")
     #单输出绘图的时候调用此函数，进行可视化展示,前五个算法的单输出画图展示

@@ -105,7 +105,9 @@ def group_lasso_predictor(
 
     metrics = {
         'MSE': mse,
-        'R2': r2
+        'R2': r2,
+        'RMSE': np.sqrt(mse),
+        'MAE': np.mean(np.abs(y_test - y_pred))
     }
 
     if show_prints:
@@ -133,7 +135,7 @@ def group_lasso_predictor(
     return grouplasso, X_test, y_test, y_pred, metrics
 
     #Group_Lasso的绘图函数，多任务输出
-def group_lasso_plot_and_evaluate(self, coef_shared, coef_specific, method, input_columns, output_columns, MSE, R2):
+def group_lasso_plot_and_evaluate(self, coef_shared, coef_specific, method, input_columns, output_columns, MSE,RMSE,MAE, R2):
 
     """
     绘制系数热力图（Coefficient Heatmap），并将每张图像保存到 GL_view 文件夹中。
@@ -180,6 +182,8 @@ def group_lasso_plot_and_evaluate(self, coef_shared, coef_specific, method, inpu
     # 更新界面控件
     self.lineEdit_state.setText('Finish!')
     self.lineEdit_MSE.setText(str(round(MSE, 5)))
+    self.lineEdit_RMSE.setText(str(round(RMSE, 5)))
+    self.lineEdit_MAE.setText(str(round(MAE, 5)))
     self.lineEdit_R2.setText(str(round(R2, 5)))
     self.lineEdit_Algorithm_name.setText(f"当前算法: {method}")
     #多任务Wasserstein的绘图函数

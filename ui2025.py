@@ -1124,6 +1124,90 @@ class Ui_MainWindow(object):
         self.pushButton_bottom.setObjectName("pushButton_bottom")
         self.horizontalLayout_8.addWidget(self.pushButton_bottom)
         self.verticalLayout_4.addLayout(self.horizontalLayout_8)
+        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.widget.setGeometry(QtCore.QRect(134, 826, 581, 32))
+        self.widget.setObjectName("widget")
+        self.horizontalLayout_9 = QtWidgets.QHBoxLayout(self.widget)
+        self.horizontalLayout_9.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
+        self.label_RMSE = QtWidgets.QLabel(self.widget)
+        self.label_RMSE.setMinimumSize(QtCore.QSize(90, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.label_RMSE.setFont(font)
+        self.label_RMSE.setStyleSheet("QLabel{\n"
+"\n"
+"   text-align: center;    \n"
+" qproperty-alignment: \'AlignCenter\';   \n"
+"\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    \n"
+"\n"
+"\n"
+"}")
+        self.label_RMSE.setObjectName("label_RMSE")
+        self.horizontalLayout_9.addWidget(self.label_RMSE)
+        self.lineEdit_RMSE = QtWidgets.QLineEdit(self.widget)
+        self.lineEdit_RMSE.setMinimumSize(QtCore.QSize(120, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lineEdit_RMSE.setFont(font)
+        self.lineEdit_RMSE.setStyleSheet("QLineEdit{\n"
+"\n"
+"border:1px solid black; \n"
+"border-radius:10px; \n"
+"\n"
+"}")
+        self.lineEdit_RMSE.setReadOnly(True)
+        self.lineEdit_RMSE.setObjectName("lineEdit_RMSE")
+        self.horizontalLayout_9.addWidget(self.lineEdit_RMSE)
+        self.label_MAE = QtWidgets.QLabel(self.widget)
+        self.label_MAE.setMinimumSize(QtCore.QSize(90, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.label_MAE.setFont(font)
+        self.label_MAE.setStyleSheet("QLabel{\n"
+"\n"
+"   text-align: center;    \n"
+" qproperty-alignment: \'AlignCenter\';   \n"
+"\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    \n"
+"\n"
+"\n"
+"}")
+        self.label_MAE.setObjectName("label_MAE")
+        self.horizontalLayout_9.addWidget(self.label_MAE)
+        self.lineEdit_MAE = QtWidgets.QLineEdit(self.widget)
+        self.lineEdit_MAE.setMinimumSize(QtCore.QSize(120, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lineEdit_MAE.setFont(font)
+        self.lineEdit_MAE.setStyleSheet("QLineEdit{\n"
+"\n"
+"border:1px solid black; \n"
+"border-radius:10px; \n"
+"\n"
+"}")
+        self.lineEdit_MAE.setReadOnly(True)
+        self.lineEdit_MAE.setObjectName("lineEdit_MAE")
+        self.horizontalLayout_9.addWidget(self.lineEdit_MAE)
         MainWindow.setCentralWidget(self.centralwidget)
         self.toolBar = QtWidgets.QToolBar(MainWindow)
         self.toolBar.setObjectName("toolBar")
@@ -1215,4 +1299,8 @@ class Ui_MainWindow(object):
         self.pushButton_top.setText(_translate("MainWindow", "↑"))
         self.pushButton_bottom.setToolTip(_translate("MainWindow", "<html><head/><body><p>下翻页</p></body></html>"))
         self.pushButton_bottom.setText(_translate("MainWindow", "↓"))
+        self.label_RMSE.setToolTip(_translate("MainWindow", "<html><head/><body><p>均方误差</p></body></html>"))
+        self.label_RMSE.setText(_translate("MainWindow", "RMSE"))
+        self.label_MAE.setToolTip(_translate("MainWindow", "<html><head/><body><p>均方误差</p></body></html>"))
+        self.label_MAE.setText(_translate("MainWindow", "MAE"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
