@@ -1135,8 +1135,6 @@ class Ui_MainWindow(object):
         self.pushButton_AL3.clicked.connect(MainWindow.AL_SVM_para) # type: ignore
         self.pushButton_AL4.clicked.connect(MainWindow.AL_MLP_para) # type: ignore
         self.pushButton_AL5.clicked.connect(MainWindow.AL_ET_para) # type: ignore
-        self.pushButton_otherpara.clicked.connect(MainWindow.openfolder) # type: ignore
-        self.pushButton_train.clicked.connect(MainWindow.All_Methods_Begin) # type: ignore
         self.pushButton.clicked.connect(MainWindow.AL_GL_para) # type: ignore
         self.checkBox_percentage.clicked.connect(MainWindow.change_percentage) # type: ignore
         self.pushButton_2.clicked.connect(MainWindow.AL_MTW_para) # type: ignore
@@ -1147,6 +1145,7 @@ class Ui_MainWindow(object):
         self.pushButton_4.clicked.connect(MainWindow.AL_MMoE_para) # type: ignore
         self.pushButton_inputall.clicked.connect(MainWindow.change_CheckBox_input) # type: ignore
         self.pushButton_outputall.clicked.connect(MainWindow.change_CheckBox_output) # type: ignore
+        self.pushButton_train.clicked.connect(MainWindow.openfolder) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

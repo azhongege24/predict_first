@@ -403,7 +403,7 @@ class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):
         method = 'DT'
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("Decision Tree")
-
+        self.parent_window.All_Methods_Begin()
         print("max_depth:", max_depth) 
         print("random_state:", random_state)
         print("scale_features:", scale_features)
@@ -423,7 +423,7 @@ class POP_RF_para(QMainWindow, Ui_RF_para, Ui_MainWindow):
         method = 'RF'
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("Random Forest")
-        
+        self.parent_window.All_Methods_Begin()
         print("n_estimators:", n_estimators)
         print("max_depth:", max_depth)
         print("random_state:", random_state)
@@ -446,7 +446,7 @@ class POP_SVM_para(QMainWindow, Ui_SVM_para, Ui_MainWindow):
         method = 'SVM'
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("Support Vector Machine")
-
+        self.parent_window.All_Methods_Begin()
         print("kernel:", kernel)
         print("C:", C)
         print("epsilon:", epsilon)
@@ -472,6 +472,7 @@ class POP_MLP_para(QMainWindow, Ui_MLP_para, Ui_MainWindow):
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("Multi-layer Perceptron")
         max_iter = self.spinBox_max_iter.text()
+        self.parent_window.All_Methods_Begin()
         print("random_state:", random_state)
         print("hidden_layer_sizes:", hidden_layer_sizes)
         print("max_iter:", max_iter)   
@@ -494,6 +495,7 @@ class POP_ET_para(QMainWindow, Ui_ET_para, Ui_MainWindow):
         method = 'ET'   
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("Extra Trees")   
+        self.parent_window.All_Methods_Begin()
         print("n_estimators:", n_estimators)
         print("max_depth:", max_depth)  
         print("n_jobs:", n_jobs)
@@ -516,7 +518,7 @@ class POP_GL_para(QMainWindow, Ui_GL_para, Ui_MainWindow):
         method = 'GL'
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("Group Lasso")
-
+        self.parent_window.All_Methods_Begin()
         print("alpha:", alpha) 
         print("random_state:", random_state)
         print("max_iter:", max_iter)
@@ -540,7 +542,7 @@ class POP_MTW_para(QMainWindow, Ui_MTW_para, Ui_MainWindow):#mtw算法改
         method = 'MTW'
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("Multitask Wasserstein ")
-        
+        self.parent_window.All_Methods_Begin()
         print("random_state:", random_state)
         print("alpha:", alpha)
         print("beta:", beta)
@@ -565,7 +567,7 @@ class POP_REMTW_para(QMainWindow, Ui_REMTW_para, Ui_MainWindow):#remtw算法改
         method = 'REMTW'
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("Reweighted Multitask Wasserstein ")
-        
+        self.parent_window.All_Methods_Begin()
         print("random_state:", random_state)
         print("alpha:", alpha)
         print("beta:", beta)
@@ -596,7 +598,7 @@ class POP_MMoE_para(QMainWindow, Ui_MMoE_para, Ui_MainWindow):#remtw算法改
         method = 'MMoE'
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("Multi-gate Mixture-of-Experts")
-        
+        self.parent_window.All_Methods_Begin()
         # 打印所有参数值，方便调试
         print(f"算法名称: {method}")
         print(f"alpha: {alpha}")

@@ -2007,38 +2007,6 @@ qproperty-alignment: 'AlignCenter';
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_otherpara</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>openfolder()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>449</x>
-     <y>255</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>342</x>
-     <y>219</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton_train</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>All_Methods_Begin()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>725</x>
-     <y>248</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>755</x>
-     <y>189</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>pushButton</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
@@ -2195,6 +2163,22 @@ qproperty-alignment: 'AlignCenter';
     <hint type="destinationlabel">
      <x>1367</x>
      <y>855</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_train</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>openfolder()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>751</x>
+     <y>215</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>738</x>
+     <y>163</y>
     </hint>
    </hints>
   </connection>
