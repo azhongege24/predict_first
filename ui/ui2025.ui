@@ -1054,7 +1054,7 @@ color:red;
 }</string>
          </property>
          <property name="text">
-          <string>Please select an Algorithm！</string>
+          <string>请在右侧区域选择所需算法模型！</string>
          </property>
         </widget>
        </item>
@@ -1439,7 +1439,7 @@ font:bold;		/*设置按钮文字和大小*/
        <property name="font">
         <font>
          <family>Times New Roman</family>
-         <pointsize>14</pointsize>
+         <pointsize>12</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -1454,7 +1454,7 @@ color:red;
 }</string>
        </property>
        <property name="text">
-        <string>Please select a Dataset！</string>
+        <string>请点击下方训练验模按钮导入训练数据！</string>
        </property>
        <property name="readOnly">
         <bool>true</bool>
