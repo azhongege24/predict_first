@@ -32,25 +32,25 @@ def signed_expm1(arr):
     arr = np.asarray(arr, dtype=np.float64)  # 强制转为 numpy 数组
     return np.sign(arr) * np.expm1(np.abs(arr))
 
-
+# 配套修改多任务回归预测函数，使其返回每个输出的独立指标
 def multi_task_regression_predictor(
-    data_train: pd.DataFrame,          # ▶ 接收主程序处理后的训练集
-    data_test: pd.DataFrame,           # ▶ 接收主程序处理后的测试集
-    input_columns: list,               # ▶ 输入特征列名列表
-    output_columns: list,              # ▶ 输出目标列名列表
+    data_train: pd.DataFrame,
+    data_test: pd.DataFrame,
+    input_columns: list,
+    output_columns: list,
     model_type: str = 'RF',
+    # 其他参数保持不变...
     scale_features: bool = True,
     random_state: int = 42,
     max_depth: int = 4,
-    n_estimators=100,                   #用于RF/ET等模型
+    n_estimators=100,
     kernel='rbf',
     C=1.0,
     epsilon=0.1,
     n_jobs=-1,
-    max_iter=500, 
-    alpha=0.0001,# MLP最大迭代次数
-    mlp_hidden_layers: tuple = (100, 50), # MLP隐藏层结构
-    #MMOE特有参数
+    max_iter=500,
+    alpha=0.0001,
+    mlp_hidden_layers: tuple = (100, 50),
     mmoe_num_experts :int = 5,
     mmoe_expert_hidden :int = 64,
     mmoe_learning_rate : float = 0.001,
@@ -58,24 +58,14 @@ def multi_task_regression_predictor(
     mmoe_epochs : int = 100,
     mmoe_batch_size : int = 32,
     mmoe_lambda_balance : float = 0.1,
-    
-
 ):
-    
-    
-    # 返回：
-    # model : 训练好的回归模型
-    # y_test : 测试集真实值（形状 [N_test, output_cols]）
-    # y_pred : 预测结果（形状 [N_test, output_cols]）
-    # metrics : 包含MSE和R2的字典
-  
-    # 数据加载与预处理
+    # 原有数据加载与预处理逻辑保持不变...
     X_train = data_train[input_columns].values
     y_train = data_train[output_columns].values
     X_test = data_test[input_columns].values
     y_test = data_test[output_columns].values
     
-    # 找到 output12 的列索引
+    # 处理output12的代码保持不变...
     if 'output12' in output_columns:
         idx = output_columns.index('output12')
         if y_train.ndim == 1:
@@ -84,19 +74,14 @@ def multi_task_regression_predictor(
         else:
             y_train[:, idx] = signed_log1p(y_train[:, idx])
             y_test[:, idx] = signed_log1p(y_test[:, idx])
-        
-    scaler = None    # 特征标准化(返回scaler用于后续预测)
-  
+    
+    scaler = None
     if scale_features:
-        
         scaler = StandardScaler()
         X_train = scaler.fit_transform(X_train)
         X_test = scaler.transform(X_test)
-        
     
-
-    
-    # 模型选择与初始化+新增了MMOE模型
+    # 模型选择与训练逻辑保持不变...
     model_mapping = {
         'DT': DecisionTreeRegressor(max_depth=max_depth, random_state=random_state),
         'RF': RandomForestRegressor(n_estimators=n_estimators, max_depth=max_depth, n_jobs=n_jobs, random_state=random_state),
@@ -121,62 +106,46 @@ def multi_task_regression_predictor(
     
     model = model_mapping[model_type]
     
-    
+    # 模型训练逻辑保持不变...
     print("开始训练模型...")
-    # 模型训练
     if model_type == 'MMoE':
-        #MMoE模型开始训练
         with tqdm(total = mmoe_epochs, desc ="MMoE训练进度", unit="epoch" ) as pbar:
             model.fit(X_train , y_train , verbose = False)
             pbar.update(mmoe_epochs)
     else:
-    #其他模型开始训练
-        with tqdm(total=1, desc="训练进度", unit="step") as pbar:  # 使用 tqdm 显示进度
+        with tqdm(total=1, desc="训练进度", unit="step") as pbar:
             model.fit(X_train, y_train)
-            pbar.update(1)  # 更新进度
-            
-    # 预测与评估
+            pbar.update(1)
+    
+    # 预测逻辑保持不变...
     if model_type == 'MMoE':
         y_pred = model.predict(X_test)
     else:
         y_pred = model.predict(X_test)  
     
-
+    # 关键修改：计算每个输出的独立指标
+    n_tasks = y_test.shape[1] if y_test.ndim > 1 else 1
+    if y_test.ndim == 1:
+        y_test = y_test.reshape(-1, 1)
+        y_pred = y_pred.reshape(-1, 1)
     
-    # # 关键：强制转换为float64类型，确保np.isnan可处理
-    # y_test = np.asarray(y_test, dtype=np.float64)
-    # y_pred = np.asarray(y_pred, dtype=np.float64)
-    # print("y_test 包含NaN:", np.isnan(y_test).any())
-    # print("y_test 包含无穷大:", np.isinf(y_test).any())
-    # print("y_pred 包含NaN:", np.isnan(y_pred).any())
-    # print("y_pred 包含无穷大:", np.isinf(y_pred).any())  
+    # 计算每个输出的单独指标
+    mse_list = [mean_squared_error(y_test[:, i], y_pred[:, i]) for i in range(n_tasks)]
+    r2_list = [r2_score(y_test[:, i], y_pred[:, i]) for i in range(n_tasks)]
+    rmse_list = [np.sqrt(mse) for mse in mse_list]
+    mae_list = [np.mean(np.abs(y_test[:, i] - y_pred[:, i])) for i in range(n_tasks)]
     
-    # if 'output12' in output_columns:
-    #     idx = output_columns.index('output12')
-    #     # 兼容一维和二维
-    #     if y_pred.ndim == 1:
-    #         y_pred = signed_expm1(y_pred)
-    #         y_test = signed_expm1(y_test)
-    #     else:
-    #         y_pred[:, idx] = signed_expm1(y_pred[:, idx])
-    #         y_test[:, idx] = signed_expm1(y_test[:, idx])
-    
-    # 计算指标
-    mse = mean_squared_error(y_test, y_pred, multioutput='uniform_average')
-    r2 = r2_score(y_test, y_pred, multioutput='uniform_average')
-    metrics = {'MSE': mse, 'R2': r2, 'RMSE': np.sqrt(mse), 'MAE': np.mean(np.abs(y_test - y_pred))}
-    
-    #现在是这么个情况就是：目前进行带符号的对数变换，能够跑通，但是评估后如果还原会出现无穷大的值。这个会报错，图也画不出来，各项指标也不行。
-    # 所以目前就这样解决的，希望后期能有更好的解决方法，至少程序可以跑通了
-    # if 'output12' in output_columns:
-    #     idx = output_columns.index('output12')
-    #     # 兼容一维和二维
-    #     if y_pred.ndim == 1:
-    #         y_pred = signed_expm1(y_pred)
-    #         y_test = signed_expm1(y_test)
-    #     else:
-    #         y_pred[:, idx] = signed_expm1(y_pred[:, idx])
-    #         y_test[:, idx] = signed_expm1(y_test[:, idx])
+    # 整体指标（平均值）
+    metrics = {
+        'MSE': np.mean(mse_list),
+        'MSE_list': mse_list,
+        'R2': np.mean(r2_list),
+        'R2_list': r2_list,
+        'RMSE': np.mean(rmse_list),
+        'RMSE_list': rmse_list,
+        'MAE': np.mean(mae_list),
+        'MAE_list': mae_list
+    }
     
     return model, scaler, y_test, y_pred, metrics
 
@@ -353,16 +322,17 @@ def single_plot_and_evaluate(self, y_test, y_pred, method, data_test,
 
     # 保存预测结果到 DataFrame
     self.data_save = pd.DataFrame(y_pred, index=data_test.index.values)
-    self.lineEdit_Algorithm_name.setText(
-        f'当前生成数据: {output_columns[0]} [ {N_start_test}:{N_end_test} ]'
-    )
+    # self.lineEdit_Algorithm_name.setText(
+    #     f'当前生成数据: {output_columns[0]} [ {N_start_test}:{N_end_test} ]'
+    # )
     return self.data_save
 
 #新的翻页多输出结果可视化
 def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test, 
-                                   output_columns, N_start_test, N_end_test, MSE,RMSE,MAE, R2):
+                                   output_columns, N_start_test, N_end_test, 
+                                   MSE_list, RMSE_list, MAE_list, R2_list):
     """
-    多输出回归模型的分页可视化函数
+    多输出回归模型的分页可视化函数（支持每个输出显示独立指标）
     
     参数:
         y_test: 测试集真实值 (形状 [N_test, n_outputs])
@@ -372,52 +342,76 @@ def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test,
         output_columns: 输出特征列名列表
         N_start_test: 测试集起始索引
         N_end_test: 测试集结束索引
-        MSE: 各输出变量的MSE列表
-        R2: 各输出变量的R2列表
+        MSE_list: 各输出变量的MSE列表（长度=n_outputs）
+        RMSE_list: 各输出变量的RMSE列表（长度=n_outputs）
+        MAE_list: 各输出变量的MAE列表（长度=n_outputs）
+        R2_list: 各输出变量的R2列表（长度=n_outputs）
     """
     self.end_time = time.time()
     print(f"运行时间: {self.end_time - self.start_time:.2f} 秒")
     
+    # 校验输入维度（避免索引越界）
+    n_outputs = len(output_columns)
+    if len(MSE_list) != n_outputs or len(R2_list) != n_outputs:
+        raise ValueError(f"指标列表长度与输出变量数不匹配: MSE列表长度={len(MSE_list)}, 输出变量数={n_outputs}")
+    
     # 创建保存图像的目录
-    output_dir = "MultiOutput_view/"+""+method+"_view"
+    output_dir = f"MultiOutput_view/{method}_view"
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     else:
-         # 清空文件夹内容
+        # 清空文件夹内容
         for file in os.listdir(output_dir):
             file_path = os.path.join(output_dir, file)
             try:
                 if os.path.isfile(file_path) or os.path.islink(file_path):
-                    os.unlink(file_path)  # 删除文件或符号链接
+                    os.unlink(file_path)
                 elif os.path.isdir(file_path):
-                    shutil.rmtree(file_path)  # 删除子文件夹
+                    shutil.rmtree(file_path)
             except Exception as e:
                 print(f"无法删除文件 {file_path}。原因: {e}")
     
-    # 清空之前的图像
+    # 清空之前的图像（保留则注释此行）
     self.figures = []
+    
+    # 计算整体指标（用于界面显示）
+    overall_mse = np.mean(MSE_list)
+    overall_rmse = np.mean(RMSE_list) if RMSE_list else np.sqrt(overall_mse)
+    overall_mae = np.mean(MAE_list) if MAE_list else np.mean(np.abs(y_test - y_pred))
+    overall_r2 = np.mean(R2_list)
     
     # 为每个输出变量创建并保存可视化图像
     for i, col in enumerate(output_columns):
+        # 当前输出的独立指标
+        current_mse = MSE_list[i]
+        current_r2 = R2_list[i]
+        current_rmse = RMSE_list[i] if RMSE_list else np.sqrt(current_mse)
+        current_mae = MAE_list[i] if MAE_list else np.mean(np.abs(y_test[:, i] - y_pred[:, i]))
+        
         # 创建图像
         fig = plt.figure(figsize=(7, 4), dpi=120)
         ax = fig.add_subplot(111)
         
         # 绘制真实值与预测值散点图
-        scatter1 = ax.scatter(np.arange(len(y_test[:, i])), y_test[:, i], 
-                            c='b', marker='o', s=10, label='True', alpha=0.8)
-        scatter2 = ax.scatter(np.arange(len(y_test[:, i])), y_pred[:, i], 
-                            c='r', marker='X', s=20, label=f'Pred_{method}', alpha=0.8)
+        ax.scatter(np.arange(len(y_test[:, i])), y_test[:, i], 
+                  c='b', marker='o', s=10, label='真实值', alpha=0.8)
+        ax.scatter(np.arange(len(y_test[:, i])), y_pred[:, i], 
+                  c='r', marker='X', s=20, label=f'预测值_{method}', alpha=0.8)
         
-        # 绘制垂直连接线段
-        for j in range(len(y_test[:, i])):
-            ax.plot([j, j], [y_test[j, i], y_pred[j, i]],
-                    color='#2F5597', linestyle='-', linewidth=1.5, alpha=0.6, zorder=0)
+        # 绘制垂直连接线段（向量方式更高效）
+        x = np.arange(len(y_test[:, i]))
+        ax.plot([x, x], [y_test[:, i], y_pred[:, i]],
+                color='#2F5597', linestyle='-', linewidth=1.5, alpha=0.6, zorder=0)
         
-        # 设置子图标题和标签
-        ax.set_title(f'Output: {col} (MSE: {MSE:.4f}, R2: {R2:.4f})', fontsize=12)
-        ax.set_xlabel('Sample Index', fontsize=10)
-        ax.set_ylabel('Value', fontsize=10)
+        # 设置子图标题和标签（显示当前输出的独立指标）
+        ax.set_title(
+            f'输出变量: {col}\n'
+            f'MSE: {current_mse:.4f}, RMSE: {current_rmse:.4f}\n'
+            f'MAE: {current_mae:.4f}, R: {current_r2:.4f}',
+            fontsize=10
+        )
+        ax.set_xlabel('样本索引', fontsize=10)
+        ax.set_ylabel('数值', fontsize=10)
         ax.grid(linestyle='--', alpha=0.5)
         ax.legend()
         ax.set_xlim(-5, len(y_test[:, i]) + 5)
@@ -425,9 +419,9 @@ def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test,
         ax.spines['top'].set_visible(False)
         ax.spines['right'].set_visible(False)
         
-        # 保存图像
+        # 保存图像（自动调整布局避免标签截断）
         fig_path = os.path.join(output_dir, f"output_{col}.png")
-        fig.savefig(fig_path)
+        fig.savefig(fig_path, bbox_inches='tight')
         plt.close(fig)
         
         # 将图像路径添加到列表中
@@ -437,21 +431,27 @@ def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test,
     self.current_page = 0
     self.update_graphics_view()
     
-    # 更新界面控件
+    # 更新界面控件（显示整体平均指标）
     self.lineEdit_state.setText('Finish!')
-    self.lineEdit_MSE.setText(str(round(MSE, 5)))
-    self.lineEdit_RMSE.setText(str(round(RMSE, 5)))  # 假设新增了RMSE控件
-    self.lineEdit_MAE.setText(str(round(MAE, 5)))    # 假设新增了MAE控件
-    self.lineEdit_R2.setText(str(round(R2, 5)))
+    self.lineEdit_MSE.setText(f"{overall_mse:.5f}")
+    self.lineEdit_RMSE.setText(f"{overall_rmse:.5f}")
+    self.lineEdit_MAE.setText(f"{overall_mae:.5f}")
+    self.lineEdit_R2.setText(f"{overall_r2:.5f}")
     
-    # 保存预测结果到 DataFrame
-    self.data_save = pd.DataFrame(y_pred, 
-                                index=data_test.index.values,
-                                columns=[f"pred_{col}" for col in output_columns])
-    self.lineEdit_Algorithm_name.setText(
-        f'当前生成数据: {", ".join(output_columns)} [{N_start_test}:{N_end_test}]')
+    # 保存预测结果到 DataFrame（包含真实值便于对比）
+    pred_df = pd.DataFrame(
+        y_pred, 
+        index=data_test.index.values,
+        columns=[f"pred_{col}" for col in output_columns]
+    )
+    true_df = pd.DataFrame(
+        y_test,
+        index=data_test.index.values,
+        columns=[f"true_{col}" for col in output_columns]
+    )
+    self.data_save = pd.concat([true_df, pred_df], axis=1)
+    
     return self.data_save
-
 #新增的MMOE多专家混合系统
 class Expert(nn.Module):
     def __init__(self, input_dim ,hidden_dim, dropout_rate = 0.1):

@@ -1,4 +1,5 @@
 import os
+import shutil
 import time
 import numpy as np
 import pandas as pd
@@ -7,6 +8,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 from matplotlib import rcParams
 import matplotlib.pyplot as plt
 import seaborn as sns
+from ALL_Algorithms.Algorithms import Multi_output_plot_and_evaluate
 
 # 设置中文显示 matplotlib
 rcParams['font.sans-serif'] = ['SimHei']
@@ -132,13 +134,28 @@ def group_lasso_predictor(
         plt.show()
 
     # 返回结果
-    return grouplasso, X_test, y_test, y_pred, metrics
+    return grouplasso, X_test, y_test, y_pred, metrics,data_test.index
 
     #Group_Lasso的绘图函数，多任务输出
-def group_lasso_plot_and_evaluate(self, coef_shared, coef_specific, method, input_columns, output_columns, MSE,RMSE,MAE, R2):
 
+def group_lasso_plot_and_evaluate(self, coef_shared, coef_specific, method, input_columns, output_columns, 
+                                 MSE, RMSE, MAE, R2, y_test, y_pred, data_test_index):
     """
-    绘制系数热力图（Coefficient Heatmap），并将每张图像保存到 GL_view 文件夹中。
+    绘制Group Lasso模型的系数热力图和各输出变量的真实值-预测值对比图
+    
+    参数:
+        coef_shared: 共享系数矩阵
+        coef_specific: 特定系数矩阵
+        method: 算法名称
+        input_columns: 输入特征列名
+        output_columns: 输出特征列名
+        MSE: 均方误差（整体或各输出列表）
+        RMSE: 均方根误差（整体或各输出列表）
+        MAE: 平均绝对误差（整体或各输出列表）
+        R2: 决定系数（整体或各输出列表）
+        y_test: 测试集真实值 (形状 [N_test, n_outputs])
+        y_pred: 测试集预测值 (形状 [N_test, n_outputs])
+        data_test_index: 测试集索引列表
     """
     self.end_time = time.time()
     print(f"运行时间: {self.end_time - self.start_time:.2f} 秒")
@@ -147,47 +164,105 @@ def group_lasso_plot_and_evaluate(self, coef_shared, coef_specific, method, inpu
     output_dir = "GL_view"
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
+    else:
+        # 清空目录避免旧图干扰
+        for file in os.listdir(output_dir):
+            file_path = os.path.join(output_dir, file)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print(f"无法删除文件 {file_path}。原因: {e}")
 
-    # 创建第一个热力图页面并保存
-    figure1 = plt.figure(figsize=(7, 4), dpi=120)
-    ax1 = figure1.add_subplot(111)
+    # 存储所有图像路径的列表
+    self.figures = []
+
+    # 1. 绘制系数热力图（总系数矩阵）
+    fig1 = plt.figure(figsize=(7, 4), dpi=120)
+    ax1 = fig1.add_subplot(111)
     sns.heatmap(coef_shared + coef_specific, annot=True, fmt=".2f", cmap="coolwarm",
                 xticklabels=output_columns, yticklabels=input_columns, ax=ax1)
     ax1.set_title("总系数矩阵 (共享 + 特定)")
     ax1.set_xlabel("输出任务")
     ax1.set_ylabel("输入特征")
-    figure1_path = os.path.join(output_dir, "heatmap_total.png")
-    figure1.savefig(figure1_path)
-    plt.close(figure1)
+    fig1_path = os.path.join(output_dir, "heatmap_total.png")
+    fig1.savefig(fig1_path, bbox_inches='tight')
+    plt.close(fig1)
+    self.figures.append(fig1_path)
 
-    # 创建第二个热力图页面并保存
-    figure2 = plt.figure(figsize=(7, 4), dpi=120)
-    ax2 = figure2.add_subplot(111)
+    # 2. 绘制共享系数矩阵热力图
+    fig2 = plt.figure(figsize=(7, 4), dpi=120)
+    ax2 = fig2.add_subplot(111)
     sns.heatmap(coef_shared, annot=True, fmt=".2f", cmap="Blues",
                 xticklabels=output_columns, yticklabels=input_columns, ax=ax2)
     ax2.set_title("共享系数矩阵")
     ax2.set_xlabel("输出任务")
     ax2.set_ylabel("输入特征")
-    figure2_path = os.path.join(output_dir, "heatmap_shared.png")
-    figure2.savefig(figure2_path)
-    plt.close(figure2)
+    fig2_path = os.path.join(output_dir, "heatmap_shared.png")
+    fig2.savefig(fig2_path, bbox_inches='tight')
+    plt.close(fig2)
+    self.figures.append(fig2_path)
 
-    # 将图像路径存储到列表中
-    self.figures = [figure1_path, figure2_path]
+    # 3. 绘制各输出变量的真实值-预测值对比图
+    n_outputs = len(output_columns)
+    test_index_range = f"[{data_test_index[0]}:{data_test_index[-1]}]" if not data_test_index.empty else "[0:0]"
+    
+    for i in range(n_outputs):
+        # 获取当前输出的评估指标（支持单值或列表）
+        current_mse = MSE[i] if isinstance(MSE, (list, np.ndarray)) else MSE
+        current_r2 = R2[i] if isinstance(R2, (list, np.ndarray)) else R2
+        
+        # 创建对比图
+        fig = plt.figure(figsize=(7, 4), dpi=120)
+        ax = fig.add_subplot(111)
+        
+        # 绘制真实值与预测值散点
+        ax.scatter(np.arange(len(y_test[:, i])), y_test[:, i], 
+                  c='b', marker='o', s=10, label='真实值', alpha=0.8)
+        ax.scatter(np.arange(len(y_test[:, i])), y_pred[:, i], 
+                  c='r', marker='X', s=20, label=f'预测值_{method}', alpha=0.8)
+        
+        # 绘制连接线段
+        x = np.arange(len(y_test[:, i]))
+        ax.plot([x, x], [y_test[:, i], y_pred[:, i]],
+                color='#2F5597', linestyle='-', linewidth=1.5, alpha=0.6, zorder=0)
+        
+        # 设置图表属性
+        ax.set_title(f'输出变量: {output_columns[i]}\nMSE: {current_mse:.4f}, R2: {current_r2:.4f}\n索引范围: {test_index_range}',
+                    fontsize=10)
+        ax.set_xlabel('样本索引', fontsize=10)
+        ax.set_ylabel('数值', fontsize=10)
+        ax.grid(linestyle='--', alpha=0.5)
+        ax.legend()
+        ax.set_xlim(-5, len(y_test[:, i]) + 5)
+        ax.set_facecolor('#f8f9fa')
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        
+        # 保存图像
+        fig_path = os.path.join(output_dir, f"pred_vs_true_{output_columns[i]}.png")
+        fig.savefig(fig_path, bbox_inches='tight')
+        plt.close(fig)
+        self.figures.append(fig_path)
 
-    # 显示第一页
+    # 初始化分页显示（包含所有图像：热力图+对比图）
     self.current_page = 0
     self.update_graphics_view()
 
-    # 更新界面控件
-    self.lineEdit_state.setText('Finish!')
-    self.lineEdit_MSE.setText(str(round(MSE, 5)))
-    self.lineEdit_RMSE.setText(str(round(RMSE, 5)))
-    self.lineEdit_MAE.setText(str(round(MAE, 5)))
-    self.lineEdit_R2.setText(str(round(R2, 5)))
-    self.lineEdit_Algorithm_name.setText(f"当前算法: {method}")
-    #多任务Wasserstein的绘图函数
+    # 更新界面控件（显示整体指标）
+    overall_mse = np.mean(MSE) if isinstance(MSE, (list, np.ndarray)) else MSE
+    overall_rmse = np.mean(RMSE) if isinstance(RMSE, (list, np.ndarray)) else RMSE
+    overall_mae = np.mean(MAE) if isinstance(MAE, (list, np.ndarray)) else MAE
+    overall_r2 = np.mean(R2) if isinstance(R2, (list, np.ndarray)) else R2
 
+    self.lineEdit_state.setText('Finish!')
+    self.lineEdit_MSE.setText(f"{overall_mse:.5f}")
+    self.lineEdit_RMSE.setText(f"{overall_rmse:.5f}")
+    self.lineEdit_MAE.setText(f"{overall_mae:.5f}")
+    self.lineEdit_R2.setText(f"{overall_r2:.5f}")
+    self.lineEdit_Algorithm_name.setText(f"当前算法: {method}")
 if __name__ == "__main__":
     # 示例数据
     data_train = pd.DataFrame({

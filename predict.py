@@ -1108,11 +1108,12 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                 data_test, 
                                                 output_columns, 
                                                 N_start_test,
-                                                  N_end_test,
-                                                  metrics['MSE'],
-                                                  metrics['RMSE'],
-                                                  metrics['MAE'],
-                                                  metrics['R2'])
+                                                N_end_test,
+                                                MSE_list=metrics['MSE_list'],  # 传递每个输出的MSE列表
+                                                RMSE_list=metrics['RMSE_list'],  # 传递每个输出的RMSE列表
+                                                MAE_list=metrics['MAE_list'],  # 传递每个输出的MAE列表
+                                                R2_list=metrics['R2_list']  # 传递每个输出的R2列表)
+                )
             if len(output_columns) == 1:
                 self.data_save=single_plot_and_evaluate(self,y_test, y_pred,
                                         method, data_test,
@@ -1150,11 +1151,12 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                 data_test, 
                                                 output_columns, 
                                                 N_start_test,
-                                                  N_end_test,
-                                                  metrics['MSE'],
-                                                  metrics['RMSE'],
-                                                  metrics['MAE'],
-                                                  metrics['R2'])
+                                                N_end_test,
+                                                MSE_list=metrics['MSE_list'],  # 传递每个输出的MSE列表
+                                                RMSE_list=metrics['RMSE_list'],  # 传递每个输出的RMSE列表
+                                                MAE_list=metrics['MAE_list'],  # 传递每个输出的MAE列表
+                                                R2_list=metrics['R2_list']  # 传递每个输出的R2列表)
+                )
             if len(output_columns) == 1:
                 self.data_save=single_plot_and_evaluate(self,y_test, y_pred, method,
                                           data_test, output_columns, 
@@ -1195,11 +1197,12 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                 data_test, 
                                                 output_columns, 
                                                 N_start_test,
-                                                  N_end_test,
-                                                  metrics['MSE'],
-                                                  metrics['RMSE'],
-                                                  metrics['MAE'],
-                                                  metrics['R2'])
+                                                N_end_test,
+                                                MSE_list=metrics['MSE_list'],  # 传递每个输出的MSE列表
+                                                RMSE_list=metrics['RMSE_list'],  # 传递每个输出的RMSE列表
+                                                MAE_list=metrics['MAE_list'],  # 传递每个输出的MAE列表
+                                                R2_list=metrics['R2_list']  # 传递每个输出的R2列表)
+                )
             if len(output_columns) == 1:
                 self.data_save=single_plot_and_evaluate(self,y_test, y_pred, method, 
                                          data_test, output_columns,
@@ -1237,11 +1240,12 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                 data_test, 
                                                 output_columns, 
                                                 N_start_test,
-                                                  N_end_test,
-                                                  metrics['MSE'],
-                                                  metrics['RMSE'],
-                                                  metrics['MAE'],
-                                                  metrics['R2'])
+                                                N_end_test,
+                                                MSE_list=metrics['MSE_list'],  # 传递每个输出的MSE列表
+                                                RMSE_list=metrics['RMSE_list'],  # 传递每个输出的RMSE列表
+                                                MAE_list=metrics['MAE_list'],  # 传递每个输出的MAE列表
+                                                R2_list=metrics['R2_list']  # 传递每个输出的R2列表)
+                )
             if len(output_columns) == 1:
                 self.data_save=single_plot_and_evaluate(self,y_test, y_pred, method, data_test,
                                            output_columns, N_start_test, N_end_test,
@@ -1280,11 +1284,12 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                 data_test, 
                                                 output_columns, 
                                                 N_start_test,
-                                                  N_end_test,
-                                                  metrics['MSE'],
-                                                  metrics['RMSE'],
-                                                  metrics['MAE'],
-                                                  metrics['R2'])
+                                                N_end_test,
+                                                MSE_list=metrics['MSE_list'],  # 传递每个输出的MSE列表
+                                                RMSE_list=metrics['RMSE_list'],  # 传递每个输出的RMSE列表
+                                                MAE_list=metrics['MAE_list'],  # 传递每个输出的MAE列表
+                                                R2_list=metrics['R2_list']  # 传递每个输出的R2列表)
+                )
             if len(output_columns) == 1:    
                 self.data_save=single_plot_and_evaluate(self,y_test, y_pred, method,
                                                          data_test, output_columns, 
@@ -1303,7 +1308,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         
         if method == 'GL':
             self.new_model = 1
-            model, X_test, y_test, y_pred, metrics = group_lasso_predictor(
+            model, X_test, y_test, y_pred, metrics,data_index = group_lasso_predictor(
                 data_train=data_train,
                 data_test=data_test,
                 input_columns=input_columns,
@@ -1331,13 +1336,16 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     MSE=metrics['MSE'],
                     RMSE = metrics['RMSE'],
                     MAE = metrics['MAE'],
-                    R2=metrics['R2']
+                    R2=metrics['R2'],
+                    y_test=y_test, 
+                    y_pred=y_pred,
+                    data_test_index=data_index
                 )
             self.lineEdit_DEVICE.setText("CPU")
     
         if method == 'MTW':
             self.new_model = 1
-            model, X_test, y_test, y_pred, metrics = MTW_Lasso(
+            model, X_test, y_test, y_pred, metrics,data_index = MTW_Lasso(
                 data_train=data_train,
                 data_test=data_test,
                 input_columns=input_columns,
@@ -1364,13 +1372,20 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     MSE=metrics['MSE'],
                     RMSE = metrics['RMSE'],
                     MAE = metrics['MAE'],
-                    R2=metrics['R2']
+                    R2=metrics['R2'],
+                    MSE_list=metrics['MSE_list'],
+                    MAE_list=metrics['MAE_list'],
+                    RMSE_list=metrics['RMSE_list'],
+                    R2_list=metrics['R2_list'],
+                    data_test_index=data_index,
+                    y_test=y_test, 
+                    y_pred=y_pred
                 )
             self.lineEdit_DEVICE.setText("GPU")
         
         if method == 'REMTW':
             self.new_model = 1
-            model, X_test, y_test, y_pred, metrics = REMTW_Lasso(
+            model, X_test, y_test, y_pred, metrics,data_index = REMTW_Lasso(
                 data_train=data_train,
                 data_test=data_test,
                 input_columns=input_columns,
@@ -1397,7 +1412,15 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     MSE=metrics['MSE'],
                     RMSE = metrics['RMSE'],
                     MAE = metrics['MAE'],
-                    R2=metrics['R2']
+                    R2=metrics['R2'],
+                    MSE_list=metrics['MSE_list'],
+                    MAE_list=metrics['MAE_list'],
+                    RMSE_list=metrics['RMSE_list'],
+                    R2_list=metrics['R2_list'],
+                    data_test_index=data_index,
+                    y_test=y_test, 
+                    y_pred=y_pred
+                    
                 )
             self.lineEdit_DEVICE.setText("GPU")
         if method == 'MMoE':
@@ -1427,13 +1450,16 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             print("MMoE评估指标:", metrics)
             # 多输出绘图
             if len(output_columns) > 1:
-                self.data_save = Multi_output_plot_and_evaluate(
-                    self, y_test, y_pred, method, data_test,
-                    output_columns, N_start_test, N_end_test,
-                    metrics['MSE'],
-                    metrics['RMSE'],
-                    metrics['MAE'],
-                    metrics['R2']
+                self.data_save=Multi_output_plot_and_evaluate(self,y_test, 
+                                               y_pred, method,
+                                                data_test, 
+                                                output_columns, 
+                                                N_start_test,
+                                                N_end_test,
+                                                MSE_list=metrics['MSE_list'],  # 传递每个输出的MSE列表
+                                                RMSE_list=metrics['RMSE_list'],  # 传递每个输出的RMSE列表
+                                                MAE_list=metrics['MAE_list'],  # 传递每个输出的MAE列表
+                                                R2_list=metrics['R2_list']  # 传递每个输出的R2列表)
                 )
             else:
                 self.data_save = single_plot_and_evaluate(
