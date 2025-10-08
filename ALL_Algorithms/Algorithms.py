@@ -17,7 +17,7 @@ from sklearn.preprocessing import StandardScaler
 from matplotlib import pyplot as plt
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import ExtraTreesRegressor, RandomForestRegressor
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 from sklearn.svm import SVR
 from tqdm import tqdm
 import shutil
@@ -123,17 +123,30 @@ def multi_task_regression_predictor(
     else:
         y_pred = model.predict(X_test)  
     
-    # 关键修改：计算每个输出的独立指标
-    n_tasks = y_test.shape[1] if y_test.ndim > 1 else 1
+   
     if y_test.ndim == 1:
         y_test = y_test.reshape(-1, 1)
         y_pred = y_pred.reshape(-1, 1)
-    
-    # 计算每个输出的单独指标
-    mse_list = [mean_squared_error(y_test[:, i], y_pred[:, i]) for i in range(n_tasks)]
-    r2_list = [r2_score(y_test[:, i], y_pred[:, i]) for i in range(n_tasks)]
-    rmse_list = [np.sqrt(mse) for mse in mse_list]
-    mae_list = [np.mean(np.abs(y_test[:, i] - y_pred[:, i])) for i in range(n_tasks)]
+     # 关键修改：计算每个输出的独立指标
+    n_tasks = y_test.shape[1] if y_test.ndim > 1 else 1
+    if n_tasks == 1:
+        # 单任务情况 - 直接计算指标
+        mse = mean_squared_error(y_test, y_pred)
+        r2 = r2_score(y_test, y_pred)
+        rmse = np.sqrt(mse)
+        mae = mean_absolute_error(y_test, y_pred)
+        
+        # 将指标放入列表以保持格式一致
+        mse_list = [mse]
+        r2_list = [r2]
+        rmse_list = [rmse]
+        mae_list = [mae]
+    else:
+        # 多任务情况 - 为每个任务单独计算指标
+        mse_list = [mean_squared_error(y_test[:, i], y_pred[:, i]) for i in range(n_tasks)]
+        r2_list = [r2_score(y_test[:, i], y_pred[:, i]) for i in range(n_tasks)]
+        rmse_list = [np.sqrt(mse) for mse in mse_list]
+        mae_list = [mean_absolute_error(y_test[:, i], y_pred[:, i]) for i in range(n_tasks)]
     
     # 整体指标（平均值）
     metrics = {
