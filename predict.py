@@ -188,7 +188,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
                 
                 self.spinBox_predict_end.setValue(self.shape[0]*0.9)
                 self.parent_window.data_load = 1
-          
+            print(len(self.predict_output_columns))
             print("新数据 shape:", self.predict_data.shape)
             print("输入特征列:", self.predict_input_columns)
             print("真实值列:", self.predict_output_columns)
@@ -968,8 +968,14 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 raise ValueError("模型加载失败")
             self.start_time = time.time()
             # 2. 准备输入特征和真实值
-            X = self.predict_data[self.predict_input_cols].values  # 输入特征
-            y_test = self.predict_data[self.predict_output_cols].values  # 真实值（用于评估）
+            predict_data = self.predict_data
+            self.predict_input_columns, flag1 = self.get_input()
+            self.predict_output_columns, flag2 = self.get_output()
+            self.predict_output_cols = self.predict_output_columns
+            X = predict_data[self.predict_input_columns].values  # 输入特征
+            y_test = predict_data[self.predict_output_columns].values  # 真实值（用于评估）
+            # X = self.predict_data[self.predict_input_cols].values  # 输入特征
+            # y_test = self.predict_data[self.predict_output_cols].values  # 真实值（用于评估）
             
             # 3. 模型预测
             if hasattr(model, 'predict'):
@@ -979,10 +985,56 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             
             # 4. 计算评估指标
             from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
-            mse = mean_squared_error(y_test, y_pred, multioutput='uniform_average')
-            r2 = r2_score(y_test, y_pred, multioutput='uniform_average')
-            rmse = np.sqrt(mse)  # 新增RMSE
-            mae = mean_absolute_error(y_test, y_pred, multioutput='uniform_average')  # 新增MAE
+            # 确保数组维度正确
+            if y_test.ndim == 1:
+                y_test = y_test.reshape(-1, 1)
+                y_pred = y_pred.reshape(-1, 1)
+            
+            # 获取任务数量
+            n_tasks = y_test.shape[1] if y_test.ndim > 1 else 1
+            
+            # 计算每个任务的单独指标
+            mse_list = []
+            r2_list = []
+            rmse_list = []
+            mae_list = []
+            
+            for i in range(n_tasks):
+                if n_tasks == 1:
+                    y_test_task = y_test.ravel()
+                    y_pred_task = y_pred.ravel()
+                else:
+                    y_test_task = y_test[:, i]
+                    y_pred_task = y_pred[:, i]
+                
+                mse_list.append(mean_squared_error(y_test_task, y_pred_task))
+                r2_list.append(r2_score(y_test_task, y_pred_task))
+                rmse_list.append(np.sqrt(mse_list[-1]))
+                mae_list.append(mean_absolute_error(y_test_task, y_pred_task))
+            
+            # 计算整体指标
+            overall_mse = mean_squared_error(y_test, y_pred, multioutput='uniform_average')
+            overall_r2 = r2_score(y_test, y_pred, multioutput='uniform_average')
+            overall_rmse = np.sqrt(overall_mse)
+            overall_mae = mean_absolute_error(y_test, y_pred, multioutput='uniform_average')
+            
+            # 创建 metrics 字典
+            metrics = {
+                'MSE': overall_mse,
+                'MSE_list': mse_list,
+                'R2': overall_r2,
+                'R2_list': r2_list,
+                'RMSE': overall_rmse,
+                'RMSE_list': rmse_list,
+                'MAE': overall_mae,
+                'MAE_list': mae_list
+            }
+            
+            
+            # mse = mean_squared_error(y_test, y_pred, multioutput='uniform_average')
+            # r2 = r2_score(y_test, y_pred, multioutput='uniform_average')
+            # rmse = np.sqrt(mse)  # 新增RMSE
+            # mae = mean_absolute_error(y_test, y_pred, multioutput='uniform_average')  # 新增MAE
             # 5. 可视化结果（根据输出维度选择单输出/多输出可视化）
             method_name = os.path.basename(self.selected_model_path).split('.')[0]  # 从模型文件名提取方法名
             if y_test.ndim == 1 or y_test.shape[1] == 1:
@@ -995,10 +1047,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     output_columns=self.predict_output_cols,
                     N_start_test=0,
                     N_end_test=len(y_test),
-                    MSE=mse,
-                    RMSE=rmse,  # 新增
-                    MAE=mae,    # 新增
-                    R2=r2
+                    MSE=overall_mse,
+                    RMSE=overall_rmse,
+                    MAE=overall_mae,
+                    R2=overall_r2
                 )
             else:
                 # 多输出可视化
@@ -1010,11 +1062,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     output_columns=self.predict_output_cols,
                     N_start_test=0,
                     N_end_test=len(y_test),
-                    MSE=mse,
-                    R2=r2
+                    MSE_list=metrics['MSE_list'],  # 传递每个输出的MSE列表
+                    RMSE_list=metrics['RMSE_list'],  # 传递每个输出的RMSE列表
+                    MAE_list=metrics['MAE_list'],  # 传递每个输出的MAE列表
+                    R2_list=metrics['R2_list']
                 )
             
-            self.lineEdit_state.setText(f"预测完成！MSE: {mse:.4f}, R²: {r2:.4f}")
+            
             
         except Exception as e:
             QMessageBox.critical(self, "预测失败", f"预测过程出错：{str(e)}")
