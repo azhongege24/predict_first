@@ -1029,6 +1029,37 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 'MAE': overall_mae,
                 'MAE_list': mae_list
             }
+            # 在predict.py的predict_with_loaded_model函数中，计算完MAE后添加
+            epsilon = 1e-8
+            y_test_pos = y_test + epsilon
+            y_pred_pos = y_pred + epsilon
+            db_diff = 20 * np.log10(y_pred_pos / y_test_pos)
+
+            # 计算指标1：±3dB内比例
+            db_within_3_ratio_list = []
+            for i in range(n_tasks):
+                if n_tasks == 1:
+                    within_3 = np.abs(db_diff) <= 3
+                else:
+                    within_3 = np.abs(db_diff[:, i]) <= 3
+                ratio = np.mean(within_3)
+                db_within_3_ratio_list.append(ratio)
+            db_within_3_ratio = np.mean(db_within_3_ratio_list)
+
+            # 计算指标2：总分贝偏差和
+            total_db_deviation = np.sum(np.abs(db_diff))
+            total_db_deviation_per_feature = [
+                np.sum(np.abs(db_diff[:, i])) if n_tasks > 1 else np.sum(np.abs(db_diff))
+                for i in range(n_tasks)
+            ]
+
+            # 更新metrics字典
+            metrics.update({
+                'db_within_3_ratio': db_within_3_ratio,
+                'db_within_3_ratio_list': db_within_3_ratio_list,
+                'total_db_deviation': total_db_deviation,
+                'total_db_deviation_per_feature': total_db_deviation_per_feature
+            })
             
             
             # mse = mean_squared_error(y_test, y_pred, multioutput='uniform_average')
@@ -1050,7 +1081,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     MSE=overall_mse,
                     RMSE=overall_rmse,
                     MAE=overall_mae,
-                    R2=overall_r2
+                    R2=overall_r2,
+                    db_within_3_ratio = metrics['db_within_3_ratio'],
+                    total_db_deviation = metrics['total_db_deviation']
                 )
             else:
                 # 多输出可视化
@@ -1065,7 +1098,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     MSE_list=metrics['MSE_list'],  # 传递每个输出的MSE列表
                     RMSE_list=metrics['RMSE_list'],  # 传递每个输出的RMSE列表
                     MAE_list=metrics['MAE_list'],  # 传递每个输出的MAE列表
-                    R2_list=metrics['R2_list']
+                    R2_list=metrics['R2_list'],
+                    db_within_3_ratio_list = metrics['db_within_3_ratio_list'],
+                    total_db_deviation_per_feature = metrics['total_db_deviation_per_feature']
                 )
             
             
@@ -1166,8 +1201,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                 MSE_list=metrics['MSE_list'],  # 传递每个输出的MSE列表
                                                 RMSE_list=metrics['RMSE_list'],  # 传递每个输出的RMSE列表
                                                 MAE_list=metrics['MAE_list'],  # 传递每个输出的MAE列表
-                                                R2_list=metrics['R2_list']  # 传递每个输出的R2列表)
-                )
+                                                R2_list=metrics['R2_list'], # 传递每个输出的R2列表)
+                                                db_within_3_ratio_list = metrics['db_within_3_ratio_list'],
+                                                total_db_deviation_per_feature = metrics['total_db_deviation_per_feature']
+                                                )
+                
             if len(output_columns) == 1:
                 self.data_save=single_plot_and_evaluate(self,y_test, y_pred,
                                         method, data_test,
@@ -1176,7 +1214,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                         metrics['MSE'],
                                         metrics['RMSE'],
                                         metrics['MAE'],
-                                        metrics['R2'])
+                                        metrics['R2'],
+                                        db_within_3_ratio=metrics['db_within_3_ratio'],
+                                        total_db_deviation=metrics['total_db_deviation']
+                                        )
             self.lineEdit_DEVICE.setText("CPU")
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
             # QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
@@ -1209,7 +1250,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                 MSE_list=metrics['MSE_list'],  # 传递每个输出的MSE列表
                                                 RMSE_list=metrics['RMSE_list'],  # 传递每个输出的RMSE列表
                                                 MAE_list=metrics['MAE_list'],  # 传递每个输出的MAE列表
-                                                R2_list=metrics['R2_list']  # 传递每个输出的R2列表)
+                                                R2_list=metrics['R2_list'],  # 传递每个输出的R2列表)
+                                                db_within_3_ratio_list = metrics['db_within_3_ratio_list'],
+                                                total_db_deviation_per_feature = metrics['total_db_deviation_per_feature']
                 )
             if len(output_columns) == 1:
                 self.data_save=single_plot_and_evaluate(self,y_test, y_pred, method,
@@ -1218,7 +1261,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                           metrics['MSE'],
                                         metrics['RMSE'],
                                         metrics['MAE'],
-                                        metrics['R2'])
+                                        metrics['R2'],
+                                        db_within_3_ratio=metrics['db_within_3_ratio'],
+                                        total_db_deviation=metrics['total_db_deviation'])
             self.lineEdit_DEVICE.setText("CPU")
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
             # QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
@@ -1255,16 +1300,20 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                 MSE_list=metrics['MSE_list'],  # 传递每个输出的MSE列表
                                                 RMSE_list=metrics['RMSE_list'],  # 传递每个输出的RMSE列表
                                                 MAE_list=metrics['MAE_list'],  # 传递每个输出的MAE列表
-                                                R2_list=metrics['R2_list']  # 传递每个输出的R2列表)
+                                                R2_list=metrics['R2_list'],  # 传递每个输出的R2列表)
+                                                db_within_3_ratio_list = metrics['db_within_3_ratio_list'],
+                                                total_db_deviation_per_feature = metrics['total_db_deviation_per_feature']
                 )
             if len(output_columns) == 1:
                 self.data_save=single_plot_and_evaluate(self,y_test, y_pred, method, 
                                          data_test, output_columns,
                                            N_start_test, N_end_test,
                                            metrics['MSE'],
-                                                  metrics['RMSE'],
-                                                  metrics['MAE'],
-                                                  metrics['R2'])
+                                            metrics['RMSE'],
+                                            metrics['MAE'],
+                                            metrics['R2'],
+                                            db_within_3_ratio=metrics['db_within_3_ratio'],
+                                        total_db_deviation=metrics['total_db_deviation'])
             self.lineEdit_DEVICE.setText("CPU")
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
             # QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
@@ -1298,7 +1347,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                 MSE_list=metrics['MSE_list'],  # 传递每个输出的MSE列表
                                                 RMSE_list=metrics['RMSE_list'],  # 传递每个输出的RMSE列表
                                                 MAE_list=metrics['MAE_list'],  # 传递每个输出的MAE列表
-                                                R2_list=metrics['R2_list']  # 传递每个输出的R2列表)
+                                                R2_list=metrics['R2_list'],  # 传递每个输出的R2列表)
+                                                db_within_3_ratio_list = metrics['db_within_3_ratio_list'],
+                                                total_db_deviation_per_feature = metrics['total_db_deviation_per_feature']
                 )
             if len(output_columns) == 1:
                 self.data_save=single_plot_and_evaluate(self,y_test, y_pred, method, data_test,
@@ -1306,7 +1357,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                            metrics['MSE'],
                                             metrics['RMSE'],
                                             metrics['MAE'],
-                                            metrics['R2'])
+                                            metrics['R2'],
+                                            db_within_3_ratio=metrics['db_within_3_ratio'],
+                                        total_db_deviation=metrics['total_db_deviation'])
             self.lineEdit_DEVICE.setText("CPU")
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
             # QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
@@ -1342,7 +1395,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                 MSE_list=metrics['MSE_list'],  # 传递每个输出的MSE列表
                                                 RMSE_list=metrics['RMSE_list'],  # 传递每个输出的RMSE列表
                                                 MAE_list=metrics['MAE_list'],  # 传递每个输出的MAE列表
-                                                R2_list=metrics['R2_list']  # 传递每个输出的R2列表)
+                                                R2_list=metrics['R2_list'],  # 传递每个输出的R2列表)
+                                                db_within_3_ratio_list = metrics['db_within_3_ratio_list'],
+                                                total_db_deviation_per_feature = metrics['total_db_deviation_per_feature']
                 )
             if len(output_columns) == 1:    
                 self.data_save=single_plot_and_evaluate(self,y_test, y_pred, method,
@@ -1351,7 +1406,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                          metrics['MSE'],
                                                         metrics['RMSE'],
                                                         metrics['MAE'],
-                                                        metrics['R2'])
+                                                        metrics['R2'],db_within_3_ratio=metrics['db_within_3_ratio'],
+                                                        total_db_deviation=metrics['total_db_deviation'])
+
             self.lineEdit_DEVICE.setText("CPU")
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
             # QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
@@ -1513,7 +1570,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                 MSE_list=metrics['MSE_list'],  # 传递每个输出的MSE列表
                                                 RMSE_list=metrics['RMSE_list'],  # 传递每个输出的RMSE列表
                                                 MAE_list=metrics['MAE_list'],  # 传递每个输出的MAE列表
-                                                R2_list=metrics['R2_list']  # 传递每个输出的R2列表)
+                                                R2_list=metrics['R2_list'],  # 传递每个输出的R2列表)
+                                                db_within_3_ratio_list = metrics['db_within_3_ratio_list'],
+                                                total_db_deviation_per_feature = metrics['total_db_deviation_per_feature']
                 )
             else:
                 self.data_save = single_plot_and_evaluate(
@@ -1522,7 +1581,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     metrics['MSE'],
                     metrics['RMSE'],
                     metrics['MAE'],
-                    metrics['R2']
+                    metrics['R2'],
+                    db_within_3_ratio=metrics['db_within_3_ratio'],
+                    total_db_deviation=metrics['total_db_deviation']
                 )
             self.lineEdit_DEVICE.setText("GPU" if torch.cuda.is_available() else "CPU")
     #单输出绘图的时候调用此函数，进行可视化展示,前五个算法的单输出画图展示

@@ -147,6 +147,7 @@ def multi_task_regression_predictor(
         r2_list = [r2_score(y_test[:, i], y_pred[:, i]) for i in range(n_tasks)]
         rmse_list = [np.sqrt(mse) for mse in mse_list]
         mae_list = [mean_absolute_error(y_test[:, i], y_pred[:, i]) for i in range(n_tasks)]
+
     
     # 整体指标（平均值）
     metrics = {
@@ -159,6 +160,30 @@ def multi_task_regression_predictor(
         'MAE': np.mean(mae_list),
         'MAE_list': mae_list
     }
+    # 新增：计算分贝偏差指标
+    epsilon = 1e-8  # 避免零值导致的计算错误
+    y_test_pos = y_test + epsilon  # 确保非负
+    y_pred_pos = y_pred + epsilon
+    # 计算每个样本的分贝偏差 (20*log10(预测值/真实值))
+    db_diff = 20 * np.log10(y_pred_pos / y_test_pos)
+    # 指标1：每个输出特征中偏差在±3dB内的样本比例（再求平均）
+    db_within_3_ratio_list = []
+    for j in range(n_tasks):
+        # 计算当前特征中偏差在±3dB内的样本占比
+        within_range = np.abs(db_diff[:, j]) <= 3
+        ratio = np.mean(within_range)  # 比例
+        db_within_3_ratio_list.append(ratio)
+    db_within_3_ratio = np.mean(db_within_3_ratio_list)  # 整体平均比例
+        # 指标2：所有特征的偏差分贝数绝对值之和
+    total_db_deviation = np.sum(np.abs(db_diff))
+    total_db_deviation_per_feature = [np.sum(np.abs(db_diff[:, j])) for j in range(n_tasks)]
+    # 更新metrics字典
+    metrics.update({
+        'db_within_3_ratio': db_within_3_ratio,  # 整体±3dB内比例
+        'db_within_3_ratio_list': db_within_3_ratio_list,  # 各特征±3dB内比例
+        'total_db_deviation': total_db_deviation,  # 总分贝偏差和
+        'total_db_deviation_per_feature': total_db_deviation_per_feature  # 各特征分贝偏差和
+    })
     
     return model, scaler, y_test, y_pred, metrics
 
@@ -271,7 +296,8 @@ def filter_extreme(arr, threshold=1e10):
 
 #单输出画图可视化函数
 def single_plot_and_evaluate(self, y_test, y_pred, method, data_test, 
-                                output_columns, N_start_test, N_end_test,MSE,RMSE,MAE,R2):
+                                output_columns, N_start_test, N_end_test,
+                                MSE, RMSE, MAE, R2, db_within_3_ratio, total_db_deviation):
     """
     绘制真实值与预测值的散点图，计算评估指标，并更新界面控件。
 
@@ -332,6 +358,8 @@ def single_plot_and_evaluate(self, y_test, y_pred, method, data_test,
     self.lineEdit_RMSE.setText(str(round(RMSE, 5)))  # 假设新增了RMSE控件
     self.lineEdit_MAE.setText(str(round(MAE, 5)))    # 假设新增了MAE控件
     self.lineEdit_R2.setText(str(round(R2, 5)))
+    self.lineEdit_db_within_3_ratio.setText(f"{db_within_3_ratio*100:.2f}%")  # 新增±3dB内比例控件
+    self.lineEdit_total_db_deviation.setText(f"{total_db_deviation:.2f}")  # 新增总分贝偏差控件
 
     # 保存预测结果到 DataFrame
     self.data_save = pd.DataFrame(y_pred, index=data_test.index.values)
@@ -343,7 +371,7 @@ def single_plot_and_evaluate(self, y_test, y_pred, method, data_test,
 #新的翻页多输出结果可视化
 def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test, 
                                    output_columns, N_start_test, N_end_test, 
-                                   MSE_list, RMSE_list, MAE_list, R2_list):
+                                   MSE_list, RMSE_list, MAE_list, R2_list,db_within_3_ratio_list,total_db_deviation_per_feature):
     """
     多输出回归模型的分页可视化函数（支持每个输出显示独立指标）
     
@@ -400,7 +428,8 @@ def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test,
         current_r2 = R2_list[i]
         current_rmse = RMSE_list[i] if RMSE_list else np.sqrt(current_mse)
         current_mae = MAE_list[i] if MAE_list else np.mean(np.abs(y_test[:, i] - y_pred[:, i]))
-        
+        current_db_within_3_ratio = db_within_3_ratio_list[i] if db_within_3_ratio_list else None
+        current_total_db_deviation_per_feature = total_db_deviation_per_feature[i] if total_db_deviation_per_feature else None
         # 创建图像
         fig = plt.figure(figsize=(7, 4), dpi=120)
         ax = fig.add_subplot(111)
@@ -420,7 +449,9 @@ def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test,
         ax.set_title(
             f'输出变量: {col}\n'
             f'MSE: {current_mse:.4f}, RMSE: {current_rmse:.4f}\n'
-            f'MAE: {current_mae:.4f}, R: {current_r2:.4f}',
+            f'MAE: {current_mae:.4f}, R^2: {current_r2:.4f}\n'
+            f'±3dB比例: {current_db_within_3_ratio:.2%}\n'
+            f'总分贝偏差: {current_total_db_deviation_per_feature:.2f} dB',
             fontsize=10
         )
         ax.set_xlabel('样本索引', fontsize=10)
@@ -450,6 +481,8 @@ def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test,
     self.lineEdit_RMSE.setText(f"{overall_rmse:.5f}")
     self.lineEdit_MAE.setText(f"{overall_mae:.5f}")
     self.lineEdit_R2.setText(f"{overall_r2:.5f}")
+    self.lineEdit_db_within_3_ratio.setText(f"{np.mean(db_within_3_ratio_list)*100:.2f}%")
+    self.lineEdit_total_db_deviation.setText(f"{np.sum(total_db_deviation_per_feature):.2f}")
     
     # 保存预测结果到 DataFrame（包含真实值便于对比）
     pred_df = pd.DataFrame(
