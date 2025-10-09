@@ -656,14 +656,35 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
     
     def ask_and_save_model(self, trained_model, method):
         try:
+            # 定义文件过滤器
             file_filter = "模型文件 (*.pkl);;所有文件 (*.*)"
-            initial_dir = self.lastSelectedPath if hasattr(self, 'lastSelectedPath') else "data/"
-            save_path, _ = QFileDialog.getSaveFileName(self, "保存预训练模型", initial_dir, file_filter)
-            if not save_path:
+            
+            # 获取初始目录（如果存在）
+            base_dir = self.lastSelectedPath if hasattr(self, 'lastSelectedPath') else "data/"
+            
+            # 构造默认文件名：method + .pkl
+            default_filename = f"{method}.pkl"
+            # 拼接完整的初始文件路径（目录+文件名）
+            initial_file_path = os.path.join(base_dir, default_filename)
+            
+            # 打开保存对话框，设置默认文件名
+            save_path, _ = QFileDialog.getSaveFileName(
+                self, 
+                "保存预训练模型", 
+                initial_file_path,  # 这里传入包含默认文件名的路径
+                file_filter
+            )
+            
+            if not save_path:  # 用户取消保存
                 return
-            # 只保存模型对象，不保存列表或其它内容
+            
+            # 保存模型
             joblib.dump(trained_model, save_path)
             QMessageBox.information(self, "保存成功", f"模型已保存到: {save_path}")
+            
+            # 可选：更新最后选择的路径（用于下次默认目录）
+            self.lastSelectedPath = os.path.dirname(save_path)
+            
         except Exception as e:
             QMessageBox.warning(self, "保存模型失败", str(e))
             
@@ -961,153 +982,233 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             return
         
         try:
-            # 1. 加载模型
+            # 1. 加载模型并判断类型
             from ALL_Algorithms.Algorithms import load_model
+            from mutar import GroupLasso, ReMTW, MTW  # 导入特殊模型类用于类型判断
             model = load_model(self.selected_model_path)
             if model is None:
                 raise ValueError("模型加载失败")
             self.start_time = time.time()
+
             # 2. 准备输入特征和真实值
             predict_data = self.predict_data
             self.predict_input_columns, flag1 = self.get_input()
             self.predict_output_columns, flag2 = self.get_output()
             self.predict_output_cols = self.predict_output_columns
-            X = predict_data[self.predict_input_columns].values  # 输入特征
-            y_test = predict_data[self.predict_output_columns].values  # 真实值（用于评估）
-            # X = self.predict_data[self.predict_input_cols].values  # 输入特征
-            # y_test = self.predict_data[self.predict_output_cols].values  # 真实值（用于评估）
-            
-            # 3. 模型预测
-            if hasattr(model, 'predict'):
-                y_pred = model.predict(X)
+            X_2d = predict_data[self.predict_input_columns].values  # 基础2D输入 (样本×特征)
+            y_test = predict_data[self.predict_output_columns].values  # 真实值 (样本×任务)
+            n_tasks = len(self.predict_output_columns)  # 任务数量
+
+            # 3. 根据模型类型处理输入格式并预测
+            model_type = None
+            y_pred = None
+
+            # 处理Group Lasso模型 (需要3D输入)
+            if isinstance(model, GroupLasso):
+                model_type = "GroupLasso"
+                # 转换为3D格式 (任务×样本×特征)
+                X_3d = np.repeat(X_2d[None, :, :], n_tasks, axis=0)
+                y_pred = model.predict(X_3d).T  # 预测后转置为 (样本×任务)
+
+            # 处理ReMTW模型 (需要3D输入)
+            elif isinstance(model, ReMTW):
+                model_type = "ReMTW"
+                X_3d = np.repeat(X_2d[None, :, :], n_tasks, axis=0)
+                y_pred = model.predict(X_3d).T
+
+            # 处理MTW模型 (需要3D输入)
+            elif isinstance(model, MTW):
+                model_type = "MTW"
+                X_3d = np.repeat(X_2d[None, :, :], n_tasks, axis=0)
+                y_pred = model.predict(X_3d).T
+
+            # 普通模型 (2D输入)
             else:
-                raise ValueError("加载的模型不支持predict方法")
-            
-            # 4. 计算评估指标
-            from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
-            # 确保数组维度正确
+                model_type = "Normal"
+                if hasattr(model, 'predict'):
+                    y_pred = model.predict(X_2d)
+                else:
+                    raise ValueError("加载的模型不支持predict方法")
+
+            # 确保预测结果维度正确
             if y_test.ndim == 1:
                 y_test = y_test.reshape(-1, 1)
                 y_pred = y_pred.reshape(-1, 1)
-            
-            # 获取任务数量
-            n_tasks = y_test.shape[1] if y_test.ndim > 1 else 1
-            
-            # 计算每个任务的单独指标
+            n_tasks = y_test.shape[1]  # 重新确认任务数
+
+            # 4. 计算评估指标 (与原逻辑一致，确保兼容所有模型)
+            from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
             mse_list = []
             r2_list = []
             rmse_list = []
             mae_list = []
             
             for i in range(n_tasks):
-                if n_tasks == 1:
-                    y_test_task = y_test.ravel()
-                    y_pred_task = y_pred.ravel()
-                else:
-                    y_test_task = y_test[:, i]
-                    y_pred_task = y_pred[:, i]
+                y_test_task = y_test[:, i] if n_tasks > 1 else y_test.ravel()
+                y_pred_task = y_pred[:, i] if n_tasks > 1 else y_pred.ravel()
                 
                 mse_list.append(mean_squared_error(y_test_task, y_pred_task))
                 r2_list.append(r2_score(y_test_task, y_pred_task))
                 rmse_list.append(np.sqrt(mse_list[-1]))
                 mae_list.append(mean_absolute_error(y_test_task, y_pred_task))
             
-            # 计算整体指标
             overall_mse = mean_squared_error(y_test, y_pred, multioutput='uniform_average')
             overall_r2 = r2_score(y_test, y_pred, multioutput='uniform_average')
             overall_rmse = np.sqrt(overall_mse)
             overall_mae = mean_absolute_error(y_test, y_pred, multioutput='uniform_average')
             
-            # 创建 metrics 字典
             metrics = {
-                'MSE': overall_mse,
-                'MSE_list': mse_list,
-                'R2': overall_r2,
-                'R2_list': r2_list,
-                'RMSE': overall_rmse,
-                'RMSE_list': rmse_list,
-                'MAE': overall_mae,
-                'MAE_list': mae_list
+                'MSE': overall_mse, 'MSE_list': mse_list,
+                'R2': overall_r2, 'R2_list': r2_list,
+                'RMSE': overall_rmse, 'RMSE_list': rmse_list,
+                'MAE': overall_mae, 'MAE_list': mae_list
             }
-            # 在predict.py的predict_with_loaded_model函数中，计算完MAE后添加
+
+            # 计算分贝偏差指标
             epsilon = 1e-8
             y_test_pos = y_test + epsilon
             y_pred_pos = y_pred + epsilon
             db_diff = 20 * np.log10(y_pred_pos / y_test_pos)
 
-            # 计算指标1：±3dB内比例
             db_within_3_ratio_list = []
             for i in range(n_tasks):
-                if n_tasks == 1:
-                    within_3 = np.abs(db_diff) <= 3
-                else:
-                    within_3 = np.abs(db_diff[:, i]) <= 3
-                ratio = np.mean(within_3)
-                db_within_3_ratio_list.append(ratio)
+                within_3 = np.abs(db_diff[:, i]) <= 3 if n_tasks > 1 else np.abs(db_diff) <= 3
+                db_within_3_ratio_list.append(np.mean(within_3))
             db_within_3_ratio = np.mean(db_within_3_ratio_list)
 
-            # 计算指标2：总分贝偏差和
             total_db_deviation = np.sum(np.abs(db_diff))
             total_db_deviation_per_feature = [
                 np.sum(np.abs(db_diff[:, i])) if n_tasks > 1 else np.sum(np.abs(db_diff))
                 for i in range(n_tasks)
             ]
 
-            # 更新metrics字典
             metrics.update({
                 'db_within_3_ratio': db_within_3_ratio,
                 'db_within_3_ratio_list': db_within_3_ratio_list,
                 'total_db_deviation': total_db_deviation,
                 'total_db_deviation_per_feature': total_db_deviation_per_feature
             })
-            
-            
-            # mse = mean_squared_error(y_test, y_pred, multioutput='uniform_average')
-            # r2 = r2_score(y_test, y_pred, multioutput='uniform_average')
-            # rmse = np.sqrt(mse)  # 新增RMSE
-            # mae = mean_absolute_error(y_test, y_pred, multioutput='uniform_average')  # 新增MAE
-            # 5. 可视化结果（根据输出维度选择单输出/多输出可视化）
-            method_name = os.path.basename(self.selected_model_path).split('.')[0]  # 从模型文件名提取方法名
-            if y_test.ndim == 1 or y_test.shape[1] == 1:
-                # 单输出可视化
-                single_plot_and_evaluate(self,
-                    y_test=y_test.ravel(),  # 转为一维
-                    y_pred=y_pred.ravel(),
+
+            # 5. 可视化结果 (根据模型类型选择对应函数)
+            method_name = model_type  # 使用模型类型作为方法名
+            data_test_index = predict_data.index  # 测试集索引
+
+            # Group Lasso可视化
+            if model_type == "GroupLasso":
+                
+                group_lasso_plot_and_evaluate(
+                    self,
+                    coef_shared=model.coef_shared_,
+                    coef_specific=model.coef_specific_,
                     method=method_name,
-                    data_test=self.predict_data,
-                    output_columns=self.predict_output_cols,
-                    N_start_test=0,
-                    N_end_test=len(y_test),
-                    MSE=overall_mse,
-                    RMSE=overall_rmse,
-                    MAE=overall_mae,
-                    R2=overall_r2,
-                    db_within_3_ratio = metrics['db_within_3_ratio'],
-                    total_db_deviation = metrics['total_db_deviation']
-                )
-            else:
-                # 多输出可视化
-                Multi_output_plot_and_evaluate(self,
+                    input_columns=self.predict_input_columns,
+                    output_columns=self.predict_output_columns,
+                    MSE=metrics['MSE'],
+                    MSE_list=metrics['MSE_list'],
+                    RMSE=metrics['RMSE'],
+                    RMSE_list=metrics['RMSE_list'],
+                    MAE=metrics['MAE'],
+                    MAE_list=metrics['MAE_list'],
+                    R2=metrics['R2'],
+                    R2_list=metrics['R2_list'],
+                    db_within_3_ratio_list=metrics['db_within_3_ratio_list'],
+                    total_db_deviation_per_feature=metrics['total_db_deviation_per_feature'],
                     y_test=y_test,
                     y_pred=y_pred,
-                    method=method_name,
-                    data_test=self.predict_data,
-                    output_columns=self.predict_output_cols,
-                    N_start_test=0,
-                    N_end_test=len(y_test),
-                    MSE_list=metrics['MSE_list'],  # 传递每个输出的MSE列表
-                    RMSE_list=metrics['RMSE_list'],  # 传递每个输出的RMSE列表
-                    MAE_list=metrics['MAE_list'],  # 传递每个输出的MAE列表
-                    R2_list=metrics['R2_list'],
-                    db_within_3_ratio_list = metrics['db_within_3_ratio_list'],
-                    total_db_deviation_per_feature = metrics['total_db_deviation_per_feature']
+                    data_test_index=data_test_index
                 )
-            
-            
-            
+
+            # ReMTW可视化
+            elif model_type == "ReMTW":
+                
+                remtw_plot_and_evaluate(
+                    self,
+                    remtw_model=model,
+                    method=method_name,
+                    input_columns=self.predict_input_columns,
+                    output_columns=self.predict_output_columns,
+                    MSE=metrics['MSE'],
+                    MSE_list=metrics['MSE_list'],
+                    RMSE=metrics['RMSE'],
+                    RMSE_list=metrics['RMSE_list'],
+                    MAE=metrics['MAE'],
+                    MAE_list=metrics['MAE_list'],
+                    R2=metrics['R2'],
+                    R2_list=metrics['R2_list'],
+                    db_within_3_ratio_list=metrics['db_within_3_ratio_list'],
+                    total_db_deviation_per_feature=metrics['total_db_deviation_per_feature'],
+                    y_test=y_test,
+                    y_pred=y_pred,
+                    data_test_index=data_test_index
+                )
+
+            # MTW可视化
+            elif model_type == "MTW":
+                mtw_plot_and_evaluate(
+                    self,
+                    mtw_model=model,
+                    method=method_name,
+                    input_columns=self.predict_input_columns,
+                    output_columns=self.predict_output_columns,
+                    MSE=metrics['MSE'],
+                    MSE_list=metrics['MSE_list'],
+                    RMSE=metrics['RMSE'],
+                    RMSE_list=metrics['RMSE_list'],
+                    MAE=metrics['MAE'],
+                    MAE_list=metrics['MAE_list'],
+                    R2=metrics['R2'],
+                    R2_list=metrics['R2_list'],
+                    db_within_3_ratio_list=metrics['db_within_3_ratio_list'],
+                    total_db_deviation_per_feature=metrics['total_db_deviation_per_feature'],
+                    y_test=y_test,
+                    y_pred=y_pred,
+                    data_test_index=data_test_index
+                )
+
+            # 普通模型可视化
+            else:
+                if y_test.ndim == 1 or y_test.shape[1] == 1:
+                    # 单输出可视化
+                    single_plot_and_evaluate(
+                        self,
+                        y_test=y_test.ravel(),
+                        y_pred=y_pred.ravel(),
+                        method=method_name,
+                        data_test=predict_data,
+                        output_columns=self.predict_output_cols,
+                        N_start_test=0,
+                        N_end_test=len(y_test),
+                        MSE=overall_mse,
+                        RMSE=overall_rmse,
+                        MAE=overall_mae,
+                        R2=overall_r2,
+                        db_within_3_ratio=metrics['db_within_3_ratio'],
+                        total_db_deviation=metrics['total_db_deviation']
+                    )
+                else:
+                    # 多输出可视化
+                    Multi_output_plot_and_evaluate(
+                        self,
+                        y_test=y_test,
+                        y_pred=y_pred,
+                        method=method_name,
+                        data_test=predict_data,
+                        output_columns=self.predict_output_cols,
+                        N_start_test=0,
+                        N_end_test=len(y_test),
+                        MSE_list=metrics['MSE_list'],
+                        RMSE_list=metrics['RMSE_list'],
+                        MAE_list=metrics['MAE_list'],
+                        R2_list=metrics['R2_list'],
+                        db_within_3_ratio_list=metrics['db_within_3_ratio_list'],
+                        total_db_deviation_per_feature=metrics['total_db_deviation_per_feature']
+                    )
+
         except Exception as e:
-            QMessageBox.critical(self, "预测失败", f"预测过程出错：{str(e)}")
-            print(f"预测错误：{e}")
+            QMessageBox.critical(self, "错误", f"预测过程出错: {str(e)}")
+            import traceback
+            traceback.print_exc()
+                
         
     def All_Methods_Begin(self):
         global method
