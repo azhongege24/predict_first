@@ -56,7 +56,7 @@ class Ui_DT_para(object):
 "}")
         self.pushButton_2.setObjectName("pushButton_2")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(110, 50, 272, 136))
+        self.layoutWidget.setGeometry(QtCore.QRect(110, 50, 272, 152))
         self.layoutWidget.setObjectName("layoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -150,7 +150,7 @@ class Ui_DT_para(object):
 "QSpinBox::down-button:pressed {\n"
 "    margin-top: 4px;\n"
 "}")
-        self.spinBox_max_depth.setProperty("value", 4)
+        self.spinBox_max_depth.setProperty("value", 12)
         self.spinBox_max_depth.setObjectName("spinBox_max_depth")
         self.verticalLayout_2.addWidget(self.spinBox_max_depth)
         self.spinBox_random_state = QtWidgets.QSpinBox(self.layoutWidget)

@@ -161,23 +161,38 @@ def multi_task_regression_predictor(
         'MAE_list': mae_list
     }
     # 新增：计算分贝偏差指标
+    # 替换原有分贝偏差计算部分
     epsilon = 1e-8  # 避免零值导致的计算错误
-    y_test_pos = y_test + epsilon  # 确保非负
+
+    # 确保y_test和y_pred形状统一为2D数组
+    if y_test.ndim == 1:
+        y_test = y_test.reshape(-1, 1)
+    if y_pred.ndim == 1:
+        y_pred = y_pred.reshape(-1, 1)
+
+    # 确保非负性（针对log10计算）
+    y_test_pos = y_test + epsilon
     y_pred_pos = y_pred + epsilon
-    # 计算每个样本的分贝偏差 (20*log10(预测值/真实值))
-    db_diff = 20 * np.log10(y_pred_pos / y_test_pos)
-    # 指标1：每个输出特征中偏差在±3dB内的样本比例（再求平均）
+
+    # 计算分贝偏差 (20*log10(预测值/真实值))
+    # 新增：添加clip限制极端值，避免异常值影响
+    ratio = y_pred_pos / y_test_pos
+    ratio_clipped = np.clip(ratio, 10**(-3), 10**3)  # 限制在±30dB范围内
+    db_diff = 20 * np.log10(ratio_clipped)
+
+    # 重新计算分贝指标
     db_within_3_ratio_list = []
     for j in range(n_tasks):
-        # 计算当前特征中偏差在±3dB内的样本占比
+        # 单输出时j=0，直接取第0列
         within_range = np.abs(db_diff[:, j]) <= 3
-        ratio = np.mean(within_range)  # 比例
+        ratio = np.mean(within_range)
         db_within_3_ratio_list.append(ratio)
-    db_within_3_ratio = np.mean(db_within_3_ratio_list)  # 整体平均比例
-        # 指标2：所有特征的偏差分贝数绝对值之和
+
+    # 单输出时直接取唯一元素，避免不必要的mean计算
+    db_within_3_ratio = db_within_3_ratio_list[0] if n_tasks == 1 else np.mean(db_within_3_ratio_list)
     total_db_deviation = np.sum(np.abs(db_diff))
     total_db_deviation_per_feature = [np.sum(np.abs(db_diff[:, j])) for j in range(n_tasks)]
-    # 更新metrics字典
+        # 更新metrics字典
     metrics.update({
         'db_within_3_ratio': db_within_3_ratio,  # 整体±3dB内比例
         'db_within_3_ratio_list': db_within_3_ratio_list,  # 各特征±3dB内比例
