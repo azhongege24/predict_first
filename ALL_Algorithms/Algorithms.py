@@ -371,7 +371,8 @@ def single_plot_and_evaluate(self, y_test, y_pred, method, data_test,
 #新的翻页多输出结果可视化
 def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test, 
                                    output_columns, N_start_test, N_end_test, 
-                                   MSE_list, RMSE_list, MAE_list, R2_list,db_within_3_ratio_list,total_db_deviation_per_feature):
+                                   MSE_list, RMSE_list, MAE_list, R2_list,
+                                   db_within_3_ratio_list,total_db_deviation_per_feature):
     """
     多输出回归模型的分页可视化函数（支持每个输出显示独立指标）
     

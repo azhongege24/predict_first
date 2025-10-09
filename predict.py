@@ -1448,8 +1448,14 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     RMSE = metrics['RMSE'],
                     MAE = metrics['MAE'],
                     R2=metrics['R2'],
+                    MSE_list=metrics['MSE_list'],
+                    MAE_list=metrics['MAE_list'],
+                    RMSE_list=metrics['RMSE_list'],
+                    R2_list=metrics['R2_list'],
                     y_test=y_test, 
                     y_pred=y_pred,
+                    db_within_3_ratio_list = metrics['db_within_3_ratio_list'],
+                    total_db_deviation_per_feature = metrics['total_db_deviation_per_feature'],
                     data_test_index=data_index
                 )
             self.lineEdit_DEVICE.setText("CPU")
@@ -1488,6 +1494,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     MAE_list=metrics['MAE_list'],
                     RMSE_list=metrics['RMSE_list'],
                     R2_list=metrics['R2_list'],
+                    db_within_3_ratio_list = metrics['db_within_3_ratio_list'],
+                    total_db_deviation_per_feature = metrics['total_db_deviation_per_feature'],
                     data_test_index=data_index,
                     y_test=y_test, 
                     y_pred=y_pred
@@ -1529,6 +1537,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     RMSE_list=metrics['RMSE_list'],
                     R2_list=metrics['R2_list'],
                     data_test_index=data_index,
+                    db_within_3_ratio_list = metrics['db_within_3_ratio_list'],
+                    total_db_deviation_per_feature = metrics['total_db_deviation_per_feature'],
                     y_test=y_test, 
                     y_pred=y_pred
                     

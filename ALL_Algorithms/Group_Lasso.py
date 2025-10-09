@@ -101,17 +101,49 @@ def group_lasso_predictor(
 
     # 3. 预测与评估
     y_pred = grouplasso.predict(X_test_3d).T  # 转置回 (n_samples, n_tasks)
-
+    # 计算每个输出的单独指标（用于可视化）
+    mse_list = [mean_squared_error(y_test[:, i], y_pred[:, i]) for i in range(n_tasks)]
+    r2_list = [r2_score(y_test[:, i], y_pred[:, i]) for i in range(n_tasks)]
+    rmse_list = [np.sqrt(mse) for mse in mse_list]
+    mae_list = [np.mean(np.abs(y_test[:, i] - y_pred[:, i])) for i in range(n_tasks)]
+    
     mse = mean_squared_error(y_test, y_pred)
     r2 = r2_score(y_test, y_pred)
 
     metrics = {
         'MSE': mse,
+        'MSE_list': mse_list,
         'R2': r2,
+        'R2_list': r2_list,
         'RMSE': np.sqrt(mse),
-        'MAE': np.mean(np.abs(y_test - y_pred))
+        'RMSE_list': rmse_list,
+        'MAE': np.mean(np.abs(y_test - y_pred)),
+        'MAE_list': mae_list
     }
-
+    # 新增：计算分贝偏差指标
+    epsilon = 1e-8  # 避免零值导致的计算错误
+    y_test_pos = y_test + epsilon  # 确保非负
+    y_pred_pos = y_pred + epsilon
+    # 计算每个样本的分贝偏差 (20*log10(预测值/真实值))
+    db_diff = 20 * np.log10(y_pred_pos / y_test_pos)
+    # 指标1：每个输出特征中偏差在±3dB内的样本比例（再求平均）
+    db_within_3_ratio_list = []
+    for j in range(n_tasks):
+        # 计算当前特征中偏差在±3dB内的样本占比
+        within_range = np.abs(db_diff[:, j]) <= 3
+        ratio = np.mean(within_range)  # 比例
+        db_within_3_ratio_list.append(ratio)
+    db_within_3_ratio = np.mean(db_within_3_ratio_list)  # 整体平均比例
+    # 指标2：所有特征的偏差分贝数绝对值之和
+    total_db_deviation = np.sum(np.abs(db_diff))
+    total_db_deviation_per_feature = [np.sum(np.abs(db_diff[:, j])) for j in range(n_tasks)]
+    # 更新metrics字典
+    metrics.update({
+        'db_within_3_ratio': db_within_3_ratio,  # 整体±3dB内比例
+        'db_within_3_ratio_list': db_within_3_ratio_list,  # 各特征±3dB内比例
+        'total_db_deviation': total_db_deviation,  # 总分贝偏差和
+        'total_db_deviation_per_feature': total_db_deviation_per_feature  # 各特征分贝偏差和
+    })
     if show_prints:
         print("\n测试集评估结果:")
         print(f"MSE: {mse:.4f}")
@@ -139,7 +171,10 @@ def group_lasso_predictor(
     #Group_Lasso的绘图函数，多任务输出
 
 def group_lasso_plot_and_evaluate(self, coef_shared, coef_specific, method, input_columns, output_columns, 
-                                 MSE, RMSE, MAE, R2, y_test, y_pred, data_test_index):
+                                 MSE,MSE_list, RMSE,RMSE_list, MAE,MAE_list, 
+                                 R2,R2_list,
+                                 db_within_3_ratio_list,total_db_deviation_per_feature,
+                                 y_test, y_pred, data_test_index):
     """
     绘制Group Lasso模型的系数热力图和各输出变量的真实值-预测值对比图
     
@@ -209,11 +244,14 @@ def group_lasso_plot_and_evaluate(self, coef_shared, coef_specific, method, inpu
     n_outputs = len(output_columns)
     test_index_range = f"[{data_test_index[0]}:{data_test_index[-1]}]" if not data_test_index.empty else "[0:0]"
     
-    for i in range(n_outputs):
+    for i,col in enumerate(output_columns):
         # 获取当前输出的评估指标（支持单值或列表）
-        current_mse = MSE[i] if isinstance(MSE, (list, np.ndarray)) else MSE
-        current_r2 = R2[i] if isinstance(R2, (list, np.ndarray)) else R2
-        
+        current_mse = MSE_list[i]
+        current_r2 = R2_list[i]
+        current_rmse = RMSE_list[i] if RMSE_list else np.sqrt(current_mse)
+        current_mae = MAE_list[i] if MAE_list else np.mean(np.abs(y_test[:, i] - y_pred[:, i]))
+        current_db_within_3_ratio = db_within_3_ratio_list[i] if db_within_3_ratio_list else None
+        current_total_db_deviation_per_feature = total_db_deviation_per_feature[i] if total_db_deviation_per_feature else None
         # 创建对比图
         fig = plt.figure(figsize=(7, 4), dpi=120)
         ax = fig.add_subplot(111)
@@ -230,8 +268,15 @@ def group_lasso_plot_and_evaluate(self, coef_shared, coef_specific, method, inpu
                 color='#2F5597', linestyle='-', linewidth=1.5, alpha=0.6, zorder=0)
         
         # 设置图表属性
-        ax.set_title(f'输出变量: {output_columns[i]}\nMSE: {current_mse:.4f}, R2: {current_r2:.4f}\n索引范围: {test_index_range}',
-                    fontsize=10)
+        # 设置子图标题和标签（显示当前输出的独立指标）
+        ax.set_title(
+            f'输出变量: {col}\n'
+            f'MSE: {current_mse:.4f}, RMSE: {current_rmse:.4f}\n'
+            f'MAE: {current_mae:.4f}, R^2: {current_r2:.4f}\n'
+            f'±3dB比例: {current_db_within_3_ratio:.2%}\n'
+            f'总分贝偏差: {current_total_db_deviation_per_feature:.2f} dB',
+            fontsize=10
+        )
         ax.set_xlabel('样本索引', fontsize=10)
         ax.set_ylabel('数值', fontsize=10)
         ax.grid(linestyle='--', alpha=0.5)
@@ -262,6 +307,8 @@ def group_lasso_plot_and_evaluate(self, coef_shared, coef_specific, method, inpu
     self.lineEdit_RMSE.setText(f"{overall_rmse:.5f}")
     self.lineEdit_MAE.setText(f"{overall_mae:.5f}")
     self.lineEdit_R2.setText(f"{overall_r2:.5f}")
+    self.lineEdit_db_within_3_ratio.setText(f"{np.mean(db_within_3_ratio_list)*100:.2f}%")
+    self.lineEdit_total_db_deviation.setText(f"{np.sum(total_db_deviation_per_feature):.2f}")
     self.lineEdit_Algorithm_name.setText(f"当前算法: {method}")
 if __name__ == "__main__":
     # 示例数据

@@ -55,11 +55,38 @@ def MTW_Lasso(data_train,
         'MAE': np.mean(mae_list),
         'MAE_list': mae_list
     }
+     # 新增：计算分贝偏差指标
+    epsilon = 1e-8  # 避免零值导致的计算错误
+    y_test_pos = y_test + epsilon  # 确保非负
+    y_pred_pos = y_pred + epsilon
+    # 计算每个样本的分贝偏差 (20*log10(预测值/真实值))
+    db_diff = 20 * np.log10(y_pred_pos / y_test_pos)
+    # 指标1：每个输出特征中偏差在±3dB内的样本比例（再求平均）
+    db_within_3_ratio_list = []
+    for j in range(n_tasks):
+        # 计算当前特征中偏差在±3dB内的样本占比
+        within_range = np.abs(db_diff[:, j]) <= 3
+        ratio = np.mean(within_range)  # 比例
+        db_within_3_ratio_list.append(ratio)
+    db_within_3_ratio = np.mean(db_within_3_ratio_list)  # 整体平均比例
+    # 指标2：所有特征的偏差分贝数绝对值之和
+    total_db_deviation = np.sum(np.abs(db_diff))
+    total_db_deviation_per_feature = [np.sum(np.abs(db_diff[:, j])) for j in range(n_tasks)]
+    # 更新metrics字典
+    metrics.update({
+        'db_within_3_ratio': db_within_3_ratio,  # 整体±3dB内比例
+        'db_within_3_ratio_list': db_within_3_ratio_list,  # 各特征±3dB内比例
+        'total_db_deviation': total_db_deviation,  # 总分贝偏差和
+        'total_db_deviation_per_feature': total_db_deviation_per_feature  # 各特征分贝偏差和
+    })
+    
     return model, X_test, y_test, y_pred, metrics, data_test.index  # 新增返回测试集索引
 
 
 def mtw_plot_and_evaluate(self, mtw_model, method, input_columns, output_columns,
-                         MSE, MSE_list, RMSE, RMSE_list, MAE, MAE_list, R2, R2_list,
+                         MSE, MSE_list, RMSE, RMSE_list, MAE, MAE_list,
+                         db_within_3_ratio_list,total_db_deviation_per_feature,
+                         R2, R2_list,
                          y_test, y_pred, data_test_index):
     """
     绘制MTW模型的完整可视化结果：
@@ -121,11 +148,14 @@ def mtw_plot_and_evaluate(self, mtw_model, method, input_columns, output_columns
     # 处理测试集索引（兼容RangeIndex）
     test_index_range = f"[{data_test_index[0]}:{data_test_index[-1]}]" if not data_test_index.empty else "[0:0]"
 
-    for i in range(n_outputs):
+    for i ,col in  enumerate(output_columns):
         # 当前输出的指标
         current_mse = MSE_list[i]
         current_r2 = R2_list[i]
-
+        current_rmse = RMSE_list[i] if RMSE_list else np.sqrt(current_mse)
+        current_mae = MAE_list[i] if MAE_list else np.mean(np.abs(y_test[:, i] - y_pred[:, i]))
+        current_db_within_3_ratio = db_within_3_ratio_list[i] if db_within_3_ratio_list else None
+        current_total_db_deviation_per_feature = total_db_deviation_per_feature[i] if total_db_deviation_per_feature else None
         # 创建对比图
         fig = plt.figure(figsize=(7, 4), dpi=120)
         ax = fig.add_subplot(111)
@@ -143,7 +173,11 @@ def mtw_plot_and_evaluate(self, mtw_model, method, input_columns, output_columns
 
         # 图表标题和标签
         ax.set_title(
-            f'输出变量: {output_columns[i]}\nMSE: {current_mse:.4f}, R: {current_r2:.4f}\n索引范围: {test_index_range}',
+            f'输出变量: {col}\n'
+            f'MSE: {current_mse:.4f}, RMSE: {current_rmse:.4f}\n'
+            f'MAE: {current_mae:.4f}, R^2: {current_r2:.4f}\n'
+            f'±3dB比例: {current_db_within_3_ratio:.2%}\n'
+            f'总分贝偏差: {current_total_db_deviation_per_feature:.2f} dB',
             fontsize=10
         )
         ax.set_xlabel('样本索引', fontsize=10)
@@ -165,12 +199,21 @@ def mtw_plot_and_evaluate(self, mtw_model, method, input_columns, output_columns
     self.current_page = 0
     self.update_graphics_view()
 
+
+    # 更新界面控件（显示整体指标）
+    overall_mse = np.mean(MSE) if isinstance(MSE, (list, np.ndarray)) else MSE
+    overall_rmse = np.mean(RMSE) if isinstance(RMSE, (list, np.ndarray)) else RMSE
+    overall_mae = np.mean(MAE) if isinstance(MAE, (list, np.ndarray)) else MAE
+    overall_r2 = np.mean(R2) if isinstance(R2, (list, np.ndarray)) else R2
+    
     # 更新界面控件（显示整体指标）
     self.lineEdit_state.setText('Finish!')
-    self.lineEdit_MSE.setText(f"{MSE:.5f}")
-    self.lineEdit_RMSE.setText(f"{RMSE:.5f}")
-    self.lineEdit_MAE.setText(f"{MAE:.5f}")
-    self.lineEdit_R2.setText(f"{R2:.5f}")
+    self.lineEdit_MSE.setText(f"{overall_mse:.5f}")
+    self.lineEdit_RMSE.setText(f"{overall_rmse:.5f}")
+    self.lineEdit_MAE.setText(f"{overall_mae:.5f}")
+    self.lineEdit_R2.setText(f"{overall_r2:.5f}")
+    self.lineEdit_db_within_3_ratio.setText(f"{np.mean(db_within_3_ratio_list)*100:.2f}%")
+    self.lineEdit_total_db_deviation.setText(f"{np.sum(total_db_deviation_per_feature):.2f}")
     self.lineEdit_Algorithm_name.setText(f"当前算法: {method}")
 
 
