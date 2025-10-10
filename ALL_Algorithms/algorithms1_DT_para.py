@@ -150,7 +150,7 @@ class Ui_DT_para(object):
 "QSpinBox::down-button:pressed {\n"
 "    margin-top: 4px;\n"
 "}")
-        self.spinBox_max_depth.setProperty("value", 12)
+        self.spinBox_max_depth.setProperty("value", 10)
         self.spinBox_max_depth.setObjectName("spinBox_max_depth")
         self.verticalLayout_2.addWidget(self.spinBox_max_depth)
         self.spinBox_random_state = QtWidgets.QSpinBox(self.layoutWidget)

@@ -273,6 +273,6 @@ class Ui_MLP_para(object):
         self.label_2.setText(_translate("MLP_para", "mlp_alpha"))
         self.label_random_state.setText(_translate("MLP_para", "random_state"))
         self.label.setText(_translate("MLP_para", "scale_features"))
-        self.lineEdit_hidden_layer_sizes.setText(_translate("MLP_para", "100,50"))
+        self.lineEdit_hidden_layer_sizes.setText(_translate("MLP_para", "200,100"))
         self.comboBox_scale_features.setItemText(0, _translate("MLP_para", "False"))
         self.comboBox_scale_features.setItemText(1, _translate("MLP_para", "True"))

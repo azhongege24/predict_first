@@ -249,7 +249,7 @@ font: 16 px  &quot;Times New Roman&quot;;
 }</string>
     </property>
     <property name="text">
-     <string>v3.0 2025.09.30</string>
+     <string>v3.0 2025.10.10</string>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">
@@ -802,6 +802,9 @@ font:bold 16px;		/*设置按钮文字和大小*/
          </property>
          <property name="styleSheet">
           <string notr="true"/>
+         </property>
+         <property name="maximum">
+          <number>10000</number>
          </property>
         </widget>
        </item>
@@ -1540,7 +1543,7 @@ qproperty-alignment: 'AlignCenter';
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>133</x>
@@ -1774,7 +1777,7 @@ border-radius:10px;
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>133</x>
@@ -1987,7 +1990,7 @@ border-radius:10px;
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>134</x>

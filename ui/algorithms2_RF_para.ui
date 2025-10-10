@@ -362,7 +362,7 @@ QSpinBox::down-button:pressed {
           <number>1000</number>
          </property>
          <property name="value">
-          <number>100</number>
+          <number>200</number>
          </property>
         </widget>
        </item>
@@ -397,7 +397,7 @@ QSpinBox::down-button:pressed {
 }</string>
          </property>
          <property name="value">
-          <number>4</number>
+          <number>12</number>
          </property>
         </widget>
        </item>

@@ -83,7 +83,7 @@ def group_lasso_predictor(
     grouplasso = GroupLasso(
         alpha=alpha,
         fit_intercept=True,
-        normalize=False,
+        normalize=True,
         max_iter=max_iter,
         tol=tol
     )

@@ -261,7 +261,7 @@ QLabel:pressed {
           </size>
          </property>
          <property name="text">
-          <string>100,50</string>
+          <string>200,100</string>
          </property>
         </widget>
        </item>

@@ -153,7 +153,7 @@ class Ui_ET_para(object):
 "    margin-top: 4px;\n"
 "}")
         self.spinBox_n_estimators.setMaximum(1000)
-        self.spinBox_n_estimators.setProperty("value", 100)
+        self.spinBox_n_estimators.setProperty("value", 97)
         self.spinBox_n_estimators.setObjectName("spinBox_n_estimators")
         self.verticalLayout_2.addWidget(self.spinBox_n_estimators)
         self.spinBox_max_depth = QtWidgets.QSpinBox(self.layoutWidget)
@@ -170,7 +170,7 @@ class Ui_ET_para(object):
 "QSpinBox::down-button:pressed {\n"
 "    margin-top: 4px;\n"
 "}")
-        self.spinBox_max_depth.setProperty("value", 4)
+        self.spinBox_max_depth.setProperty("value", 12)
         self.spinBox_max_depth.setObjectName("spinBox_max_depth")
         self.verticalLayout_2.addWidget(self.spinBox_max_depth)
         self.spinBox_n_jobs = QtWidgets.QSpinBox(self.layoutWidget)

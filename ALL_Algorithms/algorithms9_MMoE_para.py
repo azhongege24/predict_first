@@ -385,7 +385,7 @@ class Ui_MMoE_para(object):
 "}")
         self.doubleSpinBox_mmoe_learning_rate.setReadOnly(False)
         self.doubleSpinBox_mmoe_learning_rate.setDecimals(4)
-        self.doubleSpinBox_mmoe_learning_rate.setProperty("value", 0.001)
+        self.doubleSpinBox_mmoe_learning_rate.setProperty("value", 0.005)
         self.doubleSpinBox_mmoe_learning_rate.setObjectName("doubleSpinBox_mmoe_learning_rate")
         self.verticalLayout.addWidget(self.doubleSpinBox_mmoe_learning_rate)
         self.doubleSpinBox_mmoe_dropout_rate = QtWidgets.QDoubleSpinBox(self.layoutWidget)
