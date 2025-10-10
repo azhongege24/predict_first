@@ -240,27 +240,6 @@ class Ui_MainWindow(object):
 "}")
         self.pushButton_AL2.setObjectName("pushButton_AL2")
         self.verticalLayout.addWidget(self.pushButton_AL2)
-        self.pushButton_AL3 = QtWidgets.QPushButton(self.layoutWidget1)
-        self.pushButton_AL3.setStyleSheet("QPushButton{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color:rgb(168, 249, 124);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 16pt \"楷体\";\n"
-"min-width:80px;    /*设置最小宽度*/\n"
-"min-height:40px;    /*设置最小高度*/\n"
-"font:bold;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(21, 151, 165); /* 悬停时背景色 */\n"
-"    color: white;             /* 悬停时文字颜色 */\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color:  rgb(38, 70, 83); /* 按下时背景色 */\n"
-"}")
-        self.pushButton_AL3.setObjectName("pushButton_AL3")
-        self.verticalLayout.addWidget(self.pushButton_AL3)
         self.pushButton_AL5 = QtWidgets.QPushButton(self.layoutWidget1)
         self.pushButton_AL5.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
@@ -282,6 +261,27 @@ class Ui_MainWindow(object):
 "}")
         self.pushButton_AL5.setObjectName("pushButton_AL5")
         self.verticalLayout.addWidget(self.pushButton_AL5)
+        self.pushButton_AL3 = QtWidgets.QPushButton(self.layoutWidget1)
+        self.pushButton_AL3.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color:rgb(168, 249, 124);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 16pt \"楷体\";\n"
+"min-width:80px;    /*设置最小宽度*/\n"
+"min-height:40px;    /*设置最小高度*/\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(21, 151, 165); /* 悬停时背景色 */\n"
+"    color: white;             /* 悬停时文字颜色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:  rgb(38, 70, 83); /* 按下时背景色 */\n"
+"}")
+        self.pushButton_AL3.setObjectName("pushButton_AL3")
+        self.verticalLayout.addWidget(self.pushButton_AL3)
         self.pushButton_AL4 = QtWidgets.QPushButton(self.layoutWidget1)
         self.pushButton_AL4.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
@@ -324,6 +324,27 @@ class Ui_MainWindow(object):
 "}")
         self.pushButton_4.setObjectName("pushButton_4")
         self.verticalLayout.addWidget(self.pushButton_4)
+        self.pushButton_5 = QtWidgets.QPushButton(self.layoutWidget1)
+        self.pushButton_5.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:14px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color:rgb(168, 249, 124);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 14pt \"楷体\";\n"
+"min-width:80px;    /*设置最小宽度*/\n"
+"min-height:40px;    /*设置最小高度*/\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(21, 151, 165); /* 悬停时背景色 */\n"
+"    color: white;             /* 悬停时文字颜色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:  rgb(38, 70, 83); /* 按下时背景色 */\n"
+"}")
+        self.pushButton_5.setObjectName("pushButton_5")
+        self.verticalLayout.addWidget(self.pushButton_5)
         self.pushButton = QtWidgets.QPushButton(self.layoutWidget1)
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -1321,23 +1342,24 @@ class Ui_MainWindow(object):
         self.pushButton_vibration_analysis.setToolTip(_translate("MainWindow", "<html><head/><body><p>设置采样频率并导入振动数据，可以是多组或者是单组</p></body></html>"))
         self.pushButton_vibration_analysis.setText(_translate("MainWindow", "振动分析"))
         self.pushButton_otherpara.setText(_translate("MainWindow", "其他参数"))
-        self.pushButton_dataset.setText(_translate("MainWindow", "数据集合"))
+        self.pushButton_dataset.setText(_translate("MainWindow", "数据集合成"))
         self.pushButton_train.setText(_translate("MainWindow", "训练验模"))
         self.pushButton_predict.setText(_translate("MainWindow", "预测"))
-        self.label_version.setText(_translate("MainWindow", "v3.0 2025.09.30"))
+        self.label_version.setText(_translate("MainWindow", "v3.0 2025.10.10"))
         self.label_2.setText(_translate("MainWindow", "算法模型"))
         self.pushButton_AL1.setToolTip(_translate("MainWindow", "<html><head/><body><p>决策树算法</p></body></html>"))
         self.pushButton_AL1.setText(_translate("MainWindow", "决策树"))
         self.pushButton_AL2.setToolTip(_translate("MainWindow", "<html><head/><body><p>随机森林算法</p></body></html>"))
         self.pushButton_AL2.setText(_translate("MainWindow", "随机森林"))
-        self.pushButton_AL3.setToolTip(_translate("MainWindow", "<html><head/><body><p>支持向量机算法</p></body></html>"))
-        self.pushButton_AL3.setText(_translate("MainWindow", "支持向量机"))
         self.pushButton_AL5.setToolTip(_translate("MainWindow", "<html><head/><body><p>极端树算法</p></body></html>"))
         self.pushButton_AL5.setText(_translate("MainWindow", "极端树"))
+        self.pushButton_AL3.setToolTip(_translate("MainWindow", "<html><head/><body><p>支持向量机算法</p></body></html>"))
+        self.pushButton_AL3.setText(_translate("MainWindow", "支持向量机"))
         self.pushButton_AL4.setToolTip(_translate("MainWindow", "<html><head/><body><p>多层感知机算法</p></body></html>"))
         self.pushButton_AL4.setText(_translate("MainWindow", "多层感知机"))
         self.pushButton_4.setText(_translate("MainWindow", "多门控\n"
 "混合专家"))
+        self.pushButton_5.setText(_translate("MainWindow", "高斯过程"))
         self.pushButton.setToolTip(_translate("MainWindow", "<html><head/><body><p>GroupLasso：基于 L1/L2混合范数正则化的多任务学习模型</p></body></html>"))
         self.pushButton.setText(_translate("MainWindow", "GroupLasso"))
         self.pushButton_2.setToolTip(_translate("MainWindow", "<html><head/><body><p>Multitask Wasserstein：基于Wasserstein距离正则化的稀疏多任务回归模型</p></body></html>"))

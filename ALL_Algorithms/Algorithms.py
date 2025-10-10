@@ -162,7 +162,8 @@ def multi_task_regression_predictor(
     }
     # 新增：计算分贝偏差指标
     # 替换原有分贝偏差计算部分
-    epsilon = 1e-8  # 避免零值导致的计算错误
+    # 对于大数值，使用相对较小的epsilon，避免引入显著偏差
+    epsilon = np.maximum(np.abs(y_test) * 1e-12, 1e-8)  # 动态调整epsilon
 
     # 确保y_test和y_pred形状统一为2D数组
     if y_test.ndim == 1:
@@ -171,27 +172,32 @@ def multi_task_regression_predictor(
         y_pred = y_pred.reshape(-1, 1)
 
     # 确保非负性（针对log10计算）
-    y_test_pos = y_test + epsilon
-    y_pred_pos = y_pred + epsilon
+    y_test_pos = np.abs(y_test) + epsilon
+    y_pred_pos = np.abs(y_pred) + epsilon
 
     # 计算分贝偏差 (20*log10(预测值/真实值))
-    # 新增：添加clip限制极端值，避免异常值影响
     ratio = y_pred_pos / y_test_pos
-    ratio_clipped = np.clip(ratio, 10**(-3), 10**3)  # 限制在±30dB范围内
-    db_diff = 20 * np.log10(ratio_clipped)
+
+    # 对于极端大的比率差异，先计算分贝再限制范围，而不是先限制比率
+    db_diff = 20 * np.log10(ratio)
+    db_diff_clipped = np.clip(db_diff, -30, 30)  # 限制在±30dB范围内
 
     # 重新计算分贝指标
     db_within_3_ratio_list = []
     for j in range(n_tasks):
         # 单输出时j=0，直接取第0列
+        # 使用原始的db_diff而非裁剪后的db_diff_clipped来计算这个指标
+        # 因为我们想知道真实落在±3dB范围内的比例，而不是裁剪后的
         within_range = np.abs(db_diff[:, j]) <= 3
         ratio = np.mean(within_range)
         db_within_3_ratio_list.append(ratio)
 
-    # 单输出时直接取唯一元素，避免不必要的mean计算
+        # 单输出时直接取唯一元素，避免不必要的mean计算
     db_within_3_ratio = db_within_3_ratio_list[0] if n_tasks == 1 else np.mean(db_within_3_ratio_list)
-    total_db_deviation = np.sum(np.abs(db_diff))
-    total_db_deviation_per_feature = [np.sum(np.abs(db_diff[:, j])) for j in range(n_tasks)]
+
+    # 对于总偏差，使用裁剪后的值以避免极端值主导结果
+    total_db_deviation = np.sum(np.abs(db_diff_clipped))
+    total_db_deviation_per_feature = [np.sum(np.abs(db_diff_clipped[:, j])) for j in range(n_tasks)]
         # 更新metrics字典
     metrics.update({
         'db_within_3_ratio': db_within_3_ratio,  # 整体±3dB内比例
