@@ -88,7 +88,7 @@ QPushButton:pressed {
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>80</x>
@@ -437,6 +437,9 @@ QSpinBox::down-button:pressed {
 QDoubleSpinBox::down-button:pressed {
     margin-top: 4px;
 }</string>
+         </property>
+         <property name="maximum">
+          <double>9999999999999999932209486743616279764617084419440640.000000000000000</double>
          </property>
          <property name="singleStep">
           <double>0.100000000000000</double>

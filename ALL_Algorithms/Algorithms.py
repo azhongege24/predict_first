@@ -22,6 +22,8 @@ from sklearn.svm import SVR
 from tqdm import tqdm
 import shutil
 import joblib
+from ALL_Algorithms.Gassu_process import MultitaskGPRegressor
+
 
 #带有符号的对数变换
 def signed_log1p(arr):
@@ -58,6 +60,9 @@ def multi_task_regression_predictor(
     mmoe_epochs : int = 100,
     mmoe_batch_size : int = 32,
     mmoe_lambda_balance : float = 0.1,
+    gp_learning_rate = 0.01,
+    gp_training_iterations =100
+    
 ):
     # 原有数据加载与预处理逻辑保持不变...
     X_train = data_train[input_columns].values
@@ -98,7 +103,14 @@ def multi_task_regression_predictor(
             num_epochs = mmoe_epochs,
             batch_size = mmoe_batch_size,
             lambda_balance= mmoe_lambda_balance
-        )
+        ),
+        # 添加高斯过程多任务回归模型
+        'GP': MultitaskGPRegressor(
+        input_dim=len(input_columns),
+        output_dim=len(output_columns),
+        learning_rate=gp_learning_rate,
+        training_iterations=gp_training_iterations
+    )
     }
     
     if model_type not in model_mapping:

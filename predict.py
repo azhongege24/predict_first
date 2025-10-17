@@ -1383,6 +1383,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 kernel=str(kernel),
                 C=float(C),
                 epsilon=float(epsilon),
+                
                 n_jobs=n_jobs,
                 max_iter=-1,#SVM不需要这个参数
             )

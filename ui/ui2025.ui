@@ -457,34 +457,6 @@ QPushButton:pressed {
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_4">
-       <property name="styleSheet">
-        <string notr="true">QPushButton{
-border:1px solid red;   /*边框的粗细，颜色*/
-border-radius:14px;    /*设置圆角半径 */
-padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
-background-color:rgb(168, 249, 124);	/*背景颜色*/
-color:rgb(0, 0, 0);		/*字体颜色*/
-	font: 14pt &quot;楷体&quot;;
-min-width:80px;	/*设置最小宽度*/
-min-height:40px;	/*设置最小高度*/
-font:bold;
-}
-QPushButton:hover {
-    background-color: rgb(21, 151, 165); /* 悬停时背景色 */
-    color: white;             /* 悬停时文字颜色 */
-}
-QPushButton:pressed {
-    background-color:  rgb(38, 70, 83); /* 按下时背景色 */
-}</string>
-       </property>
-       <property name="text">
-        <string>多门控
-混合专家</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="pushButton_5">
        <property name="styleSheet">
         <string notr="true">QPushButton{
@@ -508,6 +480,47 @@ QPushButton:pressed {
        </property>
        <property name="text">
         <string>高斯过程</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_4">
+       <property name="font">
+        <font>
+         <family>楷体</family>
+         <pointsize>14</pointsize>
+         <weight>75</weight>
+         <italic>false</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: 1px solid #2b8cbe;           /* 科技蓝边框 */
+    border-radius: 15px;
+    padding: 2px 4px;
+    background-color: #e0f3f8;           /* 浅蓝灰背景 */
+    color: #0c2c84;                     /* 深蓝字体 */
+    font:  14pt  &quot;楷体&quot; ;
+    min-width: 80px;
+font:bold;
+    min-height: 40px;
+}
+
+QPushButton:hover {
+    background-color: #7bccc4;          /* 悬浮时：蓝绿色 */
+    border-color: #0868ac;              /* 加深边框 */
+    color: #f7fcfd;                     /* 悬停文字改为白色 */
+}
+
+QPushButton:pressed {
+    background-color: #4eb3d3;          /* 按压时：科技蓝 */
+    border-color: #084081;              /* 深蓝边框 */
+}</string>
+       </property>
+       <property name="text">
+        <string>多门控
+混合专家</string>
        </property>
       </widget>
      </item>
