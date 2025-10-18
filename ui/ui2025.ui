@@ -2300,8 +2300,8 @@ border-radius:10px;
    <slot>AL_SVM_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1034</x>
-     <y>439</y>
+     <x>1035</x>
+     <y>492</y>
     </hint>
     <hint type="destinationlabel">
      <x>1045</x>
@@ -2332,8 +2332,8 @@ border-radius:10px;
    <slot>AL_ET_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1034</x>
-     <y>491</y>
+     <x>1035</x>
+     <y>440</y>
     </hint>
     <hint type="destinationlabel">
      <x>1016</x>
@@ -2517,6 +2517,22 @@ border-radius:10px;
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_5</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>AL_GP_para()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1086</x>
+     <y>568</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1039</x>
+     <y>864</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>AL_DT_para()</slot>
@@ -2541,5 +2557,6 @@ border-radius:10px;
   <slot>AL_MMoE_para()</slot>
   <slot>change_CheckBox_input()</slot>
   <slot>change_CheckBox_output()</slot>
+  <slot>AL_GP_para()</slot>
  </slots>
 </ui>

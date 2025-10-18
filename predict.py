@@ -30,6 +30,7 @@ from ALL_Algorithms.algorithms6_GL_para import Ui_GL_para
 from ALL_Algorithms.algorithms7_MTW_para import Ui_MTW_para
 from ALL_Algorithms.algorithms8_REMTW_para import Ui_REMTW_para
 from ALL_Algorithms.algorithms9_MMoE_para import Ui_MMoE_para
+from ALL_Algorithms.algorithms10_GP_para import Ui_GP_para
 from ALL_Algorithms.Dataset_handle import Ui_dataset_handle
 from PyQt5.QtCore import pyqtSlot
 from ALL_Algorithms.Algorithms import multi_task_regression_predictor
@@ -383,11 +384,7 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
         self.lineEdit_info.setText("请选择输入和输出特征文件")
         self.lineEdit_status.setText("就绪")
         self.lineEdit_status_2.setText("就绪")   
-    
-        
-    
-                
-                
+                           
 class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):
     def __init__(self, parent=None):
         super(POP_DT_para, self).__init__()
@@ -613,6 +610,21 @@ class POP_MMoE_para(QMainWindow, Ui_MMoE_para, Ui_MainWindow):#remtw算法改
         print(f"平衡系数(mmoe_lambda_balance): {mmoe_lambda_balance}")
         print(f"是否标准化输入特征(mmoe_scale_features): {mmoe_scale_features}")
 
+class POP_GP_para(QMainWindow, Ui_GP_para, Ui_MainWindow): 
+    def __init__(self,parent=None):
+        super(POP_GP_para, self).__init__()
+        self.setupUi(self)
+        self.parent_window = parent#保存主窗口的引用
+    def Confirm(self):
+        global input_dim,output_dim,learning_rate,training_iterations,method
+        input_dim = self.spinBox_inputdim.text()
+        output_dim = self.spinBox_outputdim.text()
+        learning_rate = self.doubleSpinBox_learning_rate.text()
+        training_iterations = self.spinBox_training_iterations.text()
+        method = 'GP'
+        if self.parent_window:
+            self.parent_window.lineEdit_Algorithm_name.setText("GassuProcessing")
+        self.parent_window.All_Methods_Begin()
         
    
 class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_MainWindow界面类
@@ -643,6 +655,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
 
         # 连接按钮信号
+        
         self.pushButton_top.clicked.connect(self.show_previous_page)
         self.pushButton_bottom.clicked.connect(self.show_next_page)
         # self.pushButton_preview_VA_data.clicked.connect(self.preview_VA_data)  这个现在没用了，直接导入振动数据文件的时候，确认便就会预览
@@ -809,6 +822,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             
                 self.ui_pop = POP_MMoE_para(self)
                 self.ui_pop.show()
+    
+    def AL_GP_para(self):  
+        
+            self.ui_pop = POP_GP_para(self)
+            self.ui_pop.show()
 
     def get_gpu_util(self):
     # 调用 nvidia-smi 获取利用率（返回纯数字）
