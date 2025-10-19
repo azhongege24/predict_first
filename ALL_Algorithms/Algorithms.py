@@ -22,7 +22,8 @@ from sklearn.svm import SVR
 from tqdm import tqdm
 import shutil
 import joblib
-from ALL_Algorithms.Gassu_process import MultitaskGPRegressor
+from ALL_Algorithms.Gassu_process import MultitaskGPRegressor,MultitaskGPModel
+import gpytorch
 
 
 #带有符号的对数变换
@@ -220,6 +221,8 @@ def multi_task_regression_predictor(
     
     return model, scaler, y_test, y_pred, metrics
 
+
+
 def ask_and_save_model(parent, model, default_name="model.pkl"):
     """
     训练后询问是否保存模型，并保存到用户指定路径
@@ -297,24 +300,41 @@ def load_model(model_path, model_type=None):
                 pass
         
         # 对于MMoE模型，用torch加载
-        if model_type == 'MMoE' or model_type is None:
+        if model_type in ['MMoE', 'GP'] or model_type is None:
             checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
             
-            # 创建MMoE模型实例
-            model = MMoERegressor(
-                input_dim=checkpoint['input_dim'],
-                output_dim=checkpoint['output_dim'],
-                num_experts=checkpoint['num_experts'],
-                expert_hidden=checkpoint['expert_hidden']
-            )
+            # 加载GP模型
+            if model_type == 'GP' or (model_type is None and 'likelihood_state_dict' in checkpoint):
+                model = MultitaskGPRegressor(
+                    input_dim=checkpoint['input_dim'],
+                    output_dim=checkpoint['output_dim'],
+                    num_tasks=checkpoint.get('num_tasks')
+                )
+                model.model = MultitaskGPModel(
+                    None, None, 
+                    gpytorch.likelihoods.MultitaskGaussianLikelihood(num_tasks=checkpoint['num_tasks'])
+                )
+                model.likelihood = model.model.likelihood
+                model.model.load_state_dict(checkpoint['model_state_dict'])
+                model.likelihood.load_state_dict(checkpoint['likelihood_state_dict'])
+                model.scaler = checkpoint.get('scaler')
+                model.loss_history = checkpoint.get('loss_history', [])
+                print("成功加载GP模型")
+                return model
             
-            # 加载模型状态
-            model.model.load_state_dict(checkpoint['model_state_dict'])
-            model.scaler = checkpoint.get('scaler')
-            model.loss_history = checkpoint.get('loss_history', [])
-            
-            print("成功加载MMoE模型")
-            return model
+            # 加载MMoE模型
+            elif model_type == 'MMoE':
+                model = MMoERegressor(
+                    input_dim=checkpoint['input_dim'],
+                    output_dim=checkpoint['output_dim'],
+                    num_experts=checkpoint['num_experts'],
+                    expert_hidden=checkpoint['expert_hidden']
+                )
+                model.model.load_state_dict(checkpoint['model_state_dict'])
+                model.scaler = checkpoint.get('scaler')
+                model.loss_history = checkpoint.get('loss_history', [])
+                print("成功加载MMoE模型")
+                return model
         
         raise ValueError(f"不支持的模型类型: {model_type}")
         

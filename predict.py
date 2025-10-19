@@ -665,39 +665,74 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 ) # 保存预训练模型
 
     
-    def ask_and_save_model(self, trained_model, method):
+    def ask_and_save_model(parent, model, method_name=None):
+        """
+        保存训练好的模型（直接保存，不询问）
+        :param parent: 父窗口
+        :param model: 训练好的模型对象
+        :param method_name: 方法名称（用于默认文件名）
+        """
+        # 1. 确定默认文件名
+        default_name = f"{method_name}.pkl" if method_name else "model.pkl"
+        
+        # 2. 获取保存路径（固定使用 ./trained_models/）
+        initial_path = os.path.join("./trained_models/", default_name)
+        
+        file_path, _ = QFileDialog.getSaveFileName(
+            parent,
+            "保存模型文件",
+            initial_path,
+            "模型文件 (*.pkl *.joblib *.pt);;所有文件 (*)"
+        )
+        
+        if not file_path:
+            return
+        
+        # 3. 根据模型类型选择保存方式
         try:
-            # 定义文件过滤器
-            file_filter = "模型文件 (*.pkl);;所有文件 (*.*)"
+            class_name = model.__class__.__name__
             
-            # 获取初始目录（如果存在）
-            base_dir = self.lastSelectedPath if hasattr(self, 'lastSelectedPath') else "data/"
+            # 特殊处理 PyTorch 模型
+            if class_name in ['MMoERegressor', 'MultitaskGPRegressor']:
+                # 确保使用 .pt 扩展名
+                if not file_path.endswith('.pt'):
+                    file_path = os.path.splitext(file_path)[0] + '.pt'
+                
+                # 公共保存内容
+                save_dict = {
+                    'scaler': model.scaler,
+                    'input_dim': model.input_dim,
+                    'output_dim': model.output_dim,
+                    'loss_history': model.loss_history
+                }
+                
+                # 特定模型的额外保存内容
+                if class_name == 'MMoERegressor':
+                    save_dict.update({
+                        'model_state_dict': model.model.state_dict(),
+                        'num_experts': model.num_experts,
+                        'expert_hidden': model.expert_hidden
+                    })
+                elif class_name == 'MultitaskGPRegressor':
+                    save_dict.update({
+                        'model_state_dict': model.model.state_dict(),
+                        'likelihood_state_dict': model.likelihood.state_dict(),
+                        'num_tasks': model.num_tasks
+                    })
+                    
+                torch.save(save_dict, file_path)
+            else:
+                # 其他模型使用 joblib
+                joblib.dump(model, file_path)
             
-            # 构造默认文件名：method + .pkl
-            default_filename = f"{method}.pkl"
-            # 拼接完整的初始文件路径（目录+文件名）
-            initial_file_path = os.path.join(base_dir, default_filename)
+            # 4. 更新状态
+            if hasattr(parent, "lineEdit_state"):
+                parent.lineEdit_state.setText("模型已保存")
             
-            # 打开保存对话框，设置默认文件名
-            save_path, _ = QFileDialog.getSaveFileName(
-                self, 
-                "保存预训练模型", 
-                initial_file_path,  # 这里传入包含默认文件名的路径
-                file_filter
-            )
-            
-            if not save_path:  # 用户取消保存
-                return
-            
-            # 保存模型
-            joblib.dump(trained_model, save_path)
-            QMessageBox.information(self, "保存成功", f"模型已保存到: {save_path}")
-            
-            # 可选：更新最后选择的路径（用于下次默认目录）
-            self.lastSelectedPath = os.path.dirname(save_path)
+            QMessageBox.information(parent, "保存成功", f"模型已保存到: {file_path}")
             
         except Exception as e:
-            QMessageBox.warning(self, "保存模型失败", str(e))
+            QMessageBox.warning(parent, "保存模型失败", str(e))
             
     
     def handle_vibration_analysis(self):#测试阶段
