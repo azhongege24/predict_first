@@ -616,9 +616,7 @@ class POP_GP_para(QMainWindow, Ui_GP_para, Ui_MainWindow):
         self.setupUi(self)
         self.parent_window = parent#保存主窗口的引用
     def Confirm(self):
-        global input_dim,output_dim,learning_rate,training_iterations,method
-        input_dim = self.spinBox_inputdim.text()
-        output_dim = self.spinBox_outputdim.text()
+        global learning_rate,training_iterations,method
         learning_rate = self.doubleSpinBox_learning_rate.text()
         training_iterations = self.spinBox_training_iterations.text()
         method = 'GP'
@@ -1534,7 +1532,50 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             # QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
 
         
-        
+        if method =='GP':
+            self.new_model = 1
+            model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
+                data_train,
+                data_test,
+                input_columns,
+                output_columns,
+                model_type='GP',
+                gp_learning_rate=float(learning_rate),
+                gp_training_iterations=int(training_iterations),
+                
+            )
+            self.trained_model = model  # 保存训练好的模型
+            # `model` 是训练好的模型，`y_pred` 是预测结果
+            print("预测结果:", y_pred)
+            print("真实值:", y_test)
+            print("评估指标:", metrics)
+            if len(output_columns) > 1:
+                self.data_save=Multi_output_plot_and_evaluate(self,y_test, 
+                                               y_pred, method,
+                                                data_test, 
+                                                output_columns, 
+                                                N_start_test,
+                                                N_end_test,
+                                                MSE_list=metrics['MSE_list'],  # 传递每个输出的MSE列表
+                                                RMSE_list=metrics['RMSE_list'],  # 传递每个输出的RMSE列表
+                                                MAE_list=metrics['MAE_list'],  # 传递每个输出的MAE列表
+                                                R2_list=metrics['R2_list'],  # 传递每个输出的R2列表)
+                                                db_within_3_ratio_list = metrics['db_within_3_ratio_list'],
+                                                total_db_deviation_per_feature = metrics['total_db_deviation_per_feature']
+                )
+            if len(output_columns) == 1:    
+                self.data_save=single_plot_and_evaluate(self,y_test, y_pred, method,
+                                                         data_test, output_columns, 
+                                                         N_start_test, N_end_test,
+                                                         metrics['MSE'],
+                                                        metrics['RMSE'],
+                                                        metrics['MAE'],
+                                                        metrics['R2'],db_within_3_ratio=metrics['db_within_3_ratio'],
+                                                        total_db_deviation=metrics['total_db_deviation'])
+
+            self.lineEdit_DEVICE.setText("CPU")
+            
+            
 
         
         if method == 'GL':

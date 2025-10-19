@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>481</width>
-    <height>433</height>
+    <height>347</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>300</y>
+      <x>120</x>
+      <y>220</y>
       <width>241</width>
       <height>51</height>
      </rect>
@@ -93,166 +93,11 @@ QPushButton:pressed {
      <rect>
       <x>66</x>
       <y>84</y>
-      <width>371</width>
-      <height>188</height>
+      <width>361</width>
+      <height>111</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>250</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QLabel {
-    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
-    border-radius: 8px;
-    padding: 4px 8px;
-    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
-    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
-    font: bold 16pt &quot;Times New Roman&quot;;     
-    qproperty-alignment: 'AlignCenter';
-    /* 强化阴影效果 */
-}
-
-QLabel:hover {
-    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */
-    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */
-}
-
-QLabel:pressed {
-    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */
-}</string>
-         </property>
-         <property name="text">
-          <string>inputdim</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="spinBox_inputdim">
-         <property name="minimumSize">
-          <size>
-           <width>110</width>
-           <height>40</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Times New Roman</family>
-           <pointsize>12</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QSpinBox::up-button:pressed {
-    margin-top: 4px;  /* 模拟按压下沉 */
-}
-QSpinBox::down-button:pressed {
-    margin-top: 4px;
-}</string>
-         </property>
-         <property name="maximum">
-          <number>999</number>
-         </property>
-         <property name="singleStep">
-          <number>100</number>
-         </property>
-         <property name="value">
-          <number>100</number>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>250</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QLabel {
-    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
-    border-radius: 8px;
-    padding: 4px 8px;
-    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
-    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
-    font: bold 16pt &quot;Times New Roman&quot;;     
-    qproperty-alignment: 'AlignCenter';
-    /* 强化阴影效果 */
-}
-
-QLabel:hover {
-    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */
-    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */
-}
-
-QLabel:pressed {
-    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */
-}</string>
-         </property>
-         <property name="text">
-          <string>outputdim</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="spinBox_outputdim">
-         <property name="minimumSize">
-          <size>
-           <width>110</width>
-           <height>40</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Times New Roman</family>
-           <pointsize>12</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QSpinBox::up-button:pressed {
-    margin-top: 4px;  /* 模拟按压下沉 */
-}
-QSpinBox::down-button:pressed {
-    margin-top: 4px;
-}</string>
-         </property>
-         <property name="maximum">
-          <number>999</number>
-         </property>
-         <property name="value">
-          <number>50</number>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>

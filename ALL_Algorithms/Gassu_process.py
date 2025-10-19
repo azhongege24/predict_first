@@ -1,7 +1,7 @@
 import gpytorch
 import torch
 from sklearn.preprocessing import StandardScaler
-import tqdm
+from tqdm import tqdm  # 直接导入 tqdm 类
 # 在现有代码中添加高斯过程多任务回归模型类
 class MultitaskGPRegressor:
     def __init__(self, input_dim, output_dim, num_tasks=None, learning_rate=0.1, 

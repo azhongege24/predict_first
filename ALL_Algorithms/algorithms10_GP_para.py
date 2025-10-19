@@ -14,11 +14,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_GP_para(object):
     def setupUi(self, GP_para):
         GP_para.setObjectName("GP_para")
-        GP_para.resize(481, 433)
+        GP_para.resize(481, 347)
         self.centralwidget = QtWidgets.QWidget(GP_para)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(130, 300, 241, 51))
+        self.layoutWidget.setGeometry(QtCore.QRect(120, 220, 241, 51))
         self.layoutWidget.setObjectName("layoutWidget")
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout_5.setContentsMargins(0, 0, 0, 0)
@@ -64,102 +64,11 @@ class Ui_GP_para(object):
         self.pushButton_2.setObjectName("pushButton_2")
         self.horizontalLayout_5.addWidget(self.pushButton_2)
         self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(66, 84, 371, 188))
+        self.layoutWidget1.setGeometry(QtCore.QRect(66, 84, 361, 111))
         self.layoutWidget1.setObjectName("layoutWidget1")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget1)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.label = QtWidgets.QLabel(self.layoutWidget1)
-        self.label.setMinimumSize(QtCore.QSize(100, 30))
-        self.label.setMaximumSize(QtCore.QSize(250, 16777215))
-        self.label.setStyleSheet("QLabel {\n"
-"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
-"    border-radius: 8px;\n"
-"    padding: 4px 8px;\n"
-"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
-"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
-"    font: bold 16pt \"Times New Roman\";     \n"
-"    qproperty-alignment: \'AlignCenter\';\n"
-"    /* 强化阴影效果 */\n"
-"}\n"
-"\n"
-"QLabel:hover {\n"
-"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
-"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
-"}\n"
-"\n"
-"QLabel:pressed {\n"
-"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
-"}")
-        self.label.setObjectName("label")
-        self.horizontalLayout.addWidget(self.label)
-        self.spinBox_inputdim = QtWidgets.QSpinBox(self.layoutWidget1)
-        self.spinBox_inputdim.setMinimumSize(QtCore.QSize(110, 40))
-        font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.spinBox_inputdim.setFont(font)
-        self.spinBox_inputdim.setStyleSheet("QSpinBox::up-button:pressed {\n"
-"    margin-top: 4px;  /* 模拟按压下沉 */\n"
-"}\n"
-"QSpinBox::down-button:pressed {\n"
-"    margin-top: 4px;\n"
-"}")
-        self.spinBox_inputdim.setMaximum(999)
-        self.spinBox_inputdim.setSingleStep(100)
-        self.spinBox_inputdim.setProperty("value", 100)
-        self.spinBox_inputdim.setObjectName("spinBox_inputdim")
-        self.horizontalLayout.addWidget(self.spinBox_inputdim)
-        self.verticalLayout.addLayout(self.horizontalLayout)
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.label_2 = QtWidgets.QLabel(self.layoutWidget1)
-        self.label_2.setMinimumSize(QtCore.QSize(100, 30))
-        self.label_2.setMaximumSize(QtCore.QSize(250, 16777215))
-        self.label_2.setStyleSheet("QLabel {\n"
-"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
-"    border-radius: 8px;\n"
-"    padding: 4px 8px;\n"
-"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
-"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
-"    font: bold 16pt \"Times New Roman\";     \n"
-"    qproperty-alignment: \'AlignCenter\';\n"
-"    /* 强化阴影效果 */\n"
-"}\n"
-"\n"
-"QLabel:hover {\n"
-"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
-"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
-"}\n"
-"\n"
-"QLabel:pressed {\n"
-"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
-"}")
-        self.label_2.setObjectName("label_2")
-        self.horizontalLayout_3.addWidget(self.label_2)
-        self.spinBox_outputdim = QtWidgets.QSpinBox(self.layoutWidget1)
-        self.spinBox_outputdim.setMinimumSize(QtCore.QSize(110, 40))
-        font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.spinBox_outputdim.setFont(font)
-        self.spinBox_outputdim.setStyleSheet("QSpinBox::up-button:pressed {\n"
-"    margin-top: 4px;  /* 模拟按压下沉 */\n"
-"}\n"
-"QSpinBox::down-button:pressed {\n"
-"    margin-top: 4px;\n"
-"}")
-        self.spinBox_outputdim.setMaximum(999)
-        self.spinBox_outputdim.setProperty("value", 50)
-        self.spinBox_outputdim.setObjectName("spinBox_outputdim")
-        self.horizontalLayout_3.addWidget(self.spinBox_outputdim)
-        self.verticalLayout.addLayout(self.horizontalLayout_3)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.label_3 = QtWidgets.QLabel(self.layoutWidget1)
@@ -273,7 +182,5 @@ class Ui_GP_para(object):
         GP_para.setWindowTitle(_translate("GP_para", "MainWindow"))
         self.pushButton.setText(_translate("GP_para", "确认"))
         self.pushButton_2.setText(_translate("GP_para", "取消"))
-        self.label.setText(_translate("GP_para", "inputdim"))
-        self.label_2.setText(_translate("GP_para", "outputdim"))
         self.label_3.setText(_translate("GP_para", "learning_rate"))
         self.label_4.setText(_translate("GP_para", "training_iterations"))
