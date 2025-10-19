@@ -6,279 +6,405 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>579</width>
-    <height>336</height>
+    <width>854</width>
+    <height>619</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>VibrationAnalyzer参数设置</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>200</y>
-      <width>191</width>
-      <height>42</height>
+      <x>60</x>
+      <y>20</y>
+      <width>711</width>
+      <height>471</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout_6">
      <item>
-      <widget class="QPushButton" name="pushButton">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>80</width>
-         <height>60</height>
-        </size>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton{
-border:1px solid red;   /*边框的粗细，颜色*/
-border-radius:15px;    /*设置圆角半径 */
-padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
-background-color: rgb(149, 236, 165);	/*背景颜色*/
-color:rgb(0, 0, 0);		/*字体颜色*/
-	font: 18pt &quot;楷体&quot;;
-
-font:bold;
-}
-QPushButton:hover {
-    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */
-}
-QPushButton:pressed {
-    background-color:rgb(99, 181, 255);     /* 点击时背景色 */
-}</string>
-       </property>
-       <property name="text">
-        <string>确认</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>80</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton{
-border:1px solid red;   /*边框的粗细，颜色*/
-border-radius:15px;    /*设置圆角半径 */
-padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
-background-color: rgb(149, 236, 165);	/*背景颜色*/
-color:rgb(0, 0, 0);		/*字体颜色*/
-	font: 18pt &quot;楷体&quot;;
-
-font:bold;
-}
-QPushButton:hover {
-    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */
-}
-QPushButton:pressed {
-    background-color:rgb(99, 181, 255);     /* 点击时背景色 */
-}</string>
-       </property>
-       <property name="text">
-        <string>取消</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>62</x>
-      <y>81</y>
-      <width>461</width>
-      <height>82</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
-        <widget class="QLabel" name="label">
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>40</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QLabel {
-    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
-    border-radius: 8px;
-    padding: 4px 8px;
-    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
-    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
-    font: bold 16pt &quot;Times New Roman&quot;;     
-    qproperty-alignment: 'AlignCenter';
-    /* 强化阴影效果 */
-}
-
-QLabel:hover {
-    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */
-    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */
-}
-
-QLabel:pressed {
-    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */
-}</string>
-         </property>
-         <property name="text">
-          <string>sampling_rate</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_VA_data_path">
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>40</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QLabel {
-    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
-    border-radius: 8px;
-    padding: 4px 8px;
-    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
-    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
-    font: bold 16pt &quot;Times New Roman&quot;;     
-    qproperty-alignment: 'AlignCenter';
-    /* 强化阴影效果 */
-}
-
-QLabel:hover {
-    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */
-    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */
-}
-
-QLabel:pressed {
-    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */
-}</string>
-         </property>
-         <property name="text">
-          <string>VA_data_path</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QSpinBox" name="spinBox_sampling_rate">
+        <widget class="QLabel" name="label_8">
          <property name="minimumSize">
           <size>
-           <width>110</width>
-           <height>40</height>
+           <width>88</width>
+           <height>34</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>400</width>
-           <height>16777215</height>
+           <width>16777215</width>
+           <height>40</height>
           </size>
          </property>
          <property name="font">
           <font>
-           <family>Times New Roman</family>
-           <pointsize>12</pointsize>
+           <family>楷体</family>
+           <pointsize>14</pointsize>
            <weight>75</weight>
+           <italic>false</italic>
            <bold>true</bold>
           </font>
          </property>
          <property name="styleSheet">
-          <string notr="true">QSpinBox::up-button:pressed {
-    margin-top: 4px;  /* 模拟按压下沉 */
-}
-QSpinBox::down-button:pressed {
-    margin-top: 4px;
+          <string notr="true">QLabel {
+
+	color:white;	
+    padding: 2px 4px;  
+    background-color:#5F9EA0; 
+    font: 14pt &quot;楷体&quot;;  /* 推荐使用无衬线字体更清晰  */
+    min-width: 80px;
+    min-height: 30px;
+    font-weight: bold;
+qproperty-alignment: 'AlignCenter'; 
 }</string>
          </property>
-         <property name="maximum">
-          <number>9999</number>
+         <property name="text">
+          <string>分析功能区</string>
          </property>
-         <property name="value">
-          <number>1000</number>
+         <property name="margin">
+          <number>1</number>
          </property>
         </widget>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLineEdit" name="lineEdit_VA_data_path">
+          <layout class="QVBoxLayout" name="verticalLayout"/>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QPushButton" name="pushButton_browe_data_file">
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
+    border-radius: 8px;
+    padding: 4px 8px;
+    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
+    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
+    font: bold 16pt &quot;Times New Roman&quot;;     
+    qproperty-alignment: 'AlignCenter';
+    /* 强化阴影效果 */
+}
+
+QPushButton:hover {
+    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */
+    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */
+}
+
+QPushButton:pressed {
+    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */
+}</string>
+             </property>
+             <property name="text">
+              <string>浏览数据文件</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_select">
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
+    border-radius: 8px;
+    padding: 4px 8px;
+    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
+    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
+    font: bold 16pt &quot;Times New Roman&quot;;     
+    qproperty-alignment: 'AlignCenter';
+    /* 强化阴影效果 */
+}
+
+QPushButton:hover {
+    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */
+    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */
+}
+
+QPushButton:pressed {
+    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */
+}</string>
+             </property>
+             <property name="text">
+              <string>选择输出目录</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <widget class="QLineEdit" name="lineEdit">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_2">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QLabel" name="label_6">
            <property name="minimumSize">
             <size>
-             <width>250</width>
-             <height>30</height>
+             <width>100</width>
+             <height>40</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>9999</width>
-             <height>16777215</height>
+             <width>16777215</width>
+             <height>40</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <family>Times New Roman</family>
-             <pointsize>12</pointsize>
+             <family>楷体</family>
+             <pointsize>14</pointsize>
              <weight>75</weight>
+             <italic>false</italic>
              <bold>true</bold>
             </font>
            </property>
-           <property name="readOnly">
-            <bool>true</bool>
+           <property name="styleSheet">
+            <string notr="true">QLabel {
+
+	color:white;	
+    padding: 2px 4px;  
+    background-color:#5F9EA0; 
+    font: 14pt &quot;楷体&quot;;  /* 推荐使用无衬线字体更清晰  */
+    min-width: 80px;
+    min-height: 30px;
+    font-weight: bold;
+qproperty-alignment: 'AlignCenter'; 
+}</string>
+           </property>
+           <property name="text">
+            <string>分析功能区</string>
+           </property>
+           <property name="margin">
+            <number>1</number>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_3">
+          <widget class="QPushButton" name="pushButton_preview_data_file">
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
+    border-radius: 8px;
+    padding: 4px 8px;
+    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
+    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
+    font: bold 16pt &quot;Times New Roman&quot;;     
+    qproperty-alignment: 'AlignCenter';
+    /* 强化阴影效果 */
+}
+
+QPushButton:hover {
+    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */
+    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */
+}
+
+QPushButton:pressed {
+    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */
+}</string>
+           </property>
+           <property name="text">
+            <string>预览数据</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_psd_analysis">
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
+    border-radius: 8px;
+    padding: 4px 8px;
+    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
+    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
+    font: bold 16pt &quot;Times New Roman&quot;;     
+    qproperty-alignment: 'AlignCenter';
+    /* 强化阴影效果 */
+}
+
+QPushButton:hover {
+    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */
+    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */
+}
+
+QPushButton:pressed {
+    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */
+}</string>
+           </property>
+           <property name="text">
+            <string>功率谱分析</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_save_data">
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
+    border-radius: 8px;
+    padding: 4px 8px;
+    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
+    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
+    font: bold 16pt &quot;Times New Roman&quot;;     
+    qproperty-alignment: 'AlignCenter';
+    /* 强化阴影效果 */
+}
+
+QPushButton:hover {
+    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */
+    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */
+}
+
+QPushButton:pressed {
+    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */
+}</string>
+           </property>
+           <property name="text">
+            <string>保存结果</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_7">
            <property name="minimumSize">
             <size>
-             <width>30</width>
-             <height>30</height>
+             <width>88</width>
+             <height>34</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>30</width>
-             <height>30</height>
+             <width>16777215</width>
+             <height>40</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <family>Times New Roman</family>
-             <pointsize>12</pointsize>
+             <family>楷体</family>
+             <pointsize>14</pointsize>
              <weight>75</weight>
+             <italic>false</italic>
              <bold>true</bold>
             </font>
            </property>
+           <property name="styleSheet">
+            <string notr="true">QLabel {
+
+	color:white;	
+    padding: 2px 4px;  
+    background-color:#5F9EA0; 
+    font: 14pt &quot;楷体&quot;;  /* 推荐使用无衬线字体更清晰  */
+    min-width: 80px;
+    min-height: 30px;
+    font-weight: bold;
+qproperty-alignment: 'AlignCenter'; 
+}</string>
+           </property>
            <property name="text">
-            <string>...</string>
+            <string>辅助设置区</string>
+           </property>
+           <property name="margin">
+            <number>1</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_set_para">
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
+    border-radius: 8px;
+    padding: 4px 8px;
+    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
+    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
+    font: bold 16pt &quot;Times New Roman&quot;;     
+    qproperty-alignment: 'AlignCenter';
+    /* 强化阴影效果 */
+}
+
+QPushButton:hover {
+    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */
+    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */
+}
+
+QPushButton:pressed {
+    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */
+}</string>
+           </property>
+           <property name="text">
+            <string>参数设置</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_help">
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
+    border-radius: 8px;
+    padding: 4px 8px;
+    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
+    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
+    font: bold 16pt &quot;Times New Roman&quot;;     
+    qproperty-alignment: 'AlignCenter';
+    /* 强化阴影效果 */
+}
+
+QPushButton:hover {
+    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */
+    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */
+}
+
+QPushButton:pressed {
+    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */
+}</string>
+           </property>
+           <property name="text">
+            <string>帮助</string>
            </property>
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QGraphicsView" name="graphicsView"/>
        </item>
       </layout>
      </item>
@@ -290,7 +416,7 @@ QSpinBox::down-button:pressed {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>579</width>
+     <width>854</width>
      <height>23</height>
     </rect>
    </property>
@@ -298,72 +424,7 @@ QSpinBox::down-button:pressed {
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>pushButton_3</sender>
-   <signal>clicked()</signal>
-   <receiver>VA_para</receiver>
-   <slot>open_VA_folder()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>503</x>
-     <y>227</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>510</x>
-     <y>180</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>VA_para</receiver>
-   <slot>Confirm()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>247</x>
-     <y>307</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>306</x>
-     <y>301</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton</sender>
-   <signal>released()</signal>
-   <receiver>VA_para</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>247</x>
-     <y>307</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>342</x>
-     <y>284</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton_2</sender>
-   <signal>clicked()</signal>
-   <receiver>VA_para</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>340</x>
-     <y>307</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>541</x>
-     <y>318</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <slots>
   <slot>open_VA_folder()</slot>
   <slot>save_VA_folder()</slot>

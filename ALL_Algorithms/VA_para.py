@@ -14,163 +14,275 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_VA_para(object):
     def setupUi(self, VA_para):
         VA_para.setObjectName("VA_para")
-        VA_para.resize(579, 336)
+        VA_para.resize(854, 619)
         self.centralwidget = QtWidgets.QWidget(VA_para)
         self.centralwidget.setObjectName("centralwidget")
-        self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(180, 200, 191, 42))
-        self.layoutWidget.setObjectName("layoutWidget")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.pushButton = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton.setMinimumSize(QtCore.QSize(0, 40))
-        self.pushButton.setMaximumSize(QtCore.QSize(80, 60))
-        self.pushButton.setStyleSheet("QPushButton{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
-"\n"
-"font:bold;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
-"}")
-        self.pushButton.setObjectName("pushButton")
-        self.horizontalLayout.addWidget(self.pushButton)
-        self.pushButton_2 = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
-        self.pushButton_2.setMaximumSize(QtCore.QSize(80, 16777215))
-        self.pushButton_2.setStyleSheet("QPushButton{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
-"\n"
-"font:bold;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
-"}")
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.horizontalLayout.addWidget(self.pushButton_2)
-        self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(62, 81, 461, 82))
-        self.layoutWidget1.setObjectName("layoutWidget1")
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.layoutWidget1)
-        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.label = QtWidgets.QLabel(self.layoutWidget1)
-        self.label.setMaximumSize(QtCore.QSize(200, 40))
-        self.label.setStyleSheet("QLabel {\n"
-"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
-"    border-radius: 8px;\n"
-"    padding: 4px 8px;\n"
-"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
-"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
-"    font: bold 16pt \"Times New Roman\";     \n"
-"    qproperty-alignment: \'AlignCenter\';\n"
-"    /* 强化阴影效果 */\n"
-"}\n"
-"\n"
-"QLabel:hover {\n"
-"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
-"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
-"}\n"
-"\n"
-"QLabel:pressed {\n"
-"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
-"}")
-        self.label.setObjectName("label")
-        self.verticalLayout_2.addWidget(self.label)
-        self.label_VA_data_path = QtWidgets.QLabel(self.layoutWidget1)
-        self.label_VA_data_path.setMaximumSize(QtCore.QSize(200, 40))
-        self.label_VA_data_path.setStyleSheet("QLabel {\n"
-"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
-"    border-radius: 8px;\n"
-"    padding: 4px 8px;\n"
-"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
-"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
-"    font: bold 16pt \"Times New Roman\";     \n"
-"    qproperty-alignment: \'AlignCenter\';\n"
-"    /* 强化阴影效果 */\n"
-"}\n"
-"\n"
-"QLabel:hover {\n"
-"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
-"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
-"}\n"
-"\n"
-"QLabel:pressed {\n"
-"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
-"}")
-        self.label_VA_data_path.setObjectName("label_VA_data_path")
-        self.verticalLayout_2.addWidget(self.label_VA_data_path)
-        self.horizontalLayout_3.addLayout(self.verticalLayout_2)
-        self.verticalLayout = QtWidgets.QVBoxLayout()
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.spinBox_sampling_rate = QtWidgets.QSpinBox(self.layoutWidget1)
-        self.spinBox_sampling_rate.setMinimumSize(QtCore.QSize(110, 40))
-        self.spinBox_sampling_rate.setMaximumSize(QtCore.QSize(400, 16777215))
+        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.widget.setGeometry(QtCore.QRect(60, 20, 711, 471))
+        self.widget.setObjectName("widget")
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.widget)
+        self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_6.setObjectName("verticalLayout_6")
+        self.verticalLayout_5 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_5.setObjectName("verticalLayout_5")
+        self.label_8 = QtWidgets.QLabel(self.widget)
+        self.label_8.setMinimumSize(QtCore.QSize(88, 34))
+        self.label_8.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(12)
+        font.setFamily("楷体")
+        font.setPointSize(14)
         font.setBold(True)
+        font.setItalic(False)
         font.setWeight(75)
-        self.spinBox_sampling_rate.setFont(font)
-        self.spinBox_sampling_rate.setStyleSheet("QSpinBox::up-button:pressed {\n"
-"    margin-top: 4px;  /* 模拟按压下沉 */\n"
-"}\n"
-"QSpinBox::down-button:pressed {\n"
-"    margin-top: 4px;\n"
+        self.label_8.setFont(font)
+        self.label_8.setStyleSheet("QLabel {\n"
+"\n"
+"    color:white;    \n"
+"    padding: 2px 4px;  \n"
+"    background-color:#5F9EA0; \n"
+"    font: 14pt \"楷体\";  /* 推荐使用无衬线字体更清晰  */\n"
+"    min-width: 80px;\n"
+"    min-height: 30px;\n"
+"    font-weight: bold;\n"
+"qproperty-alignment: \'AlignCenter\'; \n"
 "}")
-        self.spinBox_sampling_rate.setMaximum(9999)
-        self.spinBox_sampling_rate.setProperty("value", 1000)
-        self.spinBox_sampling_rate.setObjectName("spinBox_sampling_rate")
-        self.verticalLayout.addWidget(self.spinBox_sampling_rate)
+        self.label_8.setObjectName("label_8")
+        self.verticalLayout_5.addWidget(self.label_8)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.lineEdit_VA_data_path = QtWidgets.QLineEdit(self.layoutWidget1)
-        self.lineEdit_VA_data_path.setMinimumSize(QtCore.QSize(250, 30))
-        self.lineEdit_VA_data_path.setMaximumSize(QtCore.QSize(9999, 16777215))
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.horizontalLayout_2.addLayout(self.verticalLayout)
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.pushButton_browe_data_file = QtWidgets.QPushButton(self.widget)
+        self.pushButton_browe_data_file.setStyleSheet("QPushButton {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.pushButton_browe_data_file.setObjectName("pushButton_browe_data_file")
+        self.verticalLayout_4.addWidget(self.pushButton_browe_data_file)
+        self.pushButton_select = QtWidgets.QPushButton(self.widget)
+        self.pushButton_select.setStyleSheet("QPushButton {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.pushButton_select.setObjectName("pushButton_select")
+        self.verticalLayout_4.addWidget(self.pushButton_select)
+        self.horizontalLayout_2.addLayout(self.verticalLayout_4)
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.lineEdit = QtWidgets.QLineEdit(self.widget)
+        self.lineEdit.setMinimumSize(QtCore.QSize(0, 30))
+        self.lineEdit.setReadOnly(True)
+        self.lineEdit.setObjectName("lineEdit")
+        self.verticalLayout_2.addWidget(self.lineEdit)
+        self.lineEdit_2 = QtWidgets.QLineEdit(self.widget)
+        self.lineEdit_2.setMinimumSize(QtCore.QSize(0, 30))
+        self.lineEdit_2.setReadOnly(True)
+        self.lineEdit_2.setObjectName("lineEdit_2")
+        self.verticalLayout_2.addWidget(self.lineEdit_2)
+        self.horizontalLayout_2.addLayout(self.verticalLayout_2)
+        self.verticalLayout_5.addLayout(self.horizontalLayout_2)
+        self.verticalLayout_6.addLayout(self.verticalLayout_5)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.label_6 = QtWidgets.QLabel(self.widget)
+        self.label_6.setMinimumSize(QtCore.QSize(100, 40))
+        self.label_6.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(12)
+        font.setFamily("楷体")
+        font.setPointSize(14)
         font.setBold(True)
+        font.setItalic(False)
         font.setWeight(75)
-        self.lineEdit_VA_data_path.setFont(font)
-        self.lineEdit_VA_data_path.setReadOnly(True)
-        self.lineEdit_VA_data_path.setObjectName("lineEdit_VA_data_path")
-        self.horizontalLayout_2.addWidget(self.lineEdit_VA_data_path)
-        self.pushButton_3 = QtWidgets.QPushButton(self.layoutWidget1)
-        self.pushButton_3.setMinimumSize(QtCore.QSize(30, 30))
-        self.pushButton_3.setMaximumSize(QtCore.QSize(30, 30))
+        self.label_6.setFont(font)
+        self.label_6.setStyleSheet("QLabel {\n"
+"\n"
+"    color:white;    \n"
+"    padding: 2px 4px;  \n"
+"    background-color:#5F9EA0; \n"
+"    font: 14pt \"楷体\";  /* 推荐使用无衬线字体更清晰  */\n"
+"    min-width: 80px;\n"
+"    min-height: 30px;\n"
+"    font-weight: bold;\n"
+"qproperty-alignment: \'AlignCenter\'; \n"
+"}")
+        self.label_6.setObjectName("label_6")
+        self.verticalLayout_3.addWidget(self.label_6)
+        self.pushButton_preview_data_file = QtWidgets.QPushButton(self.widget)
+        self.pushButton_preview_data_file.setStyleSheet("QPushButton {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.pushButton_preview_data_file.setObjectName("pushButton_preview_data_file")
+        self.verticalLayout_3.addWidget(self.pushButton_preview_data_file)
+        self.pushButton_psd_analysis = QtWidgets.QPushButton(self.widget)
+        self.pushButton_psd_analysis.setStyleSheet("QPushButton {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.pushButton_psd_analysis.setObjectName("pushButton_psd_analysis")
+        self.verticalLayout_3.addWidget(self.pushButton_psd_analysis)
+        self.pushButton_save_data = QtWidgets.QPushButton(self.widget)
+        self.pushButton_save_data.setStyleSheet("QPushButton {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.pushButton_save_data.setObjectName("pushButton_save_data")
+        self.verticalLayout_3.addWidget(self.pushButton_save_data)
+        self.label_7 = QtWidgets.QLabel(self.widget)
+        self.label_7.setMinimumSize(QtCore.QSize(88, 34))
+        self.label_7.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(12)
+        font.setFamily("楷体")
+        font.setPointSize(14)
         font.setBold(True)
+        font.setItalic(False)
         font.setWeight(75)
-        self.pushButton_3.setFont(font)
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.horizontalLayout_2.addWidget(self.pushButton_3)
-        self.verticalLayout.addLayout(self.horizontalLayout_2)
-        self.horizontalLayout_3.addLayout(self.verticalLayout)
+        self.label_7.setFont(font)
+        self.label_7.setStyleSheet("QLabel {\n"
+"\n"
+"    color:white;    \n"
+"    padding: 2px 4px;  \n"
+"    background-color:#5F9EA0; \n"
+"    font: 14pt \"楷体\";  /* 推荐使用无衬线字体更清晰  */\n"
+"    min-width: 80px;\n"
+"    min-height: 30px;\n"
+"    font-weight: bold;\n"
+"qproperty-alignment: \'AlignCenter\'; \n"
+"}")
+        self.label_7.setObjectName("label_7")
+        self.verticalLayout_3.addWidget(self.label_7)
+        self.pushButton_set_para = QtWidgets.QPushButton(self.widget)
+        self.pushButton_set_para.setStyleSheet("QPushButton {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.pushButton_set_para.setObjectName("pushButton_set_para")
+        self.verticalLayout_3.addWidget(self.pushButton_set_para)
+        self.pushButton_help = QtWidgets.QPushButton(self.widget)
+        self.pushButton_help.setStyleSheet("QPushButton {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.pushButton_help.setObjectName("pushButton_help")
+        self.verticalLayout_3.addWidget(self.pushButton_help)
+        self.horizontalLayout.addLayout(self.verticalLayout_3)
+        self.graphicsView = QtWidgets.QGraphicsView(self.widget)
+        self.graphicsView.setObjectName("graphicsView")
+        self.horizontalLayout.addWidget(self.graphicsView)
+        self.verticalLayout_6.addLayout(self.horizontalLayout)
         VA_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(VA_para)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 579, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 854, 23))
         self.menubar.setObjectName("menubar")
         VA_para.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(VA_para)
@@ -178,17 +290,18 @@ class Ui_VA_para(object):
         VA_para.setStatusBar(self.statusbar)
 
         self.retranslateUi(VA_para)
-        self.pushButton_3.clicked.connect(VA_para.open_VA_folder) # type: ignore
-        self.pushButton.clicked.connect(VA_para.Confirm) # type: ignore
-        self.pushButton.released.connect(VA_para.close) # type: ignore
-        self.pushButton_2.clicked.connect(VA_para.close) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(VA_para)
 
     def retranslateUi(self, VA_para):
         _translate = QtCore.QCoreApplication.translate
         VA_para.setWindowTitle(_translate("VA_para", "VibrationAnalyzer参数设置"))
-        self.pushButton.setText(_translate("VA_para", "确认"))
-        self.pushButton_2.setText(_translate("VA_para", "取消"))
-        self.label.setText(_translate("VA_para", "sampling_rate"))
-        self.label_VA_data_path.setText(_translate("VA_para", "VA_data_path"))
-        self.pushButton_3.setText(_translate("VA_para", "..."))
+        self.label_8.setText(_translate("VA_para", "分析功能区"))
+        self.pushButton_browe_data_file.setText(_translate("VA_para", "浏览数据文件"))
+        self.pushButton_select.setText(_translate("VA_para", "选择输出目录"))
+        self.label_6.setText(_translate("VA_para", "分析功能区"))
+        self.pushButton_preview_data_file.setText(_translate("VA_para", "预览数据"))
+        self.pushButton_psd_analysis.setText(_translate("VA_para", "功率谱分析"))
+        self.pushButton_save_data.setText(_translate("VA_para", "保存结果"))
+        self.label_7.setText(_translate("VA_para", "辅助设置区"))
+        self.pushButton_set_para.setText(_translate("VA_para", "参数设置"))
+        self.pushButton_help.setText(_translate("VA_para", "帮助"))

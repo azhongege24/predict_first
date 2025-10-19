@@ -15,9 +15,6 @@ import os
 import scipy.io as sio
 import torch
 import joblib
-from ALL_Algorithms.VA_data_handle import preview_VAdata
-from ALL_Algorithms.VA_data_handle import analyze_VA_psd
-from ALL_Algorithms.VA_data_handle import save_psd_result_util
 from ALL_Algorithms.VA_para import Ui_VA_para
 from ALL_Algorithms.Load_model_para import Ui_Load_model_para
 from ALL_Algorithms.Load_pretrained_model import select_pretrained_model_path
@@ -43,6 +40,13 @@ from ALL_Algorithms.MTW import MTW_Lasso
 from ALL_Algorithms.MTW import mtw_plot_and_evaluate
 from ALL_Algorithms.ReMTW import REMTW_Lasso
 from ALL_Algorithms.ReMTW import remtw_plot_and_evaluate
+# 在文件顶部添加VA分析模块导入
+from ALL_Algorithms.VA_ANALYSIS.vibration_analyzer import VibrationAnalysisController
+from ALL_Algorithms.VA_ANALYSIS.vibration_data_loader import VibrationDataLoader
+from ALL_Algorithms.VA_ANALYSIS.power_spectrum_analyzer import PowerSpectrumAnalyzer
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 global max_depth, random_state,n_estimators,kernel, C, epsilon,scale_features
@@ -51,65 +55,267 @@ global mmoe_num_experts,mmoe_expert_hidden,mmoe_learning_rate,mmoe_dropout_rate
 global mmoe_epochs,mmoe_batch_size,mmoe_lambda_balance,mmoe_scale_features
 method = 'NONE'  # 初始化方法为NONE
 # 读取输入参数
-VA_data_path = ""  # 设置一个默认值
+
 class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
     def __init__(self, parent=None):
         super(POP_VA_para, self).__init__()
         self.setupUi(self)
-        self.parent_window = parent#保存主窗口的引用
-        self.lastSelectedPath = ""
-    
-    def Confirm(self):
-         # 读取输入参数
-        global sampling_rate,VA_data_path,VA_outpath,num_groups
-        sampling_rate = int(self.spinBox_sampling_rate.text())
-        VA_data_path = str(self.lineEdit_VA_data_path.text())
-        if self.parent_window:
-            self.parent_window.VA_data_path = VA_data_path  # 将路径传递给主窗口
-            self.parent_window.lineEdit_Algorithm_name.setText("Vibration Analysis")
-            self.parent_window.lineEdit_state.setText("正在进行振动分析")
-            self.parent_window.preview_VA_data()  # 预览数据
+        self.parent_window = parent  # 保存主窗口的引用
         
-        print("sampling_rate:", sampling_rate) 
-        print("VA_data_path:", VA_data_path)
+        # 初始化VA分析控制器
+        self.va_controller = VibrationAnalysisController()
+        
+        # 当前数据和分析结果
+        self.current_file_path = None
+        self.current_time_data = None
+        self.current_signal_data = None
+        self.analysis_results = None
+        self.save_directory = None
+        
+        # 创建matplotlib图形画布
+        self.figure = Figure(figsize=(8, 6), dpi=100)
+        self.canvas = FigureCanvas(self.figure)
+        
+        # 将matplotlib画布添加到graphicsView中
+        scene = QGraphicsScene()
+        scene.addWidget(self.canvas)
+        self.graphicsView.setScene(scene)
+        
+        # 连接按钮信号
+        self.pushButton_browe_data_file.clicked.connect(self.browse_data_file)
+        self.pushButton_select.clicked.connect(self.select_output_directory)
+        self.pushButton_preview_data_file.clicked.connect(self.preview_data)
+        self.pushButton_psd_analysis.clicked.connect(self.perform_psd_analysis)
+        self.pushButton_save_data.clicked.connect(self.save_analysis_results)
+        self.pushButton_set_para.clicked.connect(self.set_analysis_parameters)
+        self.pushButton_help.clicked.connect(self.show_help)
+        
+    def browse_data_file(self):
+        """浏览数据文件"""
+        file_filter = "数据文件 (*.txt *.mat);;文本文件 (*.txt);;MAT文件 (*.mat);;所有文件 (*.*)"
+        initial_dir = "data/" if os.path.exists("data/") else "./"
+        
+        file_path, _ = QFileDialog.getOpenFileName(
+            self, "选择振动数据文件", initial_dir, file_filter
+        )
+        
+        if file_path:
+            self.current_file_path = file_path
+            self.lineEdit.setText(file_path)
+            
+            try:
+                # 尝试加载数据以验证文件格式
+                time_data, signal_data = self.va_controller.data_loader.load_data(file_path)
+                self.current_time_data = time_data
+                self.current_signal_data = signal_data
+                
+                # 解析文件信息
+                file_name = os.path.basename(file_path)
+                channel, direction = self.va_controller.data_loader.parse_channel_info(file_name)
+                
+                info_msg = f"文件加载成功\n"
+                info_msg += f"数据点数: {len(time_data)}\n"
+                info_msg += f"时间范围: {time_data[0]:.3f} - {time_data[-1]:.3f}秒\n"
+                if channel:
+                    info_msg += f"通道: {channel}\n"
+                if direction:
+                    info_msg += f"方向: {direction}"
+                
+                QMessageBox.information(self, "文件信息", info_msg)
+                
+            except Exception as e:
+                QMessageBox.warning(self, "加载失败", f"文件加载失败: {str(e)}")
+                self.current_file_path = None
+                self.current_time_data = None
+                self.current_signal_data = None
+    
+    def select_output_directory(self):
+        """选择输出目录"""
+        initial_dir = "results/" if os.path.exists("results/") else "./"
+        directory = QFileDialog.getExistingDirectory(
+            self, "选择结果保存目录", initial_dir
+        )
+        
+        if directory:
+            self.save_directory = directory
+            self.lineEdit_2.setText(directory)
+    
+    def preview_data(self):
+        """预览数据 - 显示时域和频域预览"""
+        if self.current_time_data is None or self.current_signal_data is None:
+            QMessageBox.warning(self, "警告", "请先加载数据文件！")
+            return
+        
+        try:
+            # 清空当前图形
+            self.figure.clear()
+            
+            # 创建子图
+            ax1 = self.figure.add_subplot(211)
+            ax2 = self.figure.add_subplot(212)
+            
+            # 时域图
+            ax1.plot(self.current_time_data, self.current_signal_data, 'b-', linewidth=1)
+            ax1.set_xlabel('时间 (s)')
+            ax1.set_ylabel('振动幅值')
+            ax1.set_title('时域信号')
+            ax1.grid(True, alpha=0.3)
+            
+            # 频域预览（使用简单的FFT）
+            fs = 1.0 / np.mean(np.diff(self.current_time_data))
+            n = len(self.current_signal_data)
+            freq = np.fft.fftfreq(n, 1/fs)[:n//2]
+            fft_spectrum = np.abs(np.fft.fft(self.current_signal_data))[:n//2]
+            
+            ax2.plot(freq, fft_spectrum, 'r-', linewidth=1)
+            ax2.set_xlabel('频率 (Hz)')
+            ax2.set_ylabel('幅值')
+            ax2.set_title('频域预览（FFT）')
+            ax2.grid(True, alpha=0.3)
+            ax2.set_xlim(0, min(fs/2, 2000))  # 限制显示到2000Hz
+            
+            # 调整布局
+            self.figure.tight_layout()
+            self.canvas.draw()
+            
+        except Exception as e:
+            QMessageBox.warning(self, "预览失败", f"数据预览失败: {str(e)}")
+    
+    def perform_psd_analysis(self):
+        """执行功率谱分析"""
+        if self.current_time_data is None or self.current_signal_data is None:
+            QMessageBox.warning(self, "警告", "请先加载数据文件！")
+            return
+        
+        try:
+            # 获取文件信息
+            file_name = os.path.basename(self.current_file_path)
+            channel, direction = self.va_controller.data_loader.parse_channel_info(file_name)
+            
+            # 执行分析（使用默认参数）
+            self.analysis_results = self.va_controller.analyze_file(
+                self.current_file_path, 
+                product_code="Unknown",
+                serial_number="Unknown"
+            )
+            
+            # 显示分析结果
+            self.display_analysis_results()
+            
+            QMessageBox.information(self, "分析完成", "功率谱分析已完成！")
+            
+        except Exception as e:
+            QMessageBox.warning(self, "分析失败", f"功率谱分析失败: {str(e)}")
+    
+    def display_analysis_results(self):
+        """显示分析结果"""
+        if not self.analysis_results:
+            return
+        
+        try:
+            # 清空当前图形
+            self.figure.clear()
+            
+            results = self.analysis_results['results']
+            num_segments = len(results)
+            
+            # 为每个分段创建子图
+            if num_segments <= 3:
+                # 少于等于3个分段，垂直排列
+                for i, result in enumerate(results):
+                    ax = self.figure.add_subplot(num_segments, 1, i+1)
+                    ax.plot(result['frequency'], result['power_spectrum'], 'b-', linewidth=1.5)
+                    ax.set_xlabel('频率 (Hz)')
+                    ax.set_ylabel('功率谱密度')
+                    ax.set_title(f"时间段: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
+                    ax.grid(True, alpha=0.3)
+            else:
+                # 多于3个分段，使用网格布局
+                cols = 2
+                rows = (num_segments + 1) // cols
+                for i, result in enumerate(results):
+                    ax = self.figure.add_subplot(rows, cols, i+1)
+                    ax.plot(result['frequency'], result['power_spectrum'], 'b-', linewidth=1.5)
+                    ax.set_xlabel('频率 (Hz)')
+                    ax.set_ylabel('功率谱密度')
+                    ax.set_title(f"时间段: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
+                    ax.grid(True, alpha=0.3)
+            
+            # 调整布局
+            self.figure.suptitle(f"功率谱分析结果 - {self.analysis_results['channel']} {self.analysis_results['direction']}", 
+                                 fontsize=14)
+            self.figure.tight_layout()
+            self.canvas.draw()
+            
+        except Exception as e:
+            QMessageBox.warning(self, "显示失败", f"结果显示失败: {str(e)}")
+    
+    def save_analysis_results(self):
+        """保存分析结果"""
+        if not self.analysis_results:
+            QMessageBox.warning(self, "警告", "请先执行功率谱分析！")
+            return
+        
+        if not self.save_directory:
+            QMessageBox.warning(self, "警告", "请先选择输出目录！")
+            return
+        
+        try:
+            # 获取文件信息
+            file_name = os.path.basename(self.current_file_path)
+            channel, direction = self.va_controller.data_loader.parse_channel_info(file_name)
+            
+            # 保存结果
+            saved_files = self.va_controller.save_analysis_results(
+                self.analysis_results,
+                self.save_directory
+            )
+            
+            file_list = "\n".join(saved_files)
+            QMessageBox.information(self, "保存成功", f"分析结果已保存到以下文件:\n{file_list}")
+            
+        except Exception as e:
+            QMessageBox.warning(self, "保存失败", f"结果保存失败: {str(e)}")
+    
+    def set_analysis_parameters(self):
+        """设置分析参数"""
+        # 这里可以添加参数设置对话框
+        # 暂时显示当前参数
+        current_params = self.va_controller.current_params
+        param_text = "当前分析参数:\n"
+        param_text += f"分析方法: {current_params['method']}\n"
+        param_text += f"窗口函数: {current_params['window']}\n"
+        param_text += f"重叠比例: {current_params['overlap_ratio']}\n"
+        param_text += f"采样频率: {current_params['fs']}\n"
+        param_text += f"每段点数: {current_params['nperseg']}\n"
+        
+        QMessageBox.information(self, "分析参数", param_text)
+    
+    def show_help(self):
+        """显示帮助信息"""
+        help_text = """振动分析工具使用说明:
+
+1. 浏览数据文件 - 选择振动数据文件(.txt或.mat格式)
+2. 选择输出目录 - 设置分析结果保存位置
+3. 预览数据 - 显示时域和频域预览图
+4. 功率谱分析 - 执行完整的功率谱分析
+5. 保存结果 - 保存分析结果到指定目录
+6. 参数设置 - 查看当前分析参数
+7. 帮助 - 显示此帮助信息
+
+支持的数据格式:
+- .txt文件: 两列数据(时间, 振动值)
+- .mat文件: 包含's'变量的MAT文件
+
+文件命名建议:
+- 包含通道和方向信息，如"A通道X方向振动.txt"
+"""
+        QMessageBox.information(self, "使用帮助", help_text)
+    
+
 
     
-    def open_VA_folder(self):
-        '''新内容取消的时候不会改变linedit'''
-        file_filter = "Data Files (*.csv *.xls *.xlsx *.mat);;Excel Files (*.xls *.xlsx);;MATLAB Files (*.mat);;CSV Files (*.csv);;All Files(*.*)"
-        initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
-        self.fileName, _ = QFileDialog.getOpenFileName(
-            self, "选取文件", initial_dir, file_filter
-        )
 
-        if not self.fileName:  # 用户取消选择
-            return  # 直接返回，不改变lineEdit的内容
-
-        # 更新上次路径并显示到lineEdit
-        self.lastSelectedPath = self.fileName
-        self.lineEdit_VA_data_path.setText(self.fileName)
-        print("选择的文件:", self.fileName)
-        if not os.path.isfile(self.fileName):
-            self.lineEdit_VA_data_path.setText("File path doesn't exist")
-            return
-
-    def save_VA_folder(self):
-        '''新内容取消的时候不会改变lineEdit'''
-        # 将初始目录设置为 data 文件夹
-        initial_dir = os.path.join(os.getcwd(), "data")  # 获取当前工作目录下的 data 文件夹路径
-        if not os.path.exists(initial_dir):  # 如果 data 文件夹不存在，则创建
-            os.makedirs(initial_dir)
-
-        self.fileName = QFileDialog.getExistingDirectory(
-            self, "选取文件夹", initial_dir
-        )
-
-        if not self.fileName:  # 用户取消选择
-            return 
-        # 更新上次路径并显示到 lineEdit
-        self.lastSelectedPath = self.fileName
-        self.lineEdit_VA_outputpath.setText(self.fileName)
-        print("选择输出的文件夹:", self.fileName)
 
 class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -647,125 +853,17 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         # 在UI初始化代码中添加
 
 
-        # 初始化 VibrationAnalyzer 为 None，等待用户输入采样率后再实例化
-        self.VA_data_path = ""
-
-
-
         # 连接按钮信号
         
         self.pushButton_top.clicked.connect(self.show_previous_page)
         self.pushButton_bottom.clicked.connect(self.show_next_page)
-        # self.pushButton_preview_VA_data.clicked.connect(self.preview_VA_data)  这个现在没用了，直接导入振动数据文件的时候，确认便就会预览
-        self.pushButton_psd_analysis.clicked.connect(self.handle_vibration_analysis)
-        self.pushButton_save_psd.clicked.connect(self.save_psd_result)
-        self.pushButton_dataset.clicked.connect(self.AL_dataset_handle)  # 打开数据集处理窗口
+        
+        self.pushButton_dataset.clicked.connect(self.AL_dataset_handle)  # 打开数据集合成处理窗口
         self.pushButton_save_pretrained_model.clicked.connect(
                     lambda: self.ask_and_save_model(self.trained_model, method)
                 ) # 保存预训练模型
 
     
-    def ask_and_save_model(parent, model, method_name=None):
-        """
-        保存训练好的模型（直接保存，不询问）
-        :param parent: 父窗口
-        :param model: 训练好的模型对象
-        :param method_name: 方法名称（用于默认文件名）
-        """
-        # 1. 确定默认文件名
-        default_name = f"{method_name}.pkl" if method_name else "model.pkl"
-        
-        # 2. 获取保存路径（固定使用 ./trained_models/）
-        initial_path = os.path.join("./trained_models/", default_name)
-        
-        file_path, _ = QFileDialog.getSaveFileName(
-            parent,
-            "保存模型文件",
-            initial_path,
-            "模型文件 (*.pkl *.joblib *.pt);;所有文件 (*)"
-        )
-        
-        if not file_path:
-            return
-        
-        # 3. 根据模型类型选择保存方式
-        try:
-            class_name = model.__class__.__name__
-            
-            # 特殊处理 PyTorch 模型
-            if class_name in ['MMoERegressor', 'MultitaskGPRegressor']:
-                # 确保使用 .pt 扩展名
-                if not file_path.endswith('.pt'):
-                    file_path = os.path.splitext(file_path)[0] + '.pt'
-                
-                # 公共保存内容
-                save_dict = {
-                    'scaler': model.scaler,
-                    'input_dim': model.input_dim,
-                    'output_dim': model.output_dim,
-                    'loss_history': model.loss_history
-                }
-                
-                # 特定模型的额外保存内容
-                if class_name == 'MMoERegressor':
-                    save_dict.update({
-                        'model_state_dict': model.model.state_dict(),
-                        'num_experts': model.num_experts,
-                        'expert_hidden': model.expert_hidden
-                    })
-                elif class_name == 'MultitaskGPRegressor':
-                    save_dict.update({
-                        'model_state_dict': model.model.state_dict(),
-                        'likelihood_state_dict': model.likelihood.state_dict(),
-                        'num_tasks': model.num_tasks
-                    })
-                    
-                torch.save(save_dict, file_path)
-            else:
-                # 其他模型使用 joblib
-                joblib.dump(model, file_path)
-            
-            # 4. 更新状态
-            if hasattr(parent, "lineEdit_state"):
-                parent.lineEdit_state.setText("模型已保存")
-            
-            QMessageBox.information(parent, "保存成功", f"模型已保存到: {file_path}")
-            
-        except Exception as e:
-            QMessageBox.warning(parent, "保存模型失败", str(e))
-            
-    
-    def handle_vibration_analysis(self):#测试阶段
-        """
-        振动分析按钮的槽函数
-        """
-
-
-        try:
-            # 调用 VibrationAnalyzer 的方法
-            result = analyze_VA_psd(self, VA_data_path,fs=sampling_rate)
-            if result is not None:
-                self.psd_results = result['psd_data']  # 获取 PSD 数据
-                self.lineEdit_state.setText("功率谱分析成功")
-            else:
-                self.lineEdit_state.setText("分析失败")
-        except Exception as e:
-            print(f"振动分析失败: {str(e)}")   
-
-    def preview_VA_data(self):
-        """
-        预览振动数据
-        """
-
-        try:
-            # 调用 VibrationAnalyzer 的方法
-            preview_VAdata(self, VA_data_path)
-            self.lineEdit_state.setText("数据预览成功")
-        except Exception as e:
-            print(f"数据预览失败: {str(e)}")
-    # 主窗口类内
-    def save_psd_result(self):
-        save_psd_result_util(self, self.psd_results)   
 
 
 

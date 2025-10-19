@@ -1,0 +1,98 @@
+import os
+import numpy as np
+import scipy.io as sio
+import pandas as pd
+from pathlib import Path
+
+class VibrationDataLoader:
+    """振动数据读取工具类，支持txt和mat格式"""
+    
+    @staticmethod
+    def parse_channel_info(filename):
+        """从文件名解析通道信息和方向"""
+        # 示例文件名: "A通道X方向振动.txt"
+        name = os.path.splitext(filename)[0]
+        channel = None
+        direction = None
+        
+        if "通道" in name and "方向" in name:
+            channel_part = name.split("通道")[0]
+            dir_part = name.split("通道")[1].split("方向")[0]
+            channel = f"{channel_part}通道"
+            direction = f"{dir_part}方向"
+            
+        return channel, direction
+    
+    @staticmethod
+    def read_txt_file(file_path):
+        """读取txt格式的振动数据"""
+        try:
+            # 尝试用空格分隔
+            data = np.loadtxt(file_path)
+            if data.ndim == 2 and data.shape[1] == 2:
+                return data[:, 0], data[:, 1]  # 时间，振动量值
+            
+            # 尝试用其他分隔符
+            df = pd.read_csv(file_path, sep=None, engine='python', header=None)
+            if len(df.columns) >= 2:
+                return df[0].values, df[1].values
+                
+            raise ValueError("txt文件格式不正确，需要两列数据")
+        except Exception as e:
+            raise Exception(f"读取txt文件失败: {str(e)}")
+    
+    @staticmethod
+    def read_mat_file(file_path):
+        """读取mat格式的振动数据"""
+        try:
+            mat_data = sio.loadmat(file_path)
+            if 's' in mat_data:
+                s = mat_data['s']
+                if s.ndim == 2 and s.shape[1] == 2:
+                    return s[:, 0].flatten(), s[:, 1].flatten()  # 时间，振动量值
+                else:
+                    raise ValueError("mat文件中的变量s格式不正确")
+            else:
+                raise ValueError("mat文件中未找到变量s")
+        except Exception as e:
+            raise Exception(f"读取mat文件失败: {str(e)}")
+    
+    @staticmethod
+    def load_data(file_path):
+        """根据文件扩展名自动选择读取方式"""
+        file_ext = os.path.splitext(file_path)[1].lower()
+        
+        if file_ext == '.txt':
+            return VibrationDataLoader.read_txt_file(file_path)
+        elif file_ext == '.mat':
+            return VibrationDataLoader.read_mat_file(file_path)
+        else:
+            raise ValueError(f"不支持的文件格式: {file_ext}")
+    
+    @staticmethod
+    def get_file_structure(root_dir):
+        """获取数据文件的目录结构：产品代号 -> 产品序号 -> 通道文件"""
+        structure = {}
+        root_path = Path(root_dir)
+        
+        if not root_path.is_dir():
+            return structure
+            
+        # 一级目录：产品代号
+        for product_dir in root_path.iterdir():
+            if product_dir.is_dir():
+                product_code = product_dir.name
+                structure[product_code] = {}
+                
+                # 二级目录：产品序号
+                for serial_dir in product_dir.iterdir():
+                    if serial_dir.is_dir():
+                        serial_number = serial_dir.name
+                        structure[product_code][serial_number] = []
+                        
+                        # 收集通道文件
+                        for file in serial_dir.iterdir():
+                            if file.is_file() and file.suffix.lower() in ['.txt', '.mat']:
+                                structure[product_code][serial_number].append(str(file))
+        
+        return structure
