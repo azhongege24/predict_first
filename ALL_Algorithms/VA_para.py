@@ -14,18 +14,18 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_VA_para(object):
     def setupUi(self, VA_para):
         VA_para.setObjectName("VA_para")
-        VA_para.resize(854, 619)
+        VA_para.resize(1284, 799)
         self.centralwidget = QtWidgets.QWidget(VA_para)
         self.centralwidget.setObjectName("centralwidget")
-        self.widget = QtWidgets.QWidget(self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(60, 20, 711, 471))
-        self.widget.setObjectName("widget")
-        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.widget)
+        self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget.setGeometry(QtCore.QRect(60, 20, 1181, 701))
+        self.layoutWidget.setObjectName("layoutWidget")
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.layoutWidget)
         self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout()
         self.verticalLayout_5.setObjectName("verticalLayout_5")
-        self.label_8 = QtWidgets.QLabel(self.widget)
+        self.label_8 = QtWidgets.QLabel(self.layoutWidget)
         self.label_8.setMinimumSize(QtCore.QSize(88, 34))
         self.label_8.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
@@ -55,7 +55,7 @@ class Ui_VA_para(object):
         self.horizontalLayout_2.addLayout(self.verticalLayout)
         self.verticalLayout_4 = QtWidgets.QVBoxLayout()
         self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.pushButton_browe_data_file = QtWidgets.QPushButton(self.widget)
+        self.pushButton_browe_data_file = QtWidgets.QPushButton(self.layoutWidget)
         self.pushButton_browe_data_file.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -63,7 +63,6 @@ class Ui_VA_para(object):
 "    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
 "    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
 "    font: bold 16pt \"Times New Roman\";     \n"
-"    qproperty-alignment: \'AlignCenter\';\n"
 "    /* 强化阴影效果 */\n"
 "}\n"
 "\n"
@@ -77,7 +76,7 @@ class Ui_VA_para(object):
 "}")
         self.pushButton_browe_data_file.setObjectName("pushButton_browe_data_file")
         self.verticalLayout_4.addWidget(self.pushButton_browe_data_file)
-        self.pushButton_select = QtWidgets.QPushButton(self.widget)
+        self.pushButton_select = QtWidgets.QPushButton(self.layoutWidget)
         self.pushButton_select.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -85,7 +84,6 @@ class Ui_VA_para(object):
 "    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
 "    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
 "    font: bold 16pt \"Times New Roman\";     \n"
-"    qproperty-alignment: \'AlignCenter\';\n"
 "    /* 强化阴影效果 */\n"
 "}\n"
 "\n"
@@ -102,12 +100,12 @@ class Ui_VA_para(object):
         self.horizontalLayout_2.addLayout(self.verticalLayout_4)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.lineEdit = QtWidgets.QLineEdit(self.widget)
+        self.lineEdit = QtWidgets.QLineEdit(self.layoutWidget)
         self.lineEdit.setMinimumSize(QtCore.QSize(0, 30))
         self.lineEdit.setReadOnly(True)
         self.lineEdit.setObjectName("lineEdit")
         self.verticalLayout_2.addWidget(self.lineEdit)
-        self.lineEdit_2 = QtWidgets.QLineEdit(self.widget)
+        self.lineEdit_2 = QtWidgets.QLineEdit(self.layoutWidget)
         self.lineEdit_2.setMinimumSize(QtCore.QSize(0, 30))
         self.lineEdit_2.setReadOnly(True)
         self.lineEdit_2.setObjectName("lineEdit_2")
@@ -119,8 +117,8 @@ class Ui_VA_para(object):
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.label_6 = QtWidgets.QLabel(self.widget)
-        self.label_6.setMinimumSize(QtCore.QSize(100, 40))
+        self.label_6 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_6.setMinimumSize(QtCore.QSize(88, 34))
         self.label_6.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
         font.setFamily("楷体")
@@ -142,7 +140,7 @@ class Ui_VA_para(object):
 "}")
         self.label_6.setObjectName("label_6")
         self.verticalLayout_3.addWidget(self.label_6)
-        self.pushButton_preview_data_file = QtWidgets.QPushButton(self.widget)
+        self.pushButton_preview_data_file = QtWidgets.QPushButton(self.layoutWidget)
         self.pushButton_preview_data_file.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -150,7 +148,6 @@ class Ui_VA_para(object):
 "    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
 "    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
 "    font: bold 16pt \"Times New Roman\";     \n"
-"    qproperty-alignment: \'AlignCenter\';\n"
 "    /* 强化阴影效果 */\n"
 "}\n"
 "\n"
@@ -164,7 +161,7 @@ class Ui_VA_para(object):
 "}")
         self.pushButton_preview_data_file.setObjectName("pushButton_preview_data_file")
         self.verticalLayout_3.addWidget(self.pushButton_preview_data_file)
-        self.pushButton_psd_analysis = QtWidgets.QPushButton(self.widget)
+        self.pushButton_psd_analysis = QtWidgets.QPushButton(self.layoutWidget)
         self.pushButton_psd_analysis.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -172,7 +169,6 @@ class Ui_VA_para(object):
 "    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
 "    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
 "    font: bold 16pt \"Times New Roman\";     \n"
-"    qproperty-alignment: \'AlignCenter\';\n"
 "    /* 强化阴影效果 */\n"
 "}\n"
 "\n"
@@ -186,7 +182,7 @@ class Ui_VA_para(object):
 "}")
         self.pushButton_psd_analysis.setObjectName("pushButton_psd_analysis")
         self.verticalLayout_3.addWidget(self.pushButton_psd_analysis)
-        self.pushButton_save_data = QtWidgets.QPushButton(self.widget)
+        self.pushButton_save_data = QtWidgets.QPushButton(self.layoutWidget)
         self.pushButton_save_data.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -194,7 +190,6 @@ class Ui_VA_para(object):
 "    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
 "    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
 "    font: bold 16pt \"Times New Roman\";     \n"
-"    qproperty-alignment: \'AlignCenter\';\n"
 "    /* 强化阴影效果 */\n"
 "}\n"
 "\n"
@@ -208,7 +203,7 @@ class Ui_VA_para(object):
 "}")
         self.pushButton_save_data.setObjectName("pushButton_save_data")
         self.verticalLayout_3.addWidget(self.pushButton_save_data)
-        self.label_7 = QtWidgets.QLabel(self.widget)
+        self.label_7 = QtWidgets.QLabel(self.layoutWidget)
         self.label_7.setMinimumSize(QtCore.QSize(88, 34))
         self.label_7.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
@@ -231,7 +226,7 @@ class Ui_VA_para(object):
 "}")
         self.label_7.setObjectName("label_7")
         self.verticalLayout_3.addWidget(self.label_7)
-        self.pushButton_set_para = QtWidgets.QPushButton(self.widget)
+        self.pushButton_set_para = QtWidgets.QPushButton(self.layoutWidget)
         self.pushButton_set_para.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -239,7 +234,6 @@ class Ui_VA_para(object):
 "    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
 "    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
 "    font: bold 16pt \"Times New Roman\";     \n"
-"    qproperty-alignment: \'AlignCenter\';\n"
 "    /* 强化阴影效果 */\n"
 "}\n"
 "\n"
@@ -253,7 +247,7 @@ class Ui_VA_para(object):
 "}")
         self.pushButton_set_para.setObjectName("pushButton_set_para")
         self.verticalLayout_3.addWidget(self.pushButton_set_para)
-        self.pushButton_help = QtWidgets.QPushButton(self.widget)
+        self.pushButton_help = QtWidgets.QPushButton(self.layoutWidget)
         self.pushButton_help.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -261,7 +255,6 @@ class Ui_VA_para(object):
 "    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
 "    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
 "    font: bold 16pt \"Times New Roman\";     \n"
-"    qproperty-alignment: \'AlignCenter\';\n"
 "    /* 强化阴影效果 */\n"
 "}\n"
 "\n"
@@ -276,13 +269,13 @@ class Ui_VA_para(object):
         self.pushButton_help.setObjectName("pushButton_help")
         self.verticalLayout_3.addWidget(self.pushButton_help)
         self.horizontalLayout.addLayout(self.verticalLayout_3)
-        self.graphicsView = QtWidgets.QGraphicsView(self.widget)
+        self.graphicsView = QtWidgets.QGraphicsView(self.layoutWidget)
         self.graphicsView.setObjectName("graphicsView")
         self.horizontalLayout.addWidget(self.graphicsView)
         self.verticalLayout_6.addLayout(self.horizontalLayout)
         VA_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(VA_para)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 854, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1284, 23))
         self.menubar.setObjectName("menubar")
         VA_para.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(VA_para)

@@ -6,21 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>854</width>
-    <height>619</height>
+    <width>1284</width>
+    <height>799</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>VibrationAnalyzer参数设置</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>60</x>
       <y>20</y>
-      <width>711</width>
-      <height>471</height>
+      <width>1181</width>
+      <height>701</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -87,7 +87,6 @@ qproperty-alignment: 'AlignCenter';
     background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
     color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
     font: bold 16pt &quot;Times New Roman&quot;;     
-    qproperty-alignment: 'AlignCenter';
     /* 强化阴影效果 */
 }
 
@@ -115,7 +114,6 @@ QPushButton:pressed {
     background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
     color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
     font: bold 16pt &quot;Times New Roman&quot;;     
-    qproperty-alignment: 'AlignCenter';
     /* 强化阴影效果 */
 }
 
@@ -177,8 +175,8 @@ QPushButton:pressed {
           <widget class="QLabel" name="label_6">
            <property name="minimumSize">
             <size>
-             <width>100</width>
-             <height>40</height>
+             <width>88</width>
+             <height>34</height>
             </size>
            </property>
            <property name="maximumSize">
@@ -227,7 +225,6 @@ qproperty-alignment: 'AlignCenter';
     background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
     color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
     font: bold 16pt &quot;Times New Roman&quot;;     
-    qproperty-alignment: 'AlignCenter';
     /* 强化阴影效果 */
 }
 
@@ -255,7 +252,6 @@ QPushButton:pressed {
     background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
     color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
     font: bold 16pt &quot;Times New Roman&quot;;     
-    qproperty-alignment: 'AlignCenter';
     /* 强化阴影效果 */
 }
 
@@ -283,7 +279,6 @@ QPushButton:pressed {
     background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
     color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
     font: bold 16pt &quot;Times New Roman&quot;;     
-    qproperty-alignment: 'AlignCenter';
     /* 强化阴影效果 */
 }
 
@@ -355,7 +350,6 @@ qproperty-alignment: 'AlignCenter';
     background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
     color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
     font: bold 16pt &quot;Times New Roman&quot;;     
-    qproperty-alignment: 'AlignCenter';
     /* 强化阴影效果 */
 }
 
@@ -383,7 +377,6 @@ QPushButton:pressed {
     background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
     color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
     font: bold 16pt &quot;Times New Roman&quot;;     
-    qproperty-alignment: 'AlignCenter';
     /* 强化阴影效果 */
 }
 
@@ -416,7 +409,7 @@ QPushButton:pressed {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>854</width>
+     <width>1284</width>
      <height>23</height>
     </rect>
    </property>

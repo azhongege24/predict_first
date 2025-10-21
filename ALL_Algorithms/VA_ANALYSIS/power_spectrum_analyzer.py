@@ -15,14 +15,14 @@ class PowerSpectrumAnalyzer:
         
         # 支持的窗口函数
         self.supported_windows = [
-            'hanning', 'hamming', 'blackman', 'bartlett', 
+            'hann', 'hamming', 'blackman', 'bartlett', 
             'boxcar', 'triang', 'parzen', 'bohman',
             'blackmanharris', 'nuttall', 'barthann'
         ]
         
         # 默认参数
         self.default_method = 'welch'
-        self.default_window = 'hanning'
+        self.default_window = 'hann'
         self.default_overlap_ratio = 0.5
         self.default_freq_range = (20, 2000)  # Hz
     
@@ -64,13 +64,21 @@ class PowerSpectrumAnalyzer:
         
         return f, Pxx
     
-    def _get_window_function(self, window_name,nperseg=None):
+    def _get_window_function(self, window_name ,nperseg=None):
         """获取窗口函数"""
+        # 首先标准化窗口名称（转换为小写）
+        if window_name is None:
+            window_name = self.default_window
+        else:
+            window_name = str(window_name).lower()
+            
+        # 检查窗口函数是否支持
         if window_name not in self.supported_windows:
-            raise ValueError(f"不支持的窗口函数: {window_name}，支持的有: {self.supported_windows}")
-                # 如果提供了nperseg，返回实际的窗口函数数组，否则返回名称
-        if nperseg is not None:
-            return get_window(window_name, nperseg)
+            # 提供一个更友好的错误信息，并显示支持的窗口列表
+            supported_windows_str = ', '.join(self.supported_windows)
+            raise ValueError(f"不支持的窗口函数: '{window_name}'。\n支持的窗口函数有: {supported_windows_str}")
+       
+
         return window_name
     
     def segment_data(self, time_data, signal_data, start_time=None, end_time=None, 
@@ -147,7 +155,7 @@ class PowerSpectrumAnalyzer:
         return segments
     
     def analyze_single_segment(self, time_data, signal_data, fs=None, method='welch', 
-                              window='hanning', nperseg=None, overlap_ratio=0.5):
+                              window='hann', nperseg=None, overlap_ratio=0.5):
         """
         分析单个数据段的功率谱
         
@@ -206,7 +214,7 @@ class PowerSpectrumAnalyzer:
         return f[freq_mask], Pxx[freq_mask]
     
     def analyze_multiple_segments(self, time_data, signal_data, fs=None, method='welch', 
-                                 window='hanning', nperseg=None, start_time=None, 
+                                 window='hann', nperseg=None, start_time=None, 
                                  end_time=None, num_segments=None, segment_duration=None,
                                  overlap_ratio=0.5):
         """

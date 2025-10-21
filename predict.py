@@ -44,6 +44,7 @@ from ALL_Algorithms.ReMTW import remtw_plot_and_evaluate
 from ALL_Algorithms.VA_ANALYSIS.vibration_analyzer import VibrationAnalysisController
 from ALL_Algorithms.VA_ANALYSIS.vibration_data_loader import VibrationDataLoader
 from ALL_Algorithms.VA_ANALYSIS.power_spectrum_analyzer import PowerSpectrumAnalyzer
+from ALL_Algorithms.VA_method_para import Ui_VA_method_para
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
@@ -87,9 +88,12 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         self.pushButton_preview_data_file.clicked.connect(self.preview_data)
         self.pushButton_psd_analysis.clicked.connect(self.perform_psd_analysis)
         self.pushButton_save_data.clicked.connect(self.save_analysis_results)
-        self.pushButton_set_para.clicked.connect(self.set_analysis_parameters)
+        self.pushButton_set_para.clicked.connect(self.AL_VA_method_para)
         self.pushButton_help.clicked.connect(self.show_help)
-        
+    def AL_VA_method_para(self):
+      
+        self.ui_pop = POP_VA_method_para(self)
+        self.ui_pop.show()   
     def browse_data_file(self):
         """浏览数据文件"""
         file_filter = "数据文件 (*.txt *.mat);;文本文件 (*.txt);;MAT文件 (*.mat);;所有文件 (*.*)"
@@ -277,19 +281,19 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         except Exception as e:
             QMessageBox.warning(self, "保存失败", f"结果保存失败: {str(e)}")
     
-    def set_analysis_parameters(self):
-        """设置分析参数"""
-        # 这里可以添加参数设置对话框
-        # 暂时显示当前参数
-        current_params = self.va_controller.current_params
-        param_text = "当前分析参数:\n"
-        param_text += f"分析方法: {current_params['method']}\n"
-        param_text += f"窗口函数: {current_params['window']}\n"
-        param_text += f"重叠比例: {current_params['overlap_ratio']}\n"
-        param_text += f"采样频率: {current_params['fs']}\n"
-        param_text += f"每段点数: {current_params['nperseg']}\n"
+    # def set_analysis_parameters(self):
+    #     """设置分析参数"""
+    #     # 这里可以添加参数设置对话框
+    #     # 暂时显示当前参数
+    #     current_params = self.va_controller.current_params
+    #     param_text = "当前分析参数:\n"
+    #     param_text += f"分析方法: {current_params['method']}\n"
+    #     param_text += f"窗口函数: {current_params['window']}\n"
+    #     param_text += f"重叠比例: {current_params['overlap_ratio']}\n"
+    #     param_text += f"采样频率: {current_params['fs']}\n"
+    #     param_text += f"每段点数: {current_params['nperseg']}\n"
         
-        QMessageBox.information(self, "分析参数", param_text)
+    #     QMessageBox.information(self, "分析参数", param_text)
     
     def show_help(self):
         """显示帮助信息"""
@@ -312,8 +316,36 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
 """
         QMessageBox.information(self, "使用帮助", help_text)
     
-
-
+class POP_VA_method_para(QMainWindow, Ui_VA_method_para, Ui_MainWindow):
+    def __init__(self, parent=None):
+        super(POP_VA_method_para, self).__init__()
+        self.setupUi(self)
+        self.parent_window = parent#保存主窗口的引用
+    
+    def Confirm(self):
+         # 读取输入参数
+        global analysis_method,window_funtion,overlap_rate,frequence,amounts
+        analysis_method = self.comboBox_analysis_method.currentText()
+        window_funtion = self.comboBox_window_funtion.currentText()
+        overlap_rate = float(self.doubleSpinBox_overlap_rate.text())
+        frequence = int(self.spinBox_frequence.text() )
+        amounts = int(self.spinBox_amounts.text())
+     
+        print("analysis_method:", analysis_method) 
+        print("window_funtion:", window_funtion)
+        print("overlap_rate:", overlap_rate)
+        print("frequence:", frequence)
+        print("amounts:", amounts)
+         # 将参数传递给VA分析控制器
+        if self.parent_window and hasattr(self.parent_window, 'va_controller'):
+            # 设置分析参数
+            self.parent_window.va_controller.set_analysis_params(
+                method=analysis_method,
+                window=window_funtion,
+                overlap_ratio=overlap_rate,
+                fs=frequence,
+                nperseg=amounts
+            )
     
 
 

@@ -18,7 +18,7 @@ class VibrationAnalysisController:
         # 当前分析参数
         self.current_params = {
             'method': 'welch',
-            'window': 'hanning',
+            'window': 'hann',
             'overlap_ratio': 0.5,
             'fs': None,
             'nperseg': None,

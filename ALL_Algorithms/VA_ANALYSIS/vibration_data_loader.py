@@ -20,6 +20,37 @@ class VibrationDataLoader:
             dir_part = name.split("通道")[1].split("方向")[0]
             channel = f"{channel_part}通道"
             direction = f"{dir_part}方向"
+        # 尝试格式2: "通道名称C1位置X向振动.txt"
+        elif "通道名称" in name and "位置" in name and "向" in name:
+            try:
+                # 提取通道信息（通道名称C1）
+                channel_start = name.find("通道名称")
+                pos_start = name.find("位置")
+                if channel_start != -1 and pos_start != -1:
+                    channel = name[channel_start:pos_start]  # "通道名称C1"
+                
+                # 提取方向信息（X向）
+                xiang_start = name.find("向")
+                if pos_start != -1 and xiang_start != -1:
+                    direction_part = name[pos_start+2:xiang_start]  # "X"
+                    direction = f"{direction_part}向"
+            except:
+                pass
+        
+        # 如果还是无法解析，使用默认值
+        if not channel and not direction:
+            # 尝试从文件名中提取一些基本信息
+            if "通道" in name:
+                parts = name.split("通道")
+                if len(parts) > 1:
+                    channel = f"通道{parts[1][:2]}"  # 尝试获取通道号
+            
+            # 寻找方向相关的字符
+            directions = ['X', 'Y', 'Z', 'x', 'y', 'z']
+            for dir_char in directions:
+                if dir_char in name:
+                    direction = f"{dir_char.upper()}向"
+                    break
             
         return channel, direction
     
