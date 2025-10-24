@@ -321,22 +321,61 @@ class POP_VA_method_para(QMainWindow, Ui_VA_method_para, Ui_MainWindow):
         super(POP_VA_method_para, self).__init__()
         self.setupUi(self)
         self.parent_window = parent#保存主窗口的引用
+        
+        #连接分段模式选择信号
+        self.comboBox_segment_mode.currentTextChanged.connect(self.on_segment_mode_changed)
+        # 初始状态设置
+        self.on_segment_mode_changed(self.comboBox_segment_mode.currentText())
+    
+    def on_segment_mode_changed(self, mode):
+        """根据分段模式启用/禁用相关控件"""
+        if mode == "时间分段":
+            # 时间段模式：启用开始/终止时间，禁用分段数量
+            self.doubleSpinBox_start_time.setEnabled(True)
+            self.doubleSpinBox_end_time.setEnabled(True)
+            self.spinBox_num_segments.setEnabled(False)
+        else:  # 固定长度模式
+            # 固定长度模式：禁用开始/终止时间，启用分段数量
+            self.doubleSpinBox_start_time.setEnabled(False)
+            self.doubleSpinBox_end_time.setEnabled(False)
+            self.spinBox_num_segments.setEnabled(True)
     
     def Confirm(self):
          # 读取输入参数
-        global analysis_method,window_funtion,overlap_rate,frequence,amounts
+        global analysis_method, window_funtion, overlap_rate, frequence, amounts
         analysis_method = self.comboBox_analysis_method.currentText()
         window_funtion = self.comboBox_window_funtion.currentText()
         overlap_rate = float(self.doubleSpinBox_overlap_rate.text())
-        frequence = int(self.spinBox_frequence.text() )
+        frequence = int(self.spinBox_frequence.text())
         amounts = int(self.spinBox_amounts.text())
-     
+        
+        # 读取分段模式相关参数
+        segment_mode = self.comboBox_segment_mode.currentText()
+        
+        if segment_mode == "时间分段":
+            # 时间段模式：使用开始/终止时间
+            start_time = float(self.doubleSpinBox_start_time.text())
+            end_time = float(self.doubleSpinBox_end_time.text())
+            num_segments = None  # 自动计算分段数量
+            segment_duration = None
+        else:
+            # 固定长度模式：使用分段数量
+            start_time = None
+            end_time = None
+            num_segments = int(self.spinBox_num_segments.text())
+            segment_duration = None  # 或者可以添加每段时长设置
+        
         print("analysis_method:", analysis_method) 
         print("window_funtion:", window_funtion)
         print("overlap_rate:", overlap_rate)
         print("frequence:", frequence)
         print("amounts:", amounts)
-         # 将参数传递给VA分析控制器
+        print("segment_mode:", segment_mode)
+        print("start_time:", start_time)
+        print("end_time:", end_time)
+        print("num_segments:", num_segments)
+        
+        # 将参数传递给VA分析控制器
         if self.parent_window and hasattr(self.parent_window, 'va_controller'):
             # 设置分析参数
             self.parent_window.va_controller.set_analysis_params(
@@ -344,7 +383,10 @@ class POP_VA_method_para(QMainWindow, Ui_VA_method_para, Ui_MainWindow):
                 window=window_funtion,
                 overlap_ratio=overlap_rate,
                 fs=frequence,
-                nperseg=amounts
+                nperseg=amounts,
+                start_time=start_time,
+                end_time=end_time,
+                num_segments=num_segments
             )
     
 
@@ -894,8 +936,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.pushButton_save_pretrained_model.clicked.connect(
                     lambda: self.ask_and_save_model(self.trained_model, method)
                 ) # 保存预训练模型
+    def ask_and_save_model(self,model, method):
+         ask_and_save_model(self, model, f"{method}_model.pkl")
+        
+        
 
-    
 
 
 
@@ -1465,7 +1510,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             )
             
             self.trained_model = model  # 保存训练好的模型
-            # ask_and_save_model(self,method,default_name='trained_model'+'_'+str(method)+'.pkl')    
+            
 
             # `model` 是训练好的模型，`y_pred` 是预测结果
             print("预测结果:", y_pred)
@@ -1502,7 +1547,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                         )
             self.lineEdit_DEVICE.setText("CPU")
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
-            # QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
+            
 
         if method =='RF':
             self.new_model = 1
@@ -1548,7 +1593,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                         total_db_deviation=metrics['total_db_deviation'])
             self.lineEdit_DEVICE.setText("CPU")
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
-            # QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
+            
    
 
         if method =='SVM':
@@ -1599,7 +1644,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                         total_db_deviation=metrics['total_db_deviation'])
             self.lineEdit_DEVICE.setText("CPU")
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
-            # QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
+            
 
         if method == 'ET':
             self.new_model = 1
@@ -1645,7 +1690,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                         total_db_deviation=metrics['total_db_deviation'])
             self.lineEdit_DEVICE.setText("CPU")
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
-            # QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
+            
 
 
         if method == 'MLP':
@@ -1694,7 +1739,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
             self.lineEdit_DEVICE.setText("CPU")
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
-            # QTimer.singleShot(2000, lambda: ask_and_save_model(self, model, default_name='trained_model_' + str(method) + '.pkl'))
+            
 
         
         if method =='GP':

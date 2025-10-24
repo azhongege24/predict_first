@@ -20,19 +20,26 @@ class VibrationAnalysisController:
             'method': 'welch',
             'window': 'hann',
             'overlap_ratio': 0.5,
-            'fs': None,
-            'nperseg': None,
+            'fs': 5000,
+            'nperseg': 1024,
             'start_time': None,
             'end_time': None,
             'num_segments': None,
             'segment_duration': None
         }
     
-    def set_analysis_params(self,** kwargs):
-        """设置分析参数"""
-        for key, value in kwargs.items():
-            if key in self.current_params:
-                self.current_params[key] = value
+    def set_analysis_params(self, method='welch', window='hann', overlap_ratio=0.5, 
+                           fs=2000, nperseg=1024, start_time=None, end_time=None, num_segments=None):
+        self.current_params = {
+            'method': method,
+            'window': window,
+            'overlap_ratio': overlap_ratio,
+            'fs': fs,
+            'nperseg': nperseg,
+            'start_time': start_time,
+            'end_time': end_time,
+            'num_segments': num_segments
+        }
     
     def get_file_structure(self, root_dir):
         """获取数据文件结构"""
@@ -67,7 +74,7 @@ class VibrationAnalysisController:
             start_time=self.current_params['start_time'],
             end_time=self.current_params['end_time'],
             num_segments=self.current_params['num_segments'],
-            segment_duration=self.current_params['segment_duration'],
+            # segment_duration=self.current_params['segment_duration'],
             overlap_ratio=self.current_params['overlap_ratio']
         )
         

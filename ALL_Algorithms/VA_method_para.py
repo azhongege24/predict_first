@@ -14,11 +14,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_VA_method_para(object):
     def setupUi(self, VA_method_para):
         VA_method_para.setObjectName("VA_method_para")
-        VA_method_para.resize(470, 416)
+        VA_method_para.resize(715, 474)
         self.centralwidget = QtWidgets.QWidget(VA_method_para)
         self.centralwidget.setObjectName("centralwidget")
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(240, 320, 91, 41))
+        self.pushButton_2.setGeometry(QtCore.QRect(350, 380, 91, 41))
         self.pushButton_2.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
 "border-radius:15px;    /*设置圆角半径 */\n"
@@ -37,7 +37,7 @@ class Ui_VA_method_para(object):
 "}")
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(140, 320, 81, 41))
+        self.pushButton.setGeometry(QtCore.QRect(260, 380, 81, 41))
         self.pushButton.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
 "border-radius:15px;    /*设置圆角半径 */\n"
@@ -56,7 +56,7 @@ class Ui_VA_method_para(object):
 "}")
         self.pushButton.setObjectName("pushButton")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(60, 40, 341, 248))
+        self.layoutWidget.setGeometry(QtCore.QRect(40, 100, 641, 250))
         self.layoutWidget.setObjectName("layoutWidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.layoutWidget)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -75,6 +75,8 @@ class Ui_VA_method_para(object):
 "}")
         self.label.setObjectName("label")
         self.verticalLayout_2.addWidget(self.label)
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
@@ -195,7 +197,7 @@ class Ui_VA_method_para(object):
         font.setWeight(75)
         self.doubleSpinBox_overlap_rate.setFont(font)
         self.doubleSpinBox_overlap_rate.setSingleStep(0.1)
-        self.doubleSpinBox_overlap_rate.setProperty("value", 0.5)
+        self.doubleSpinBox_overlap_rate.setProperty("value", 0.0)
         self.doubleSpinBox_overlap_rate.setObjectName("doubleSpinBox_overlap_rate")
         self.horizontalLayout_3.addWidget(self.doubleSpinBox_overlap_rate)
         self.verticalLayout.addLayout(self.horizontalLayout_3)
@@ -232,12 +234,205 @@ class Ui_VA_method_para(object):
         font.setWeight(75)
         self.spinBox_frequence.setFont(font)
         self.spinBox_frequence.setMaximum(9999)
-        self.spinBox_frequence.setProperty("value", 2000)
+        self.spinBox_frequence.setProperty("value", 5000)
         self.spinBox_frequence.setObjectName("spinBox_frequence")
         self.horizontalLayout_4.addWidget(self.spinBox_frequence)
         self.verticalLayout.addLayout(self.horizontalLayout_4)
-        self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+        self.horizontalLayout_6 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
+        self.label_9 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_9.setMinimumSize(QtCore.QSize(0, 0))
+        self.label_9.setMaximumSize(QtCore.QSize(16777215, 30))
+        self.label_9.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label_9.setObjectName("label_9")
+        self.horizontalLayout_6.addWidget(self.label_9)
+        self.spinBox_num_segments = QtWidgets.QSpinBox(self.layoutWidget)
+        self.spinBox_num_segments.setMinimumSize(QtCore.QSize(0, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.spinBox_num_segments.setFont(font)
+        self.spinBox_num_segments.setMaximum(9999)
+        self.spinBox_num_segments.setSingleStep(1)
+        self.spinBox_num_segments.setProperty("value", 9000)
+        self.spinBox_num_segments.setObjectName("spinBox_num_segments")
+        self.horizontalLayout_6.addWidget(self.spinBox_num_segments)
+        self.verticalLayout.addLayout(self.horizontalLayout_6)
+        self.horizontalLayout_5.addLayout(self.verticalLayout)
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.horizontalLayout_11 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_11.setObjectName("horizontalLayout_11")
+        self.label_11 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_11.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label_11.setObjectName("label_11")
+        self.horizontalLayout_11.addWidget(self.label_11)
+        self.comboBox_segment_mode = QtWidgets.QComboBox(self.layoutWidget)
+        self.comboBox_segment_mode.setMinimumSize(QtCore.QSize(4, 30))
+        font = QtGui.QFont()
+        font.setFamily("楷体")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.comboBox_segment_mode.setFont(font)
+        self.comboBox_segment_mode.setObjectName("comboBox_segment_mode")
+        self.comboBox_segment_mode.addItem("")
+        self.comboBox_segment_mode.addItem("")
+        self.horizontalLayout_11.addWidget(self.comboBox_segment_mode)
+        self.verticalLayout_4.addLayout(self.horizontalLayout_11)
+        self.horizontalLayout_12 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_12.setObjectName("horizontalLayout_12")
+        self.label_7 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_7.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label_7.setObjectName("label_7")
+        self.horizontalLayout_12.addWidget(self.label_7)
+        self.doubleSpinBox_start_time = QtWidgets.QDoubleSpinBox(self.layoutWidget)
+        self.doubleSpinBox_start_time.setMinimumSize(QtCore.QSize(0, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.doubleSpinBox_start_time.setFont(font)
+        self.doubleSpinBox_start_time.setSingleStep(0.1)
+        self.doubleSpinBox_start_time.setProperty("value", 0.0)
+        self.doubleSpinBox_start_time.setObjectName("doubleSpinBox_start_time")
+        self.horizontalLayout_12.addWidget(self.doubleSpinBox_start_time)
+        self.verticalLayout_4.addLayout(self.horizontalLayout_12)
+        self.horizontalLayout_13 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_13.setObjectName("horizontalLayout_13")
+        self.label_8 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_8.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label_8.setObjectName("label_8")
+        self.horizontalLayout_13.addWidget(self.label_8)
+        self.doubleSpinBox_end_time = QtWidgets.QDoubleSpinBox(self.layoutWidget)
+        self.doubleSpinBox_end_time.setMinimumSize(QtCore.QSize(0, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.doubleSpinBox_end_time.setFont(font)
+        self.doubleSpinBox_end_time.setMaximum(999.9)
+        self.doubleSpinBox_end_time.setSingleStep(0.1)
+        self.doubleSpinBox_end_time.setProperty("value", 100.0)
+        self.doubleSpinBox_end_time.setObjectName("doubleSpinBox_end_time")
+        self.horizontalLayout_13.addWidget(self.doubleSpinBox_end_time)
+        self.verticalLayout_4.addLayout(self.horizontalLayout_13)
+        self.horizontalLayout_14 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_14.setObjectName("horizontalLayout_14")
+        self.label_10 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_10.setStyleSheet("QLabel {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    qproperty-alignment: \'AlignCenter\';\n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QLabel:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QLabel:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.label_10.setObjectName("label_10")
+        self.horizontalLayout_14.addWidget(self.label_10)
+        self.doubleSpinBox_segment_duration = QtWidgets.QDoubleSpinBox(self.layoutWidget)
+        self.doubleSpinBox_segment_duration.setMinimumSize(QtCore.QSize(0, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.doubleSpinBox_segment_duration.setFont(font)
+        self.doubleSpinBox_segment_duration.setDecimals(4)
+        self.doubleSpinBox_segment_duration.setSingleStep(0.1)
+        self.doubleSpinBox_segment_duration.setProperty("value", 0.01)
+        self.doubleSpinBox_segment_duration.setObjectName("doubleSpinBox_segment_duration")
+        self.horizontalLayout_14.addWidget(self.doubleSpinBox_segment_duration)
+        self.verticalLayout_4.addLayout(self.horizontalLayout_14)
+        self.horizontalLayout_10 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_10.setObjectName("horizontalLayout_10")
         self.label_6 = QtWidgets.QLabel(self.layoutWidget)
         self.label_6.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
@@ -259,7 +454,7 @@ class Ui_VA_method_para(object):
 "    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
 "}")
         self.label_6.setObjectName("label_6")
-        self.horizontalLayout_5.addWidget(self.label_6)
+        self.horizontalLayout_10.addWidget(self.label_6)
         self.spinBox_amounts = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_amounts.setMinimumSize(QtCore.QSize(0, 30))
         font = QtGui.QFont()
@@ -270,14 +465,15 @@ class Ui_VA_method_para(object):
         self.spinBox_amounts.setFont(font)
         self.spinBox_amounts.setMaximum(9999)
         self.spinBox_amounts.setSingleStep(100)
-        self.spinBox_amounts.setProperty("value", 160)
+        self.spinBox_amounts.setProperty("value", 1024)
         self.spinBox_amounts.setObjectName("spinBox_amounts")
-        self.horizontalLayout_5.addWidget(self.spinBox_amounts)
-        self.verticalLayout.addLayout(self.horizontalLayout_5)
-        self.verticalLayout_2.addLayout(self.verticalLayout)
+        self.horizontalLayout_10.addWidget(self.spinBox_amounts)
+        self.verticalLayout_4.addLayout(self.horizontalLayout_10)
+        self.horizontalLayout_5.addLayout(self.verticalLayout_4)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_5)
         VA_method_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(VA_method_para)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 470, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 715, 23))
         self.menubar.setObjectName("menubar")
         VA_method_para.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(VA_method_para)
@@ -313,4 +509,11 @@ class Ui_VA_method_para(object):
         self.comboBox_window_funtion.setItemText(10, _translate("VA_method_para", "barthann"))
         self.label_2.setText(_translate("VA_method_para", "重叠比例"))
         self.label_5.setText(_translate("VA_method_para", "采样频率"))
+        self.label_9.setText(_translate("VA_method_para", "分段数量"))
+        self.label_11.setText(_translate("VA_method_para", "分段模式"))
+        self.comboBox_segment_mode.setItemText(0, _translate("VA_method_para", "时间分段"))
+        self.comboBox_segment_mode.setItemText(1, _translate("VA_method_para", "点数分段"))
+        self.label_7.setText(_translate("VA_method_para", "开始时间"))
+        self.label_8.setText(_translate("VA_method_para", "终止时间"))
+        self.label_10.setText(_translate("VA_method_para", "每段持续时间"))
         self.label_6.setText(_translate("VA_method_para", "每段点数"))

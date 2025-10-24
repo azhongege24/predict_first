@@ -188,11 +188,11 @@ def multi_task_regression_predictor(
     y_test_pos = np.abs(y_test) + epsilon
     y_pred_pos = np.abs(y_pred) + epsilon
 
-    # 计算分贝偏差 (20*log10(预测值/真实值))
+    # 计算分贝偏差 (10*log10(预测值/真实值))
     ratio = y_pred_pos / y_test_pos
 
     # 对于极端大的比率差异，先计算分贝再限制范围，而不是先限制比率
-    db_diff = 20 * np.log10(ratio)
+    db_diff = 10 * np.log10(ratio)
     db_diff_clipped = np.clip(db_diff, -30, 30)  # 限制在±30dB范围内
 
     # 重新计算分贝指标
