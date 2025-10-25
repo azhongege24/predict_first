@@ -80,6 +80,108 @@ class ResultSaver:
             
         return saved_files
     
+    def save_structured_dataset(self, results, product_code, serial_number, 
+                               channel, direction, base_path, format='mat',
+                               additional_info=None):
+            """
+            保存结构化数据集
+            
+            参数:
+                results: 分析结果列表，每个结果包含'frequency', 'power_spectrum'
+                product_code: 产品代号
+                serial_number: 产品序号
+                channel: 通道名称
+                direction: 方向
+                base_path: 保存路径(不含扩展名)
+                format: 保存格式 ('mat', 'csv')
+                additional_info: 额外信息字典
+                
+            返回:
+                保存的文件路径
+            """
+            if format not in ['mat', 'csv']:
+                raise ValueError(f"结构化数据集不支持格式: {format}，支持的有: mat, csv")
+            
+            # 创建目录(如果不存在)
+            dir_name = os.path.dirname(base_path)
+            if dir_name and not os.path.exists(dir_name):
+                os.makedirs(dir_name, exist_ok=True)
+            
+            # 构建完整的元数据
+            metadata = {
+                'product_code': product_code,
+                'serial_number': serial_number,
+                'channel': channel,
+                'direction': direction,
+                'analysis_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                'num_segments': len(results),
+                'points_per_spectrum': len(results[0]['power_spectrum']) if results else 0,
+                'frequency_range': {
+                    'min': float(results[0]['frequency'][0]) if results else 0,
+                    'max': float(results[0]['frequency'][-1]) if results else 0
+                },
+                **(additional_info or {})
+            }
+            
+            # 构建完整文件路径
+            full_path = f"{base_path}_structured_dataset.{format}"
+            
+            # 提取所有功率谱数据
+            power_spectra = []
+            time_ranges = []
+            
+            for i, result in enumerate(results):
+                power_spectra.append(result['power_spectrum'])
+                time_ranges.append(result['time_range'])
+            
+            # 转换为numpy数组
+            power_spectra_array = np.array(power_spectra)
+            time_ranges_array = np.array(time_ranges)
+            
+            # 根据格式保存
+            if format == 'mat':
+                # 保存为MATLAB格式
+                data = {
+                    'power_spectra': power_spectra_array,  # 行数=分段数，列数=功率谱点数
+                    'time_ranges': time_ranges_array,      # 每行对应一个时间段 [开始时间, 结束时间]
+                    'frequency': results[0]['frequency'] if results else np.array([]),  # 频率轴
+                    'metadata': metadata
+                }
+                sio.savemat(full_path, data)
+                
+            elif format == 'csv':
+                # 保存为CSV格式
+                # 创建列名：P1, P2, ..., Pn (n=功率谱点数)
+                num_points = len(results[0]['power_spectrum']) if results else 0
+                column_names = [f'P{i+1}' for i in range(num_points)]
+                
+                # 创建DataFrame
+                df = pd.DataFrame(power_spectra_array, columns=column_names)
+                
+                # 添加时间范围信息
+                df['start_time'] = time_ranges_array[:, 0]
+                df['end_time'] = time_ranges_array[:, 1]
+                df['segment_id'] = range(1, len(results) + 1)
+                
+                # 保存CSV文件
+                df.to_csv(full_path, index=False)
+                
+                # 保存元数据到单独的文件
+                meta_path = f"{base_path}_metadata.txt"
+                with open(meta_path, 'w', encoding='utf-8') as f:
+                    f.write("=== 结构化数据集元数据 ===\n")
+                    for key, value in metadata.items():
+                        f.write(f"{key}: {value}\n")
+                    f.write(f"\n数据结构说明:\n")
+                    f.write(f"- 数据文件: {os.path.basename(full_path)}\n")
+                    f.write(f"- 行数: {len(results)} (功率谱分段数量)\n")
+                    f.write(f"- 列数: {num_points} (每个功率谱的点数)\n")
+                    f.write(f"- 列名格式: P1, P2, ..., P{num_points} (对应功率谱密度值)\n")
+                    f.write(f"- 额外列: start_time, end_time, segment_id\n")
+            
+            return full_path
+    
+    
     def _save_mat(self, file_path, result, metadata):
         """保存为mat格式"""
         data = {

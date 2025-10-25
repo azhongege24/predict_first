@@ -72,7 +72,10 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         self.current_signal_data = None
         self.analysis_results = None
         self.save_directory = None
-        
+                # 分页显示相关属性
+        self.current_page = 0
+        self.total_pages = 0
+        self.results_per_page = 2  # 每页显示2个功率谱图
         # 创建matplotlib图形画布
         self.figure = Figure(figsize=(8, 6), dpi=100)
         self.canvas = FigureCanvas(self.figure)
@@ -90,6 +93,8 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         self.pushButton_save_data.clicked.connect(self.save_analysis_results)
         self.pushButton_set_para.clicked.connect(self.AL_VA_method_para)
         self.pushButton_help.clicked.connect(self.show_help)
+        self.pushButton_top.clicked.connect(self.show_previous_page)
+        self.pushButton_bottom.clicked.connect(self.show_next_page)
     def AL_VA_method_para(self):
       
         self.ui_pop = POP_VA_method_para(self)
@@ -203,56 +208,113 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
                 serial_number="Unknown"
             )
             
+            
+            # 生成结构化特征集
+            self.feature_dataset = self.va_controller.generate_feature_dataset(self.analysis_results)
+            print(f"生成特征数据集: 形状 {self.feature_dataset.shape}")
             # 显示分析结果
             self.display_analysis_results()
             
-            QMessageBox.information(self, "分析完成", "功率谱分析已完成！")
+            QMessageBox.information(self, "分析完成", 
+                              f"功率谱分析已完成！\n生成特征数据集: {self.feature_dataset.shape[0]}段 x {self.feature_dataset.shape[1]}特征")
             
         except Exception as e:
             QMessageBox.warning(self, "分析失败", f"功率谱分析失败: {str(e)}")
     
     def display_analysis_results(self):
-        """显示分析结果"""
+        """显示分析结果 - 分页显示"""
         if not self.analysis_results:
             return
         
         try:
-            # 清空当前图形
-            self.figure.clear()
-            
             results = self.analysis_results['results']
             num_segments = len(results)
             
-            # 为每个分段创建子图
-            if num_segments <= 3:
-                # 少于等于3个分段，垂直排列
-                for i, result in enumerate(results):
-                    ax = self.figure.add_subplot(num_segments, 1, i+1)
-                    ax.plot(result['frequency'], result['power_spectrum'], 'b-', linewidth=1.5)
-                    ax.set_xlabel('频率 (Hz)')
-                    ax.set_ylabel('功率谱密度')
-                    ax.set_title(f"时间段: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
-                    ax.grid(True, alpha=0.3)
-            else:
-                # 多于3个分段，使用网格布局
-                cols = 2
-                rows = (num_segments + 1) // cols
-                for i, result in enumerate(results):
-                    ax = self.figure.add_subplot(rows, cols, i+1)
-                    ax.plot(result['frequency'], result['power_spectrum'], 'b-', linewidth=1.5)
-                    ax.set_xlabel('频率 (Hz)')
-                    ax.set_ylabel('功率谱密度')
-                    ax.set_title(f"时间段: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
-                    ax.grid(True, alpha=0.3)
+            # 计算总页数
+            self.total_pages = (num_segments + self.results_per_page - 1) // self.results_per_page
             
-            # 调整布局
-            self.figure.suptitle(f"功率谱分析结果 - {self.analysis_results['channel']} {self.analysis_results['direction']}", 
-                                 fontsize=14)
-            self.figure.tight_layout()
+            # 确保当前页在有效范围内
+            if self.current_page >= self.total_pages:
+                self.current_page = self.total_pages - 1
+            if self.current_page < 0:
+                self.current_page = 0
+            
+            # 清空当前图形
+            self.figure.clear()
+            
+            # 计算当前页显示的分段范围
+            start_idx = self.current_page * self.results_per_page
+            end_idx = min(start_idx + self.results_per_page, num_segments)
+            
+            # 为当前页的分段创建子图
+            num_to_show = end_idx - start_idx
+            
+            if num_to_show > 0:
+                # 垂直排列显示当前页的分段
+                for i in range(num_to_show):
+                    result_idx = start_idx + i
+                    result = results[result_idx]
+                    
+                    ax = self.figure.add_subplot(num_to_show, 1, i+1)
+                    ax.plot(result['frequency'], result['power_spectrum'], 'b-', linewidth=1.5)
+                    ax.set_xlabel('频率 (Hz)')
+                    ax.set_ylabel('功率谱密度')
+                    ax.set_title(f"时间段 {result_idx+1}/{num_segments}: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
+                    ax.grid(True, alpha=0.3)
+                
+                # 调整布局，避免tight_layout警告
+                self.figure.subplots_adjust(left=0.1, right=0.95, bottom=0.1, top=0.9, 
+                                          hspace=0.5, wspace=0.3)
+                
+                # 添加总标题和页码信息
+                self.figure.suptitle(
+                    f"功率谱分析结果 - {self.analysis_results['channel']} {self.analysis_results['direction']}\n"
+                    f"第 {self.current_page + 1}/{self.total_pages} 页 (显示 {start_idx+1}-{end_idx} 段，共 {num_segments} 段)",
+                    fontsize=12
+                )
+            else:
+                # 没有数据可显示
+                ax = self.figure.add_subplot(111)
+                ax.text(0.5, 0.5, '没有数据可显示', 
+                        horizontalalignment='center', verticalalignment='center',
+                        transform=ax.transAxes, fontsize=14)
+                ax.set_xlim(0, 1)
+                ax.set_ylim(0, 1)
+                ax.axis('off')
+            
             self.canvas.draw()
+            
+            # 更新翻页按钮状态
+            self.update_page_buttons()
             
         except Exception as e:
             QMessageBox.warning(self, "显示失败", f"结果显示失败: {str(e)}")
+    def show_previous_page(self):
+        """显示上一页"""
+        if self.current_page > 0:
+            self.current_page -= 1
+            self.display_analysis_results()
+
+    def show_next_page(self):
+        """显示下一页"""
+        if self.current_page < self.total_pages - 1:
+            self.current_page += 1
+            self.display_analysis_results()
+
+    def update_page_buttons(self):
+        """更新翻页按钮状态"""
+        if hasattr(self, 'pushButton_prev'):
+            self.pushButton_prev.setEnabled(self.current_page > 0)
+        if hasattr(self, 'pushButton_next'):
+            self.pushButton_next.setEnabled(self.current_page < self.total_pages - 1)
+        
+        # 如果没有翻页按钮，在状态栏显示提示信息
+        if not hasattr(self, 'pushButton_prev') and not hasattr(self, 'pushButton_next'):
+            # 在图形标题中显示翻页提示
+            if self.total_pages > 1:
+                print(f"提示: 使用键盘左右箭头键翻页 (第 {self.current_page + 1}/{self.total_pages} 页)")    
+    
+    
     
     def save_analysis_results(self):
         """保存分析结果"""
@@ -269,31 +331,98 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
             file_name = os.path.basename(self.current_file_path)
             channel, direction = self.va_controller.data_loader.parse_channel_info(file_name)
             
-            # 保存结果
-            saved_files = self.va_controller.save_analysis_results(
-                self.analysis_results,
-                self.save_directory
+            # 询问用户保存方式
+            reply = QMessageBox.question(
+                self, 
+                "选择保存方式", 
+                "请选择保存方式：\n\n"
+                "• 单个文件：将所有功率谱分段保存为单个结构化数据集文件\n"
+                "• 多个文件：将每个功率谱分段保存为单独的文件\n\n"
+                "点击'是'保存为单个结构化数据集，点击'否'保存为多个单独文件",
+                QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel,
+                QMessageBox.Yes
             )
             
-            file_list = "\n".join(saved_files)
-            QMessageBox.information(self, "保存成功", f"分析结果已保存到以下文件:\n{file_list}")
+            if reply == QMessageBox.Cancel:
+                return
+            
+            saved_files = []
+            
+            if reply == QMessageBox.Yes:
+                # 保存为结构化数据集
+                # 询问保存格式
+                format_reply = QMessageBox.question(
+                    self,
+                    "选择保存格式",
+                    "请选择结构化数据集的保存格式：\n\n"
+                    "• MATLAB格式 (.mat)：适合MATLAB分析\n"
+                    "• CSV格式 (.csv)：适合Excel和Python分析\n\n"
+                    "点击'是'保存为MATLAB格式，点击'否'保存为CSV格式",
+                    QMessageBox.Yes | QMessageBox.No,
+                    QMessageBox.Yes
+                )
+                
+                format_type = 'mat' if format_reply == QMessageBox.Yes else 'csv'
+                
+                # 构建基础文件名
+                base_filename = f"{self.analysis_results['product_code']}_{self.analysis_results['serial_number']}"
+                if channel:
+                    base_filename += f"_{channel}"
+                if direction:
+                    base_filename += f"_{direction}"
+                
+                full_base_path = os.path.join(self.save_directory, base_filename)
+                
+                # 保存结构化数据集
+                saved_file = self.va_controller.result_saver.save_structured_dataset(
+                    self.analysis_results['results'],
+                    product_code=self.analysis_results['product_code'],
+                    serial_number=self.analysis_results['serial_number'],
+                    channel=channel,
+                    direction=direction,
+                    base_path=full_base_path,
+                    format=format_type
+                )
+                saved_files.append(saved_file)
+                
+                # 如果是CSV格式，还会生成元数据文件
+                if format_type == 'csv':
+                    meta_file = f"{full_base_path}_metadata.txt"
+                    if os.path.exists(meta_file):
+                        saved_files.append(meta_file)
+                
+                file_list = "\n".join(saved_files)
+                QMessageBox.information(
+                    self, 
+                    "保存成功", 
+                    f"结构化数据集已保存！\n\n"
+                    f"文件信息：\n"
+                    f"- 分段数量：{len(self.analysis_results['results'])}\n"
+                    f"- 每段点数：{len(self.analysis_results['results'][0]['power_spectrum']) if self.analysis_results['results'] else 0}\n"
+                    f"- 保存格式：{format_type.upper()}\n\n"
+                    f"保存文件：\n{file_list}"
+                )
+                
+            else:
+                # 保存为多个单独文件
+                saved_files = self.va_controller.save_analysis_results(
+                    self.analysis_results,
+                    self.save_directory
+                )
+                
+                file_list = "\n".join(saved_files)
+                QMessageBox.information(
+                    self, 
+                    "保存成功", 
+                    f"分析结果已保存到以下文件：\n\n"
+                    f"共保存了 {len(saved_files)} 个分段文件\n\n"
+                    f"{file_list}"
+                )
             
         except Exception as e:
             QMessageBox.warning(self, "保存失败", f"结果保存失败: {str(e)}")
     
-    # def set_analysis_parameters(self):
-    #     """设置分析参数"""
-    #     # 这里可以添加参数设置对话框
-    #     # 暂时显示当前参数
-    #     current_params = self.va_controller.current_params
-    #     param_text = "当前分析参数:\n"
-    #     param_text += f"分析方法: {current_params['method']}\n"
-    #     param_text += f"窗口函数: {current_params['window']}\n"
-    #     param_text += f"重叠比例: {current_params['overlap_ratio']}\n"
-    #     param_text += f"采样频率: {current_params['fs']}\n"
-    #     param_text += f"每段点数: {current_params['nperseg']}\n"
-        
-    #     QMessageBox.information(self, "分析参数", param_text)
+ 
     
     def show_help(self):
         """显示帮助信息"""
@@ -333,22 +462,24 @@ class POP_VA_method_para(QMainWindow, Ui_VA_method_para, Ui_MainWindow):
             # 时间段模式：启用开始/终止时间，禁用分段数量
             self.doubleSpinBox_start_time.setEnabled(True)
             self.doubleSpinBox_end_time.setEnabled(True)
-            self.spinBox_num_segments.setEnabled(False)
+            self.doubleSpinBox_segment_duration.setEnabled(True)
+            self.spinBox_amounts.setEnabled(False)
         else:  # 固定长度模式
             # 固定长度模式：禁用开始/终止时间，启用分段数量
             self.doubleSpinBox_start_time.setEnabled(False)
             self.doubleSpinBox_end_time.setEnabled(False)
-            self.spinBox_num_segments.setEnabled(True)
+            self.doubleSpinBox_segment_duration.setEnabled(False)
+            self.spinBox_amounts.setEnabled(True)
     
     def Confirm(self):
          # 读取输入参数
-        global analysis_method, window_funtion, overlap_rate, frequence, amounts
+        global analysis_method, window_funtion, overlap_rate, frequence, amounts,number_psd
         analysis_method = self.comboBox_analysis_method.currentText()
         window_funtion = self.comboBox_window_funtion.currentText()
         overlap_rate = float(self.doubleSpinBox_overlap_rate.text())
         frequence = int(self.spinBox_frequence.text())
         amounts = int(self.spinBox_amounts.text())
-        
+        number_psd = int(self.spinBox_number_psd.text())
         # 读取分段模式相关参数
         segment_mode = self.comboBox_segment_mode.currentText()
         
@@ -357,12 +488,14 @@ class POP_VA_method_para(QMainWindow, Ui_VA_method_para, Ui_MainWindow):
             start_time = float(self.doubleSpinBox_start_time.text())
             end_time = float(self.doubleSpinBox_end_time.text())
             num_segments = None  # 自动计算分段数量
-            segment_duration = None
+            segment_duration = float(self.doubleSpinBox_segment_duration.text())
         else:
             # 固定长度模式：使用分段数量
             start_time = None
             end_time = None
-            num_segments = int(self.spinBox_num_segments.text())
+            amounts = int(self.spinBox_amounts.text())
+            
+            num_segments = None
             segment_duration = None  # 或者可以添加每段时长设置
         
         print("analysis_method:", analysis_method) 
@@ -386,7 +519,9 @@ class POP_VA_method_para(QMainWindow, Ui_VA_method_para, Ui_MainWindow):
                 nperseg=amounts,
                 start_time=start_time,
                 end_time=end_time,
-                num_segments=num_segments
+                num_segments=num_segments,
+                segment_duration=segment_duration,
+                number_psd=number_psd
             )
     
 

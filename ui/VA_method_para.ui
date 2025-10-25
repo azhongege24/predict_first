@@ -331,7 +331,7 @@ QLabel:pressed {
               <double>0.100000000000000</double>
              </property>
              <property name="value">
-              <double>0.000000000000000</double>
+              <double>0.500000000000000</double>
              </property>
             </widget>
            </item>
@@ -431,12 +431,12 @@ QLabel:pressed {
 }</string>
              </property>
              <property name="text">
-              <string>分段数量</string>
+              <string>固定输出特征</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="spinBox_num_segments">
+            <widget class="QSpinBox" name="spinBox_number_psd">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -458,7 +458,7 @@ QLabel:pressed {
               <number>1</number>
              </property>
              <property name="value">
-              <number>9000</number>
+              <number>160</number>
              </property>
             </widget>
            </item>

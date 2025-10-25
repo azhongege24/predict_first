@@ -25,6 +25,17 @@ class PowerSpectrumAnalyzer:
         self.default_window = 'hann'
         self.default_overlap_ratio = 0.5
         self.default_freq_range = (20, 2000)  # Hz
+    def resample_power_spectrum(self, freq, psd, target_points=160):
+        """将功率谱重采样到固定点数"""
+        # 创建目标频率轴
+        min_freq = freq.min()
+        max_freq = freq.max()
+        target_freq = np.linspace(min_freq, max_freq, target_points)
+        
+        # 插值得到目标点数的功率谱
+        target_psd = np.interp(target_freq, freq, psd)
+        
+        return target_freq, target_psd
     
     def _calculate_sampling_freq(self, time_data):
         """从时间数据计算采样频率"""
@@ -82,7 +93,7 @@ class PowerSpectrumAnalyzer:
         return window_name
     
     def segment_data(self, time_data, signal_data, start_time=None, end_time=None, 
-                    num_segments=None, segment_duration=None, overlap_ratio=0.5):
+                    num_segments=None, segment_duration=None,nperseg=None, overlap_ratio=0.5):
         """
         将数据分段
         
@@ -115,11 +126,19 @@ class PowerSpectrumAnalyzer:
         fs = self._calculate_sampling_freq(filtered_time)
         
         # 确定分段长度(点数)
-        total_duration = end_time - start_time
-        if segment_duration is not None:
+        if nperseg is not None:
+            # 点数模式：使用nperseg作为每段点数
+            segment_length = nperseg
+            # 计算实际分段数量
+            total_points = len(filtered_time)
+            step = int(segment_length * (1 - overlap_ratio))
+            num_segments = max(1, (total_points - segment_length) // step + 1)
+        elif segment_duration is not None:
+            # 时间模式：使用segment_duration计算每段点数
             segment_length = int(segment_duration * fs)
-            num_segments = int(np.ceil(total_duration / segment_duration))
+            num_segments = int(np.ceil((end_time - start_time) / segment_duration))
         elif num_segments is not None:
+            # 分段数量模式：计算每段点数
             segment_length = int(len(filtered_time) / num_segments)
         else:
             # 如果没有指定分段参数，返回整个时间段
@@ -155,7 +174,7 @@ class PowerSpectrumAnalyzer:
         return segments
     
     def analyze_single_segment(self, time_data, signal_data, fs=None, method='welch', 
-                              window='hann', nperseg=None, overlap_ratio=0.5):
+                              window='hann', nperseg=None, overlap_ratio=0.5,number_psd=None):
         """
         分析单个数据段的功率谱
         
@@ -211,12 +230,17 @@ class PowerSpectrumAnalyzer:
         upper_freq = min(self.default_freq_range[1], nyquist)
         
         freq_mask = (f >= lower_freq) & (f <= upper_freq)
-        return f[freq_mask], Pxx[freq_mask]
+        f_filtered = f[freq_mask]
+        psd_filtered = Pxx[freq_mask]
+
+        # 重采样到160个点
+        f_resampled, psd_resampled = self.resample_power_spectrum(f_filtered, psd_filtered, number_psd)
+        return f_resampled, psd_resampled
     
     def analyze_multiple_segments(self, time_data, signal_data, fs=None, method='welch', 
                                  window='hann', nperseg=None, start_time=None, 
                                  end_time=None, num_segments=None, segment_duration=None,
-                                 overlap_ratio=0.5):
+                                 overlap_ratio=0.5,number_psd=None):
         """
         分析多个数据段的功率谱
         
@@ -230,6 +254,7 @@ class PowerSpectrumAnalyzer:
             end_time=end_time,
             num_segments=num_segments,
             segment_duration=segment_duration,
+            nperseg=nperseg,  # 添加这行，传递nperseg参数
             overlap_ratio=overlap_ratio
         )
         
@@ -250,7 +275,8 @@ class PowerSpectrumAnalyzer:
                 method=method,
                 window=window,
                 nperseg=nperseg,
-                overlap_ratio=overlap_ratio
+                overlap_ratio=overlap_ratio,
+                number_psd=number_psd
             )
             
             results.append({
