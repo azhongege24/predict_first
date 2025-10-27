@@ -182,7 +182,7 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
             ax2.set_title('频域预览（FFT）')
             ax2.grid(True, alpha=0.3)
             ax2.set_xlim(0, min(fs/2, 2000))  # 限制显示到2000Hz
-            
+            ax2.set_yscale('log')
             # 调整布局
             self.figure.tight_layout()
             self.canvas.draw()
@@ -261,15 +261,15 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
                     ax.set_ylabel('功率谱密度')
                     ax.set_title(f"时间段 {result_idx+1}/{num_segments}: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
                     ax.grid(True, alpha=0.3)
-                
+                    ax.set_yscale('log')
+            
                 # 调整布局，避免tight_layout警告
                 self.figure.subplots_adjust(left=0.1, right=0.95, bottom=0.1, top=0.9, 
                                           hspace=0.5, wspace=0.3)
                 
                 # 添加总标题和页码信息
                 self.figure.suptitle(
-                    f"功率谱分析结果 - {self.analysis_results['channel']} {self.analysis_results['direction']}\n"
-                    f"第 {self.current_page + 1}/{self.total_pages} 页 (显示 {start_idx+1}-{end_idx} 段，共 {num_segments} 段)",
+                    f"功率谱分析结果 - {self.analysis_results['channel']} {self.analysis_results['direction']} 第 {self.current_page + 1}/{self.total_pages} 页 (显示 {start_idx+1}-{end_idx} 段，共 {num_segments} 段)",
                     fontsize=12
                 )
             else:

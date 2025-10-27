@@ -375,17 +375,14 @@ def single_plot_and_evaluate(self, y_test, y_pred, method, data_test,
 
     # 绘制真实值与预测值散点图
     scatter1 = ax.scatter(np.arange(len(y_test)), y_test, c='b', marker='o', s=10, label='True', alpha=0.8)
-    scatter2 = ax.scatter(np.arange(len(y_test)), y_pred, c='r', marker='X', s=20, label='pred_' + method, alpha=0.8)
+    scatter2 = ax.scatter(np.arange(len(y_test)), y_pred, c='r', marker='X', s=20, label='pred_' + method, alpha=0.6)
 
     # 绘制垂直连接线段
     for i in range(len(y_test)):
         ax.plot([i, i], [y_test[i], y_pred[i]],
                 color='#2F5597', linestyle='-', linewidth=2.5, alpha=0.5, solid_capstyle='round', zorder=0)
 
-    # 新增：绘制理想预测线（y=x参考线）
-    min_val = min(min(y_test), min(y_pred))
-    max_val = max(max(y_test), max(y_pred))
-    ax.plot([min_val, max_val], [min_val, max_val], 'k--', alpha=0.6, label='理想预测线')
+
     
     
     # 优化显示设置
