@@ -1983,7 +1983,7 @@ QPushButton:disabled {
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>890</x>
@@ -2077,8 +2077,8 @@ QPushButton:disabled {
    <slot>AL_DT_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1034</x>
-     <y>335</y>
+     <x>1035</x>
+     <y>285</y>
     </hint>
     <hint type="destinationlabel">
      <x>1023</x>
@@ -2093,8 +2093,8 @@ QPushButton:disabled {
    <slot>AL_RF_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1033</x>
-     <y>383</y>
+     <x>1034</x>
+     <y>337</y>
     </hint>
     <hint type="destinationlabel">
      <x>1042</x>
@@ -2109,8 +2109,8 @@ QPushButton:disabled {
    <slot>AL_SVM_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1035</x>
-     <y>492</y>
+     <x>1036</x>
+     <y>441</y>
     </hint>
     <hint type="destinationlabel">
      <x>1045</x>
@@ -2125,8 +2125,8 @@ QPushButton:disabled {
    <slot>AL_MLP_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1046</x>
-     <y>543</y>
+     <x>1047</x>
+     <y>493</y>
     </hint>
     <hint type="destinationlabel">
      <x>1043</x>
@@ -2141,8 +2141,8 @@ QPushButton:disabled {
    <slot>AL_ET_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1035</x>
-     <y>440</y>
+     <x>1036</x>
+     <y>389</y>
     </hint>
     <hint type="destinationlabel">
      <x>1016</x>
@@ -2157,8 +2157,8 @@ QPushButton:disabled {
    <slot>AL_GL_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1034</x>
-     <y>689</y>
+     <x>1035</x>
+     <y>650</y>
     </hint>
     <hint type="destinationlabel">
      <x>982</x>
@@ -2174,7 +2174,7 @@ QPushButton:disabled {
    <hints>
     <hint type="sourcelabel">
      <x>1234</x>
-     <y>147</y>
+     <y>97</y>
     </hint>
     <hint type="destinationlabel">
      <x>1147</x>
@@ -2189,8 +2189,8 @@ QPushButton:disabled {
    <slot>AL_MTW_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1034</x>
-     <y>751</y>
+     <x>1035</x>
+     <y>707</y>
     </hint>
     <hint type="destinationlabel">
      <x>976</x>
@@ -2205,8 +2205,8 @@ QPushButton:disabled {
    <slot>AL_REMTW_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1072</x>
-     <y>827</y>
+     <x>1073</x>
+     <y>778</y>
     </hint>
     <hint type="destinationlabel">
      <x>1143</x>
@@ -2221,8 +2221,8 @@ QPushButton:disabled {
    <slot>AL_VA_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>152</x>
-     <y>234</y>
+     <x>153</x>
+     <y>225</y>
     </hint>
     <hint type="destinationlabel">
      <x>118</x>
@@ -2237,8 +2237,8 @@ QPushButton:disabled {
    <slot>save()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>77</x>
-     <y>674</y>
+     <x>951</x>
+     <y>793</y>
     </hint>
     <hint type="destinationlabel">
      <x>102</x>
@@ -2269,8 +2269,8 @@ QPushButton:disabled {
    <slot>AL_MMoE_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1099</x>
-     <y>632</y>
+     <x>1089</x>
+     <y>598</y>
     </hint>
     <hint type="destinationlabel">
      <x>1119</x>
@@ -2285,8 +2285,8 @@ QPushButton:disabled {
    <slot>change_CheckBox_input()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1248</x>
-     <y>812</y>
+     <x>1219</x>
+     <y>777</y>
     </hint>
     <hint type="destinationlabel">
      <x>1221</x>
@@ -2301,8 +2301,8 @@ QPushButton:disabled {
    <slot>change_CheckBox_output()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1364</x>
-     <y>802</y>
+     <x>1347</x>
+     <y>777</y>
     </hint>
     <hint type="destinationlabel">
      <x>1367</x>
@@ -2333,12 +2333,28 @@ QPushButton:disabled {
    <slot>AL_GP_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1086</x>
-     <y>568</y>
+     <x>1087</x>
+     <y>545</y>
     </hint>
     <hint type="destinationlabel">
      <x>1039</x>
      <y>864</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_otherpara</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>AL_Other_para()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>381</x>
+     <y>193</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>290</x>
+     <y>129</y>
     </hint>
    </hints>
   </connection>
@@ -2367,5 +2383,6 @@ QPushButton:disabled {
   <slot>change_CheckBox_input()</slot>
   <slot>change_CheckBox_output()</slot>
   <slot>AL_GP_para()</slot>
+  <slot>AL_Other_para()</slot>
  </slots>
 </ui>

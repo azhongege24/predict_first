@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Other</class>
+ <widget class="QMainWindow" name="Other">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>665</width>
+    <height>363</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>其他参数模块</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>70</y>
+      <width>174</width>
+      <height>116</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPushButton" name="load_para">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
+    border-radius: 8px;
+    padding: 4px 8px;
+    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
+    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
+    font: bold 16pt &quot;Times New Roman&quot;;     
+    /* 强化阴影效果 */
+}
+
+QPushButton:hover {
+    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */
+    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */
+}
+
+QPushButton:pressed {
+    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */
+}</string>
+       </property>
+       <property name="text">
+        <string>导入特征参数</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="data_ps">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
+    border-radius: 8px;
+    padding: 4px 8px;
+    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
+    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
+    font: bold 16pt &quot;Times New Roman&quot;;     
+    /* 强化阴影效果 */
+}
+
+QPushButton:hover {
+    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */
+    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */
+}
+
+QPushButton:pressed {
+    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */
+}</string>
+       </property>
+       <property name="text">
+        <string>数据备注</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_save_data">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
+    border-radius: 8px;
+    padding: 4px 8px;
+    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */
+    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */
+    font: bold 16pt &quot;Times New Roman&quot;;     
+    /* 强化阴影效果 */
+}
+
+QPushButton:hover {
+    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */
+    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */
+}
+
+QPushButton:pressed {
+    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */
+}</string>
+       </property>
+       <property name="text">
+        <string>数据保存</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>665</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

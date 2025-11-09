@@ -14,11 +14,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_VA_method_para(object):
     def setupUi(self, VA_method_para):
         VA_method_para.setObjectName("VA_method_para")
-        VA_method_para.resize(715, 474)
+        VA_method_para.resize(715, 397)
         self.centralwidget = QtWidgets.QWidget(VA_method_para)
         self.centralwidget.setObjectName("centralwidget")
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(350, 380, 91, 41))
+        self.pushButton_2.setGeometry(QtCore.QRect(350, 310, 91, 41))
         self.pushButton_2.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
 "border-radius:15px;    /*设置圆角半径 */\n"
@@ -37,7 +37,7 @@ class Ui_VA_method_para(object):
 "}")
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(260, 380, 81, 41))
+        self.pushButton.setGeometry(QtCore.QRect(260, 310, 81, 41))
         self.pushButton.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
 "border-radius:15px;    /*设置圆角半径 */\n"
@@ -56,7 +56,7 @@ class Ui_VA_method_para(object):
 "}")
         self.pushButton.setObjectName("pushButton")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(40, 100, 641, 250))
+        self.layoutWidget.setGeometry(QtCore.QRect(40, 30, 641, 250))
         self.layoutWidget.setObjectName("layoutWidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.layoutWidget)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)

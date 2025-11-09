@@ -1187,13 +1187,13 @@ class Ui_MainWindow(object):
 "}")
         self.pushButton_save_pretrained_model.setObjectName("pushButton_save_pretrained_model")
         self.horizontalLayout_8.addWidget(self.pushButton_save_pretrained_model)
-        self.widget = QtWidgets.QWidget(self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(890, 390, 42, 70))
-        self.widget.setObjectName("widget")
-        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.widget)
+        self.layoutWidget9 = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget9.setGeometry(QtCore.QRect(890, 390, 42, 70))
+        self.layoutWidget9.setObjectName("layoutWidget9")
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.layoutWidget9)
         self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.pushButton_top = QtWidgets.QPushButton(self.widget)
+        self.pushButton_top = QtWidgets.QPushButton(self.layoutWidget9)
         self.pushButton_top.setMinimumSize(QtCore.QSize(32, 32))
         self.pushButton_top.setMaximumSize(QtCore.QSize(40, 30))
         font = QtGui.QFont()
@@ -1204,7 +1204,7 @@ class Ui_MainWindow(object):
         self.pushButton_top.setFont(font)
         self.pushButton_top.setObjectName("pushButton_top")
         self.verticalLayout_4.addWidget(self.pushButton_top)
-        self.pushButton_bottom = QtWidgets.QPushButton(self.widget)
+        self.pushButton_bottom = QtWidgets.QPushButton(self.layoutWidget9)
         self.pushButton_bottom.setMinimumSize(QtCore.QSize(0, 30))
         self.pushButton_bottom.setMaximumSize(QtCore.QSize(40, 30))
         font = QtGui.QFont()
@@ -1238,6 +1238,7 @@ class Ui_MainWindow(object):
         self.pushButton_outputall.clicked.connect(MainWindow.change_CheckBox_output) # type: ignore
         self.pushButton_train.clicked.connect(MainWindow.openfolder) # type: ignore
         self.pushButton_5.clicked.connect(MainWindow.AL_GP_para) # type: ignore
+        self.pushButton_otherpara.clicked.connect(MainWindow.AL_Other_para) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

@@ -3,14 +3,14 @@ product_code: Unknown
 serial_number: Unknown
 channel: 通道名称C1
 direction: X向
-analysis_time: 2025-10-25 14:19:50
-num_segments: 1091
+analysis_time: 2025-11-02 09:41:31
+num_segments: 975
 points_per_spectrum: 160
 frequency_range: {'min': 24.4140625, 'max': 1997.0703125}
 
 数据结构说明:
 - 数据文件: Unknown_Unknown_通道名称C1_X向_structured_dataset.csv
-- 行数: 1091 (功率谱分段数量)
+- 行数: 975 (功率谱分段数量)
 - 列数: 160 (每个功率谱的点数)
 - 列名格式: P1, P2, ..., P160 (对应功率谱密度值)
 - 额外列: start_time, end_time, segment_id
