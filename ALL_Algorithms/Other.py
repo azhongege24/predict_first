@@ -14,17 +14,21 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Other(object):
     def setupUi(self, Other):
         Other.setObjectName("Other")
-        Other.resize(665, 363)
+        Other.resize(644, 421)
         self.centralwidget = QtWidgets.QWidget(Other)
         self.centralwidget.setObjectName("centralwidget")
-        self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(70, 70, 174, 116))
-        self.layoutWidget.setObjectName("layoutWidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.widget.setGeometry(QtCore.QRect(60, 30, 531, 321))
+        self.widget.setObjectName("widget")
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.widget)
+        self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_6.setObjectName("verticalLayout_6")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.load_para = QtWidgets.QPushButton(self.layoutWidget)
-        self.load_para.setStyleSheet("QPushButton {\n"
+        self.pushButton_load_para = QtWidgets.QPushButton(self.widget)
+        self.pushButton_load_para.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
 "    padding: 4px 8px;\n"
@@ -42,10 +46,10 @@ class Ui_Other(object):
 "QPushButton:pressed {\n"
 "    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
 "}")
-        self.load_para.setObjectName("load_para")
-        self.verticalLayout.addWidget(self.load_para)
-        self.data_ps = QtWidgets.QPushButton(self.layoutWidget)
-        self.data_ps.setStyleSheet("QPushButton {\n"
+        self.pushButton_load_para.setObjectName("pushButton_load_para")
+        self.verticalLayout.addWidget(self.pushButton_load_para)
+        self.pushButton_select_target_file = QtWidgets.QPushButton(self.widget)
+        self.pushButton_select_target_file.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
 "    padding: 4px 8px;\n"
@@ -63,9 +67,30 @@ class Ui_Other(object):
 "QPushButton:pressed {\n"
 "    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
 "}")
-        self.data_ps.setObjectName("data_ps")
-        self.verticalLayout.addWidget(self.data_ps)
-        self.pushButton_save_data = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButton_select_target_file.setObjectName("pushButton_select_target_file")
+        self.verticalLayout.addWidget(self.pushButton_select_target_file)
+        self.pushButton_align_data = QtWidgets.QPushButton(self.widget)
+        self.pushButton_align_data.setStyleSheet("QPushButton {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.pushButton_align_data.setObjectName("pushButton_align_data")
+        self.verticalLayout.addWidget(self.pushButton_align_data)
+        self.pushButton_save_data = QtWidgets.QPushButton(self.widget)
         self.pushButton_save_data.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -86,9 +111,84 @@ class Ui_Other(object):
 "}")
         self.pushButton_save_data.setObjectName("pushButton_save_data")
         self.verticalLayout.addWidget(self.pushButton_save_data)
+        self.horizontalLayout_2.addLayout(self.verticalLayout)
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.other_files_list_label = QtWidgets.QLabel(self.widget)
+        self.other_files_list_label.setMinimumSize(QtCore.QSize(0, 40))
+        font = QtGui.QFont()
+        font.setFamily("楷体")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.other_files_list_label.setFont(font)
+        self.other_files_list_label.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.other_files_list_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.other_files_list_label.setObjectName("other_files_list_label")
+        self.verticalLayout_2.addWidget(self.other_files_list_label)
+        self.other_files_list = QtWidgets.QListWidget(self.widget)
+        self.other_files_list.setObjectName("other_files_list")
+        self.verticalLayout_2.addWidget(self.other_files_list)
+        self.horizontalLayout_2.addLayout(self.verticalLayout_2)
+        self.verticalLayout_6.addLayout(self.horizontalLayout_2)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.file_info = QtWidgets.QLabel(self.widget)
+        self.file_info.setMinimumSize(QtCore.QSize(0, 40))
+        font = QtGui.QFont()
+        font.setFamily("楷体")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.file_info.setFont(font)
+        self.file_info.setObjectName("file_info")
+        self.verticalLayout_4.addWidget(self.file_info)
+        self.status = QtWidgets.QLabel(self.widget)
+        self.status.setMinimumSize(QtCore.QSize(0, 40))
+        font = QtGui.QFont()
+        font.setFamily("楷体")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.status.setFont(font)
+        self.status.setObjectName("status")
+        self.verticalLayout_4.addWidget(self.status)
+        self.status_2 = QtWidgets.QLabel(self.widget)
+        self.status_2.setMinimumSize(QtCore.QSize(0, 40))
+        font = QtGui.QFont()
+        font.setFamily("楷体")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.status_2.setFont(font)
+        self.status_2.setObjectName("status_2")
+        self.verticalLayout_4.addWidget(self.status_2)
+        self.horizontalLayout.addLayout(self.verticalLayout_4)
+        self.verticalLayout_5 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_5.setObjectName("verticalLayout_5")
+        self.status_label = QtWidgets.QLineEdit(self.widget)
+        self.status_label.setMinimumSize(QtCore.QSize(0, 30))
+        font = QtGui.QFont()
+        font.setFamily("黑体")
+        font.setPointSize(12)
+        self.status_label.setFont(font)
+        self.status_label.setObjectName("status_label")
+        self.verticalLayout_5.addWidget(self.status_label)
+        self.file_info_label = QtWidgets.QLineEdit(self.widget)
+        self.file_info_label.setMinimumSize(QtCore.QSize(0, 30))
+        self.file_info_label.setObjectName("file_info_label")
+        self.verticalLayout_5.addWidget(self.file_info_label)
+        self.target_file_text = QtWidgets.QLineEdit(self.widget)
+        self.target_file_text.setMinimumSize(QtCore.QSize(0, 30))
+        self.target_file_text.setObjectName("target_file_text")
+        self.verticalLayout_5.addWidget(self.target_file_text)
+        self.horizontalLayout.addLayout(self.verticalLayout_5)
+        self.verticalLayout_6.addLayout(self.horizontalLayout)
         Other.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(Other)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 665, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 644, 23))
         self.menubar.setObjectName("menubar")
         Other.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(Other)
@@ -101,6 +201,11 @@ class Ui_Other(object):
     def retranslateUi(self, Other):
         _translate = QtCore.QCoreApplication.translate
         Other.setWindowTitle(_translate("Other", "其他参数模块"))
-        self.load_para.setText(_translate("Other", "导入特征参数"))
-        self.data_ps.setText(_translate("Other", "数据备注"))
-        self.pushButton_save_data.setText(_translate("Other", "数据保存"))
+        self.pushButton_load_para.setText(_translate("Other", "1.导入参数文件"))
+        self.pushButton_select_target_file.setText(_translate("Other", "2.选择对齐文件"))
+        self.pushButton_align_data.setText(_translate("Other", "3.执行整合对齐"))
+        self.pushButton_save_data.setText(_translate("Other", "4.保存结果"))
+        self.other_files_list_label.setText(_translate("Other", "导入的参数文件列表"))
+        self.file_info.setText(_translate("Other", "参数文件信息栏"))
+        self.status.setText(_translate("Other", "当前状态栏"))
+        self.status_2.setText(_translate("Other", "目标文件信息栏"))

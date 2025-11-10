@@ -30,6 +30,7 @@ from ALL_Algorithms.algorithms9_MMoE_para import Ui_MMoE_para
 from ALL_Algorithms.algorithms10_GP_para import Ui_GP_para
 from ALL_Algorithms.Dataset_handle import Ui_dataset_handle
 from ALL_Algorithms.Other import Ui_Other
+from ALL_Algorithms.OtherLogic import POP_Other_para
 from PyQt5.QtCore import pyqtSlot
 from ALL_Algorithms.Algorithms import multi_task_regression_predictor
 from ALL_Algorithms.Algorithms import ask_and_save_model
@@ -525,18 +526,18 @@ class POP_VA_method_para(QMainWindow, Ui_VA_method_para, Ui_MainWindow):
                 number_psd=number_psd
             )
 
-class POP_Other_para(QMainWindow, Ui_Other, Ui_MainWindow):
-    def __init__(self, parent=None):
-        super(POP_Other_para, self).__init__()
-        self.setupUi(self)
-        self.parent_window = parent#保存主窗口的引用
+# class POP_Other_para(QMainWindow, Ui_Other, Ui_MainWindow):
+#     def __init__(self, parent=None):
+#         super(POP_Other_para, self).__init__()
+#         self.setupUi(self)
+#         self.parent_window = parent#保存主窗口的引用
     
-    def Confirm(self):
-         # 读取输入参数
-        global max_depth, random_state,method,scale_features
-        scale_features = self.comboBox_scale_features.currentText()=="True"
-        max_depth = self.spinBox_max_depth.text()
-        random_state = self.spinBox_random_state.text()
+#     def Confirm(self):
+#          # 读取输入参数
+#         global max_depth, random_state,method,scale_features
+#         scale_features = self.comboBox_scale_features.currentText()=="True"
+#         max_depth = self.spinBox_max_depth.text()
+#         random_state = self.spinBox_random_state.text()
 
 
 
