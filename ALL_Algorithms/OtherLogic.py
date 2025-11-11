@@ -26,16 +26,26 @@ class OtherParameterModule(QMainWindow, Ui_Other):
         self.target_data = None          # 目标文件数据
         self.other_data_list = []        # 其他参数文件数据列表
         self.aligned_data = None         # 对齐后的数据
-        
+        self.product_name = ""           # 产品名称
+        self.product_code = ""           # 产品代号
         # 连接信号槽
         self.pushButton_load_para.clicked.connect(self.load_other_parameter_files)
         self.pushButton_select_target_file.clicked.connect(self.select_target_alignment_file)
         self.pushButton_align_data.clicked.connect(self.perform_alignment)
-        self.pushButton_save_data.clicked.connect(self.save_aligned_data)
-        
+        self.pushButton_save_data.clicked.connect(self.save_aligned_data)        
+        # 连接产品信息输入框的信号
+        self.product_name_input.textChanged.connect(self.on_product_info_changed)
+        self.product_code_input.textChanged.connect(self.on_product_info_changed)
         # 更新初始状态
         self.update_status()
-    
+
+
+
+    def on_product_info_changed(self):
+            """处理产品信息输入变化"""
+            self.product_name = self.product_name_input.text().strip()
+            self.product_code = self.product_code_input.text().strip()
+            self.update_status()
     def load_other_parameter_files(self):
         """导入其他参数文件（支持多文件）"""
         file_filter = "数据文件 (*.csv *.txt *.xls *.xlsx);;所有文件 (*.*)"
@@ -287,6 +297,19 @@ class OtherParameterModule(QMainWindow, Ui_Other):
         aligned_df['start_time'] = self.target_data['start_time']
         aligned_df['end_time'] = self.target_data['end_time']
         
+        
+        # 添加产品信息作为特征列
+        if self.product_name:
+            aligned_df['product_name'] = self.product_name
+        else:
+            aligned_df['product_name'] = "未命名产品"
+            
+        if self.product_code:
+            aligned_df['product_code'] = self.product_code
+        else:
+            aligned_df['product_code'] = "未指定代号"
+            
+            
         # 为每个其他参数文件创建对齐列
         for i, other_data_info in enumerate(self.other_data_list):
             other_data = other_data_info['data']
@@ -384,6 +407,17 @@ class OtherParameterModule(QMainWindow, Ui_Other):
         
         if self.aligned_data is not None:
             status_parts.append(f"已对齐完成 ({self.aligned_data.shape[0]}行×{self.aligned_data.shape[1]}列)")
+        
+        
+        
+        # 添加产品信息状态
+        if self.product_name or self.product_code:
+            product_info = []
+            if self.product_name:
+                product_info.append(f"产品: {self.product_name}")
+            if self.product_code:
+                product_info.append(f"代号: {self.product_code}")
+            status_parts.append(" | ".join(product_info))
         
         if status_parts:
             status_text = " | ".join(status_parts)
