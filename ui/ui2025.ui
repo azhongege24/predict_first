@@ -2387,6 +2387,38 @@ QPushButton:disabled {
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>shuffle_yes_or_no</sender>
+   <signal>clicked()</signal>
+   <receiver>checkBox_percentage</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1279</x>
+     <y>84</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1140</x>
+     <y>95</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>shuffle_yes_or_no</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_percentage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1320</x>
+     <y>87</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1158</x>
+     <y>34</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>AL_DT_para()</slot>
