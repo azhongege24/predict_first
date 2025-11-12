@@ -2055,6 +2055,35 @@ QPushButton:disabled {
      </item>
     </layout>
    </widget>
+   <widget class="QCheckBox" name="shuffle_yes_or_no">
+    <property name="geometry">
+     <rect>
+      <x>1240</x>
+      <y>70</y>
+      <width>106</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Times New Roman</family>
+      <pointsize>14</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QCheckBox {
+
+    spacing: 5px;
+}
+
+</string>
+    </property>
+    <property name="text">
+     <string>shuffle</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">

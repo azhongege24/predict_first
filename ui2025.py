@@ -1215,6 +1215,21 @@ class Ui_MainWindow(object):
         self.pushButton_bottom.setFont(font)
         self.pushButton_bottom.setObjectName("pushButton_bottom")
         self.verticalLayout_4.addWidget(self.pushButton_bottom)
+        self.shuffle_yes_or_no = QtWidgets.QCheckBox(self.centralwidget)
+        self.shuffle_yes_or_no.setGeometry(QtCore.QRect(1240, 70, 106, 16))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(14)
+        font.setBold(False)
+        font.setWeight(50)
+        self.shuffle_yes_or_no.setFont(font)
+        self.shuffle_yes_or_no.setStyleSheet("QCheckBox {\n"
+"\n"
+"    spacing: 5px;\n"
+"}\n"
+"\n"
+"")
+        self.shuffle_yes_or_no.setObjectName("shuffle_yes_or_no")
         MainWindow.setCentralWidget(self.centralwidget)
         self.toolBar = QtWidgets.QToolBar(MainWindow)
         self.toolBar.setObjectName("toolBar")
@@ -1312,4 +1327,5 @@ class Ui_MainWindow(object):
         self.pushButton_top.setText(_translate("MainWindow", "↑"))
         self.pushButton_bottom.setToolTip(_translate("MainWindow", "<html><head/><body><p>下翻页</p></body></html>"))
         self.pushButton_bottom.setText(_translate("MainWindow", "↓"))
+        self.shuffle_yes_or_no.setText(_translate("MainWindow", "shuffle"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))

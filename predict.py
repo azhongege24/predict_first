@@ -1606,11 +1606,14 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
     
 
         if self.checkBox_percentage.isChecked():
-            self.shape[0] = self.data.shape
-            N_start_train = round(self.shape[0] * int(self.spinBox_train_start.text()) / 100)
-            N_end_train = round(self.shape[0] * int(self.spinBox_train_end.text()) / 100)
-            N_start_test = round(self.shape[0] * int(self.spinBox_test_start.text()) / 100)
-            N_end_test = round(self.shape[0] * int(self.spinBox_test_end.text()) / 100)
+
+            total_rows = self.data.shape[0]
+            N_start_train = round(total_rows * int(self.spinBox_train_start.text()) / 100)
+            N_end_train = round(total_rows * int(self.spinBox_train_end.text()) / 100)
+            N_start_test = round(total_rows * int(self.spinBox_test_start.text()) / 100)
+            N_end_test = round(total_rows * int(self.spinBox_test_end.text()) / 100)
+
+            
         else:
             N_start_train = int(self.spinBox_train_start.text())
             N_end_train = int(self.spinBox_train_end.text())
@@ -1644,6 +1647,28 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         data_X = data[input_columns]   # 选择输入特征
         data_y = data[output_columns]  # 选择输出特征   
         data_filter = pd.concat([data_X, data_y], axis=1)  # 合并数据
+        # 正确的shuffle逻辑：先打乱，再划分---shuffle
+        if hasattr(self, 'shuffle_yes_or_no') and self.shuffle_yes_or_no.isChecked():
+            # 如果启用shuffle，先打乱整个数据集
+            data_filter = data_filter.sample(frac=1, random_state=int(random_state)).reset_index(drop=True)
+            print("数据已随机打乱")
+            
+            # 打乱后，无论是否使用百分比模式，都应该从0开始划分
+            # 因为数据已经打乱，原来的索引范围不再有意义
+            if self.checkBox_percentage.isChecked():
+                # 百分比模式：使用百分比计算新的索引范围
+                N_start_train = 0
+                N_end_train = round(len(data_filter) * int(self.spinBox_train_end.text()) / 100)
+                N_start_test = N_end_train
+                N_end_test = len(data_filter)
+            else:
+                # 绝对索引模式：重置为0开始的连续范围
+                N_start_train = 0
+                N_end_train = N_end_train - N_start_train  # 保持训练集大小不变
+                N_start_test = N_end_train
+                N_end_test = N_start_test + (N_end_test - N_start_test)  # 保持验证集大小不变
+
+ 
         data_train = data_filter[N_start_train : N_end_train]
         data_test = data_filter[N_start_test : N_end_test]   
         print('check')

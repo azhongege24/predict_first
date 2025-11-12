@@ -26,6 +26,7 @@ from ALL_Algorithms.Gassu_process import MultitaskGPRegressor,MultitaskGPModel
 import gpytorch
 
 
+
 #带有符号的对数变换
 def signed_log1p(arr):
     arr = np.asarray(arr, dtype=np.float64)  # 强制转为 numpy 数组
@@ -563,6 +564,11 @@ class Expert(nn.Module):
             )
     def forward(self,x):
         return self.net(x)
+    
+    
+
+
+
 class MMoE(nn.Module):
     def __init__(self, input_dim,output_dim,num_experts=5,num_tasks=1,
                  expert_hidden=64, dropout_rate =0.1):
@@ -620,6 +626,14 @@ class MMoE(nn.Module):
             cv_losses_tensor = torch.stack(cv_losses).mean()  # 多任务损失取平均
             return outputs_tensor, cv_losses_tensor
 
+
+# 修复PyTorch 1.1.0版本的TensorDataset导入问题
+try:
+    # 尝试新版本的导入方式
+    from torch.utils.data import TensorDataset, DataLoader
+except ImportError:
+    # 如果失败，使用PyTorch 1.1.0的导入方式
+    from torch.utils.data import TensorDataset, DataLoader
 class MMoERegressor:
     def __init__(self,input_dim,output_dim,num_experts = 5,expert_hidden = 64,
                  learning_rate = 0.001, dropout_rate = 0.1,
@@ -658,8 +672,8 @@ class MMoERegressor:
             y_tensor = torch.FloatTensor(y).to(self.device)
             num_tasks = y.shape[1]
         #创建数据加载器
-        dataset = torch.utils.data.TensorDataset(X_tensor,y_tensor)
-        dataloader = torch.utils.data.DataLoader(dataset,batch_size=self.batch_size,shuffle=True)
+        dataset = TensorDataset(X_tensor,y_tensor)
+        dataloader = DataLoader(dataset,batch_size=self.batch_size,shuffle=True)
         #初始化模型
         self.model = MMoE(input_dim=self.input_dim,
             output_dim=self.output_dim,
