@@ -133,10 +133,76 @@ class PowerSpectrumAnalyzer:
             total_points = len(filtered_time)
             step = int(segment_length * (1 - overlap_ratio))
             num_segments = max(1, (total_points - segment_length) // step + 1)
+
+            # 分段（点数模式）
+            segments = []
+            for i in range(num_segments):
+                start_idx = i * step
+                end_idx = start_idx + segment_length
+                
+                if start_idx >= len(filtered_time):
+                    break
+                    
+                # 处理最后一段可能不足的情况
+                if end_idx > len(filtered_time):
+                    end_idx = len(filtered_time)
+                    start_idx = max(0, end_idx - segment_length)
+                    
+                segment_time = filtered_time[start_idx:end_idx]
+                segment_signal = filtered_signal[start_idx:end_idx]
+                segments.append((segment_time, segment_signal))
+                
+            return segments
+
+
         elif segment_duration is not None:
             # 时间模式：使用segment_duration计算每段点数
             segment_length = int(segment_duration * fs)
             num_segments = int(np.ceil((end_time - start_time) / segment_duration))
+            # 时间模式：基于时间间隔分段
+            segment_length_points = int(segment_duration * fs)
+            
+            # 计算总时间长度
+            total_duration = end_time - start_time
+            
+            # 计算分段数量（考虑重叠）
+            if overlap_ratio > 0:
+                # 有重叠：计算实际分段数量
+                step_duration = segment_duration * (1 - overlap_ratio)
+                num_segments = max(1, int(np.ceil(total_duration / step_duration)))
+            else:
+                # 无重叠：简单分段
+                num_segments = max(1, int(np.ceil(total_duration / segment_duration)))
+            
+            # 确保分段长度合理
+            segment_length_points = max(1024, segment_length_points)
+            if segment_length_points > len(filtered_time):
+                return [(filtered_time, filtered_signal)]
+            
+            # 时间模式分段（基于时间点）
+            segments = []
+            for i in range(num_segments):
+                # 计算当前段的起始和结束时间
+                seg_start_time = start_time + i * segment_duration * (1 - overlap_ratio)
+                seg_end_time = seg_start_time + segment_duration
+                
+                # 确保不超过总时间范围
+                if seg_start_time >= end_time:
+                    break
+                seg_end_time = min(seg_end_time, end_time)
+                
+                # 根据时间点筛选数据
+                seg_mask = (filtered_time >= seg_start_time) & (filtered_time <= seg_end_time)
+                seg_time = filtered_time[seg_mask]
+                seg_signal = filtered_signal[seg_mask]
+                
+                if len(seg_time) >= 1024:  # 确保有足够的数据点
+                    segments.append((seg_time, seg_signal))
+            
+            return segments
+
+
+
         elif num_segments is not None:
             # 分段数量模式：计算每段点数
             segment_length = int(len(filtered_time) / num_segments)

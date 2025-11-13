@@ -512,13 +512,20 @@ class POP_VA_method_para(QMainWindow, Ui_VA_method_para, Ui_MainWindow):
         
         # 将参数传递给VA分析控制器
         if self.parent_window and hasattr(self.parent_window, 'va_controller'):
+            # 根据分段模式设置nperseg参数
+            if segment_mode == "时间分段":
+                # 时间分段模式：nperseg应该为None，使用segment_duration
+                nperseg_param = None
+            else:
+                # 固定长度模式：使用amounts作为nperseg
+                nperseg_param = amounts
             # 设置分析参数
             self.parent_window.va_controller.set_analysis_params(
                 method=analysis_method,
                 window=window_funtion,
                 overlap_ratio=overlap_rate,
                 fs=frequence,
-                nperseg=amounts,
+                nperseg=nperseg_param,
                 start_time=start_time,
                 end_time=end_time,
                 num_segments=num_segments,
@@ -526,18 +533,7 @@ class POP_VA_method_para(QMainWindow, Ui_VA_method_para, Ui_MainWindow):
                 number_psd=number_psd
             )
 
-# class POP_Other_para(QMainWindow, Ui_Other, Ui_MainWindow):
-#     def __init__(self, parent=None):
-#         super(POP_Other_para, self).__init__()
-#         self.setupUi(self)
-#         self.parent_window = parent#保存主窗口的引用
-    
-#     def Confirm(self):
-#          # 读取输入参数
-#         global max_depth, random_state,method,scale_features
-#         scale_features = self.comboBox_scale_features.currentText()=="True"
-#         max_depth = self.spinBox_max_depth.text()
-#         random_state = self.spinBox_random_state.text()
+
 
 
 
