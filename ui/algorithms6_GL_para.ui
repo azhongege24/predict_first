@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>601</width>
-    <height>380</height>
+    <width>449</width>
+    <height>318</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>140</x>
       <y>220</y>
       <width>181</width>
       <height>42</height>
@@ -91,7 +91,7 @@ QPushButton:pressed {
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>100</x>
       <y>40</y>
       <width>281</width>
       <height>158</height>
@@ -102,6 +102,9 @@ QPushButton:pressed {
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QLabel" name="label">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;&quot;&gt;控制算法中所有随机过程的种子，确保结果可重现。任意整数（如 &lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.894118);&quot;&gt;0&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;&quot;&gt;, &lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.894118);&quot;&gt;42&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;&quot;&gt;）。设置为固定整数值，以保证每次运行结果一致，便于结果复现和调试。&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
@@ -130,6 +133,9 @@ QLabel:pressed {
        </item>
        <item>
         <widget class="QLabel" name="label_2">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;正则化系数，平衡模型拟合优度与分组稀疏性强度。通常是一个较小的正数，如 &lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);&quot;&gt;0.01&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;, &lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);&quot;&gt;0.1&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;, &lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);&quot;&gt;1.0&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;；可通过网格搜索在对数尺度上尝试（如 &lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);&quot;&gt;[0.001, 0.01, 0.1, 1]&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;）。值越大，对组的惩罚越强，更多组的系数会整体变为零，模型更稀疏，值太小可能导致过拟合。&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
@@ -158,6 +164,9 @@ QLabel:pressed {
        </item>
        <item>
         <widget class="QLabel" name="label_max_iter">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;指定求解器的最大迭代次数，防止无限循环，默认值常为 &lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);&quot;&gt;1000&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;。对于复杂问题可增加，如 &lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);&quot;&gt;5000&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;。若模型未收敛警告，可增大此值；但设置过大且&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);&quot;&gt;tol&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;不变时，可能增加不必要的计算&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
@@ -186,6 +195,9 @@ QLabel:pressed {
        </item>
        <item>
         <widget class="QLabel" name="label_tol">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;优化算法的收敛容差。当参数变化小于此阈值时，停止迭代，较小的正数，如 &lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);&quot;&gt;1e-4&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt; 或 &lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);&quot;&gt;1e-3&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;。值越小，求解越精细，但迭代可能更多。若结果波动或提前停止，可尝试减小此值。&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
@@ -354,7 +366,7 @@ QDoubleSpinBox::down-button:pressed {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>601</width>
+     <width>449</width>
      <height>23</height>
     </rect>
    </property>

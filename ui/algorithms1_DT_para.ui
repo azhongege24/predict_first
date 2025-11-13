@@ -102,6 +102,9 @@ QPushButton:pressed {
            <height>16777215</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:15px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#fcfcfc;&quot;&gt;这是一个通过限制树的最大深度来防止过拟合的关键参数。实践中最优值需通过实验确定，通常建议从一个较小的深度（如3）开始，逐步增加并通过验证集评估效果来选择&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
@@ -142,6 +145,9 @@ QLabel:pressed {
            <height>200</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:15px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#fcfcfc;&quot;&gt;随机种子本身并不提升模型的&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:15px; color:rgba(0,0,0,0.898039); background-color:#fcfcfc;&quot;&gt;理论性能&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:15px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#fcfcfc;&quot;&gt;上限。它只是将随机性“固定”下来，让你得到一個确定的、可比较的结果。&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
@@ -170,6 +176,9 @@ QLabel:pressed {
        </item>
        <item>
         <widget class="QLabel" name="label_3">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:15px; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#fcfcfc;&quot;&gt;许多机器学习算法在处理不同量纲的特征时会遇到问题。例如，年龄范围在0-100，而收入可能达到数百万。如果不进行缩放，量级大的特征（如收入）在计算距离（如K近邻算法）或优化目标函数（如梯度下降法）时可能会主导整个模型，导致量级小的特征（如年龄）所包含的信息被淹没&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:15px; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#fcfcfc;&quot;&gt;。特征缩放通过统一量纲来解决这一问题，主要目的包括：&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:15px; color:rgba(0,0,0,0.898039); background-color:#fcfcfc;&quot;&gt;加速模型训练&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:15px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#fcfcfc;&quot;&gt;​：特别是对于依赖梯度下降的算法，特征缩放可以使梯度下降的路径更直接，从而&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:15px; color:rgba(0,0,0,0.898039); background-color:#fcfcfc;&quot;&gt;显著提高收敛速度&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:15px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#fcfcfc;&quot;&gt;​；&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:15px; color:rgba(0,0,0,0.898039); background-color:#fcfcfc;&quot;&gt;提升模型性能&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:15px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#fcfcfc;&quot;&gt;​：避免某些特征因量纲过大而被模型过度重视，确保所有特征对模型的贡献相对均衡，从而提升模型的预测准确性以及泛化能力。&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:15px; color:rgba(0,0,0,0.898039); background-color:#fcfcfc;&quot;&gt;保证公平性&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:15px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#fcfcfc;&quot;&gt;​：对于使用正则化的模型（如Lasso、Ridge回归），特征缩放能确保正则化项对所有特征的系数进行公平的惩罚&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */

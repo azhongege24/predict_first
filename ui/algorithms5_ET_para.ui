@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>563</width>
-    <height>427</height>
+    <width>506</width>
+    <height>388</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>30</y>
+      <x>120</x>
+      <y>40</y>
       <width>271</width>
       <height>198</height>
      </rect>
@@ -28,6 +28,9 @@
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QLabel" name="label">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;森林中树的数量。树越多，模型通常越稳定，但计算成本也越高。通常从 ​&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; color:rgba(0,0,0,0.898039);&quot;&gt;50~100&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;​ 开始尝试，范围可在 ​&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; color:rgba(0,0,0,0.898039);&quot;&gt;50~500&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;​ 之间。与随机森林类似，达到一定数量后性能提升会变缓。目标是找到性能与训练时间的平衡点。极端随机树由于构建单棵树更快，有时可以尝试相对更多的树。&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
@@ -56,6 +59,9 @@ QLabel:pressed {
        </item>
        <item>
         <widget class="QLabel" name="label_2">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;每棵树的最大深度。限制深度是防止过拟合的关键手段。常用 ​&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; color:rgba(0,0,0,0.898039);&quot;&gt;5~20&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;，或不限制（&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);&quot;&gt;None&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;）。样本量很大时可尝试更深。&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; color:rgba(0,0,0,0.898039);&quot;&gt;控制模型复杂度，防止过拟合&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;​。极端随机树本身通过随机分割点已具有一定的正则化效果，但仍需注意避免树过深导致模型过于复杂。&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
@@ -84,6 +90,9 @@ QLabel:pressed {
        </item>
        <item>
         <widget class="QLabel" name="label_3">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;&quot;&gt;指定用于训练的CPU核心数，用于并行计算以加速训练。&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.894118);&quot;&gt;-1&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;&quot;&gt;（使用全部核心），&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.894118);&quot;&gt;1&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;&quot;&gt;（默认，不并行），大于1的整数（指定核心数）&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; color:rgba(0,0,0,0.894118);&quot;&gt;显著减少训练时间&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;&quot;&gt;，尤其在树的数量（&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.894118);&quot;&gt;n_estimators&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;&quot;&gt;）较多或数据集较大时效果明显。但需注意内存消耗。&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
@@ -112,6 +121,9 @@ QLabel:pressed {
        </item>
        <item>
         <widget class="QLabel" name="label_4">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; color:rgba(0,0,0,0.894118); background-color:#ffffff;&quot;&gt;随机数种子，用于控制算法中所有随机性过程的可重复性。任意整数（如 &lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; color:rgba(0,0,0,0.894118);&quot;&gt;0&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; color:rgba(0,0,0,0.894118); background-color:#ffffff;&quot;&gt;, &lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; color:rgba(0,0,0,0.894118);&quot;&gt;42&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; color:rgba(0,0,0,0.894118); background-color:#ffffff;&quot;&gt;, &lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; color:rgba(0,0,0,0.894118);&quot;&gt;123&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; color:rgba(0,0,0,0.894118); background-color:#ffffff;&quot;&gt;）保证实验的&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; color:rgba(0,0,0,0.894118);&quot;&gt;可重复性&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; color:rgba(0,0,0,0.894118); background-color:#ffffff;&quot;&gt;。设置固定值后，每次运行代码的结果（如特征子集选择、随机分割点生成）将完全一致&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
@@ -140,6 +152,9 @@ QLabel:pressed {
        </item>
        <item>
         <widget class="QLabel" name="label_5">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;否在训练前对特征进行缩放（如标准化）。布尔值（&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);&quot;&gt;True&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;/&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);&quot;&gt;False&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;），通常作为独立的预处理步骤。对于极端随机树这类基于树结构的模型，​&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; color:rgba(0,0,0,0.898039);&quot;&gt;通常不需要&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;进行特征缩放。因为树模型基于特征值的大小关系进行分裂，缩放不会改变数据的内部排序，因此对模型结果没有影响。&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
@@ -327,8 +342,8 @@ QSpinBox::down-button:pressed {
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>260</y>
+      <x>180</x>
+      <y>270</y>
       <width>151</width>
       <height>42</height>
      </rect>
@@ -404,7 +419,7 @@ QPushButton:pressed {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>563</width>
+     <width>506</width>
      <height>23</height>
     </rect>
    </property>

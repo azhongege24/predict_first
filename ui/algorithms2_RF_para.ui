@@ -123,6 +123,9 @@ QPushButton:pressed {
            <bold>true</bold>
           </font>
          </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;森林里树的数量。树越多，模型通常越稳定，但计算也越慢。通常从 ​&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; color:rgba(0,0,0,0.898039);&quot;&gt;100&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;​ 开始尝试，范围可在 ​&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; color:rgba(0,0,0,0.898039);&quot;&gt;100~500&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;​ 之间&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;达到一定数量后，性能提升会变得微乎其微。目标是找到性能稳定且训练时间可接受的平衡点&lt;/span&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
@@ -171,6 +174,9 @@ QLabel:pressed {
            <italic>false</italic>
            <bold>true</bold>
           </font>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;table border=&quot;0&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot; cellspacing=&quot;2&quot; cellpadding=&quot;0&quot; bgcolor=&quot;#fcfcfc&quot;&gt;&lt;tr&gt;&lt;td bgcolor=&quot;#ffffff&quot; style=&quot; vertical-align:middle; padding-left:12; padding-right:12; padding-top:9; padding-bottom:9;&quot;&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;&quot;&gt;每棵树的最大深度。限制深度可以有效防止模型过于复杂。&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;&quot;&gt;常用 ​&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:12pt; color:rgba(0,0,0,0.894118);&quot;&gt;5~15&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;&quot;&gt;，或不限制（&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.894118);&quot;&gt;None&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;&quot;&gt;）。样本量很大时可尝试10~100，&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:12pt; color:rgba(0,0,0,0.894118);&quot;&gt;防止过拟合&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;&quot;&gt;的关键参数。深度太小可能导致欠拟合，太深（尤其是不限制时）极易过拟合&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td bgcolor=&quot;#ffffff&quot; style=&quot; vertical-align:middle; padding-left:12; padding-right:12; padding-top:9; padding-bottom:9;&quot;/&gt;&lt;/tr&gt;&lt;/table&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
@@ -221,6 +227,9 @@ QLabel:pressed {
            <bold>true</bold>
           </font>
          </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;使用计算机的几个核心来并行计算。使用计算机的几个核心来并行计算。&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;显著减少训练时间&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;。但设置过高可能消耗大量内存，若训练时内存不足，应调低此值&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
@@ -270,6 +279,9 @@ QLabel:pressed {
            <bold>true</bold>
           </font>
          </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;随机数种子。固定它可以让每次训练结果一模一样。任意整数（如 &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:12pt;&quot;&gt;0&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;, &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:12pt;&quot;&gt;42&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;, &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:12pt;&quot;&gt;123&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;）。保证实验的&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;可重复性&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;。设置固定值后，其他人也能复现出与你完全一致的结果&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
@@ -298,6 +310,9 @@ QLabel:pressed {
        </item>
        <item>
         <widget class="QLabel" name="label_2">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;是否对数据进行特征缩放（如标准化）。布尔值（&lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:12pt;&quot;&gt;True&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;/&lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:12pt;&quot;&gt;False&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;）。对于随机森林模型，​&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;通常不需要&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;进行特征缩放，因为树模型基于特征阈值分裂，不受量纲影响&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */

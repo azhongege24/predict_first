@@ -108,6 +108,9 @@ QPushButton:pressed {
            <height>30</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;将数据映射到高维空间的函数，用于处理非线性问题。&lt;span style=&quot; font-family:'Courier New';&quot;&gt;linear&lt;/span&gt;（线性）, &lt;span style=&quot; font-family:'Courier New';&quot;&gt;rbf&lt;/span&gt;（径向基）, &lt;span style=&quot; font-family:'Courier New';&quot;&gt;poly&lt;/span&gt;（多项式）, &lt;span style=&quot; font-family:'Courier New';&quot;&gt;sigmoid&lt;/span&gt;&lt;/p&gt;&lt;p&gt;。默认为 &lt;span style=&quot; font-family:'Courier New';&quot;&gt;rbf&lt;/span&gt;。模型性能的关键。线性可分或特征维度高时用&lt;span style=&quot; font-family:'Courier New';&quot;&gt;linear&lt;/span&gt;（速度快）；非线性问题优先尝试&lt;span style=&quot; font-family:'Courier New';&quot;&gt;rbf&lt;/span&gt;；特定领域（如文本）可能用&lt;span style=&quot; font-family:'Courier New';&quot;&gt;poly&lt;/span&gt;或&lt;span style=&quot; font-family:'Courier New';&quot;&gt;sigmoid&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
@@ -150,6 +153,9 @@ QLabel:pressed {
            <italic>false</italic>
            <bold>true</bold>
           </font>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;惩罚系数，平衡“分类间隔最大化”和“误分类点容忍度”。通常在对数尺度上搜索，如 &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:12pt;&quot;&gt;[0.01, 0.1, 1, 10, 100]&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;控制过拟合与欠拟合。&lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:12pt;&quot;&gt;C&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;值越大，对误分类惩罚越重，模型越复杂，易过拟合；&lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:12pt;&quot;&gt;C&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;值越小，模型泛化能力越强，但可能欠拟合&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
@@ -228,6 +234,9 @@ QLabel:pressed {
            <height>30</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;指定用于训练的CPU核心数，用于并行计算以加速训练。&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.898039);&quot;&gt;-1&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;（使用全部核心），&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.898039);&quot;&gt;1&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;（默认，不并行），大于1的整数（指定核心数）&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:12pt; color:rgba(0,0,0,0.898039);&quot;&gt;显著减少训练时间&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;，特别在网格搜索或大数据集时。但并非核心数越多越好，需考虑内存消耗。&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
@@ -262,6 +271,9 @@ QLabel:pressed {
            <height>30</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;随机数种子，用于控制算法中所有随机性过程的可重复性。任意整数（如 &lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);&quot;&gt;0&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;, &lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);&quot;&gt;42&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;）。保证实验的&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:14px; color:rgba(0,0,0,0.898039);&quot;&gt;可重复性&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;。设置固定值后，每次运行代码的结果（如数据洗牌、概率估计初始化）将完全一致&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
@@ -295,6 +307,9 @@ QLabel:pressed {
            <width>0</width>
            <height>30</height>
           </size>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;是否在训练SVM前对特征进行缩放（如标准化或归一化）。布尔值（&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.898039);&quot;&gt;True&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;/&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.898039);&quot;&gt;False&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;），但通常作为独立的预处理步骤。对于SVM，​&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei'; font-size:12pt; color:rgba(0,0,0,0.898039);&quot;&gt;强烈建议进行特征缩放&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;​&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;&quot;&gt;。这能确保所有特征在相同量纲上，避免某些特征因数值范围大而主导模型，从而提升模型性能与训练稳定性。&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
