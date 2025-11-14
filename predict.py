@@ -698,25 +698,7 @@ class POP_VA_method_para(QMainWindow, Ui_VA_method_para, Ui_MainWindow):
             )
 
 
-class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):
-    def __init__(self, parent=None):
-        super(POP_DT_para, self).__init__()
-        self.setupUi(self)
-        self.parent_window = parent#保存主窗口的引用
-    
-    def Confirm(self):
-         # 读取输入参数
-        global max_depth, random_state,method,scale_features
-        scale_features = self.comboBox_scale_features.currentText()=="True"
-        max_depth = self.spinBox_max_depth.text()
-        random_state = self.spinBox_random_state.text()
-        method = 'DT'
-        if self.parent_window:
-            self.parent_window.lineEdit_Algorithm_name.setText("Decision Tree")
-        self.parent_window.All_Methods_Begin()
-        print("max_depth:", max_depth) 
-        print("random_state:", random_state)
-        print("scale_features:", scale_features)
+
 
 class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -952,6 +934,31 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
         combined_df = combined_df.replace([np.inf, -np.inf], np.nan)
         combined_df = combined_df.dropna(axis=0, how='any')
 
+        # ----------- 新增：中文清洗功能 -----------
+        # 3. 清洗中文字符：将"1道"、"1类"等转换为纯数字"1"
+        def clean_chinese_characters(value):
+            """清洗中文字符，将'1道'、'1类'等转换为'1'"""
+            if isinstance(value, str):
+                # 匹配数字后跟中文字符的模式，如"1道"、"2类"等
+                import re
+                # 匹配以数字开头，后面跟着中文字符的模式
+                pattern = r'^(\d+)[\u4e00-\u9fff]+$'
+                match = re.match(pattern, value.strip())
+                if match:
+                    # 提取数字部分
+                    return match.group(1)
+                # 如果是纯中文字符，返回NaN（后续会被dropna处理）
+                elif re.match(r'^[\u4e00-\u9fff]+$', value.strip()):
+                    return np.nan
+            return value
+        # 对DataFrame的每一列应用中文清洗
+        for col in combined_df.columns:
+            combined_df[col] = combined_df[col].apply(clean_chinese_characters)
+
+        # 再次剔除可能产生的NaN值
+        combined_df = combined_df.dropna(axis=0, how='any')
+    
+    
         # 选择保存路径
         file_filter = "CSV文件 (*.csv);;Excel文件 (*.xlsx);;所有文件 (*.*)"
         initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
@@ -992,7 +999,27 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
         self.lineEdit_status.setText("就绪")
         self.lineEdit_status_2.setText("就绪")   
                            
+class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):
+    def __init__(self, parent=None):
+        super(POP_DT_para, self).__init__()
+        self.setupUi(self)
+        self.parent_window = parent#保存主窗口的引用
+    
+    def Confirm(self):
+         # 读取输入参数
+        global max_depth, random_state,method,scale_features
+        scale_features = self.comboBox_scale_features.currentText()=="True"
+        max_depth = self.spinBox_max_depth.text()
+        random_state = self.spinBox_random_state.text()
         
+        method = 'DT'
+        if self.parent_window:
+            self.parent_window.lineEdit_Algorithm_name.setText("Decision Tree")
+            
+        self.parent_window.All_Methods_Begin()
+        print("max_depth:", max_depth) 
+        print("random_state:", random_state)
+        print("scale_features:", scale_features)   
 class POP_RF_para(QMainWindow, Ui_RF_para, Ui_MainWindow):
     def __init__(self,parent=None):
         super(POP_RF_para, self).__init__()
@@ -1005,9 +1032,11 @@ class POP_RF_para(QMainWindow, Ui_RF_para, Ui_MainWindow):
         max_depth = self.spinBox_max_depth.text()
         random_state = self.spinBox_random_state.text()
         n_estimators = self.spinBox_n_estimators.text()
+       
         method = 'RF'
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("Random Forest")
+            
         self.parent_window.All_Methods_Begin()
         print("n_estimators:", n_estimators)
         print("max_depth:", max_depth)
@@ -1301,11 +1330,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
     def AL_DT_para(self):
       
         self.ui_pop = POP_DT_para(self)
+        self.clear_interface()
         self.ui_pop.show()
  
     def AL_RF_para(self):
       
         self.ui_pop = POP_RF_para(self)
+        self.clear_interface()
         self.ui_pop.show()
 
     def AL_SVM_para(self):
@@ -1316,36 +1347,43 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
     def AL_MLP_para(self):
         
             self.ui_pop = POP_MLP_para(self)
+            self.clear_interface()
             self.ui_pop.show()  
 
     def AL_ET_para(self):
         
             self.ui_pop = POP_ET_para(self)
+            self.clear_interface()
             self.ui_pop.show() 
 
     def AL_GL_para(self):
         
             self.ui_pop = POP_GL_para(self)
+            self.clear_interface()
             self.ui_pop.show()
 
     def AL_MTW_para(self):  
             
                 self.ui_pop = POP_MTW_para(self)
+                self.clear_interface()
                 self.ui_pop.show()  
 
     def AL_REMTW_para(self):  
             
                 self.ui_pop = POP_REMTW_para(self)
+                self.clear_interface()
                 self.ui_pop.show()
 
     def AL_MMoE_para(self):  
             
                 self.ui_pop = POP_MMoE_para(self)
+                self.clear_interface()
                 self.ui_pop.show()
     
     def AL_GP_para(self):  
         
             self.ui_pop = POP_GP_para(self)
+            self.clear_interface()
             self.ui_pop.show()
 
     def get_gpu_util(self):
@@ -1750,6 +1788,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         
     def All_Methods_Begin(self):
         global method
+
 
         if self.data_load == 0:
             self.lineEdit_Algorithm_name.setText("请在右侧选择所需算法")
@@ -2376,7 +2415,31 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 self.spinBox_test_start.setValue(N_start_test)
                 self.spinBox_test_end.setValue(N_end_test)     
 
-
+    def clear_interface(self):
+        """清空界面控件内容的工具函数"""
+        print("正在清空界面...")
+        
+        # 清空文本框
+        self.lineEdit_Algorithm_name.clear()
+        self.lineEdit_DEVICE.clear()
+        self.lineEdit_MSE.clear()
+        self.lineEdit_RMSE.clear()
+        self.lineEdit_MAE.clear()
+        self.lineEdit_R2.clear()
+        self.lineEdit_state.clear()
+        self.lineEdit_dataset_nums.clear()
+        self.lineEdit_db_within_3_ratio.clear()
+        self.lineEdit_total_db_deviation.clear()
+        
+        # 清空图表区域
+        self.graphicscene.clear()
+        self.graphicsView.setScene(self.graphicscene)
+        
+        # 清空分页数据
+        self.current_page = 0
+        self.figures = []
+        
+        print("界面清空完成")
 
 
 if __name__ == '__main__':
