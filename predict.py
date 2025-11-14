@@ -1,5 +1,6 @@
 import subprocess
 import time
+import json
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT as NavigationToolbar
 import numpy as np
@@ -93,6 +94,7 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         self.pushButton_preview_data_file.clicked.connect(self.preview_data)
         self.pushButton_psd_analysis.clicked.connect(self.perform_psd_analysis)
         self.pushButton_save_data.clicked.connect(self.save_analysis_results)
+        self.pushButton_save_image.clicked.connect(self.save_analysis_images)  # 添加保存图片按钮连接
         self.pushButton_set_para.clicked.connect(self.AL_VA_method_para)
         self.pushButton_help.clicked.connect(self.show_help)
         self.pushButton_top.clicked.connect(self.show_previous_page)
@@ -291,6 +293,100 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
             
         except Exception as e:
             QMessageBox.warning(self, "显示失败", f"结果显示失败: {str(e)}")
+    def save_analysis_images(self):
+        """保存分析结果图片"""
+        if not self.analysis_results:
+            QMessageBox.warning(self, "警告", "请先进行功率谱分析！")
+            return
+        
+        if not self.save_directory:
+            QMessageBox.warning(self, "警告", "请先选择保存目录！")
+            return
+        
+        try:
+            # 获取分析结果信息
+            results = self.analysis_results['results']
+            channel = self.analysis_results['channel']
+            direction = self.analysis_results['direction']
+            num_segments = len(results)
+            
+            # 创建保存目录
+            save_dir = os.path.join(self.save_directory, "VA_view")
+            os.makedirs(save_dir, exist_ok=True)
+            
+            # 保存当前显示的页面图片
+            if self.current_page >= 0 and self.current_page < self.total_pages:
+                # 计算当前页显示的分段范围
+                start_idx = self.current_page * self.results_per_page
+                end_idx = min(start_idx + self.results_per_page, num_segments)
+                
+                # 生成文件名
+                filename = f"{channel}_{direction}_page_{self.current_page + 1}_of_{self.total_pages}_segments_{start_idx + 1}_to_{end_idx}.png"
+                file_path = os.path.join(save_dir, filename)
+                
+                # 保存当前显示的图片
+                self.figure.savefig(file_path, dpi=300, bbox_inches='tight')
+                
+                # 询问是否保存所有页面图片
+                reply = QMessageBox.question(self, "保存成功", 
+                                           f"当前页面图片已保存到:\n{file_path}\n\n是否保存所有页面图片？",
+                                           QMessageBox.Yes | QMessageBox.No)
+                
+                if reply == QMessageBox.Yes:
+                    # 保存所有页面图片
+                    for page in range(self.total_pages):
+                        # 计算当前页显示的分段范围
+                        start_idx = page * self.results_per_page
+                        end_idx = min(start_idx + self.results_per_page, num_segments)
+                        
+                        # 生成文件名
+                        filename = f"{channel}_{direction}_page_{page + 1}_of_{self.total_pages}_segments_{start_idx + 1}_to_{end_idx}.png"
+                        file_path = os.path.join(save_dir, filename)
+                        
+                        # 创建临时图形来保存该页面
+                        temp_fig = plt.figure(figsize=(10, 8))
+                        
+                        # 计算当前页显示的分段数量
+                        num_to_show = end_idx - start_idx
+                        
+                        if num_to_show > 0:
+                            # 垂直排列显示当前页的分段
+                            for i in range(num_to_show):
+                                result_idx = start_idx + i
+                                result = results[result_idx]
+                                
+                                ax = temp_fig.add_subplot(num_to_show, 1, i+1)
+                                ax.plot(result['frequency'], result['power_spectrum'], 'b-', linewidth=1.5)
+                                ax.set_xlabel('频率 (Hz)')
+                                ax.set_ylabel('功率谱密度')
+                                ax.set_title(f"时间段 {result_idx+1}/{num_segments}: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
+                                ax.grid(True, alpha=0.3)
+                                ax.set_yscale('log')
+                            
+                            # 调整布局
+                            temp_fig.subplots_adjust(left=0.1, right=0.95, bottom=0.1, top=0.9, 
+                                                   hspace=0.5, wspace=0.3)
+                            
+                            # 添加总标题和页码信息
+                            temp_fig.suptitle(
+                                f"功率谱分析结果 - {channel} {direction} 第 {page + 1}/{self.total_pages} 页 (显示 {start_idx+1}-{end_idx} 段，共 {num_segments} 段)",
+                                fontsize=12
+                            )
+                        
+                        # 保存图片
+                        temp_fig.savefig(file_path, dpi=300, bbox_inches='tight')
+                        plt.close(temp_fig)
+                    
+                    QMessageBox.information(self, "保存完成", 
+                                          f"所有页面图片已保存到:\n{save_dir}\n共保存了 {self.total_pages} 个图片文件")
+            
+            else:
+                QMessageBox.warning(self, "保存失败", "没有有效的分析结果可保存")
+                
+        except Exception as e:
+            QMessageBox.warning(self, "保存失败", f"图片保存失败: {str(e)}")
+
+
     def show_previous_page(self):
         """显示上一页"""
         if self.current_page > 0:
@@ -453,6 +549,16 @@ class POP_VA_method_para(QMainWindow, Ui_VA_method_para, Ui_MainWindow):
         self.setupUi(self)
         self.parent_window = parent#保存主窗口的引用
         
+        
+        # 定义参数配置文件路径
+        self.config_dir = os.path.join(os.getcwd(), "config")
+        self.config_path = os.path.join(self.config_dir, "va_params.json")
+        # 连接信号
+        self.comboBox_segment_mode.currentTextChanged.connect(self.on_segment_mode_changed)
+        # 初始状态设置
+        self.load_params()  # 加载历史参数
+        
+        
         #连接分段模式选择信号
         self.comboBox_segment_mode.currentTextChanged.connect(self.on_segment_mode_changed)
         # 初始状态设置
@@ -473,6 +579,64 @@ class POP_VA_method_para(QMainWindow, Ui_VA_method_para, Ui_MainWindow):
             self.doubleSpinBox_segment_duration.setEnabled(False)
             self.spinBox_amounts.setEnabled(True)
     
+    
+    def save_params(self):
+        """保存当前参数到JSON文件"""
+        # 收集所有需要记忆的参数
+        params = {
+            "analysis_method": self.comboBox_analysis_method.currentText(),
+            "window_funtion": self.comboBox_window_funtion.currentText(),
+            "overlap_rate": float(self.doubleSpinBox_overlap_rate.value()),
+            "frequence": self.spinBox_frequence.value(),
+            "number_psd": self.spinBox_number_psd.value(),
+            "segment_mode": self.comboBox_segment_mode.currentText(),
+            # 时间分段参数
+            "start_time": float(self.doubleSpinBox_start_time.value()),
+            "end_time": float(self.doubleSpinBox_end_time.value()),
+            "segment_duration": float(self.doubleSpinBox_segment_duration.value()),
+            # 固定长度参数
+            "amounts": self.spinBox_amounts.value()
+        }
+        
+        try:
+            # 确保配置目录存在
+            if not os.path.exists(self.config_dir):
+                os.makedirs(self.config_dir)
+            
+            # 写入JSON文件
+            with open(self.config_path, "w", encoding="utf-8") as f:
+                json.dump(params, f, ensure_ascii=False, indent=4)
+        except Exception as e:
+            QMessageBox.warning(self, "保存失败", f"参数记忆失败：{str(e)}")
+    
+    def load_params(self):
+        """从JSON文件加载历史参数"""
+        if not os.path.exists(self.config_path):
+            return  # 无历史参数，使用默认值
+        
+        try:
+            with open(self.config_path, "r", encoding="utf-8") as f:
+                params = json.load(f)
+            
+            # 恢复参数到控件（按实际控件名称对应）
+            self.comboBox_analysis_method.setCurrentText(params.get("analysis_method", ""))
+            self.comboBox_window_funtion.setCurrentText(params.get("window_funtion", ""))
+            self.doubleSpinBox_overlap_rate.setValue(params.get("overlap_rate", 0.5))
+            self.spinBox_frequence.setValue(params.get("frequence", 5000))
+            self.spinBox_number_psd.setValue(params.get("number_psd", 160))
+            self.comboBox_segment_mode.setCurrentText(params.get("segment_mode", "时间分段"))
+            
+            # 恢复时间分段参数
+            self.doubleSpinBox_start_time.setValue(params.get("start_time", 0.0))
+            self.doubleSpinBox_end_time.setValue(params.get("end_time", 100.0))
+            self.doubleSpinBox_segment_duration.setValue(params.get("segment_duration", 0.01))
+            
+            # 恢复固定长度参数
+            self.spinBox_amounts.setValue(params.get("amounts", 1024))
+            
+        except Exception as e:
+            QMessageBox.warning(self, "加载失败", f"历史参数加载失败：{str(e)}")
+            
     def Confirm(self):
          # 读取输入参数
         global analysis_method, window_funtion, overlap_rate, frequence, amounts,number_psd
@@ -532,9 +696,6 @@ class POP_VA_method_para(QMainWindow, Ui_VA_method_para, Ui_MainWindow):
                 segment_duration=segment_duration,
                 number_psd=number_psd
             )
-
-
-
 
 
 class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):

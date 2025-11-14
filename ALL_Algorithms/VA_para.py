@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_VA_para(object):
     def setupUi(self, VA_para):
         VA_para.setObjectName("VA_para")
-        VA_para.resize(1284, 862)
+        VA_para.resize(1284, 787)
         self.centralwidget = QtWidgets.QWidget(VA_para)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
@@ -203,6 +203,27 @@ class Ui_VA_para(object):
 "}")
         self.pushButton_save_data.setObjectName("pushButton_save_data")
         self.verticalLayout_3.addWidget(self.pushButton_save_data)
+        self.pushButton_save_image = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButton_save_image.setStyleSheet("QPushButton {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.pushButton_save_image.setObjectName("pushButton_save_image")
+        self.verticalLayout_3.addWidget(self.pushButton_save_image)
         self.label_7 = QtWidgets.QLabel(self.layoutWidget)
         self.label_7.setMinimumSize(QtCore.QSize(88, 34))
         self.label_7.setMaximumSize(QtCore.QSize(16777215, 40))
@@ -323,6 +344,7 @@ class Ui_VA_para(object):
         self.pushButton_preview_data_file.setText(_translate("VA_para", "预览数据"))
         self.pushButton_psd_analysis.setText(_translate("VA_para", "功率谱分析"))
         self.pushButton_save_data.setText(_translate("VA_para", "保存结果"))
+        self.pushButton_save_image.setText(_translate("VA_para", "保存图片"))
         self.label_7.setText(_translate("VA_para", "辅助设置区"))
         self.pushButton_set_para.setText(_translate("VA_para", "参数设置"))
         self.pushButton_help.setText(_translate("VA_para", "帮助"))
