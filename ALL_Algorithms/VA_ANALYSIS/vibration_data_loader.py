@@ -3,7 +3,7 @@ import numpy as np
 import scipy.io as sio
 import pandas as pd
 from pathlib import Path
-
+import h5py
 class VibrationDataLoader:
     """振动数据读取工具类，支持txt和mat格式"""
     
@@ -73,6 +73,41 @@ class VibrationDataLoader:
             raise Exception(f"读取txt文件失败: {str(e)}")
     
     @staticmethod
+    def read_mat_file_v7_3(file_path):
+        """读取MATLAB v7.3格式的振动数据（使用HDF5）"""
+
+        
+        try:
+            with h5py.File(file_path, 'r') as f:
+                # 检查文件是否包含's'变量
+                if 's' in f:
+                    s_data = f['s'][:]
+                    # 转置数据，因为HDF5存储方式与MATLAB不同
+                    if s_data.ndim == 2 and s_data.shape[0] == 2:
+                        return s_data[0, :], s_data[1, :]  # 时间，振动量值
+                    elif s_data.ndim == 2 and s_data.shape[1] == 2:
+                        return s_data[:, 0], s_data[:, 1]  # 时间，振动量值
+                    else:
+                        raise ValueError("mat文件中的变量s格式不正确")
+                else:
+                    # 尝试查找其他可能的变量名
+                    possible_vars = ['data', 'signal', 'vibration', 'time', 't', 'x', 'y']
+                    for var_name in possible_vars:
+                        if var_name in f:
+                            data = f[var_name][:]
+                            if data.ndim == 2 and data.shape[1] == 2:
+                                return data[:, 0], data[:, 1]
+                            elif data.ndim == 1:
+                                # 如果是单列数据，创建时间序列
+                                time_data = np.arange(len(data))
+                                return time_data, data
+                    
+                    raise ValueError("mat文件中未找到合适的变量")
+        except Exception as e:
+            raise Exception(f"读取MATLAB v7.3格式文件失败: {str(e)}")
+    
+    
+    @staticmethod
     def read_mat_file(file_path):
         """读取mat格式的振动数据"""
         try:
@@ -86,7 +121,14 @@ class VibrationDataLoader:
             else:
                 raise ValueError("mat文件中未找到变量s")
         except Exception as e:
-            raise Exception(f"读取mat文件失败: {str(e)}")
+            # 检查是否是v7.3格式错误
+            error_msg = str(e)
+            if "HDF reader for matlab v7.3" in error_msg or "v7.3" in error_msg:
+                # 如果是v7.3格式，使用HDF5读取器
+                return VibrationDataLoader.read_mat_file_v7_3(file_path)
+            else:
+                # 其他错误，抛出原始异常
+                raise Exception(f"读取mat文件失败: {str(e)}")
     
     @staticmethod
     def load_data(file_path):
