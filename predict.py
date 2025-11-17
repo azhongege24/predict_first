@@ -864,8 +864,8 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
         self.listWidget_output_files.clear()
 
     def add_input_features(self):
-        """添加输入特征文件（支持多选，空格分隔的.txt）"""
-        file_filter = "文本文件 (*.txt);;所有文件 (*.*)"
+        """添加输入特征文件（支持多选）"""
+        file_filter = "数据文件 (*.csv *.txt);;CSV文件 (*.csv);;文本文件 (*.txt);;所有文件 (*.*)"
         initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
         files, _ = QFileDialog.getOpenFileNames(self, "选择输入特征文件", initial_dir, file_filter)
         
@@ -881,8 +881,8 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
         self.update_combined_info()
 
     def add_output_features(self):
-        """添加输出特征文件（支持多选，空格分隔的多列.txt）"""
-        file_filter = "文本文件 (*.txt);;所有文件 (*.*)"
+        """添加输出特征文件（支持多选）"""
+        file_filter = "数据文件 (*.csv *.txt);;CSV文件 (*.csv);;文本文件 (*.txt);;所有文件 (*.*)"
         initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
         files, _ = QFileDialog.getOpenFileNames(self, "选择输出特征文件", initial_dir, file_filter)
         
@@ -898,20 +898,23 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
         self.update_combined_info()
 
     def update_combined_info(self):
-        """更新合并信息（修正输出特征列数计算）"""
+        """更新合并信息"""
         if self.input_files and self.output_files:
             try:
-                # 读取输入文件（指定空格分隔，避免多列解析错误）
-                sample_df = pd.read_csv(self.input_files[0], header=None, sep="\s+")
-                sample_count = len(sample_df)
-                input_count = len(self.input_files)
+                # 读取输入文件（带标题行）
+                input_df = pd.read_csv(self.input_files[0], sep="\s+|\t|,", engine='python')
+                input_cols = input_df.shape[1]
                 
-                # 计算所有输出文件的总列数（修正列表推导式求和）
-                output_count = sum([pd.read_csv(f, header=None, sep="\s+").shape[1] for f in self.output_files])
+                # 读取输出文件（带标题行）
+                output_df = pd.read_csv(self.output_files[0], sep="\s+|\t|,", engine='python')
+                # 计算P1到P160的列数
+                p_cols = sum(1 for col in output_df.columns if col.startswith('P'))
+                
+                sample_count = min(len(input_df), len(output_df))
                 
                 self.lineEdit_info.setText(
-                    f"预计合并结果: {sample_count} 样本 × {input_count + output_count} 特征 "
-                    f"(输入: {input_count}, 输出: {output_count})"
+                    f"预计合并结果: {sample_count} 样本 × {input_cols + p_cols} 特征 "
+                    f"(输入: {input_cols}, 输出: {p_cols})"
                 )
             except Exception as e:
                 self.lineEdit_info.setText(f"预览失败：{str(e)[:50]}...")
@@ -919,100 +922,109 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
             self.lineEdit_info.setText("请选择输入和输出特征文件")
 
     def combine_data(self):
-        """合并输入输出数据（核心修复：补全列表添加、分隔符、行数校验）"""
+        """合并输入输出数据（基于时间对齐）"""
         if not self.input_files or not self.output_files:
             QMessageBox.warning(self, "警告", "请先选择输入和输出特征文件！")
             return None
         
         try:
-            # ---------------------- 1. 读取输入文件（修复：添加到input_dfs列表）----------------------
+            # 读取所有输入文件并合并
             input_dfs = []
-            for i, file_path in enumerate(self.input_files, 1):
-                # 关键：指定sep="\s+"（匹配任意空格），避免多列数据解析为1列
-                df = pd.read_csv(file_path, header=None, sep="\s+")
-                # 若输入文件是多列，仅取第一列（按原逻辑保留，可根据需求调整）
-                if df.shape[1] > 1:
-                    df = df.iloc[:, 0]
-                df.name = f"input{i}"
-                input_dfs.append(df)  # 修复：将处理后的输入数据加入列表
-
-            # ---------------------- 2. 读取输出文件（修复：加入all_dfs校验行数）----------------------
-            output_dfs = []
-            output_counter = 1
-            for file_path in self.output_files:
-                # 关键：指定sep="\s+"，正确解析多列输出
-                df = pd.read_csv(file_path, header=None, sep="\s+")
-                # 拆分多列为单独特征（如output1、output2...）
-                for col_idx in range(df.shape[1]):
-                    col_df = df.iloc[:, col_idx].reset_index(drop=True)  # 重置索引避免行数错位
-                    col_df.name = f"output{output_counter}"
-                    output_dfs.append(col_df)
-                    output_counter += 1
-
-            # ---------------------- 3. 校验所有数据行数一致性（修复：包含输出文件）----------------------
-            all_dfs = input_dfs + output_dfs  # 修复：加入输出数据参与行数校验
-            row_counts = [len(df) for df in all_dfs]
+            for file_path in self.input_files:
+                # 支持多种分隔符（空格、制表符、逗号）
+                df = pd.read_csv(file_path, sep="\s+|\t|,", engine='python')
+                # 确保包含必要的时间列
+                required_cols = ['start_time', 'end_time']
+                if not all(col in df.columns for col in required_cols):
+                    QMessageBox.warning(self, "格式错误", f"输入文件 {os.path.basename(file_path)} 缺少必要的时间列")
+                    return None
+                input_dfs.append(df)
             
-            if len(set(row_counts)) > 1:
-                min_rows = min(row_counts)
-                # 截取到最小行数（避免索引越界）
-                input_dfs = [df.head(min_rows).reset_index(drop=True) for df in input_dfs]
-                output_dfs = [df.head(min_rows).reset_index(drop=True) for df in output_dfs]
-                warning_msg = f"警告: 文件行数不一致，已截取到最小行数: {min_rows}"
-                self.lineEdit_info.setText(warning_msg)
-
-            # ---------------------- 4. 合并数据（确保索引对齐）----------------------
-            combined_df = pd.DataFrame()
-            # 添加输入特征
-            for df in input_dfs:
-                combined_df[df.name] = df
-            # 添加输出特征
-            for df in output_dfs:
-                combined_df[df.name] = df
-
-            return combined_df
+            # 合并所有输入文件
+            input_combined = pd.concat(input_dfs, ignore_index=True)
+            
+            # 读取所有输出文件并合并
+            output_dfs = []
+            for file_path in self.output_files:
+                df = pd.read_csv(file_path, sep="\s+|\t|,", engine='python')
+                # 确保包含必要的时间列
+                required_cols = ['start_time', 'end_time']
+                if not all(col in df.columns for col in required_cols):
+                    QMessageBox.warning(self, "格式错误", f"输出文件 {os.path.basename(file_path)} 缺少必要的时间列")
+                    return None
+                
+                # 重命名P1-P160列，添加output后缀
+                p_cols = [col for col in df.columns if col.startswith('P')]
+                for col in p_cols:
+                    # 提取数字部分，如P1→1
+                    num = col[1:]
+                    df.rename(columns={col: f"P{num}_output{num}"}, inplace=True)
+                
+                output_dfs.append(df)
+            
+            # 合并所有输出文件
+            output_combined = pd.concat(output_dfs, ignore_index=True)
+            
+            # 根据时间戳合并输入和输出数据
+            # 使用start_time和end_time作为合并键，确保时间对齐
+            merged_df = pd.merge(
+                input_combined, 
+                output_combined, 
+                on=['start_time', 'end_time'], 
+                how='inner'  # 只保留时间匹配的记录
+            )
+            
+            # 移除不需要的列（如segment_id）
+            cols_to_drop = ['segment_id']
+            merged_df = merged_df.drop(columns=[col for col in cols_to_drop if col in merged_df.columns])
+            
+            # 检查合并结果
+            if merged_df.empty:
+                QMessageBox.warning(self, "合并警告", "未找到时间匹配的记录，请检查文件时间范围是否一致")
+                return None
+                
+            return merged_df
 
         except Exception as e:
             QMessageBox.critical(self, "错误", f"数据合并失败:\n{str(e)}")
             return None
 
     def save_combined_data(self):
-        """保存合并数据（增加异常值剔除功能）"""
+        """保存合并数据"""
         combined_df = self.combine_data()
         if combined_df is None:
             return
-
-        # ----------- 异常值剔除部分 -----------
+        # 在数据清洗后、保存前添加
+        print("输出列数值统计：")
+        print(combined_df[[col for col in combined_df.columns if col.startswith('P')]].describe())
+        # 数据清洗
         # 1. 剔除包含 #NAME? 的行
         combined_df = combined_df[~combined_df.apply(lambda row: row.astype(str).str.contains('#NAME\?').any(), axis=1)]
         # 2. 剔除 inf/-inf/NaN 行
         combined_df = combined_df.replace([np.inf, -np.inf], np.nan)
         combined_df = combined_df.dropna(axis=0, how='any')
 
-        # ----------- 新增：中文清洗功能 -----------
-        # 3. 清洗中文字符：将"1道"、"1类"等转换为纯数字"1"
+        # 3. 清洗中文字符
         def clean_chinese_characters(value):
             """清洗中文字符，将'1道'、'1类'等转换为'1'"""
             if isinstance(value, str):
-                # 匹配数字后跟中文字符的模式，如"1道"、"2类"等
                 import re
                 # 匹配以数字开头，后面跟着中文字符的模式
                 pattern = r'^(\d+)[\u4e00-\u9fff]+$'
                 match = re.match(pattern, value.strip())
                 if match:
-                    # 提取数字部分
                     return match.group(1)
-                # 如果是纯中文字符，返回NaN（后续会被dropna处理）
+                # 如果是纯中文字符，返回NaN
                 elif re.match(r'^[\u4e00-\u9fff]+$', value.strip()):
                     return np.nan
             return value
+        
         # 对DataFrame的每一列应用中文清洗
         for col in combined_df.columns:
             combined_df[col] = combined_df[col].apply(clean_chinese_characters)
 
         # 再次剔除可能产生的NaN值
         combined_df = combined_df.dropna(axis=0, how='any')
-    
     
         # 选择保存路径
         file_filter = "CSV文件 (*.csv);;Excel文件 (*.xlsx);;所有文件 (*.*)"
@@ -1023,20 +1035,25 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
             return
 
         try:
+            # 计算输入和输出特征列数
+            input_cols_count = sum(1 for col in combined_df.columns if not col.startswith('P'))
+            output_cols_count = sum(1 for col in combined_df.columns if col.startswith('P'))
+            
             if save_path.endswith(('.xls', '.xlsx')):
-                combined_df.to_excel(save_path, index=False, engine="openpyxl")
+                # Excel保存：保留15位有效数字（避免科学计数法自动转换）
+                combined_df.to_excel(save_path, index=False, engine="openpyxl", float_format="%.15g")
             else:
-                combined_df.to_csv(save_path, index=False, float_format="%.6f")
+                # CSV保存：用科学计数法保留15位有效数字，确保极小值不被截断
+                combined_df.to_csv(save_path, index=False, float_format="%.15g")  # 关键修改：调整float_format
 
             self.lastSelectedPath = os.path.dirname(save_path)
 
-            output_total_cols = sum([pd.read_csv(f, header=None, sep="\s+").shape[1] for f in self.output_files])
             success_msg = (
                 f"数据保存成功!\n"
                 f"文件: {os.path.basename(save_path)}\n"
                 f"数据形状: {combined_df.shape}\n"
-                f"输入特征: {len(self.input_files)} 列\n"
-                f"输出特征: {output_total_cols} 列"
+                f"输入特征: {input_cols_count} 列\n"
+                f"输出特征: {output_cols_count} 列"
             )
             QMessageBox.information(self, "成功", success_msg)
             self.lineEdit_info.setText(f"数据已保存: {os.path.basename(save_path)}")
@@ -1052,8 +1069,9 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
         self.listWidget_output_files.clear()
         self.lineEdit_info.setText("请选择输入和输出特征文件")
         self.lineEdit_status.setText("就绪")
-        self.lineEdit_status_2.setText("就绪")   
-                           
+        self.lineEdit_status_2.setText("就绪")                          
+
+                          
 class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):
     def __init__(self, parent=None):
         super(POP_DT_para, self).__init__()
