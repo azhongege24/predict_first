@@ -52,6 +52,8 @@ from ALL_Algorithms.VA_method_para import Ui_VA_method_para
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as font_manager
+import matplotlib.ticker as ticker
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 global max_depth, random_state,n_estimators,kernel, C, epsilon,scale_features
@@ -161,6 +163,7 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
             return
         
         try:
+            
             # 清空当前图形
             self.figure.clear()
             
@@ -174,7 +177,7 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
             ax1.set_ylabel('振动幅值')
             ax1.set_title('时域信号')
             ax1.grid(True, alpha=0.3)
-            
+            self.set_tick_font(ax1)
             # 频域预览（使用简单的FFT）
             fs = 1.0 / np.mean(np.diff(self.current_time_data))
             n = len(self.current_signal_data)
@@ -188,13 +191,32 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
             ax2.grid(True, alpha=0.3)
             ax2.set_xlim(0, min(fs/2, 2000))  # 限制显示到2000Hz
             ax2.set_yscale('log')
+
             # 调整布局
+            self.set_tick_font(ax2)
+            
             self.figure.tight_layout()
             self.canvas.draw()
             
         except Exception as e:
             QMessageBox.warning(self, "预览失败", f"数据预览失败: {str(e)}")
-    
+            
+    def set_tick_font(self,ax):#解决对数符号问题
+        '''
+        对指定坐标轴的刻度字体进行设置，确保上标符号显示正常
+        :param ax: 坐标轴对象（如ax1、ax2）
+        :return: None
+        '''
+        # 使用DejaVu Sans字体，支持上标和负号
+        tick_font = font_manager.FontProperties(family='DejaVu Sans', size=8)  # 大小可根据需要调整
+        # 设置x轴刻度字体
+        for labelx in ax.get_xticklabels():
+            labelx.set_fontproperties(tick_font)
+        # 设置y轴刻度字体
+        for labely in ax.get_yticklabels():
+            labely.set_fontproperties(tick_font)
+        # 仅对需要整数刻度的轴启用（例如频域图x轴）
+        # 这里不强制设置，避免影响时域图的时间轴（可能为小数） 
     def perform_psd_analysis(self):
         """执行功率谱分析"""
         if self.current_time_data is None or self.current_signal_data is None:
@@ -267,7 +289,8 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
                     ax.set_title(f"时间段 {result_idx+1}/{num_segments}: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
                     ax.grid(True, alpha=0.3)
                     ax.set_yscale('log')
-            
+                    ax.set_xscale('log')  # 新增：设置X轴为对数坐
+                    self.set_tick_font(ax)
                 # 调整布局，避免tight_layout警告
                 self.figure.subplots_adjust(left=0.1, right=0.95, bottom=0.1, top=0.9, 
                                           hspace=0.5, wspace=0.3)
@@ -363,7 +386,8 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
                                 ax.set_title(f"时间段 {result_idx+1}/{num_segments}: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
                                 ax.grid(True, alpha=0.3)
                                 ax.set_yscale('log')
-                            
+                                ax.set_xscale('log')  # 新增：设置X轴为对数坐
+                                self.set_tick_font(ax)
                             # 调整布局
                             temp_fig.subplots_adjust(left=0.1, right=0.95, bottom=0.1, top=0.9, 
                                                    hspace=0.5, wspace=0.3)
