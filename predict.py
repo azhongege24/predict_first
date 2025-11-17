@@ -29,6 +29,7 @@ from ALL_Algorithms.algorithms7_MTW_para import Ui_MTW_para
 from ALL_Algorithms.algorithms8_REMTW_para import Ui_REMTW_para
 from ALL_Algorithms.algorithms9_MMoE_para import Ui_MMoE_para
 from ALL_Algorithms.algorithms10_GP_para import Ui_GP_para
+from ALL_Algorithms.algorithms11_LR_para import Ui_LR_para
 from ALL_Algorithms.Dataset_handle import Ui_dataset_handle
 from ALL_Algorithms.Other import Ui_Other
 from ALL_Algorithms.OtherLogic import POP_Other_para
@@ -56,7 +57,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 global max_depth, random_state,n_estimators,kernel, C, epsilon,scale_features
 global hidden_layer_sizes, max_iter,method,n_jobs,alpha,beta,tol
 global mmoe_num_experts,mmoe_expert_hidden,mmoe_learning_rate,mmoe_dropout_rate
-global mmoe_epochs,mmoe_batch_size,mmoe_lambda_balance,mmoe_scale_features
+global mmoe_epochs,mmoe_batch_size,mmoe_lambda_balance,mmoe_scale_features,fit_intercept
 method = 'NONE'  # 初始化方法为NONE
 # 读取输入参数
 
@@ -555,15 +556,48 @@ class POP_VA_method_para(QMainWindow, Ui_VA_method_para, Ui_MainWindow):
         self.config_path = os.path.join(self.config_dir, "va_params.json")
         # 连接信号
         self.comboBox_segment_mode.currentTextChanged.connect(self.on_segment_mode_changed)
+        # 连接时间参数变化信号，用于验证时间间隔
+        self.doubleSpinBox_start_time.valueChanged.connect(self.validate_segment_duration)
+        self.doubleSpinBox_end_time.valueChanged.connect(self.validate_segment_duration)
+        self.doubleSpinBox_segment_duration.valueChanged.connect(self.validate_segment_duration)
         # 初始状态设置
         self.load_params()  # 加载历史参数
         
-        
-        #连接分段模式选择信号
-        self.comboBox_segment_mode.currentTextChanged.connect(self.on_segment_mode_changed)
         # 初始状态设置
         self.on_segment_mode_changed(self.comboBox_segment_mode.currentText())
-    
+        
+    def validate_segment_duration(self):
+        """验证时间间隔不超过开始时间和结束时间的差值"""
+        if self.comboBox_segment_mode.currentText() == "时间分段":
+            start_time = self.doubleSpinBox_start_time.value()
+            end_time = self.doubleSpinBox_end_time.value()
+            segment_duration = self.doubleSpinBox_segment_duration.value()
+            
+            # 计算时间范围
+            time_range = end_time - start_time
+            
+            if time_range <= 0:
+                # 开始时间大于等于结束时间，显示警告
+                self.doubleSpinBox_segment_duration.setStyleSheet("QDoubleSpinBox { background-color: #FFCCCC; }")
+                self.doubleSpinBox_segment_duration.setToolTip("开始时间必须小于结束时间")
+                return False
+            elif segment_duration > time_range:
+                # 时间间隔超过时间范围，显示警告并自动调整
+                self.doubleSpinBox_segment_duration.setStyleSheet("QDoubleSpinBox { background-color: #FFCCCC; }")
+                self.doubleSpinBox_segment_duration.setToolTip(f"时间间隔不能超过时间范围({time_range:.2f}s)")
+                
+                # 自动调整为最大允许值
+                self.doubleSpinBox_segment_duration.blockSignals(True)  # 防止递归调用
+                self.doubleSpinBox_segment_duration.setValue(time_range)
+                self.doubleSpinBox_segment_duration.blockSignals(False)
+                return False
+            else:
+                # 时间间隔在合理范围内，恢复正常样式
+                self.doubleSpinBox_segment_duration.setStyleSheet("")
+                self.doubleSpinBox_segment_duration.setToolTip("")
+                return True
+        return True
+
     def on_segment_mode_changed(self, mode):
         """根据分段模式启用/禁用相关控件"""
         if mode == "时间分段":
@@ -696,9 +730,6 @@ class POP_VA_method_para(QMainWindow, Ui_VA_method_para, Ui_MainWindow):
                 segment_duration=segment_duration,
                 number_psd=number_psd
             )
-
-
-
 
 class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -1240,7 +1271,25 @@ class POP_GP_para(QMainWindow, Ui_GP_para, Ui_MainWindow):
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("GassuProcessing")
         self.parent_window.All_Methods_Begin()
-        
+class POP_LR_para(QMainWindow, Ui_LR_para, Ui_MainWindow):
+    def __init__(self, parent=None):
+        super(POP_LR_para, self).__init__()
+        self.setupUi(self)
+        self.parent_window = parent  # 保存主窗口的引用
+
+    def Confirm(self):
+        # 读取输入参数
+        global random_state, scale_features, method,fit_intercept
+        scale_features = self.comboBox_scale_features.currentText() == "True"
+        random_state = self.spinBox_random_state.value()
+        fit_intercept = self.comboBox_fit_intercept.currentText() == "True"  # 新增fit_intercept参数读取
+        method = 'LR'
+        if self.parent_window:
+            self.parent_window.lineEdit_Algorithm_name.setText("Linear Regression")
+        self.parent_window.All_Methods_Begin()
+        print("random_state:", random_state)
+        print("scale_features:", scale_features)
+       
    
 class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_MainWindow界面类
     def __init__(self, parent=None):
@@ -1386,6 +1435,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             self.clear_interface()
             self.ui_pop.show()
 
+    def AL_LR_para(self):  # 添加线性回归参数窗口调用方法
+        self.ui_pop = POP_LR_para(self)
+        self.clear_interface()
+        self.ui_pop.show()
+    
+    
+    
     def get_gpu_util(self):
     # 调用 nvidia-smi 获取利用率（返回纯数字）
         result = subprocess.run(
@@ -1869,6 +1925,48 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         data_test = data_filter[N_start_test : N_end_test]   
         print('check')
 
+        
+        
+        if method == 'LR':  # 添加线性回归算法实现
+            self.new_model = 1
+            model, _, y_test, y_pred, metrics = multi_task_regression_predictor(
+                data_train,
+                data_test,
+                input_columns,
+                output_columns,
+                model_type='LR',
+                scale_features=scale_features,
+                random_state=int(random_state),
+                fit_intercept=str(fit_intercept)
+            )
+            self.trained_model = model  # 保存训练好的模型
+            print("预测结果:", y_pred)
+            print("真实值:", y_test)
+            print("评估指标:", metrics)
+            
+            if len(output_columns) > 1:
+                self.data_save = Multi_output_plot_and_evaluate(
+                    self, y_test, y_pred, method, data_test,
+                    output_columns, N_start_test, N_end_test,
+                    MSE_list=metrics['MSE_list'],
+                    RMSE_list=metrics['RMSE_list'],
+                    MAE_list=metrics['MAE_list'],
+                    R2_list=metrics['R2_list'],
+                    db_within_3_ratio_list=metrics['db_within_3_ratio_list'],
+                    total_db_deviation_per_feature=metrics['total_db_deviation_per_feature']
+                )
+            else:
+                self.data_save = single_plot_and_evaluate(
+                    self, y_test, y_pred, method, data_test,
+                    output_columns, N_start_test, N_end_test,
+                    metrics['MSE'],
+                    metrics['RMSE'],
+                    metrics['MAE'],
+                    metrics['R2'],
+                    db_within_3_ratio=metrics['db_within_3_ratio'],
+                    total_db_deviation=metrics['total_db_deviation']
+                )
+            self.lineEdit_DEVICE.setText("CPU")       
 
         
         if method == 'DT':

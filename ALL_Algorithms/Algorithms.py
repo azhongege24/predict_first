@@ -19,6 +19,7 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import ExtraTreesRegressor, RandomForestRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from sklearn.svm import SVR
+from sklearn.linear_model import LinearRegression, Ridge, Lasso
 from tqdm import tqdm
 import shutil
 import joblib
@@ -46,6 +47,7 @@ def multi_task_regression_predictor(
     # 其他参数保持不变...
     scale_features: bool = True,
     random_state: int = 42,
+    fit_intercept: bool = True,  # 新增fit_intercept参数
     max_depth: int = 4,
     n_estimators=100,
     kernel='rbf',
@@ -95,6 +97,7 @@ def multi_task_regression_predictor(
         'SVM': MultiOutputRegressor(SVR(kernel=kernel, C=C, epsilon=epsilon), n_jobs=n_jobs),
         'MLP': MLPRegressor(hidden_layer_sizes=mlp_hidden_layers, max_iter=max_iter,alpha=alpha, random_state=random_state),
         'ET': ExtraTreesRegressor(n_estimators=n_estimators, max_depth=max_depth, n_jobs=n_jobs, random_state=random_state),
+        'LR': LinearRegression(fit_intercept=fit_intercept), 
         'MMoE': MMoERegressor(
             input_dim = len(input_columns),
             output_dim = len(output_columns),

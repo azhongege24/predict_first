@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1403</width>
-    <height>860</height>
+    <height>870</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,10 +25,10 @@ background-color:;	/*背景颜色*/
    <widget class="QGraphicsView" name="graphicsView">
     <property name="geometry">
      <rect>
-      <x>81</x>
+      <x>71</x>
       <y>227</y>
-      <width>861</width>
-      <height>471</height>
+      <width>871</width>
+      <height>491</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -70,9 +70,9 @@ font: 30px;		/*设置按钮文字和大小*/
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>81</x>
+      <x>71</x>
       <y>117</y>
-      <width>861</width>
+      <width>871</width>
       <height>108</height>
      </rect>
     </property>
@@ -249,16 +249,16 @@ font: 16 px  &quot;Times New Roman&quot;;
 }</string>
     </property>
     <property name="text">
-     <string>v3.0 2025.10.19</string>
+     <string>v4.0 2025.11.17</string>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>950</x>
-      <y>187</y>
+      <y>167</y>
       <width>141</width>
-      <height>581</height>
+      <height>681</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -393,6 +393,36 @@ QPushButton:pressed {
        </property>
        <property name="text">
         <string>极端树</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_AL4_2">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;多层感知机算法&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+border:1px solid red;   /*边框的粗细，颜色*/
+border-radius:15px;    /*设置圆角半径 */
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+background-color:rgb(168, 249, 124);	/*背景颜色*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 16pt &quot;楷体&quot;;
+min-width:80px;	/*设置最小宽度*/
+min-height:40px;	/*设置最小高度*/
+font:bold;
+}
+QPushButton:hover {
+    background-color: rgb(21, 151, 165); /* 悬停时背景色 */
+    color: white;             /* 悬停时文字颜色 */
+}
+QPushButton:pressed {
+    background-color:  rgb(38, 70, 83); /* 按下时背景色 */
+}</string>
+       </property>
+       <property name="text">
+        <string>线性回归</string>
        </property>
       </widget>
      </item>
@@ -659,7 +689,7 @@ Wasserstein</string>
     <property name="geometry">
      <rect>
       <x>1099</x>
-      <y>187</y>
+      <y>167</y>
       <width>251</width>
       <height>581</height>
      </rect>
@@ -789,7 +819,7 @@ font: bold 16px;		/*设置按钮文字和大小*/
     <property name="geometry">
      <rect>
       <x>959</x>
-      <y>100</y>
+      <y>80</y>
       <width>391</width>
       <height>72</height>
      </rect>
@@ -1013,7 +1043,7 @@ font:bold 16px;		/*设置按钮文字和大小*/
     <property name="geometry">
      <rect>
       <x>1129</x>
-      <y>70</y>
+      <y>50</y>
       <width>106</width>
       <height>16</height>
      </rect>
@@ -1184,7 +1214,7 @@ border-radius:10px;
     <property name="geometry">
      <rect>
       <x>960</x>
-      <y>60</y>
+      <y>40</y>
       <width>155</width>
       <height>35</height>
      </rect>
@@ -1222,7 +1252,7 @@ qproperty-alignment: 'AlignCenter';
     <property name="geometry">
      <rect>
       <x>63</x>
-      <y>709</y>
+      <y>730</y>
       <width>871</width>
       <height>32</height>
      </rect>
@@ -1456,7 +1486,7 @@ border-radius:10px;
     <property name="geometry">
      <rect>
       <x>63</x>
-      <y>750</y>
+      <y>771</y>
       <width>871</width>
       <height>32</height>
      </rect>
@@ -1669,7 +1699,7 @@ border-radius:10px;
     <property name="geometry">
      <rect>
       <x>64</x>
-      <y>790</y>
+      <y>811</y>
       <width>871</width>
       <height>32</height>
      </rect>
@@ -1884,108 +1914,6 @@ border-radius:10px;
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>950</x>
-      <y>780</y>
-      <width>401</width>
-      <height>46</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_8">
-     <item>
-      <widget class="QPushButton" name="pushButton_8">
-       <property name="minimumSize">
-        <size>
-         <width>87</width>
-         <height>44</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>200</width>
-         <height>999</height>
-        </size>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
-    border-radius: 8px;                      /* 适中圆角更显严谨 */
-    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */
-    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */
-    font: bold 14pt &quot;微软雅黑&quot;;
-    min-width: 85px;
-    min-height: 42px;
- 
-}
-
-QPushButton:hover {
-    background-color: rgb(220, 230, 240);    /* 悬停时轻微加深背景 */
-    border-color: rgb(40, 60, 80);          /* 加深边框模拟金属反光 */
-    color: rgb(20, 40, 60);                 /* 文字颜色同步加深 */
-}
-
-QPushButton:pressed {
-    background-color: rgb(60, 75, 90);      /* 按压状态与边框同色 */
-    color: rgb(230, 235, 240);              /* 浅灰白文字确保可读性 */
-}
-
-QPushButton:disabled {
-    background-color: rgb(250, 250, 250);    /* 禁用状态极浅灰 */
-    color: rgb(180, 190, 200);              /* 灰蓝文字表示不可用 */
-    border-color: rgb(210, 220, 230);
-}</string>
-       </property>
-       <property name="text">
-        <string>保存预测结果</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_save_pretrained_model">
-       <property name="maximumSize">
-        <size>
-         <width>200</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
-    border-radius: 8px;                      /* 适中圆角更显严谨 */
-    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */
-    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */
-    font: bold 14pt &quot;微软雅黑&quot;;
-    min-width: 85px;
-    min-height: 42px;
- 
-}
-
-QPushButton:hover {
-    background-color: rgb(220, 230, 240);    /* 悬停时轻微加深背景 */
-    border-color: rgb(40, 60, 80);          /* 加深边框模拟金属反光 */
-    color: rgb(20, 40, 60);                 /* 文字颜色同步加深 */
-}
-
-QPushButton:pressed {
-    background-color: rgb(60, 75, 90);      /* 按压状态与边框同色 */
-    color: rgb(230, 235, 240);              /* 浅灰白文字确保可读性 */
-}
-
-QPushButton:disabled {
-    background-color: rgb(250, 250, 250);    /* 禁用状态极浅灰 */
-    color: rgb(180, 190, 200);              /* 灰蓝文字表示不可用 */
-    border-color: rgb(210, 220, 230);
-}</string>
-       </property>
-       <property name="text">
-        <string>保存训练模型</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
       <x>890</x>
       <y>390</y>
       <width>42</width>
@@ -2059,7 +1987,7 @@ QPushButton:disabled {
     <property name="geometry">
      <rect>
       <x>1240</x>
-      <y>70</y>
+      <y>50</y>
       <width>106</width>
       <height>16</height>
      </rect>
@@ -2083,6 +2011,127 @@ QPushButton:disabled {
     <property name="text">
      <string>shuffle</string>
     </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_help">
+    <property name="geometry">
+     <rect>
+      <x>1290</x>
+      <y>10</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>help</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>1100</x>
+      <y>750</y>
+      <width>251</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_5">
+     <item>
+      <widget class="QPushButton" name="pushButton_save_pretrained_model">
+       <property name="minimumSize">
+        <size>
+         <width>87</width>
+         <height>44</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>400</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
+    border-radius: 8px;                      /* 适中圆角更显严谨 */
+    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */
+    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */
+    font: bold 14pt &quot;微软雅黑&quot;;
+    min-width: 85px;
+    min-height: 42px;
+ 
+}
+
+QPushButton:hover {
+    background-color: rgb(220, 230, 240);    /* 悬停时轻微加深背景 */
+    border-color: rgb(40, 60, 80);          /* 加深边框模拟金属反光 */
+    color: rgb(20, 40, 60);                 /* 文字颜色同步加深 */
+}
+
+QPushButton:pressed {
+    background-color: rgb(60, 75, 90);      /* 按压状态与边框同色 */
+    color: rgb(230, 235, 240);              /* 浅灰白文字确保可读性 */
+}
+
+QPushButton:disabled {
+    background-color: rgb(250, 250, 250);    /* 禁用状态极浅灰 */
+    color: rgb(180, 190, 200);              /* 灰蓝文字表示不可用 */
+    border-color: rgb(210, 220, 230);
+}</string>
+       </property>
+       <property name="text">
+        <string>保存训练模型</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_8">
+       <property name="minimumSize">
+        <size>
+         <width>87</width>
+         <height>44</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>400</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */
+    border-radius: 8px;                      /* 适中圆角更显严谨 */
+    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */
+    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */
+    font: bold 14pt &quot;微软雅黑&quot;;
+    min-width: 85px;
+    min-height: 42px;
+ 
+}
+
+QPushButton:hover {
+    background-color: rgb(220, 230, 240);    /* 悬停时轻微加深背景 */
+    border-color: rgb(40, 60, 80);          /* 加深边框模拟金属反光 */
+    color: rgb(20, 40, 60);                 /* 文字颜色同步加深 */
+}
+
+QPushButton:pressed {
+    background-color: rgb(60, 75, 90);      /* 按压状态与边框同色 */
+    color: rgb(230, 235, 240);              /* 浅灰白文字确保可读性 */
+}
+
+QPushButton:disabled {
+    background-color: rgb(250, 250, 250);    /* 禁用状态极浅灰 */
+    color: rgb(180, 190, 200);              /* 灰蓝文字表示不可用 */
+    border-color: rgb(210, 220, 230);
+}</string>
+       </property>
+       <property name="text">
+        <string>保存预测结果</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QToolBar" name="toolBar">
@@ -2138,8 +2187,8 @@ QPushButton:disabled {
    <slot>AL_SVM_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1036</x>
-     <y>441</y>
+     <x>1037</x>
+     <y>493</y>
     </hint>
     <hint type="destinationlabel">
      <x>1045</x>
@@ -2154,8 +2203,8 @@ QPushButton:disabled {
    <slot>AL_MLP_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1047</x>
-     <y>493</y>
+     <x>1048</x>
+     <y>545</y>
     </hint>
     <hint type="destinationlabel">
      <x>1043</x>
@@ -2186,8 +2235,8 @@ QPushButton:disabled {
    <slot>AL_GL_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1035</x>
-     <y>650</y>
+     <x>1036</x>
+     <y>701</y>
     </hint>
     <hint type="destinationlabel">
      <x>982</x>
@@ -2218,8 +2267,8 @@ QPushButton:disabled {
    <slot>AL_MTW_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1035</x>
-     <y>707</y>
+     <x>1036</x>
+     <y>753</y>
     </hint>
     <hint type="destinationlabel">
      <x>976</x>
@@ -2299,7 +2348,7 @@ QPushButton:disabled {
    <hints>
     <hint type="sourcelabel">
      <x>1089</x>
-     <y>598</y>
+     <y>649</y>
     </hint>
     <hint type="destinationlabel">
      <x>1119</x>
@@ -2362,12 +2411,12 @@ QPushButton:disabled {
    <slot>AL_GP_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1087</x>
-     <y>545</y>
+     <x>1088</x>
+     <y>597</y>
     </hint>
     <hint type="destinationlabel">
      <x>1039</x>
-     <y>864</y>
+     <y>858</y>
     </hint>
    </hints>
   </connection>
@@ -2419,6 +2468,22 @@ QPushButton:disabled {
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_AL4_2</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>AL_LR_para()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>981</x>
+     <y>425</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>898</x>
+     <y>845</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>AL_DT_para()</slot>
@@ -2445,5 +2510,6 @@ QPushButton:disabled {
   <slot>change_CheckBox_output()</slot>
   <slot>AL_GP_para()</slot>
   <slot>AL_Other_para()</slot>
+  <slot>AL_LR_para()</slot>
  </slots>
 </ui>
