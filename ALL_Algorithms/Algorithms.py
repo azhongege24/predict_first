@@ -249,7 +249,7 @@ def ask_and_save_model(parent, model, default_name="model.pkl"):
             "模型文件 (*.pkl *.joblib);;所有文件 (*)"
         )
         if file_path:
-            if hasattr(model,'__class__') and model.__class__.name == 'MMoERegressor':
+            if hasattr(model,'__class__') and model.__class__.__name__ == 'MMoERegressor':
                 # 保存pytorch模型
                 torch.save({
                     'model_state_dict': model.model.state_dict(),

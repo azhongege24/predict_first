@@ -16,6 +16,7 @@ import os
 import scipy.io as sio
 import torch
 import joblib
+import webbrowser
 from ALL_Algorithms.VA_para import Ui_VA_para
 from ALL_Algorithms.Load_model_para import Ui_Load_model_para
 from ALL_Algorithms.Load_pretrained_model import select_pretrained_model_path
@@ -30,6 +31,7 @@ from ALL_Algorithms.algorithms8_REMTW_para import Ui_REMTW_para
 from ALL_Algorithms.algorithms9_MMoE_para import Ui_MMoE_para
 from ALL_Algorithms.algorithms10_GP_para import Ui_GP_para
 from ALL_Algorithms.algorithms11_LR_para import Ui_LR_para
+from ALL_Algorithms.help_para import Ui_help_para
 from ALL_Algorithms.Dataset_handle import Ui_dataset_handle
 from ALL_Algorithms.Other import Ui_Other
 from ALL_Algorithms.OtherLogic import POP_Other_para
@@ -1331,6 +1333,36 @@ class POP_LR_para(QMainWindow, Ui_LR_para, Ui_MainWindow):
         self.parent_window.All_Methods_Begin()
         print("random_state:", random_state)
         print("scale_features:", scale_features)
+ 
+ 
+
+class POP_help_para(QMainWindow, Ui_help_para, Ui_MainWindow):
+    def __init__(self, parent=None):
+        super(POP_help_para, self).__init__(parent)  # 初始化父类
+        self.setupUi(self)  # 继承 Ui_MainWindow 界面类
+        self.parent_window = parent#保存主窗口的引用
+
+        self.pushButton_func_1.clicked.connect(self.open_file_1)
+        self.pushButton_func_2.clicked.connect(self.open_file_2)
+        self.pushButton_func_3.clicked.connect(self.open_file_3)
+        self.pushButton_func_4.clicked.connect(self.open_file_4)
+        self.pushButton_func_5.clicked.connect(self.open_file_5)
+        self.pushButton_principle.clicked.connect(self.open_principle)
+    def open_file_1(self):
+        webbrowser.open("docs\振动分析使用说明.pdf")
+    def open_file_2(self):
+        webbrowser.open("docs\其他参数使用说明.pdf")
+    def open_file_3(self):
+        webbrowser.open("docs\数据集合成使用说明.pdf")
+    def open_file_4(self):
+        webbrowser.open("docs\训练验模使用说明.pdf")
+    def open_file_5(self):
+        webbrowser.open("docs\预测使用说明.pdf")
+    def open_principle(self):
+        webbrowser.open("docs\算法原理说明文档.pdf")
+    
+    def Confirm(self):
+        pass
        
    
 class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_MainWindow界面类
@@ -1359,7 +1391,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         
         self.pushButton_top.clicked.connect(self.show_previous_page)
         self.pushButton_bottom.clicked.connect(self.show_next_page)
-        
+        self.pushButton_help.clicked.connect(self.AL_help_para) # 打开帮助说明窗口
         self.pushButton_dataset.clicked.connect(self.AL_dataset_handle)  # 打开数据集合成处理窗口
         self.pushButton_save_pretrained_model.clicked.connect(
                     lambda: self.ask_and_save_model(self.trained_model, method)
@@ -1482,7 +1514,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.clear_interface()
         self.ui_pop.show()
     
-    
+    def AL_help_para(self):
+        self.ui_pop = POP_help_para(self)
+        self.clear_interface()
+        self.ui_pop.show()
     
     def get_gpu_util(self):
     # 调用 nvidia-smi 获取利用率（返回纯数字）

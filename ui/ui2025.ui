@@ -249,7 +249,7 @@ font: 16 px  &quot;Times New Roman&quot;;
 }</string>
     </property>
     <property name="text">
-     <string>v4.0 2025.11.17</string>
+     <string>v4.0 2025.11.18</string>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">
@@ -2022,7 +2022,7 @@ border-radius:10px;
      </rect>
     </property>
     <property name="text">
-     <string>help</string>
+     <string>帮助文档</string>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">

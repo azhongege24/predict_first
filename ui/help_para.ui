@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>help_para</class>
+ <widget class="QMainWindow" name="help_para">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>442</width>
+    <height>278</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>使用文档说明</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>20</y>
+      <width>201</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>楷体</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>各个模块的使用说明文档</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>60</y>
+      <width>281</width>
+      <height>171</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QPushButton" name="pushButton_func_1">
+         <property name="font">
+          <font>
+           <family>楷体</family>
+           <pointsize>14</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    border: 1px solid #2b8cbe;           /* 科技蓝边框 */
+    border-radius: 15px;
+    padding: 2px 4px;
+    background-color: #ffffff;           /* 浅蓝灰背景 */
+    color: #0c2c84;                     /* 深蓝字体 */
+    font:  14pt  &quot;楷体&quot; ;
+    min-width: 80px;
+font:bold;
+    min-height: 40px;
+}
+
+QPushButton:hover {
+    background-color: #7bccc4;          /* 悬浮时：蓝绿色 */
+    border-color: #0868ac;              /* 加深边框 */
+    color: #f7fcfd;                     /* 悬停文字改为白色 */
+}
+
+QPushButton:pressed {
+    background-color: #4eb3d3;          /* 按压时：科技蓝 */
+    border-color: #084081;              /* 深蓝边框 */
+}</string>
+         </property>
+         <property name="text">
+          <string>振动分析</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_func_2">
+         <property name="font">
+          <font>
+           <family>楷体</family>
+           <pointsize>14</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    border: 1px solid #2b8cbe;           /* 科技蓝边框 */
+    border-radius: 15px;
+    padding: 2px 4px;
+    background-color: #ffffff;           /* 浅蓝灰背景 */
+    color: #0c2c84;                     /* 深蓝字体 */
+    font:  14pt  &quot;楷体&quot; ;
+    min-width: 80px;
+font:bold;
+    min-height: 40px;
+}
+
+QPushButton:hover {
+    background-color: #7bccc4;          /* 悬浮时：蓝绿色 */
+    border-color: #0868ac;              /* 加深边框 */
+    color: #f7fcfd;                     /* 悬停文字改为白色 */
+}
+
+QPushButton:pressed {
+    background-color: #4eb3d3;          /* 按压时：科技蓝 */
+    border-color: #084081;              /* 深蓝边框 */
+}</string>
+         </property>
+         <property name="text">
+          <string>其他参数</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_func_3">
+         <property name="font">
+          <font>
+           <family>楷体</family>
+           <pointsize>14</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    border: 1px solid #2b8cbe;           /* 科技蓝边框 */
+    border-radius: 15px;
+    padding: 2px 4px;
+    background-color: #ffffff;           /* 浅蓝灰背景 */
+    color: #0c2c84;                     /* 深蓝字体 */
+    font:  14pt  &quot;楷体&quot; ;
+    min-width: 80px;
+font:bold;
+    min-height: 40px;
+}
+
+QPushButton:hover {
+    background-color: #7bccc4;          /* 悬浮时：蓝绿色 */
+    border-color: #0868ac;              /* 加深边框 */
+    color: #f7fcfd;                     /* 悬停文字改为白色 */
+}
+
+QPushButton:pressed {
+    background-color: #4eb3d3;          /* 按压时：科技蓝 */
+    border-color: #084081;              /* 深蓝边框 */
+}</string>
+         </property>
+         <property name="text">
+          <string>数据集合成</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QPushButton" name="pushButton_func_4">
+         <property name="font">
+          <font>
+           <family>楷体</family>
+           <pointsize>14</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    border: 1px solid #2b8cbe;           /* 科技蓝边框 */
+    border-radius: 15px;
+    padding: 2px 4px;
+    background-color: #ffffff;           /* 浅蓝灰背景 */
+    color: #0c2c84;                     /* 深蓝字体 */
+    font:  14pt  &quot;楷体&quot; ;
+    min-width: 80px;
+font:bold;
+    min-height: 40px;
+}
+
+QPushButton:hover {
+    background-color: #7bccc4;          /* 悬浮时：蓝绿色 */
+    border-color: #0868ac;              /* 加深边框 */
+    color: #f7fcfd;                     /* 悬停文字改为白色 */
+}
+
+QPushButton:pressed {
+    background-color: #4eb3d3;          /* 按压时：科技蓝 */
+    border-color: #084081;              /* 深蓝边框 */
+}</string>
+         </property>
+         <property name="text">
+          <string>数据验模</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_func_5">
+         <property name="font">
+          <font>
+           <family>楷体</family>
+           <pointsize>14</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    border: 1px solid #2b8cbe;           /* 科技蓝边框 */
+    border-radius: 15px;
+    padding: 2px 4px;
+    background-color: #ffffff;           /* 浅蓝灰背景 */
+    color: #0c2c84;                     /* 深蓝字体 */
+    font:  14pt  &quot;楷体&quot; ;
+    min-width: 80px;
+font:bold;
+    min-height: 40px;
+}
+
+QPushButton:hover {
+    background-color: #7bccc4;          /* 悬浮时：蓝绿色 */
+    border-color: #0868ac;              /* 加深边框 */
+    color: #f7fcfd;                     /* 悬停文字改为白色 */
+}
+
+QPushButton:pressed {
+    background-color: #4eb3d3;          /* 按压时：科技蓝 */
+    border-color: #084081;              /* 深蓝边框 */
+}</string>
+         </property>
+         <property name="text">
+          <string>预测</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_principle">
+         <property name="font">
+          <font>
+           <family>楷体</family>
+           <pointsize>14</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    border: 1px solid #2b8cbe;           /* 科技蓝边框 */
+    border-radius: 15px;
+    padding: 2px 4px;
+    background-color: #ffffff;           /* 浅蓝灰背景 */
+    color: #0c2c84;                     /* 深蓝字体 */
+    font:  14pt  &quot;楷体&quot; ;
+    min-width: 80px;
+font:bold;
+    min-height: 40px;
+}
+
+QPushButton:hover {
+    background-color: #7bccc4;          /* 悬浮时：蓝绿色 */
+    border-color: #0868ac;              /* 加深边框 */
+    color: #f7fcfd;                     /* 悬停文字改为白色 */
+}
+
+QPushButton:pressed {
+    background-color: #4eb3d3;          /* 按压时：科技蓝 */
+    border-color: #084081;              /* 深蓝边框 */
+}</string>
+         </property>
+         <property name="text">
+          <string>算法原理</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>442</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
