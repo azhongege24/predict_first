@@ -2161,7 +2161,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 C=float(C),
                 epsilon=float(epsilon),
                 
-                n_jobs=n_jobs,
+                n_jobs=int(n_jobs),
                 max_iter=-1,#SVM不需要这个参数
             )
             self.trained_model = model  # 保存训练好的模型
@@ -2334,7 +2334,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                         metrics['R2'],db_within_3_ratio=metrics['db_within_3_ratio'],
                                                         total_db_deviation=metrics['total_db_deviation'])
 
-            self.lineEdit_DEVICE.setText("CPU")
+            self.lineEdit_DEVICE.setText("GPU")
             
             
 

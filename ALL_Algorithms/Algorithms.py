@@ -209,7 +209,7 @@ def multi_task_regression_predictor(
         ratio = np.mean(within_range)
         db_within_3_ratio_list.append(ratio)
 
-        # 单输出时直接取唯一元素，避免不必要的mean计算
+    # 单输出时直接取唯一元素，避免不必要的mean计算
     db_within_3_ratio = db_within_3_ratio_list[0] if n_tasks == 1 else np.mean(db_within_3_ratio_list)
 
     # 对于总偏差，使用裁剪后的值以避免极端值主导结果

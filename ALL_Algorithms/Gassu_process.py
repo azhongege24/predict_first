@@ -2,7 +2,9 @@ import gpytorch
 import torch
 from sklearn.preprocessing import StandardScaler
 from tqdm import tqdm  # 直接导入 tqdm 类
+import numpy as np
 # 在现有代码中添加高斯过程多任务回归模型类
+
 class MultitaskGPRegressor:
     def __init__(self, input_dim, output_dim, num_tasks=None, learning_rate=0.1, 
                  training_iterations=50, device=None):
@@ -28,6 +30,8 @@ class MultitaskGPRegressor:
         # 转换为pytorch张量
         X_tensor = torch.FloatTensor(X_scaled).to(self.device)
         y_tensor = torch.FloatTensor(y).to(self.device)
+
+        
         
         # 初始化似然和模型
         self.likelihood = gpytorch.likelihoods.MultitaskGaussianLikelihood(
@@ -83,6 +87,9 @@ class MultitaskGPRegressor:
     def get_loss_history(self):
         return self.loss_history
 
+    
+
+
 # 高斯过程多任务模型定义
 class MultitaskGPModel(gpytorch.models.ExactGP):
     def __init__(self, train_x, train_y, likelihood, num_tasks=None):
@@ -99,3 +106,8 @@ class MultitaskGPModel(gpytorch.models.ExactGP):
         mean_x = self.mean_module(x)
         covar_x = self.covar_module(x)
         return gpytorch.distributions.MultitaskMultivariateNormal(mean_x, covar_x)
+        
+
+
+
+

@@ -415,11 +415,14 @@ QSpinBox::down-button:pressed {
     margin-top: 4px;
 }</string>
          </property>
+         <property name="maximum">
+          <number>999</number>
+         </property>
          <property name="singleStep">
           <number>1</number>
          </property>
          <property name="value">
-          <number>1</number>
+          <number>500</number>
          </property>
         </widget>
        </item>

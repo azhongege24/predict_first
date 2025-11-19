@@ -158,7 +158,7 @@ class Ui_GP_para(object):
 "}")
         self.spinBox_training_iterations.setMaximum(99999)
         self.spinBox_training_iterations.setSingleStep(100)
-        self.spinBox_training_iterations.setProperty("value", 50)
+        self.spinBox_training_iterations.setProperty("value", 500)
         self.spinBox_training_iterations.setObjectName("spinBox_training_iterations")
         self.horizontalLayout_4.addWidget(self.spinBox_training_iterations)
         self.verticalLayout.addLayout(self.horizontalLayout_4)

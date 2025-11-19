@@ -63,6 +63,17 @@ def group_lasso_predictor(
     y_train = data_train[output_columns].values.astype(float)
     X_test = data_test[input_columns].values.astype(float)
     y_test = data_test[output_columns].values.astype(float)
+    # 检查并清理NaN和无穷大的值
+    def clean_data(arr):
+        """清理数据中的NaN和无穷大值"""
+        arr = np.asarray(arr)
+        # 替换NaN和无穷大值为0
+        arr = np.nan_to_num(arr, nan=0.0, posinf=1e10, neginf=-1e10)
+        return arr
+    X_train = clean_data(X_train)
+    y_train = clean_data(y_train)
+    X_test = clean_data(X_test)
+    y_test = clean_data(y_test)
 
     # 转换为 3D 格式 (n_tasks, n_samples, n_features)
     n_tasks = len(output_columns)
@@ -101,6 +112,10 @@ def group_lasso_predictor(
 
     # 3. 预测与评估
     y_pred = grouplasso.predict(X_test_3d).T  # 转置回 (n_samples, n_tasks)
+    
+    # 清理预测结果中的NaN和无穷大值
+    y_pred = clean_data(y_pred)
+    
     # 计算每个输出的单独指标（用于可视化）
     mse_list = [mean_squared_error(y_test[:, i], y_pred[:, i]) for i in range(n_tasks)]
     r2_list = [r2_score(y_test[:, i], y_pred[:, i]) for i in range(n_tasks)]
