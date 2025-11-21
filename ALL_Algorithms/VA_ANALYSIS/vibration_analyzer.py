@@ -148,10 +148,11 @@ class VibrationAnalysisController:
             结构化数据集 (段数 x 160的二维数组)
         """
         # 提取所有功率谱数据
+        number_psd = self.current_params.get('number_psd', 160)
         features = []
         for result in analysis_result['results']:
             # 每个功率谱应该已经是160个点
-            if len(result['power_spectrum']) == 160:
+            if len(result['power_spectrum']) == number_psd:
                 features.append(result['power_spectrum'])
             else:
                 # 如果不是160个点，进行插值
