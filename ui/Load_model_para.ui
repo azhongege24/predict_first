@@ -17,9 +17,9 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>230</y>
-      <width>171</width>
+      <x>150</x>
+      <y>210</y>
+      <width>281</width>
       <height>42</height>
      </rect>
     </property>
@@ -34,7 +34,7 @@
        </property>
        <property name="maximumSize">
         <size>
-         <width>80</width>
+         <width>150</width>
          <height>16777215</height>
         </size>
        </property>
@@ -57,7 +57,7 @@ QPushButton:pressed {
 }</string>
        </property>
        <property name="text">
-        <string>确认</string>
+        <string>开始预测</string>
        </property>
       </widget>
      </item>

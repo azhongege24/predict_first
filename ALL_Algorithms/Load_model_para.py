@@ -18,14 +18,14 @@ class Ui_Load_model_para(object):
         self.centralwidget = QtWidgets.QWidget(Load_model_para)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(200, 230, 171, 42))
+        self.layoutWidget.setGeometry(QtCore.QRect(150, 210, 281, 42))
         self.layoutWidget.setObjectName("layoutWidget")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.pushButton_2 = QtWidgets.QPushButton(self.layoutWidget)
         self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
-        self.pushButton_2.setMaximumSize(QtCore.QSize(80, 16777215))
+        self.pushButton_2.setMaximumSize(QtCore.QSize(150, 16777215))
         self.pushButton_2.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
 "border-radius:15px;    /*设置圆角半径 */\n"
@@ -245,7 +245,7 @@ class Ui_Load_model_para(object):
     def retranslateUi(self, Load_model_para):
         _translate = QtCore.QCoreApplication.translate
         Load_model_para.setWindowTitle(_translate("Load_model_para", "加载预训练模型：参数设置"))
-        self.pushButton_2.setText(_translate("Load_model_para", "确认"))
+        self.pushButton_2.setText(_translate("Load_model_para", "开始预测"))
         self.pushButton_3.setText(_translate("Load_model_para", "取消"))
         self.label.setText(_translate("Load_model_para", "加载预训练模型"))
         self.pushButton_load_model.setText(_translate("Load_model_para", "..."))
