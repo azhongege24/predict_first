@@ -413,7 +413,7 @@ def single_plot_and_evaluate(self, y_test, y_pred, method, data_test,
     self.lineEdit_MAE.setText(str(round(MAE, 5)))    # 假设新增了MAE控件
     self.lineEdit_R2.setText(str(round(R2, 5)))
     self.lineEdit_db_within_3_ratio.setText(f"{db_within_3_ratio*100:.2f}%")  # 新增±3dB内比例控件
-    self.lineEdit_total_db_deviation.setText(f"{total_db_deviation:.2f}")  # 新增总分贝偏差控件
+    # self.lineEdit_total_db_deviation.setText(f"{total_db_deviation:.2f}")  # 新增总分贝偏差控件
 
     # 保存预测结果到 DataFrame
     self.data_save = pd.DataFrame(y_pred, index=data_test.index.values)
@@ -537,7 +537,7 @@ def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test,
     self.lineEdit_MAE.setText(f"{overall_mae:.5f}")
     self.lineEdit_R2.setText(f"{overall_r2:.5f}")
     self.lineEdit_db_within_3_ratio.setText(f"{np.mean(db_within_3_ratio_list)*100:.2f}%")
-    self.lineEdit_total_db_deviation.setText(f"{np.sum(total_db_deviation_per_feature):.2f}")
+    # self.lineEdit_total_db_deviation.setText(f"{np.sum(total_db_deviation_per_feature):.2f}")
     
     # 保存预测结果到 DataFrame（包含真实值便于对比）
     pred_df = pd.DataFrame(

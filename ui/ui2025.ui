@@ -130,7 +130,7 @@ QPushButton:pressed {
 }</string>
        </property>
        <property name="text">
-        <string>其他参数</string>
+        <string>输入参数</string>
        </property>
       </widget>
      </item>
@@ -1704,7 +1704,7 @@ border-radius:10px;
      <rect>
       <x>64</x>
       <y>811</y>
-      <width>871</width>
+      <width>581</width>
       <height>32</height>
      </rect>
     </property>
@@ -1818,74 +1818,6 @@ font:bold;
      </item>
      <item>
       <widget class="QLineEdit" name="lineEdit_db_within_3_ratio">
-       <property name="minimumSize">
-        <size>
-         <width>120</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Times New Roman</family>
-         <pointsize>12</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QLineEdit{
-
-border:1px solid black; 
-border-radius:10px; 
-
-}</string>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_R2_3">
-       <property name="minimumSize">
-        <size>
-         <width>90</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>楷体</family>
-         <pointsize>12</pointsize>
-         <weight>75</weight>
-         <italic>false</italic>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;决定系数R^2,越接近1，代表模型拟合能力越强&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QLabel{
-
-   text-align: center;    
- qproperty-alignment: 'AlignCenter';   
-
-padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
-color:rgb(0, 0, 0);		/*字体颜色*/
-	font: 12pt  &quot;楷体&quot;;
-font:bold;
-
-
-}</string>
-       </property>
-       <property name="text">
-        <string>总分贝偏差</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="lineEdit_total_db_deviation">
        <property name="minimumSize">
         <size>
          <width>120</width>

@@ -1794,6 +1794,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
     def AL_SVM_para(self):
         
             self.ui_pop = POP_SVM_para(self)
+            self.clear_interface()
             self.ui_pop.show()  
     
     def AL_MLP_para(self):
@@ -2933,7 +2934,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.lineEdit_state.clear()
         self.lineEdit_dataset_nums.clear()
         self.lineEdit_db_within_3_ratio.clear()
-        self.lineEdit_total_db_deviation.clear()
+        # self.lineEdit_total_db_deviation.clear()
         
         # 清空图表区域
         self.graphicscene.clear()

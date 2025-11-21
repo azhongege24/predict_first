@@ -1018,7 +1018,7 @@ class Ui_MainWindow(object):
         self.lineEdit_MAE.setObjectName("lineEdit_MAE")
         self.horizontalLayout_7.addWidget(self.lineEdit_MAE)
         self.layoutWidget7 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget7.setGeometry(QtCore.QRect(64, 811, 871, 32))
+        self.layoutWidget7.setGeometry(QtCore.QRect(64, 811, 581, 32))
         self.layoutWidget7.setObjectName("layoutWidget7")
         self.horizontalLayout_9 = QtWidgets.QHBoxLayout(self.layoutWidget7)
         self.horizontalLayout_9.setContentsMargins(0, 0, 0, 0)
@@ -1103,46 +1103,6 @@ class Ui_MainWindow(object):
         self.lineEdit_db_within_3_ratio.setReadOnly(True)
         self.lineEdit_db_within_3_ratio.setObjectName("lineEdit_db_within_3_ratio")
         self.horizontalLayout_9.addWidget(self.lineEdit_db_within_3_ratio)
-        self.label_R2_3 = QtWidgets.QLabel(self.layoutWidget7)
-        self.label_R2_3.setMinimumSize(QtCore.QSize(90, 30))
-        font = QtGui.QFont()
-        font.setFamily("楷体")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setItalic(False)
-        font.setWeight(75)
-        self.label_R2_3.setFont(font)
-        self.label_R2_3.setStyleSheet("QLabel{\n"
-"\n"
-"   text-align: center;    \n"
-" qproperty-alignment: \'AlignCenter\';   \n"
-"\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 12pt  \"楷体\";\n"
-"font:bold;\n"
-"\n"
-"\n"
-"}")
-        self.label_R2_3.setObjectName("label_R2_3")
-        self.horizontalLayout_9.addWidget(self.label_R2_3)
-        self.lineEdit_total_db_deviation = QtWidgets.QLineEdit(self.layoutWidget7)
-        self.lineEdit_total_db_deviation.setMinimumSize(QtCore.QSize(120, 30))
-        font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.lineEdit_total_db_deviation.setFont(font)
-        self.lineEdit_total_db_deviation.setStyleSheet("QLineEdit{\n"
-"\n"
-"border:1px solid black; \n"
-"border-radius:10px; \n"
-"\n"
-"}")
-        self.lineEdit_total_db_deviation.setReadOnly(True)
-        self.lineEdit_total_db_deviation.setObjectName("lineEdit_total_db_deviation")
-        self.horizontalLayout_9.addWidget(self.lineEdit_total_db_deviation)
         self.layoutWidget8 = QtWidgets.QWidget(self.centralwidget)
         self.layoutWidget8.setGeometry(QtCore.QRect(890, 390, 42, 70))
         self.layoutWidget8.setObjectName("layoutWidget8")
@@ -1294,7 +1254,7 @@ class Ui_MainWindow(object):
         self.label_headline.setText(_translate("MainWindow", "多目标回归预示分析系统"))
         self.pushButton_vibration_analysis.setToolTip(_translate("MainWindow", "<html><head/><body><p>设置采样频率并导入振动数据，可以是多组或者是单组</p></body></html>"))
         self.pushButton_vibration_analysis.setText(_translate("MainWindow", "振动分析"))
-        self.pushButton_otherpara.setText(_translate("MainWindow", "其他参数"))
+        self.pushButton_otherpara.setText(_translate("MainWindow", "输入参数"))
         self.pushButton_dataset.setText(_translate("MainWindow", "数据集合成"))
         self.pushButton_train.setText(_translate("MainWindow", "训练验模"))
         self.pushButton_predict.setText(_translate("MainWindow", "预测"))
@@ -1353,8 +1313,6 @@ class Ui_MainWindow(object):
         self.label_R2.setText(_translate("MainWindow", "R^2"))
         self.label_R2_db_within_3_ratio.setToolTip(_translate("MainWindow", "<html><head/><body><p>决定系数R^2,越接近1，代表模型拟合能力越强</p></body></html>"))
         self.label_R2_db_within_3_ratio.setText(_translate("MainWindow", "±3dB内比例"))
-        self.label_R2_3.setToolTip(_translate("MainWindow", "<html><head/><body><p>决定系数R^2,越接近1，代表模型拟合能力越强</p></body></html>"))
-        self.label_R2_3.setText(_translate("MainWindow", "总分贝偏差"))
         self.pushButton_top.setToolTip(_translate("MainWindow", "<html><head/><body><p>上翻页</p></body></html>"))
         self.pushButton_top.setText(_translate("MainWindow", "↑"))
         self.pushButton_bottom.setToolTip(_translate("MainWindow", "<html><head/><body><p>下翻页</p></body></html>"))

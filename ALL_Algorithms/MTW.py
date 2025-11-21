@@ -213,7 +213,7 @@ def mtw_plot_and_evaluate(self, mtw_model, method, input_columns, output_columns
     self.lineEdit_MAE.setText(f"{overall_mae:.5f}")
     self.lineEdit_R2.setText(f"{overall_r2:.5f}")
     self.lineEdit_db_within_3_ratio.setText(f"{np.mean(db_within_3_ratio_list)*100:.2f}%")
-    self.lineEdit_total_db_deviation.setText(f"{np.sum(total_db_deviation_per_feature):.2f}")
+    # self.lineEdit_total_db_deviation.setText(f"{np.sum(total_db_deviation_per_feature):.2f}")
     self.lineEdit_Algorithm_name.setText(f"当前算法: {method}")
 
 
