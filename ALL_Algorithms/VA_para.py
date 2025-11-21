@@ -18,7 +18,7 @@ class Ui_VA_para(object):
         self.centralwidget = QtWidgets.QWidget(VA_para)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(60, 20, 1181, 701))
+        self.layoutWidget.setGeometry(QtCore.QRect(60, 20, 1081, 671))
         self.layoutWidget.setObjectName("layoutWidget")
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.layoutWidget)
         self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
@@ -55,8 +55,8 @@ class Ui_VA_para(object):
         self.horizontalLayout_2.addLayout(self.verticalLayout)
         self.verticalLayout_4 = QtWidgets.QVBoxLayout()
         self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.pushButton_browe_data_file = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton_browe_data_file.setStyleSheet("QPushButton {\n"
+        self.pushButton_browse_multiple_files = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButton_browse_multiple_files.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
 "    padding: 4px 8px;\n"
@@ -74,8 +74,8 @@ class Ui_VA_para(object):
 "QPushButton:pressed {\n"
 "    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
 "}")
-        self.pushButton_browe_data_file.setObjectName("pushButton_browe_data_file")
-        self.verticalLayout_4.addWidget(self.pushButton_browe_data_file)
+        self.pushButton_browse_multiple_files.setObjectName("pushButton_browse_multiple_files")
+        self.verticalLayout_4.addWidget(self.pushButton_browse_multiple_files)
         self.pushButton_select = QtWidgets.QPushButton(self.layoutWidget)
         self.pushButton_select.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
@@ -161,8 +161,8 @@ class Ui_VA_para(object):
 "}")
         self.pushButton_preview_data_file.setObjectName("pushButton_preview_data_file")
         self.verticalLayout_3.addWidget(self.pushButton_preview_data_file)
-        self.pushButton_psd_analysis = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton_psd_analysis.setStyleSheet("QPushButton {\n"
+        self.pushButton_psd_analysis_multiple = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButton_psd_analysis_multiple.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
 "    padding: 4px 8px;\n"
@@ -180,10 +180,10 @@ class Ui_VA_para(object):
 "QPushButton:pressed {\n"
 "    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
 "}")
-        self.pushButton_psd_analysis.setObjectName("pushButton_psd_analysis")
-        self.verticalLayout_3.addWidget(self.pushButton_psd_analysis)
-        self.pushButton_save_data = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton_save_data.setStyleSheet("QPushButton {\n"
+        self.pushButton_psd_analysis_multiple.setObjectName("pushButton_psd_analysis_multiple")
+        self.verticalLayout_3.addWidget(self.pushButton_psd_analysis_multiple)
+        self.pushButton_save_multiple_data = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButton_save_multiple_data.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
 "    padding: 4px 8px;\n"
@@ -201,8 +201,8 @@ class Ui_VA_para(object):
 "QPushButton:pressed {\n"
 "    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
 "}")
-        self.pushButton_save_data.setObjectName("pushButton_save_data")
-        self.verticalLayout_3.addWidget(self.pushButton_save_data)
+        self.pushButton_save_multiple_data.setObjectName("pushButton_save_multiple_data")
+        self.verticalLayout_3.addWidget(self.pushButton_save_multiple_data)
         self.pushButton_save_image = QtWidgets.QPushButton(self.layoutWidget)
         self.pushButton_save_image.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
@@ -338,12 +338,12 @@ class Ui_VA_para(object):
         _translate = QtCore.QCoreApplication.translate
         VA_para.setWindowTitle(_translate("VA_para", "VibrationAnalyzer参数设置"))
         self.label_8.setText(_translate("VA_para", "分析功能区"))
-        self.pushButton_browe_data_file.setText(_translate("VA_para", "浏览数据文件"))
+        self.pushButton_browse_multiple_files.setText(_translate("VA_para", "浏览数据文件"))
         self.pushButton_select.setText(_translate("VA_para", "选择输出目录"))
         self.label_6.setText(_translate("VA_para", "分析功能区"))
         self.pushButton_preview_data_file.setText(_translate("VA_para", "预览数据"))
-        self.pushButton_psd_analysis.setText(_translate("VA_para", "功率谱分析"))
-        self.pushButton_save_data.setText(_translate("VA_para", "保存结果"))
+        self.pushButton_psd_analysis_multiple.setText(_translate("VA_para", "功率谱分析"))
+        self.pushButton_save_multiple_data.setText(_translate("VA_para", "保存结果"))
         self.pushButton_save_image.setText(_translate("VA_para", "保存图片"))
         self.label_7.setText(_translate("VA_para", "辅助设置区"))
         self.pushButton_set_para.setText(_translate("VA_para", "参数设置"))

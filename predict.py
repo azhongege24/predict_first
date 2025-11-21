@@ -6,7 +6,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationTool
 import numpy as np
 from ui2025 import Ui_MainWindow #我新创建的界面类
 import pandas as pd
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton,QMessageBox, QFileDialog, QGraphicsScene, QGraphicsView, QWidget, QCheckBox, QListWidgetItem
+from PyQt5.QtWidgets import QApplication, QMainWindow,QProgressDialog, QPushButton,QMessageBox, QFileDialog, QGraphicsScene, QGraphicsView, QWidget, QCheckBox, QListWidgetItem
 from PyQt5.QtCore import Qt ,QSettings,QTimer
 from PyQt5.QtGui import QPixmap
 from matplotlib.figure import Figure
@@ -73,7 +73,8 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         
         # 初始化VA分析控制器
         self.va_controller = VibrationAnalysisController()
-        
+        self.multi_file_analysis_results = []  # 新增：存储多个文件的分析结果  
+        self.current_file_paths = []  # 新增：支持多个文件      
         # 当前数据和分析结果
         self.current_file_path = None
         self.current_time_data = None
@@ -94,12 +95,15 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         self.graphicsView.setScene(scene)
         
         # 连接按钮信号
-        self.pushButton_browe_data_file.clicked.connect(self.browse_data_file)
+        # self.pushButton_browe_data_file.clicked.connect(self.browse_data_file)
+        self.pushButton_browse_multiple_files.clicked.connect(self.browse_multiple_files)  # 新增：多文件选择按钮
+        self.pushButton_psd_analysis_multiple.clicked.connect(self.perform_psd_analysis_multiple)  # 新增：多文件分析按钮
         self.pushButton_select.clicked.connect(self.select_output_directory)
         self.pushButton_preview_data_file.clicked.connect(self.preview_data)
-        self.pushButton_psd_analysis.clicked.connect(self.perform_psd_analysis)
-        self.pushButton_save_data.clicked.connect(self.save_analysis_results)
+        # self.pushButton_psd_analysis.clicked.connect(self.perform_psd_analysis)
+        # self.pushButton_save_data.clicked.connect(self.save_analysis_results)
         self.pushButton_save_image.clicked.connect(self.save_analysis_images)  # 添加保存图片按钮连接
+        self.pushButton_save_multiple_data.clicked.connect(self.save_multiple_analysis_results)  # 新增：多文件保存按钮
         self.pushButton_set_para.clicked.connect(self.AL_VA_method_para)
         self.pushButton_help.clicked.connect(self.show_help)
         self.pushButton_top.clicked.connect(self.show_previous_page)
@@ -160,10 +164,24 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
     
     def preview_data(self):
         """预览数据 - 显示时域和频域预览"""
+        # 检查是否有可用的数据
         if self.current_time_data is None or self.current_signal_data is None:
-            QMessageBox.warning(self, "警告", "请先加载数据文件！")
-            return
-        
+            # 如果没有单文件数据，检查是否有多个文件
+            if not self.current_file_paths:
+                QMessageBox.warning(self, "警告", "请先加载数据文件！")
+                return
+            else:
+                # 如果有多个文件但没有加载数据，尝试加载第一个文件
+                try:
+                    first_file_path = self.current_file_paths[0]
+                    time_data, signal_data = self.va_controller.data_loader.load_data(first_file_path)
+                    self.current_time_data = time_data
+                    self.current_signal_data = signal_data
+                    self.current_file_path = first_file_path
+                except Exception as e:
+                    QMessageBox.warning(self, "加载失败", f"无法加载第一个文件用于预览: {str(e)}")
+                    return                
+                
         try:
             
             # 清空当前图形
@@ -202,6 +220,288 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
             
         except Exception as e:
             QMessageBox.warning(self, "预览失败", f"数据预览失败: {str(e)}")
+            
+    def browse_multiple_files(self):
+        """浏览多个数据文件"""
+        file_filter = "数据文件 (*.txt *.mat);;文本文件 (*.txt);;MAT文件 (*.mat);;所有文件 (*.*)"
+        initial_dir = "data/" if os.path.exists("data/") else "./"
+        
+        file_paths, _ = QFileDialog.getOpenFileNames(
+            self, "选择多个振动数据文件", initial_dir, file_filter
+        )
+        
+        if file_paths:
+            self.current_file_paths = file_paths
+            # 在界面上显示文件列表 - 显示第一个文件名和文件总数
+            if len(file_paths) == 1:
+                file_name = os.path.basename(file_paths[0])
+                self.lineEdit.setText(f"已选择: {file_name}")
+            else:
+                first_file_name = os.path.basename(file_paths[0])
+                self.lineEdit.setText(f"已选择: {first_file_name} 等 {len(file_paths)} 个文件")
+            try:
+                first_file_path = file_paths[0]
+                time_data, signal_data = self.va_controller.data_loader.load_data(first_file_path)
+                self.current_time_data = time_data
+                self.current_signal_data = signal_data
+                self.current_file_path = first_file_path
+            except Exception as e:
+                print(f"加载第一个文件用于预览失败: {str(e)}")
+                self.current_time_data = None
+                self.current_signal_data = None
+                self.current_file_path = None
+            
+            
+            # 显示文件信息
+            info_msg = f"已选择 {len(file_paths)} 个文件：\n\n"
+            for i, file_path in enumerate(file_paths, 1):
+                file_name = os.path.basename(file_path)
+                channel, direction = self.va_controller.data_loader.parse_channel_info(file_name)
+                info_msg += f"{i}. {file_name}\n"
+                if channel:
+                    info_msg += f"   通道: {channel}\n"
+                if direction:
+                    info_msg += f"   方向: {direction}\n"
+                info_msg += "\n"
+            
+            QMessageBox.information(self, "文件选择完成", info_msg)
+
+    def perform_psd_analysis_multiple(self):
+        """执行多文件功率谱分析"""
+        if not self.current_file_paths:
+            QMessageBox.warning(self, "警告", "请先选择多个数据文件！")
+            return
+        
+        try:
+            # 清空之前的多文件分析结果
+            self.multi_file_analysis_results = []
+            total_segments = 0
+            
+            # 创建进度对话框
+            progress = QProgressDialog("正在分析多个文件...", "取消", 0, len(self.current_file_paths), self)
+            progress.setWindowTitle("功率谱分析进度")
+            progress.setWindowModality(Qt.WindowModal)
+            
+            # 分析每个文件
+            for i, file_path in enumerate(self.current_file_paths):
+                progress.setValue(i)
+                progress.setLabelText(f"正在分析文件 {i+1}/{len(self.current_file_paths)}: {os.path.basename(file_path)}")
+                
+                if progress.wasCanceled():
+                    break
+                
+                try:
+                    # 分析单个文件
+                    analysis_result = self.va_controller.analyze_file(
+                        file_path, 
+                        product_code="Unknown",
+                        serial_number="Unknown"
+                    )
+                    
+                    # 生成结构化特征集
+                    feature_dataset = self.va_controller.generate_feature_dataset(analysis_result)
+                    
+                    # 存储分析结果
+                    self.multi_file_analysis_results.append({
+                        'file_path': file_path,
+                        'analysis_result': analysis_result,
+                        'feature_dataset': feature_dataset,
+                        'file_name': os.path.basename(file_path),
+                        'channel': analysis_result['channel'],
+                        'direction': analysis_result['direction'],
+                        'num_segments': len(analysis_result['results'])
+                    })
+                    
+                    total_segments += len(analysis_result['results'])
+                    
+                except Exception as e:
+                    print(f"分析文件 {file_path} 失败: {str(e)}")
+                    continue
+            
+            progress.setValue(len(self.current_file_paths))
+            
+            # 显示分析结果摘要
+            if self.multi_file_analysis_results:
+                summary_msg = f"多文件功率谱分析完成！\n\n"
+                summary_msg += f"成功分析文件数: {len(self.multi_file_analysis_results)}/{len(self.current_file_paths)}\n"
+                summary_msg += f"总分段数量: {total_segments}\n\n"
+                summary_msg += "各文件分析结果:\n"
+                
+                for result in self.multi_file_analysis_results:
+                    summary_msg += f"- {result['file_name']}: {result['num_segments']} 个分段\n"
+                
+                QMessageBox.information(self, "分析完成", summary_msg)
+                
+                # 显示第一个文件的分析结果
+                self.analysis_results = self.multi_file_analysis_results[0]['analysis_result']
+                self.display_analysis_results()
+            else:
+                QMessageBox.warning(self, "分析失败", "所有文件分析都失败了！")
+                
+        except Exception as e:
+            QMessageBox.warning(self, "分析失败", f"多文件功率谱分析失败: {str(e)}")
+
+    def save_multiple_analysis_results(self):
+        """保存多文件分析结果"""
+        if not self.multi_file_analysis_results:
+            QMessageBox.warning(self, "警告", "请先执行多文件功率谱分析！")
+            return
+        
+        if not self.save_directory:
+            QMessageBox.warning(self, "警告", "请先选择输出目录！")
+            return
+        
+        try:
+            # 询问保存方式
+            reply = QMessageBox.question(
+                self, 
+                "选择保存方式", 
+                "请选择多文件分析结果的保存方式：\n\n"
+                "• 合并保存：将所有文件的功率谱分段合并保存为单个结构化数据集文件\n"
+                "• 分别保存：将每个文件的功率谱分段分别保存为单独的结构化数据集文件\n\n"
+                "点击'是'合并保存，点击'否'分别保存",
+                QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel,
+                QMessageBox.Yes
+            )
+            
+            if reply == QMessageBox.Cancel:
+                return
+            
+            saved_files = []
+            
+            if reply == QMessageBox.Yes:
+                # 合并保存所有文件的分析结果
+                # 询问保存格式
+                format_reply = QMessageBox.question(
+                    self,
+                    "选择保存格式",
+                    "请选择合并数据集的保存格式：\n\n"
+                    "• MATLAB格式 (.mat)：适合MATLAB分析\n"
+                    "• CSV格式 (.csv)：适合Excel和Python分析\n\n"
+                    "点击'是'保存为MATLAB格式，点击'否'保存为CSV格式",
+                    QMessageBox.Yes | QMessageBox.No,
+                    QMessageBox.Yes
+                )
+                
+                format_type = 'mat' if format_reply == QMessageBox.Yes else 'csv'
+                
+                # 合并所有文件的功率谱结果
+                all_results = []
+                file_info = []
+                
+                for i, multi_result in enumerate(self.multi_file_analysis_results):
+                    analysis_result = multi_result['analysis_result']
+                    file_name = multi_result['file_name']
+                    channel = multi_result['channel']
+                    direction = multi_result['direction']
+                    
+                    # 为每个分段添加文件标识信息
+                    for j, result in enumerate(analysis_result['results']):
+                        # 复制结果并添加文件信息
+                        extended_result = result.copy()
+                        extended_result['source_file'] = file_name
+                        extended_result['source_channel'] = channel
+                        extended_result['source_direction'] = direction
+                        extended_result['file_index'] = i
+                        extended_result['segment_index'] = j
+                        all_results.append(extended_result)
+                
+                # 构建基础文件名
+                base_filename = "MULTI_FILE_STRUCTURED_DATASET"
+                full_base_path = os.path.join(self.save_directory, base_filename)
+                
+                # 保存合并的结构化数据集
+                saved_file = self.va_controller.result_saver.save_structured_dataset(
+                    all_results,
+                    product_code="MultiFile",
+                    serial_number="Combined",
+                    channel="Multiple",
+                    direction="Combined",
+                    base_path=full_base_path,
+                    format=format_type,
+                    additional_info={
+                        'num_files': len(self.multi_file_analysis_results),
+                        'total_segments': len(all_results),
+                        'source_files': [r['file_name'] for r in self.multi_file_analysis_results],
+                        'analysis_method': self.va_controller.current_params['method']
+                    }
+                )
+                saved_files.append(saved_file)
+                
+                # 如果是CSV格式，还会生成元数据文件
+                if format_type == 'csv':
+                    meta_file = f"{full_base_path}_metadata.txt"
+                    if os.path.exists(meta_file):
+                        saved_files.append(meta_file)
+                
+                file_list = "\n".join(saved_files)
+                QMessageBox.information(
+                    self, 
+                    "保存成功", 
+                    f"多文件合并数据集已保存！\n\n"
+                    f"文件信息：\n"
+                    f"- 文件数量：{len(self.multi_file_analysis_results)}\n"
+                    f"- 总分段数量：{len(all_results)}\n"
+                    f"- 保存格式：{format_type.upper()}\n\n"
+                    f"保存文件：\n{file_list}"
+                )
+                
+            else:
+                # 分别保存每个文件的分析结果
+                total_saved = 0
+                
+                for multi_result in self.multi_file_analysis_results:
+                    analysis_result = multi_result['analysis_result']
+                    file_name = multi_result['file_name']
+                    channel = multi_result['channel']
+                    direction = multi_result['direction']
+                    
+                    # 询问每个文件的保存格式
+                    format_reply = QMessageBox.question(
+                        self,
+                        f"选择 {file_name} 的保存格式",
+                        f"请选择文件 {file_name} 的保存格式：\n\n"
+                        "• MATLAB格式 (.mat)：适合MATLAB分析\n"
+                        "• CSV格式 (.csv)：适合Excel和Python分析\n\n"
+                        "点击'是'保存为MATLAB格式，点击'否'保存为CSV格式",
+                        QMessageBox.Yes | QMessageBox.No,
+                        QMessageBox.Yes
+                    )
+                    
+                    format_type = 'mat' if format_reply == QMessageBox.Yes else 'csv'
+                    
+                    # 构建基础文件名
+                    base_filename = f"{file_name.replace('.', '_')}_STRUCTURED_DATASET"
+                    full_base_path = os.path.join(self.save_directory, base_filename)
+                    
+                    # 保存单个文件的结构化数据集
+                    saved_file = self.va_controller.result_saver.save_structured_dataset(
+                        analysis_result['results'],
+                        product_code="Unknown",
+                        serial_number="Unknown",
+                        channel=channel,
+                        direction=direction,
+                        base_path=full_base_path,
+                        format=format_type,
+                        additional_info={
+                            'source_file': file_name,
+                            'num_segments': len(analysis_result['results']),
+                            'analysis_method': self.va_controller.current_params['method']
+                        }
+                    )
+                    saved_files.append(saved_file)
+                    total_saved += 1
+                
+                QMessageBox.information(
+                    self, 
+                    "保存成功", 
+                    f"多文件分析结果已分别保存！\n\n"
+                    f"成功保存文件数：{total_saved}/{len(self.multi_file_analysis_results)}\n"
+                    f"共保存了 {len(saved_files)} 个数据集文件"
+                )
+            
+        except Exception as e:
+            QMessageBox.warning(self, "保存失败", f"多文件结果保存失败: {str(e)}")
             
     def set_tick_font(self,ax):#解决对数符号问题
         '''
@@ -967,14 +1267,43 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
             # 合并所有输出文件
             output_combined = pd.concat(output_dfs, ignore_index=True)
             
-            # 根据时间戳合并输入和输出数据
-            # 使用start_time和end_time作为合并键，确保时间对齐
-            merged_df = pd.merge(
-                input_combined, 
-                output_combined, 
-                on=['start_time', 'end_time'], 
-                how='inner'  # 只保留时间匹配的记录
-            )
+            # 改进的时间匹配策略：使用时间窗口中心点进行匹配
+            # 计算每个时间窗口的中心点
+            input_combined['time_center'] = (input_combined['start_time'] + input_combined['end_time']) / 2
+            output_combined['time_center'] = (output_combined['start_time'] + output_combined['end_time']) / 2
+            
+            # 使用最近邻匹配，容忍0.1秒的时间差
+            from scipy.spatial import cKDTree
+            
+            # 创建时间中心点的KD树
+            input_centers = input_combined[['time_center']].values
+            output_centers = output_combined[['time_center']].values
+            
+            # 构建KD树进行最近邻匹配
+            tree = cKDTree(output_centers)
+            distances, indices = tree.query(input_centers, k=1, distance_upper_bound=0.1)  # 容忍0.1秒的时间差
+            
+            # 创建匹配结果
+            matched_indices = []
+            for i, (dist, idx) in enumerate(zip(distances, indices)):
+                if dist < 0.1:  # 只保留时间差小于0.1秒的匹配
+                    matched_indices.append((i, idx))
+            
+            if not matched_indices:
+                QMessageBox.warning(self, "合并警告", "未找到时间匹配的记录，请检查文件时间范围是否一致")
+                return None
+            
+            # 构建合并结果
+            merged_rows = []
+            for input_idx, output_idx in matched_indices:
+                input_row = input_combined.iloc[input_idx].copy()
+                output_row = output_combined.iloc[output_idx].copy()
+                
+                # 合并行，保留输入特征和输出特征
+                merged_row = pd.concat([input_row, output_row.drop(['start_time', 'end_time', 'time_center'])], axis=0)
+                merged_rows.append(merged_row)
+            
+            merged_df = pd.DataFrame(merged_rows)
             
             # 移除不需要的列（如segment_id）
             cols_to_drop = ['segment_id']

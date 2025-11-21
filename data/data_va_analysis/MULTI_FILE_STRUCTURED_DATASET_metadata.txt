@@ -1,0 +1,22 @@
+=== 结构化数据集元数据 ===
+product_code: MultiFile
+serial_number: Combined
+channel: Multiple
+direction: Combined
+analysis_time: 2025-11-21 19:39:26
+num_segments: 1200
+points_per_spectrum: 160
+frequency_range: {'min': 21.991203518592563, 'max': 1999.200319872051}
+has_extended_info: True
+num_files: 3
+total_segments: 1200
+source_files: ['通道名称C1位置X向振动.txt', '通道名称C1位置Y向振动.txt', '通道名称C1位置Z向振动.txt']
+analysis_method: welch
+
+数据结构说明:
+- 数据文件: MULTI_FILE_STRUCTURED_DATASET_structured_dataset.csv
+- 行数: 1200 (功率谱分段数量)
+- 列数: 160 (每个功率谱的点数)
+- 列名格式: P1, P2, ..., P160 (对应功率谱密度值)
+- 基础列: start_time, end_time, segment_id
+- 扩展列: source_file, source_channel, source_direction, file_index, segment_index

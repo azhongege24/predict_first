@@ -19,8 +19,8 @@
      <rect>
       <x>60</x>
       <y>20</y>
-      <width>1181</width>
-      <height>701</height>
+      <width>1081</width>
+      <height>671</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -78,7 +78,7 @@ qproperty-alignment: 'AlignCenter';
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
-            <widget class="QPushButton" name="pushButton_browe_data_file">
+            <widget class="QPushButton" name="pushButton_browse_multiple_files">
              <property name="styleSheet">
               <string notr="true">QPushButton {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
@@ -243,7 +243,7 @@ QPushButton:pressed {
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_psd_analysis">
+          <widget class="QPushButton" name="pushButton_psd_analysis_multiple">
            <property name="styleSheet">
             <string notr="true">QPushButton {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */
@@ -270,7 +270,7 @@ QPushButton:pressed {
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_save_data">
+          <widget class="QPushButton" name="pushButton_save_multiple_data">
            <property name="styleSheet">
             <string notr="true">QPushButton {
     border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */

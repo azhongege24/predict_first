@@ -107,6 +107,9 @@ class ResultSaver:
             if dir_name and not os.path.exists(dir_name):
                 os.makedirs(dir_name, exist_ok=True)
             
+            # 检查结果是否包含扩展信息（多文件合并）
+            has_extended_info = any('source_file' in result for result in results)
+            
             # 构建完整的元数据
             metadata = {
                 'product_code': product_code,
@@ -120,6 +123,7 @@ class ResultSaver:
                     'min': float(results[0]['frequency'][0]) if results else 0,
                     'max': float(results[0]['frequency'][-1]) if results else 0
                 },
+                'has_extended_info': has_extended_info,  # 标记是否包含多文件信息
                 **(additional_info or {})
             }
             
@@ -129,10 +133,23 @@ class ResultSaver:
             # 提取所有功率谱数据
             power_spectra = []
             time_ranges = []
+            source_files = []
+            source_channels = []
+            source_directions = []
+            file_indices = []
+            segment_indices = []
             
             for i, result in enumerate(results):
                 power_spectra.append(result['power_spectrum'])
                 time_ranges.append(result['time_range'])
+                
+                # 提取扩展信息（如果存在）
+                if has_extended_info:
+                    source_files.append(result.get('source_file', 'Unknown'))
+                    source_channels.append(result.get('source_channel', 'Unknown'))
+                    source_directions.append(result.get('source_direction', 'Unknown'))
+                    file_indices.append(result.get('file_index', -1))
+                    segment_indices.append(result.get('segment_index', -1))
             
             # 转换为numpy数组
             power_spectra_array = np.array(power_spectra)
@@ -147,6 +164,15 @@ class ResultSaver:
                     'frequency': results[0]['frequency'] if results else np.array([]),  # 频率轴
                     'metadata': metadata
                 }
+                
+                # 添加扩展信息（如果存在）
+                if has_extended_info:
+                    data['source_files'] = np.array(source_files, dtype=object)
+                    data['source_channels'] = np.array(source_channels, dtype=object)
+                    data['source_directions'] = np.array(source_directions, dtype=object)
+                    data['file_indices'] = np.array(file_indices)
+                    data['segment_indices'] = np.array(segment_indices)
+                
                 sio.savemat(full_path, data)
                 
             elif format == 'csv':
@@ -163,6 +189,14 @@ class ResultSaver:
                 df['end_time'] = time_ranges_array[:, 1]
                 df['segment_id'] = range(1, len(results) + 1)
                 
+                # 添加扩展信息（如果存在）
+                if has_extended_info:
+                    df['source_file'] = source_files
+                    df['source_channel'] = source_channels
+                    df['source_direction'] = source_directions
+                    df['file_index'] = file_indices
+                    df['segment_index'] = segment_indices
+                
                 # 保存CSV文件
                 df.to_csv(full_path, index=False)
                 
@@ -177,7 +211,9 @@ class ResultSaver:
                     f.write(f"- 行数: {len(results)} (功率谱分段数量)\n")
                     f.write(f"- 列数: {num_points} (每个功率谱的点数)\n")
                     f.write(f"- 列名格式: P1, P2, ..., P{num_points} (对应功率谱密度值)\n")
-                    f.write(f"- 额外列: start_time, end_time, segment_id\n")
+                    f.write(f"- 基础列: start_time, end_time, segment_id\n")
+                    if has_extended_info:
+                        f.write(f"- 扩展列: source_file, source_channel, source_direction, file_index, segment_index\n")
             
             return full_path
     
