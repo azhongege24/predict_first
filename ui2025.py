@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\ui2025.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\beifen\新项目\ui\ui2025.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1403, 870)
+        MainWindow.resize(1403, 913)
         MainWindow.setStyleSheet("QMainWindow{\n"
 "\n"
 "\n"
@@ -1018,98 +1018,12 @@ class Ui_MainWindow(object):
         self.lineEdit_MAE.setObjectName("lineEdit_MAE")
         self.horizontalLayout_7.addWidget(self.lineEdit_MAE)
         self.layoutWidget7 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget7.setGeometry(QtCore.QRect(64, 811, 581, 32))
+        self.layoutWidget7.setGeometry(QtCore.QRect(890, 390, 42, 70))
         self.layoutWidget7.setObjectName("layoutWidget7")
-        self.horizontalLayout_9 = QtWidgets.QHBoxLayout(self.layoutWidget7)
-        self.horizontalLayout_9.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
-        self.label_R2 = QtWidgets.QLabel(self.layoutWidget7)
-        self.label_R2.setMinimumSize(QtCore.QSize(90, 30))
-        font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setItalic(False)
-        font.setWeight(75)
-        self.label_R2.setFont(font)
-        self.label_R2.setStyleSheet("QLabel{\n"
-"\n"
-"   text-align: center;    \n"
-" qproperty-alignment: \'AlignCenter\';   \n"
-"\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 12pt  \"Times New Roman\";\n"
-"font:bold;\n"
-"\n"
-"\n"
-"}")
-        self.label_R2.setObjectName("label_R2")
-        self.horizontalLayout_9.addWidget(self.label_R2)
-        self.lineEdit_R2 = QtWidgets.QLineEdit(self.layoutWidget7)
-        self.lineEdit_R2.setMinimumSize(QtCore.QSize(120, 30))
-        font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.lineEdit_R2.setFont(font)
-        self.lineEdit_R2.setStyleSheet("QLineEdit{\n"
-"\n"
-"border:1px solid black; \n"
-"border-radius:10px; \n"
-"\n"
-"}")
-        self.lineEdit_R2.setReadOnly(True)
-        self.lineEdit_R2.setObjectName("lineEdit_R2")
-        self.horizontalLayout_9.addWidget(self.lineEdit_R2)
-        self.label_R2_db_within_3_ratio = QtWidgets.QLabel(self.layoutWidget7)
-        self.label_R2_db_within_3_ratio.setMinimumSize(QtCore.QSize(90, 30))
-        font = QtGui.QFont()
-        font.setFamily("楷体")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setItalic(False)
-        font.setWeight(75)
-        self.label_R2_db_within_3_ratio.setFont(font)
-        self.label_R2_db_within_3_ratio.setStyleSheet("QLabel{\n"
-"\n"
-"   text-align: center;    \n"
-" qproperty-alignment: \'AlignCenter\';   \n"
-"\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 12pt  \"楷体\";\n"
-"font:bold;\n"
-"\n"
-"\n"
-"}")
-        self.label_R2_db_within_3_ratio.setObjectName("label_R2_db_within_3_ratio")
-        self.horizontalLayout_9.addWidget(self.label_R2_db_within_3_ratio)
-        self.lineEdit_db_within_3_ratio = QtWidgets.QLineEdit(self.layoutWidget7)
-        self.lineEdit_db_within_3_ratio.setMinimumSize(QtCore.QSize(120, 30))
-        font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.lineEdit_db_within_3_ratio.setFont(font)
-        self.lineEdit_db_within_3_ratio.setStyleSheet("QLineEdit{\n"
-"\n"
-"border:1px solid black; \n"
-"border-radius:10px; \n"
-"\n"
-"}")
-        self.lineEdit_db_within_3_ratio.setReadOnly(True)
-        self.lineEdit_db_within_3_ratio.setObjectName("lineEdit_db_within_3_ratio")
-        self.horizontalLayout_9.addWidget(self.lineEdit_db_within_3_ratio)
-        self.layoutWidget8 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget8.setGeometry(QtCore.QRect(890, 390, 42, 70))
-        self.layoutWidget8.setObjectName("layoutWidget8")
-        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.layoutWidget8)
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.layoutWidget7)
         self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.pushButton_top = QtWidgets.QPushButton(self.layoutWidget8)
+        self.pushButton_top = QtWidgets.QPushButton(self.layoutWidget7)
         self.pushButton_top.setMinimumSize(QtCore.QSize(32, 32))
         self.pushButton_top.setMaximumSize(QtCore.QSize(40, 30))
         font = QtGui.QFont()
@@ -1120,7 +1034,7 @@ class Ui_MainWindow(object):
         self.pushButton_top.setFont(font)
         self.pushButton_top.setObjectName("pushButton_top")
         self.verticalLayout_4.addWidget(self.pushButton_top)
-        self.pushButton_bottom = QtWidgets.QPushButton(self.layoutWidget8)
+        self.pushButton_bottom = QtWidgets.QPushButton(self.layoutWidget7)
         self.pushButton_bottom.setMinimumSize(QtCore.QSize(0, 30))
         self.pushButton_bottom.setMaximumSize(QtCore.QSize(40, 30))
         font = QtGui.QFont()
@@ -1149,13 +1063,13 @@ class Ui_MainWindow(object):
         self.pushButton_help = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_help.setGeometry(QtCore.QRect(1290, 10, 75, 23))
         self.pushButton_help.setObjectName("pushButton_help")
-        self.layoutWidget9 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget9.setGeometry(QtCore.QRect(1100, 750, 251, 101))
-        self.layoutWidget9.setObjectName("layoutWidget9")
-        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.layoutWidget9)
+        self.layoutWidget8 = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget8.setGeometry(QtCore.QRect(1100, 750, 251, 101))
+        self.layoutWidget8.setObjectName("layoutWidget8")
+        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.layoutWidget8)
         self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
-        self.pushButton_save_pretrained_model = QtWidgets.QPushButton(self.layoutWidget9)
+        self.pushButton_save_pretrained_model = QtWidgets.QPushButton(self.layoutWidget8)
         self.pushButton_save_pretrained_model.setMinimumSize(QtCore.QSize(87, 44))
         self.pushButton_save_pretrained_model.setMaximumSize(QtCore.QSize(400, 40))
         self.pushButton_save_pretrained_model.setStyleSheet("QPushButton {\n"
@@ -1187,7 +1101,7 @@ class Ui_MainWindow(object):
 "}")
         self.pushButton_save_pretrained_model.setObjectName("pushButton_save_pretrained_model")
         self.verticalLayout_5.addWidget(self.pushButton_save_pretrained_model)
-        self.pushButton_8 = QtWidgets.QPushButton(self.layoutWidget9)
+        self.pushButton_8 = QtWidgets.QPushButton(self.layoutWidget8)
         self.pushButton_8.setMinimumSize(QtCore.QSize(87, 44))
         self.pushButton_8.setMaximumSize(QtCore.QSize(400, 40))
         self.pushButton_8.setStyleSheet("QPushButton {\n"
@@ -1219,6 +1133,132 @@ class Ui_MainWindow(object):
 "}")
         self.pushButton_8.setObjectName("pushButton_8")
         self.verticalLayout_5.addWidget(self.pushButton_8)
+        self.layoutWidget9 = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget9.setGeometry(QtCore.QRect(64, 810, 581, 34))
+        self.layoutWidget9.setObjectName("layoutWidget9")
+        self.horizontalLayout_10 = QtWidgets.QHBoxLayout(self.layoutWidget9)
+        self.horizontalLayout_10.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_10.setObjectName("horizontalLayout_10")
+        self.horizontalLayout_9 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
+        self.label_R2 = QtWidgets.QLabel(self.layoutWidget9)
+        self.label_R2.setMinimumSize(QtCore.QSize(90, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.label_R2.setFont(font)
+        self.label_R2.setStyleSheet("QLabel{\n"
+"\n"
+"   text-align: center;    \n"
+" qproperty-alignment: \'AlignCenter\';   \n"
+"\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 12pt  \"Times New Roman\";\n"
+"font:bold;\n"
+"\n"
+"\n"
+"}")
+        self.label_R2.setObjectName("label_R2")
+        self.horizontalLayout_9.addWidget(self.label_R2)
+        self.lineEdit_R2 = QtWidgets.QLineEdit(self.layoutWidget9)
+        self.lineEdit_R2.setMinimumSize(QtCore.QSize(150, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lineEdit_R2.setFont(font)
+        self.lineEdit_R2.setStyleSheet("QLineEdit{\n"
+"\n"
+"border:1px solid black; \n"
+"border-radius:10px; \n"
+"\n"
+"}")
+        self.lineEdit_R2.setReadOnly(True)
+        self.lineEdit_R2.setObjectName("lineEdit_R2")
+        self.horizontalLayout_9.addWidget(self.lineEdit_R2)
+        self.label_R2_db_within_3_ratio = QtWidgets.QLabel(self.layoutWidget9)
+        self.label_R2_db_within_3_ratio.setMinimumSize(QtCore.QSize(90, 30))
+        font = QtGui.QFont()
+        font.setFamily("楷体")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.label_R2_db_within_3_ratio.setFont(font)
+        self.label_R2_db_within_3_ratio.setStyleSheet("QLabel{\n"
+"\n"
+"   text-align: center;    \n"
+" qproperty-alignment: \'AlignCenter\';   \n"
+"\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 12pt  \"楷体\";\n"
+"font:bold;\n"
+"\n"
+"\n"
+"}")
+        self.label_R2_db_within_3_ratio.setObjectName("label_R2_db_within_3_ratio")
+        self.horizontalLayout_9.addWidget(self.label_R2_db_within_3_ratio)
+        self.lineEdit_db_within_3_ratio = QtWidgets.QLineEdit(self.layoutWidget9)
+        self.lineEdit_db_within_3_ratio.setMinimumSize(QtCore.QSize(50, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lineEdit_db_within_3_ratio.setFont(font)
+        self.lineEdit_db_within_3_ratio.setStyleSheet("QLineEdit{\n"
+"\n"
+"border:1px solid black; \n"
+"border-radius:10px; \n"
+"\n"
+"}")
+        self.lineEdit_db_within_3_ratio.setReadOnly(True)
+        self.lineEdit_db_within_3_ratio.setObjectName("lineEdit_db_within_3_ratio")
+        self.horizontalLayout_9.addWidget(self.lineEdit_db_within_3_ratio)
+        self.horizontalLayout_10.addLayout(self.horizontalLayout_9)
+        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.widget.setGeometry(QtCore.QRect(660, 810, 250, 32))
+        self.widget.setObjectName("widget")
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.widget)
+        self.horizontalLayout_8.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+        self.label_AL_2 = QtWidgets.QLabel(self.widget)
+        self.label_AL_2.setMinimumSize(QtCore.QSize(60, 30))
+        self.label_AL_2.setMaximumSize(QtCore.QSize(90, 30))
+        font = QtGui.QFont()
+        font.setFamily("楷体")
+        font.setPointSize(14)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_AL_2.setFont(font)
+        self.label_AL_2.setStyleSheet("QLabel{\n"
+"\n"
+"   text-align: center;    \n"
+" qproperty-alignment: \'AlignCenter\';   \n"
+"\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    \n"
+"\n"
+"\n"
+"}")
+        self.label_AL_2.setObjectName("label_AL_2")
+        self.horizontalLayout_8.addWidget(self.label_AL_2)
+        self.progressBar = QtWidgets.QProgressBar(self.widget)
+        self.progressBar.setMaximumSize(QtCore.QSize(150, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        self.progressBar.setFont(font)
+        self.progressBar.setProperty("value", 0)
+        self.progressBar.setObjectName("progressBar")
+        self.horizontalLayout_8.addWidget(self.progressBar)
         MainWindow.setCentralWidget(self.centralwidget)
         self.toolBar = QtWidgets.QToolBar(MainWindow)
         self.toolBar.setObjectName("toolBar")
@@ -1309,10 +1349,6 @@ class Ui_MainWindow(object):
         self.label_RMSE.setText(_translate("MainWindow", "RMSE"))
         self.label_MAE.setToolTip(_translate("MainWindow", "<html><head/><body><p>均方误差</p></body></html>"))
         self.label_MAE.setText(_translate("MainWindow", "MAE"))
-        self.label_R2.setToolTip(_translate("MainWindow", "<html><head/><body><p>决定系数R^2,越接近1，代表模型拟合能力越强</p></body></html>"))
-        self.label_R2.setText(_translate("MainWindow", "R^2"))
-        self.label_R2_db_within_3_ratio.setToolTip(_translate("MainWindow", "<html><head/><body><p>决定系数R^2,越接近1，代表模型拟合能力越强</p></body></html>"))
-        self.label_R2_db_within_3_ratio.setText(_translate("MainWindow", "±3dB内比例"))
         self.pushButton_top.setToolTip(_translate("MainWindow", "<html><head/><body><p>上翻页</p></body></html>"))
         self.pushButton_top.setText(_translate("MainWindow", "↑"))
         self.pushButton_bottom.setToolTip(_translate("MainWindow", "<html><head/><body><p>下翻页</p></body></html>"))
@@ -1321,4 +1357,10 @@ class Ui_MainWindow(object):
         self.pushButton_help.setText(_translate("MainWindow", "帮助文档"))
         self.pushButton_save_pretrained_model.setText(_translate("MainWindow", "保存训练模型"))
         self.pushButton_8.setText(_translate("MainWindow", "保存预测结果"))
+        self.label_R2.setToolTip(_translate("MainWindow", "<html><head/><body><p>决定系数R^2,越接近1，代表模型拟合能力越强</p></body></html>"))
+        self.label_R2.setText(_translate("MainWindow", "R^2"))
+        self.label_R2_db_within_3_ratio.setToolTip(_translate("MainWindow", "<html><head/><body><p>决定系数R^2,越接近1，代表模型拟合能力越强</p></body></html>"))
+        self.label_R2_db_within_3_ratio.setText(_translate("MainWindow", "±3dB内比例"))
+        self.label_AL_2.setToolTip(_translate("MainWindow", "<html><head/><body><p>当前使用的算法</p></body></html>"))
+        self.label_AL_2.setText(_translate("MainWindow", "训练进度"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))

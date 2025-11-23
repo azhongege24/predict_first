@@ -65,7 +65,8 @@ def multi_task_regression_predictor(
     mmoe_batch_size : int = 32,
     mmoe_lambda_balance : float = 0.1,
     gp_learning_rate = 0.01,
-    gp_training_iterations =100
+    gp_training_iterations =100,
+    progress_callback=None
     
 ):
     # 原有数据加载与预处理逻辑保持不变...
@@ -122,12 +123,17 @@ def multi_task_regression_predictor(
         raise ValueError(f"Unsupported model type: {model_type}. Available options: {list(model_mapping.keys())}")
     
     model = model_mapping[model_type]
+
+
+    # 为MMoE模型设置进度回调
+    if model_type == 'MMoE' and progress_callback:
+        model.set_progress_callback(progress_callback)
     
     # 模型训练逻辑保持不变...
     print("开始训练模型...")
     if model_type == 'MMoE':
         with tqdm(total = mmoe_epochs, desc ="MMoE训练进度", unit="epoch" ) as pbar:
-            model.fit(X_train , y_train , verbose = False)
+            model.fit(X_train , y_train , verbose = True)
             pbar.update(mmoe_epochs)
     else:
         with tqdm(total=1, desc="训练进度", unit="step") as pbar:
@@ -656,7 +662,12 @@ class MMoERegressor:
         self.model = None
         self.scaler = None
         self.loss_history = []
-    
+        self.progress_callback = None  # 新增：进度回调函数
+ 
+
+    def set_progress_callback(self, callback):
+        """设置进度回调函数"""
+        self.progress_callback = callback   
     def fit(self,X,y, verbose = True):
         #数据预处理
         if self.scaler is None:
@@ -664,6 +675,10 @@ class MMoERegressor:
             x_scaled = self.scaler.fit_transform(X)
         else:
             x_scaled = self.scaler.transform(X)
+            
+        # 更新进度：数据预处理完成 (5%)
+        if self.progress_callback:
+            self.progress_callback(5, "数据预处理完成")
     
         #转换为pytorch张量
         X_tensor = torch.FloatTensor(x_scaled).to(self.device)
@@ -677,6 +692,11 @@ class MMoERegressor:
         #创建数据加载器
         dataset = TensorDataset(X_tensor,y_tensor)
         dataloader = DataLoader(dataset,batch_size=self.batch_size,shuffle=True)
+        
+        # 更新进度：数据加载器创建完成 (10%)
+        if self.progress_callback:
+            self.progress_callback(10, "数据加载器创建完成")
+        
         #初始化模型
         self.model = MMoE(input_dim=self.input_dim,
             output_dim=self.output_dim,
@@ -685,15 +705,22 @@ class MMoERegressor:
             expert_hidden=self.expert_hidden,
             dropout_rate=self.dropout_rate
         ).to(self.device)
-        
+
+        # 更新进度：模型初始化完成 (15%)
+        if self.progress_callback:
+            self.progress_callback(15, "模型初始化完成")
+
         #定义优化器和损失函数
         optimizer = optim.Adam(self.model.parameters(),lr = self.learning_rate)
         criterion = nn.MSELoss()
         
         # 训练循环
         self.model.train()
+        total_batches = len(dataloader)
         for epoch in range(self.num_epochs):
             epoch_loss = 0.0
+            batch_count = 0
+            
             for batch_X,batch_y in dataloader:
                 optimizer.zero_grad()
                 # 强制转换为Tensor，确保类型正确
@@ -710,10 +737,33 @@ class MMoERegressor:
                 optimizer.step()
                 
                 epoch_loss += total_loss.item()
+                batch_count += 1
+                
+                # 更新batch级别的进度 (15% - 85%)
+                if self.progress_callback:
+                    epoch_progress = (epoch / self.num_epochs) * 70  # 70%分配给epoch循环
+                    batch_progress = (batch_count / total_batches) * (70 / self.num_epochs)  # 每个epoch内的batch进度
+                    current_progress = 15 + epoch_progress + batch_progress
+                    self.progress_callback(int(current_progress), 
+                                         f"Epoch {epoch+1}/{self.num_epochs}, Batch {batch_count}/{total_batches}")
+            
             avg_loss = epoch_loss/len(dataloader)
             self.loss_history.append(avg_loss)
+            
+            # 更新epoch级别的进度
+            if self.progress_callback:
+                epoch_progress = ((epoch + 1) / self.num_epochs) * 70
+                current_progress = 15 + epoch_progress
+                self.progress_callback(int(current_progress), 
+                                     f"Epoch {epoch+1}/{self.num_epochs} 完成, Loss: {avg_loss:.4f}")
+            
             if verbose and (epoch + 1)%10 == 0:
                 print(f'Epoch {epoch +1}/{self.num_epochs}, Loss:{avg_loss:.4f}')
+        
+        # 更新进度：训练完成 (85% - 100%)
+        if self.progress_callback:
+            self.progress_callback(100, "MMoE训练完成")
+        
         return self
     
     def predict(self,X):

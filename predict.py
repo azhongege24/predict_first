@@ -1714,6 +1714,20 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.current_page = 0
         self.figures = []  # 存储所有图表的列表
         # 在UI初始化代码中添加
+        
+        
+        # 进度条相关变量
+        self.progress_timer = QTimer()
+        self.progress_timer.timeout.connect(self.update_progress)
+        self.progress_value = 0
+        self.progress_max = 100
+        self.is_training = False
+        
+        # 初始化进度条
+        self.progressBar.setValue(0)
+        self.progressBar.setVisible(False)
+
+
 
 
         # 连接按钮信号
@@ -1727,8 +1741,45 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 ) # 保存预训练模型
     def ask_and_save_model(self,model, method):
          ask_and_save_model(self, model, f"{method}_model.pkl")
+         
+         
+    #进度条相关函数   
+    def start_progress_indicator(self, max_value=100):
+        """开始进度指示器"""
+        self.progress_value = 0
+        self.progress_max = max_value
+        self.progressBar.setMaximum(max_value)
+        self.progressBar.setValue(0)
+        self.progressBar.setVisible(True)
+        self.is_training = True
         
+        # 启动定时器，每100ms更新一次进度
+        self.progress_timer.start(100)
+    
+    def stop_progress_indicator(self):
+        """停止进度指示器"""
+        self.progress_timer.stop()
+        self.progressBar.setValue(self.progress_max)
+        self.is_training = False
         
+        # 延迟隐藏进度条，让用户看到完成状态
+        QTimer.singleShot(1000, lambda: self.progressBar.setVisible(False))
+    
+    def update_progress(self):
+        """更新进度条显示"""
+        if self.is_training:
+            # 模拟进度增长，实际应用中应该根据实际训练进度更新
+            if self.progress_value < self.progress_max:
+                self.progress_value += 1
+                self.progressBar.setValue(self.progress_value)
+            else:
+                self.stop_progress_indicator()
+    
+    def set_progress_value(self, value):
+        """设置进度条的具体值"""
+        if self.is_training:
+            self.progress_value = min(value, self.progress_max)
+            self.progressBar.setValue(self.progress_value)        
 
 
 
@@ -2252,7 +2303,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
     def All_Methods_Begin(self):
         global method
 
-
+        self.start_progress_indicator(100)
+                # 定义MMoE专用的进度回调函数
+        def mmoe_progress_callback(progress, message):
+            # 将MMoE内部进度映射到整体进度 (40%-90%)
+            mapped_progress = 40 + (progress * 0.5)  # 40%到90%的范围
+            self.set_progress_value(int(mapped_progress))
+        
         if self.data_load == 0:
             self.lineEdit_Algorithm_name.setText("请在右侧选择所需算法")
             self.lineEdit_state.setText('')
@@ -2261,6 +2318,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         if method == 'NONE':
                     self.lineEdit_Algorithm_name.setText("Please select an Algorithm!!!")
                     self.lineEdit_state.setText('')
+                    self.stop_progress_indicator()  # 停止进度指示
                     return
     
 
@@ -2284,6 +2342,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         else:
             self.lineEdit_Algorithm_name.setText("Data index is illegal or beyond range!!!")
             self.lineEdit_state.setText('')
+            self.stop_progress_indicator()  # 停止进度指示
             return
 
         print('ok now')
@@ -2302,10 +2361,21 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         if flag1 == 0 | flag2 == 0:
             self.lineEdit_Algorithm_name.setText("Select at least 1 input and 1 output!")
             self.lineEdit_state.setText('')
+            self.stop_progress_indicator()  # 停止进度指示
             return
+
+        # 更新进度到10%
+        self.set_progress_value(10)
+
+
         data_X = data[input_columns]   # 选择输入特征
         data_y = data[output_columns]  # 选择输出特征   
         data_filter = pd.concat([data_X, data_y], axis=1)  # 合并数据
+        
+        # 更新进度到20%
+        self.set_progress_value(20)
+        
+                
         # 正确的shuffle逻辑：先打乱，再划分---shuffle
         if hasattr(self, 'shuffle_yes_or_no') and self.shuffle_yes_or_no.isChecked():
             # 如果启用shuffle，先打乱整个数据集
@@ -2327,15 +2397,21 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 N_start_test = N_end_train
                 N_end_test = N_start_test + (N_end_test - N_start_test)  # 保持验证集大小不变
 
+        # 更新进度到30%
+        self.set_progress_value(30)
  
         data_train = data_filter[N_start_train : N_end_train]
         data_test = data_filter[N_start_test : N_end_test]   
         print('check')
 
-        
+        # 更新进度到40%
+        self.set_progress_value(40)       
         
         if method == 'LR':  # 添加线性回归算法实现
             self.new_model = 1
+            
+            self.set_progress_value(50)
+            
             model, _, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
@@ -2346,6 +2422,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 random_state=int(random_state),
                 fit_intercept=str(fit_intercept)
             )
+            self.set_progress_value(80)
+            
             self.trained_model = model  # 保存训练好的模型
             print("预测结果:", y_pred)
             print("真实值:", y_test)
@@ -2379,6 +2457,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         if method == 'DT':
             
             self.new_model = 1
+            self.set_progress_value(50)
             model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
@@ -2389,7 +2468,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 random_state=int(random_state),
                 max_depth=int(max_depth),
             )
-            
+            self.set_progress_value(80)
             self.trained_model = model  # 保存训练好的模型
             
 
@@ -2432,6 +2511,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
         if method =='RF':
             self.new_model = 1
+            self.set_progress_value(50)
             model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
@@ -2443,6 +2523,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 max_depth=int(max_depth),
                 n_estimators=int(n_estimators),
             )
+            self.set_progress_value(80)
             self.trained_model = model  # 保存训练好的模型
             # `model` 是训练好的模型，`y_pred` 是预测结果
             print("预测结果:", y_pred)
@@ -2479,6 +2560,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
         if method =='SVM':
             self.new_model = 1
+            self.set_progress_value(50)
             model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
@@ -2494,6 +2576,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 n_jobs=int(n_jobs),
                 max_iter=-1,#SVM不需要这个参数
             )
+            self.set_progress_value(80)
             self.trained_model = model  # 保存训练好的模型
             # `model` 是训练好的模型，`y_pred` 是预测结果
             print("预测结果:", y_pred)
@@ -2529,6 +2612,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
         if method == 'ET':
             self.new_model = 1
+            self.set_progress_value(50)
             model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
@@ -2541,6 +2625,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 max_depth=int(max_depth),
                 n_estimators=int(n_estimators),
             )
+            self.set_progress_value(80)
             self.trained_model = model  # 保存训练好的模型
             # `model` 是训练好的模型，`y_pred` 是预测结果
             print("预测结果:", y_pred)
@@ -2576,6 +2661,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
         if method == 'MLP':
             self.new_model = 1
+            self.set_progress_value(50)
             model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
@@ -2589,6 +2675,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 mlp_hidden_layers=tuple(hidden_layer_sizes),
                 
             )
+            self.set_progress_value(80)
             self.trained_model = model  # 保存训练好的模型
             # `model` 是训练好的模型，`y_pred` 是预测结果
             print("预测结果:", y_pred)
@@ -2625,6 +2712,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         
         if method =='GP':
             self.new_model = 1
+            self.set_progress_value(50)
             model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
@@ -2635,6 +2723,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 gp_training_iterations=int(training_iterations),
                 
             )
+            self.set_progress_value(80)
             self.trained_model = model  # 保存训练好的模型
             # `model` 是训练好的模型，`y_pred` 是预测结果
             print("预测结果:", y_pred)
@@ -2671,6 +2760,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         
         if method == 'GL':
             self.new_model = 1
+            self.set_progress_value(50)
             model, X_test, y_test, y_pred, metrics,data_index = group_lasso_predictor(
                 data_train=data_train,
                 data_test=data_test,
@@ -2683,6 +2773,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 show_plots=False,
                 show_prints=True
             )
+            self.set_progress_value(80)
             self.trained_model = model  # 保存训练好的模型
             # 打印结果
             print("预测结果:", y_pred)
@@ -2714,6 +2805,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
     
         if method == 'MTW':
             self.new_model = 1
+            self.set_progress_value(50)
             model, X_test, y_test, y_pred, metrics,data_index = MTW_Lasso(
                 data_train=data_train,
                 data_test=data_test,
@@ -2726,6 +2818,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 model_type='MTW',
                 gpu =True,              
             )
+            self.set_progress_value(80)
             self.trained_model = model  # 保存训练好的模型
             # 打印结果
             print("预测结果:", y_pred)
@@ -2756,6 +2849,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         
         if method == 'REMTW':
             self.new_model = 1
+            self.set_progress_value(50)
             model, X_test, y_test, y_pred, metrics,data_index = REMTW_Lasso(
                 data_train=data_train,
                 data_test=data_test,
@@ -2768,6 +2862,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 model_type='REMTW',
                 gpu =True,              
             )
+            self.set_progress_value(80)
             self.trained_model = model  # 保存训练好的模型
             # 打印结果
             print("预测结果:", y_pred)
@@ -2798,6 +2893,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             self.lineEdit_DEVICE.setText("GPU")
         if method == 'MMoE':
             self.new_model = 1
+            
             model, mmoe_scale_features, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
@@ -2815,8 +2911,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 mmoe_dropout_rate=float(mmoe_dropout_rate),
                 mmoe_epochs=int(mmoe_epochs),
                 mmoe_batch_size=int(mmoe_batch_size),
-                mmoe_lambda_balance=float(mmoe_lambda_balance)
+                mmoe_lambda_balance=float(mmoe_lambda_balance),
+                progress_callback=mmoe_progress_callback  # 传递进度回调
             )
+            
             self.trained_model = model  # 保存训练好的模型
             print("MMoE预测结果:", y_pred)
             print("MMoE真实值:", y_test)
@@ -2848,7 +2946,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     total_db_deviation=metrics['total_db_deviation']
                 )
             self.lineEdit_DEVICE.setText("GPU" if torch.cuda.is_available() else "CPU")
-    #单输出绘图的时候调用此函数，进行可视化展示,前五个算法的单输出画图展示
+            
+        self.set_progress_value(100)
+        self.stop_progress_indicator()      
+    
 
     def get_input(self):#取得输入的特征
         # 获取输入特征列表和标志位
