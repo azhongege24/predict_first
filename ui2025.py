@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\beifen\新项目\ui\ui2025.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\ui2025.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -1222,13 +1222,13 @@ class Ui_MainWindow(object):
         self.lineEdit_db_within_3_ratio.setObjectName("lineEdit_db_within_3_ratio")
         self.horizontalLayout_9.addWidget(self.lineEdit_db_within_3_ratio)
         self.horizontalLayout_10.addLayout(self.horizontalLayout_9)
-        self.widget = QtWidgets.QWidget(self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(660, 810, 250, 32))
-        self.widget.setObjectName("widget")
-        self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.widget)
+        self.layoutWidget10 = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget10.setGeometry(QtCore.QRect(660, 810, 250, 32))
+        self.layoutWidget10.setObjectName("layoutWidget10")
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.layoutWidget10)
         self.horizontalLayout_8.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
-        self.label_AL_2 = QtWidgets.QLabel(self.widget)
+        self.label_AL_2 = QtWidgets.QLabel(self.layoutWidget10)
         self.label_AL_2.setMinimumSize(QtCore.QSize(60, 30))
         self.label_AL_2.setMaximumSize(QtCore.QSize(90, 30))
         font = QtGui.QFont()
@@ -1250,7 +1250,7 @@ class Ui_MainWindow(object):
 "}")
         self.label_AL_2.setObjectName("label_AL_2")
         self.horizontalLayout_8.addWidget(self.label_AL_2)
-        self.progressBar = QtWidgets.QProgressBar(self.widget)
+        self.progressBar = QtWidgets.QProgressBar(self.layoutWidget10)
         self.progressBar.setMaximumSize(QtCore.QSize(150, 16777215))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -1298,7 +1298,7 @@ class Ui_MainWindow(object):
         self.pushButton_dataset.setText(_translate("MainWindow", "数据集合成"))
         self.pushButton_train.setText(_translate("MainWindow", "训练验模"))
         self.pushButton_predict.setText(_translate("MainWindow", "预测"))
-        self.label_version.setText(_translate("MainWindow", "v4.0 2025.11.18"))
+        self.label_version.setText(_translate("MainWindow", "v4.0 2025.11.24"))
         self.label_2.setText(_translate("MainWindow", "算法模型"))
         self.pushButton_AL1.setToolTip(_translate("MainWindow", "<html><head/><body><p>决策树算法</p></body></html>"))
         self.pushButton_AL1.setText(_translate("MainWindow", "决策树"))
