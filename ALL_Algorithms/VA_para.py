@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\VA_para.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\beifen\新项目\ui\VA_para.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -299,6 +299,37 @@ class Ui_VA_para(object):
 "}")
         self.pushButton_help.setObjectName("pushButton_help")
         self.verticalLayout_3.addWidget(self.pushButton_help)
+        self.pushButton_jump = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButton_jump.setStyleSheet("QPushButton {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.pushButton_jump.setObjectName("pushButton_jump")
+        self.verticalLayout_3.addWidget(self.pushButton_jump)
+        self.spinBox_jump_value = QtWidgets.QSpinBox(self.layoutWidget)
+        self.spinBox_jump_value.setMinimumSize(QtCore.QSize(0, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        self.spinBox_jump_value.setFont(font)
+        self.spinBox_jump_value.setMaximum(9999)
+        self.spinBox_jump_value.setProperty("value", 1)
+        self.spinBox_jump_value.setObjectName("spinBox_jump_value")
+        self.verticalLayout_3.addWidget(self.spinBox_jump_value)
         self.horizontalLayout.addLayout(self.verticalLayout_3)
         self.graphicsView = QtWidgets.QGraphicsView(self.layoutWidget)
         self.graphicsView.setObjectName("graphicsView")
@@ -358,6 +389,7 @@ class Ui_VA_para(object):
         self.label_7.setText(_translate("VA_para", "辅助设置区"))
         self.pushButton_set_para.setText(_translate("VA_para", "参数设置"))
         self.pushButton_help.setText(_translate("VA_para", "帮助"))
+        self.pushButton_jump.setText(_translate("VA_para", "指定页数跳转"))
         self.pushButton_top.setToolTip(_translate("VA_para", "<html><head/><body><p>上翻页</p></body></html>"))
         self.pushButton_top.setText(_translate("VA_para", "↑"))
         self.pushButton_bottom.setToolTip(_translate("VA_para", "<html><head/><body><p>下翻页</p></body></html>"))

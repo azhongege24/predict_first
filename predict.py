@@ -108,6 +108,7 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         self.pushButton_help.clicked.connect(self.show_help)
         self.pushButton_top.clicked.connect(self.show_previous_page)
         self.pushButton_bottom.clicked.connect(self.show_next_page)
+        self.pushButton_jump.clicked.connect(self.jump_to_page)
 
         # 启用滚轮事件
         self.graphicsView.wheelEvent = self.graphics_view_wheel_event        
@@ -336,8 +337,36 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
                 
                 QMessageBox.information(self, "分析完成", summary_msg)
                 
-                # 显示第一个文件的分析结果
-                self.analysis_results = self.multi_file_analysis_results[0]['analysis_result']
+                # 合并所有文件的分析结果，实现连续显示
+                combined_results = []
+                for i, multi_result in enumerate(self.multi_file_analysis_results):
+                    analysis_result = multi_result['analysis_result']
+                    file_name = multi_result['file_name']
+                    channel = multi_result['channel']
+                    direction = multi_result['direction']
+                    
+                    # 为每个分段添加文件标识信息
+                    for j, result in enumerate(analysis_result['results']):
+                        # 复制结果并添加文件信息
+                        extended_result = result.copy()
+                        extended_result['source_file'] = file_name
+                        extended_result['source_channel'] = channel
+                        extended_result['source_direction'] = direction
+                        extended_result['file_index'] = i
+                        extended_result['segment_index'] = j
+                        combined_results.append(extended_result)
+                
+                # 创建合并的分析结果对象
+                combined_analysis_result = {
+                    'channel': '多文件合并',
+                    'direction': '连续显示',
+                    'results': combined_results,
+                    'total_files': len(self.multi_file_analysis_results),
+                    'total_segments': total_segments
+                }
+                
+                # 设置合并后的分析结果
+                self.analysis_results = combined_analysis_result
                 self.display_analysis_results()
             else:
                 QMessageBox.warning(self, "分析失败", "所有文件分析都失败了！")
@@ -647,20 +676,45 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
                     ax.plot(result['frequency'], result['power_spectrum'], 'b-', linewidth=1.5)
                     ax.set_xlabel('频率 (Hz)')
                     ax.set_ylabel('功率谱密度')
-                    ax.set_title(f"时间段 {result_idx+1}/{num_segments}: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
+                    
+                    # 根据是否为多文件合并结果来设置标题
+                    if 'source_file' in result:
+                        # 多文件合并结果，显示文件来源信息
+                        file_name = result['source_file']
+                        channel = result['source_channel']
+                        direction = result['source_direction']
+                        file_index = result['file_index'] + 1
+                        segment_index = result['segment_index'] + 1
+                        
+                        ax.set_title(f"文件{file_index}: {file_name} - {channel} {direction} 时间段 {segment_index} (总第{result_idx+1}/{num_segments}段): {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
+                    else:
+                        # 单文件结果
+                        ax.set_title(f"时间段 {result_idx+1}/{num_segments}: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
+                    
                     ax.grid(True, alpha=0.3)
                     ax.set_yscale('log')
                     ax.set_xscale('log')  # 新增：设置X轴为对数坐
                     self.set_tick_font(ax)
+                
                 # 调整布局，避免tight_layout警告
                 self.figure.subplots_adjust(left=0.1, right=0.95, bottom=0.1, top=0.9, 
                                           hspace=0.5, wspace=0.3)
                 
-                # 添加总标题和页码信息
-                self.figure.suptitle(
-                    f"功率谱分析结果 - {self.analysis_results['channel']} {self.analysis_results['direction']} 第 {self.current_page + 1}/{self.total_pages} 页 (显示 {start_idx+1}-{end_idx} 段，共 {num_segments} 段)",
-                    fontsize=12
-                )
+                # 根据是否为多文件合并结果来设置总标题
+                if 'total_files' in self.analysis_results:
+                    # 多文件合并结果
+                    total_files = self.analysis_results['total_files']
+                    total_segments = self.analysis_results['total_segments']
+                    self.figure.suptitle(
+                        f"多文件功率谱分析结果 - 共{total_files}个文件 {total_segments}个分段 - 第 {self.current_page + 1}/{self.total_pages} 页 (显示 {start_idx+1}-{end_idx} 段)",
+                        fontsize=12
+                    )
+                else:
+                    # 单文件结果
+                    self.figure.suptitle(
+                        f"功率谱分析结果 - {self.analysis_results['channel']} {self.analysis_results['direction']} 第 {self.current_page + 1}/{self.total_pages} 页 (显示 {start_idx+1}-{end_idx} 段，共 {num_segments} 段)",
+                        fontsize=12
+                    )
             else:
                 # 没有数据可显示
                 ax = self.figure.add_subplot(111)
@@ -809,6 +863,38 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         # 接受事件处理，阻止事件继续传播
         event.accept()
     
+    def jump_to_page(self):
+        """跳转到指定页面"""
+        if not self.analysis_results or self.total_pages <= 0:
+            QMessageBox.warning(self, "警告", "请先进行功率谱分析！")
+            return
+        
+        try:
+            # 获取用户输入的页码
+            target_page = self.spinBox_jump_value.value() - 1  # 转换为0-based索引
+            
+            # 验证页码范围
+            if target_page < 0:
+                QMessageBox.warning(self, "输入错误", "页码必须大于0！")
+                return
+            elif target_page >= self.total_pages:
+                QMessageBox.warning(self, "输入错误", f"页码不能超过总页数({self.total_pages})！")
+                return
+            
+            # 跳转到指定页面
+            if target_page != self.current_page:
+                self.current_page = target_page
+                self.display_analysis_results()
+                
+                # 显示跳转成功信息
+                QMessageBox.information(self, "跳转成功", 
+                                      f"已跳转到第 {target_page + 1} 页")
+            else:
+                QMessageBox.information(self, "提示", 
+                                      f"当前已在第 {target_page + 1} 页")
+                
+        except Exception as e:
+            QMessageBox.warning(self, "跳转失败", f"页面跳转失败: {str(e)}")
 
     def update_page_buttons(self):
         """更新翻页按钮状态"""
