@@ -108,6 +108,10 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         self.pushButton_help.clicked.connect(self.show_help)
         self.pushButton_top.clicked.connect(self.show_previous_page)
         self.pushButton_bottom.clicked.connect(self.show_next_page)
+
+        # 启用滚轮事件
+        self.graphicsView.wheelEvent = self.graphics_view_wheel_event        
+
     def AL_VA_method_para(self):
       
         self.ui_pop = POP_VA_method_para(self)
@@ -725,6 +729,31 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         if self.current_page < self.total_pages - 1:
             self.current_page += 1
             self.display_analysis_results()
+
+    def graphics_view_wheel_event(self, event):
+        """滚轮事件处理 - 实现快速翻页功能"""
+        if not self.analysis_results or self.total_pages <= 1:
+            # 没有分析结果或只有一页，不处理滚轮事件
+            event.ignore()
+            return
+        
+        # 获取滚轮滚动的角度增量
+        delta = event.angleDelta().y()
+        
+        if delta > 0:
+            # 向上滚动滚轮 - 上一页
+            if self.current_page > 0:
+                self.current_page -= 1
+                self.display_analysis_results()
+        elif delta < 0:
+            # 向下滚动滚轮 - 下一页
+            if self.current_page < self.total_pages - 1:
+                self.current_page += 1
+                self.display_analysis_results()
+        
+        # 接受事件处理，阻止事件继续传播
+        event.accept()
+    
 
     def update_page_buttons(self):
         """更新翻页按钮状态"""
