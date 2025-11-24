@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\ui2025.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\beifen\新项目\ui\ui2025.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -1315,12 +1315,12 @@ class Ui_MainWindow(object):
         self.pushButton_5.setText(_translate("MainWindow", "高斯过程"))
         self.pushButton_4.setText(_translate("MainWindow", "多门控\n"
 "混合专家"))
-        self.pushButton.setToolTip(_translate("MainWindow", "<html><head/><body><p>GroupLasso：基于 L1/L2混合范数正则化的多任务学习模型</p></body></html>"))
+        self.pushButton.setToolTip(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:400;\">GroupLasso：基于 L1/L2混合范数正则化的多任务学习模型</span></p><p><span style=\" font-size:12pt; font-weight:400;\">图表通俗解读-总系数热力图：</span><span style=\" font-family:\'Inter,-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif\'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.847059); background-color:#ffffff;\">像 “关系地图”，行是输入特征、列是输出任务，颜色越深代表该特征对对应任务的影响越强，快速定位 “哪个特征对哪个任务最关键”；</span></p><p><span style=\" font-family:\'Inter,-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif\'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.847059); background-color:#ffffff;\">共享系数热力图则聚焦 “通用特征”，若某特征行的所有任务列颜色均深，说明其是所有任务的共同核心，抓好它能同步提升多个任务效果。</span></p></body></html>"))
         self.pushButton.setText(_translate("MainWindow", "GroupLasso"))
-        self.pushButton_2.setToolTip(_translate("MainWindow", "<html><head/><body><p>Multitask Wasserstein：基于Wasserstein距离正则化的稀疏多任务回归模型</p></body></html>"))
+        self.pushButton_2.setToolTip(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:400;\">Multitask Wasserstein：基于Wasserstein距离正则化的稀疏多任务回归模型</span></p><p><span style=\" font-family:\'Inter,-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif\'; font-size:10pt; font-weight:400; color:rgba(0,0,0,0.847059); background-color:#ffffff;\">MTW 算法的图表更细致，能分清影响的 “好坏” 与 “全局优先级”。</span></p><p><span style=\" font-family:\'Inter,-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif\'; font-size:10pt; font-weight:400; color:rgba(0,0,0,0.847059); background-color:#ffffff;\">系数热力图不仅看颜色深浅（影响强度），还通过双色区分正负影响 —— 比如红色代表促进、蓝色代表抑制，直观展现特征的 “两面性”；</span></p><p><span style=\" font-family:\'Inter,-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif\'; font-size:10pt; font-weight:400; color:rgba(0,0,0,0.847059); background-color:#ffffff;\">Wasserstein 重心柱状图是 “特征排名榜”，柱子越高，特征在所有任务中的整体重要性越强，帮你快速锁定全局核心。</span></p></body></html>"))
         self.pushButton_2.setText(_translate("MainWindow", "Multitask \n"
 "Wasserstein"))
-        self.pushButton_3.setToolTip(_translate("MainWindow", "<html><head/><body><p>Reweighted Multitask Wasserstein：基于Wasserstein距离正则化和L0.5稀疏约束的多任务回归模型</p></body></html>"))
+        self.pushButton_3.setToolTip(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:400;\">Reweighted Multitask Wasserstein：基于Wasserstein距离正则化和L0.5稀疏约束的多任务回归模型</span></p><p><span style=\" font-family:\'Inter,-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif\'; font-size:10pt; font-weight:400; color:rgba(0,0,0,0.847059); background-color:#ffffff;\">REMTW 是 MTW 的 “精准版”，核心是过滤无用信息。</span></p><p><span style=\" font-family:\'Inter,-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif\'; font-size:10pt; font-weight:400; color:rgba(0,0,0,0.847059); background-color:#ffffff;\">系数热力图的特点是 “稀疏性更强”，无关特征颜色几乎透明，仅核心关联区域颜色突出，避免被噪音特征误导；</span></p><p><span style=\" font-family:\'Inter,-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif\'; font-size:10pt; font-weight:400; color:rgba(0,0,0,0.847059); background-color:#ffffff;\">重心柱状图的分化更明显，核心特征的柱子显著高于其他，让 “真重要” 特征一目了然，减少决策干扰。</span></p></body></html>"))
         self.pushButton_3.setText(_translate("MainWindow", "Reweighted\n"
 "Multitask\n"
 "Wasserstein"))
