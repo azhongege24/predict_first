@@ -2008,12 +2008,21 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             self.data = self.data.dropna()  # 删除缺失值
             self.data.columns = self.data.columns.astype(str)  # 确保列名为字符串
             self.columns = self.data.columns.tolist()  # 获取所有列名列表
+            
+            # 关键修改：检查并保留时间列信息
+            time_columns = ['start_time', 'end_time']
+            self.time_columns_present = [col for col in time_columns if col in self.columns]            
+            
 
             # 关键修改：根据列名前缀区分输入和输出特征
             # 筛选出输入特征列（包含"input"前缀）
             input_columns = [col for col in self.columns if "input" in col.lower()]
             # 筛选出输出特征列（包含"output"前缀）
             output_columns = [col for col in self.columns if "output" in col.lower()]
+            
+            # 关键修改：从输入特征中排除时间列，避免重复
+            input_columns = [col for col in input_columns if col not in time_columns]            
+            
 
             # 如果没有找到符合命名规则的列，给出警告
             if not input_columns:
@@ -2380,7 +2389,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.N_train = N_end_train - N_start_train
         self.N_test = N_end_test - N_start_test
         self.start_time = time.time()
-        # self.mytoolBar.clear()
+      
         self.lineEdit_DEVICE.clear()
 
         #数据统一处理
@@ -2399,7 +2408,19 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
         data_X = data[input_columns]   # 选择输入特征
         data_y = data[output_columns]  # 选择输出特征   
-        data_filter = pd.concat([data_X, data_y], axis=1)  # 合并数据
+        # 关键修改：检查并保留时间列
+        time_columns = ['start_time', 'end_time']
+        time_columns_present = [col for col in time_columns if col in data.columns]
+        
+        if len(time_columns_present) == 2:
+            # 如果存在时间列，将它们包含在数据中
+            data_time = data[time_columns_present]
+            data_filter = pd.concat([data_X, data_y, data_time], axis=1)
+            print(f"数据包含时间列: {time_columns_present}")
+        else:
+            # 如果没有时间列，使用原来的合并方式
+            data_filter = pd.concat([data_X, data_y], axis=1)
+            print("警告：数据缺少时间列，预测结果将不包含时间中心点")
         
         # 更新进度到20%
         self.set_progress_value(20)
@@ -2432,6 +2453,15 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         data_train = data_filter[N_start_train : N_end_train]
         data_test = data_filter[N_start_test : N_end_test]   
         print('check')
+
+        # 关键修改：确保测试集数据包含时间列信息
+        time_columns_present_in_test = [col for col in time_columns if col in data_test.columns]
+        
+        if len(time_columns_present_in_test) == 2:
+            print(f"测试集数据包含时间列: {time_columns_present_in_test}")
+        else:
+            print("警告：测试集数据缺少时间列，预测结果将不包含时间中心点")
+
 
         # 更新进度到40%
         self.set_progress_value(40)       

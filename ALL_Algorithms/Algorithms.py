@@ -415,17 +415,33 @@ def single_plot_and_evaluate(self, y_test, y_pred, method, data_test,
     # 更新界面控件
     self.lineEdit_state.setText('Finish!')
     self.lineEdit_MSE.setText(str(round(MSE, 5)))
-    self.lineEdit_RMSE.setText(str(round(RMSE, 5)))  # 假设新增了RMSE控件
-    self.lineEdit_MAE.setText(str(round(MAE, 5)))    # 假设新增了MAE控件
+    self.lineEdit_RMSE.setText(str(round(RMSE, 5)))  # RMSE控件
+    self.lineEdit_MAE.setText(str(round(MAE, 5)))    # MAE控件
     self.lineEdit_R2.setText(str(round(R2, 5)))
-    self.lineEdit_db_within_3_ratio.setText(f"{db_within_3_ratio*100:.2f}%")  # 新增±3dB内比例控件
-    # self.lineEdit_total_db_deviation.setText(f"{total_db_deviation:.2f}")  # 新增总分贝偏差控件
+    self.lineEdit_db_within_3_ratio.setText(f"{db_within_3_ratio*100:.2f}%")  # ±3dB内比例控件
+    # self.lineEdit_total_db_deviation.setText(f"{total_db_deviation:.2f}")  # 总分贝偏差控件
 
-    # 保存预测结果到 DataFrame
-    self.data_save = pd.DataFrame(y_pred, index=data_test.index.values)
-    # self.lineEdit_Algorithm_name.setText(
-    #     f'当前生成数据: {output_columns[0]} [ {N_start_test}:{N_end_test} ]'
-    # )
+    # 关键修改：保存预测结果到 DataFrame，添加时间中心点列
+    # 检查测试集数据是否包含时间列
+    time_columns = ['start_time', 'end_time']
+    time_columns_present = [col for col in time_columns if col in data_test.columns]
+    
+    if len(time_columns_present) == 2:
+        # 计算时间中心点
+        time_center = (data_test['start_time'] + data_test['end_time']) / 2
+        # 创建包含序号、预测值和时间中心点的DataFrame
+        self.data_save = pd.DataFrame({
+            'index': data_test.index.values,
+            'prediction': y_pred.flatten(),
+            'time_center': time_center.values
+        })
+        print("预测结果已保存，包含时间中心点列")
+    else:
+        # 如果没有时间列，使用原来的保存方式
+        self.data_save = pd.DataFrame(y_pred, index=data_test.index.values)
+        print("警告：测试集数据缺少时间列，预测结果未包含时间中心点")
+    
+
     return self.data_save
 
 #新的翻页多输出结果可视化
@@ -512,7 +528,7 @@ def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test,
             f'MSE: {current_mse:.4f}, RMSE: {current_rmse:.4f}\n'
             f'MAE: {current_mae:.4f}, R^2: {current_r2:.4f}\n'
             f'±3dB比例: {current_db_within_3_ratio:.2%}\n'
-            f'总分贝偏差: {current_total_db_deviation_per_feature:.2f} dB',
+           ,
             fontsize=10
         )
         ax.set_xlabel('样本索引', fontsize=10)
@@ -545,18 +561,58 @@ def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test,
     self.lineEdit_db_within_3_ratio.setText(f"{np.mean(db_within_3_ratio_list)*100:.2f}%")
     # self.lineEdit_total_db_deviation.setText(f"{np.sum(total_db_deviation_per_feature):.2f}")
     
-    # 保存预测结果到 DataFrame（包含真实值便于对比）
-    pred_df = pd.DataFrame(
-        y_pred, 
-        index=data_test.index.values,
-        columns=[f"pred_{col}" for col in output_columns]
-    )
-    true_df = pd.DataFrame(
-        y_test,
-        index=data_test.index.values,
-        columns=[f"true_{col}" for col in output_columns]
-    )
-    self.data_save = pd.concat([true_df, pred_df], axis=1)
+    # 关键修改：保存预测结果到 DataFrame（包含真实值便于对比），添加时间中心点列
+    # 检查测试集数据是否包含时间列
+    time_columns = ['start_time', 'end_time']
+    time_columns_present = [col for col in time_columns if col in data_test.columns]
+    
+    if len(time_columns_present) == 2:
+        # 计算时间中心点
+        time_center = (data_test['start_time'] + data_test['end_time']) / 2
+        
+        # 关键修复：确保所有DataFrame使用相同的索引
+        # 创建包含序号、真实值、预测值和时间中心点的DataFrame
+        pred_df = pd.DataFrame(
+            y_pred, 
+            index=data_test.index,
+            columns=[f"pred_{col}" for col in output_columns]
+        )
+        true_df = pd.DataFrame(
+            y_test,
+            index=data_test.index,
+            columns=[f"true_{col}" for col in output_columns]
+        )
+        
+        # 关键修复：使用reset_index()确保索引一致
+        # 创建包含索引和时间中心点的DataFrame
+        time_center_df = pd.DataFrame({
+            'original_index': data_test.index,
+            'time_center': time_center.values
+        }).reset_index(drop=True)
+        
+        # 重置其他DataFrame的索引以确保一致性
+        pred_df_reset = pred_df.reset_index(drop=True)
+        true_df_reset = true_df.reset_index(drop=True)
+        
+        # 合并所有数据
+        self.data_save = pd.concat([time_center_df, true_df_reset, pred_df_reset], axis=1)
+        print("多输出预测结果已保存，包含时间中心点列")
+        print(f"保存的数据形状: {self.data_save.shape}")
+        print(f"保存的列名: {self.data_save.columns.tolist()}")
+    else:
+        # 如果没有时间列，使用原来的保存方式
+        pred_df = pd.DataFrame(
+            y_pred, 
+            index=data_test.index,
+            columns=[f"pred_{col}" for col in output_columns]
+        )
+        true_df = pd.DataFrame(
+            y_test,
+            index=data_test.index,
+            columns=[f"true_{col}" for col in output_columns]
+        )
+        self.data_save = pd.concat([true_df, pred_df], axis=1)
+        print("警告：测试集数据缺少时间列，多输出预测结果未包含时间中心点")
     
     return self.data_save
 #新增的MMOE多专家混合系统
