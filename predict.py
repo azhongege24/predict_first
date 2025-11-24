@@ -345,6 +345,55 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         except Exception as e:
             QMessageBox.warning(self, "分析失败", f"多文件功率谱分析失败: {str(e)}")
 
+    def generate_descriptive_filename(self, multi_file_results):
+        """基于导入的文件名生成描述性的文件名"""
+        if not multi_file_results:
+            return "MULTI_FILE_STRUCTURED_DATASET"
+        
+        # 提取所有通道和方向信息
+        channels = set()
+        directions = set()
+        file_names = []
+        
+        for result in multi_file_results:
+            channel = result.get('channel', '')
+            direction = result.get('direction', '')
+            file_name = result.get('file_name', '')
+            
+            if channel:
+                channels.add(channel)
+            if direction:
+                directions.add(direction)
+            if file_name:
+                file_names.append(file_name)
+        
+        # 构建描述性文件名
+        if len(channels) == 1 and len(directions) > 1:
+            # 同一通道，多个方向：通道名称C1位置X、Y、Z向振动
+            channel_name = list(channels)[0]
+            direction_list = sorted(list(directions))
+            direction_str = '、'.join(direction_list)
+            return f"{channel_name}位置{direction_str}向振动_STRUCTURED_DATASET"
+        
+        elif len(channels) > 1 and len(directions) == 1:
+            # 多个通道，同一方向：通道名称C1、C2位置X向振动
+            channel_list = sorted(list(channels))
+            channel_str = '、'.join(channel_list)
+            direction_name = list(directions)[0]
+            return f"{channel_str}位置{direction_name}向振动_STRUCTURED_DATASET"
+        
+        elif len(channels) == 1 and len(directions) == 1:
+            # 单一通道和方向：通道名称C1位置X向振动
+            channel_name = list(channels)[0]
+            direction_name = list(directions)[0]
+            return f"{channel_name}位置{direction_name}向振动_STRUCTURED_DATASET"
+        
+        else:
+            # 复杂情况：使用文件数量描述
+            num_files = len(multi_file_results)
+            return f"{num_files}文件合并_STRUCTURED_DATASET"
+
+
     def save_multiple_analysis_results(self):
         """保存多文件分析结果"""
         if not self.multi_file_analysis_results:
@@ -410,8 +459,8 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
                         extended_result['segment_index'] = j
                         all_results.append(extended_result)
                 
-                # 构建基础文件名
-                base_filename = "MULTI_FILE_STRUCTURED_DATASET"
+                # 构建基础文件名 - 使用新的描述性命名逻辑
+                base_filename = self.generate_descriptive_filename(self.multi_file_analysis_results)
                 full_base_path = os.path.join(self.save_directory, base_filename)
                 
                 # 保存合并的结构化数据集
@@ -474,8 +523,14 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
                     
                     format_type = 'mat' if format_reply == QMessageBox.Yes else 'csv'
                     
-                    # 构建基础文件名
-                    base_filename = f"{file_name.replace('.', '_')}_STRUCTURED_DATASET"
+                    # 构建基础文件名 - 使用新的描述性命名逻辑
+                    if channel and direction:
+                        # 使用通道和方向信息构建文件名
+                        base_filename = f"{channel}位置{direction}向振动_STRUCTURED_DATASET"
+                    else:
+                        # 回退到原始逻辑
+                        base_filename = f"{file_name.replace('.', '_')}_STRUCTURED_DATASET"
+                        
                     full_base_path = os.path.join(self.save_directory, base_filename)
                     
                     # 保存单个文件的结构化数据集
