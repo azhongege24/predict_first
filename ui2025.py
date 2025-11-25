@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1403, 913)
+        MainWindow.resize(1403, 876)
         MainWindow.setStyleSheet("QMainWindow{\n"
 "\n"
 "\n"
@@ -474,6 +474,29 @@ class Ui_MainWindow(object):
 "}")
         self.pushButton_3.setObjectName("pushButton_3")
         self.verticalLayout.addWidget(self.pushButton_3)
+        self.pushButton_begin_to_predict = QtWidgets.QPushButton(self.layoutWidget1)
+        self.pushButton_begin_to_predict.setStyleSheet("QPushButton{\n"
+"    border:1px solid #64748B;   /* 浅灰蓝色边框，低调不突兀 */\n"
+"    border-radius:15px;          /* 保持原有圆角设计 */\n"
+"    padding:2px 4px;             /* 保持内边距 */\n"
+"    background-color:#EFF6FF;    /* 淡蓝灰色背景，柔和不刺眼 */\n"
+"    color:#1E293B;               /* 深灰蓝色文字，清晰易读 */\n"
+"    font: 16pt \"楷体\";           /* 保持原有字体 */\n"
+"    min-width:80px;              /* 保持最小宽度 */\n"
+"    min-height:40px;             /* 保持最小高度 */\n"
+"    font:bold;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #93C5FD;   /* 悬停时浅天蓝色，温和反馈 */\n"
+"    color: #FFFFFF;              /* 悬停时白色文字，提升对比度 */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #3B82F6;   /* 按下时标准蓝色，明确反馈（科研常用主色调） */\n"
+"}")
+        self.pushButton_begin_to_predict.setObjectName("pushButton_begin_to_predict")
+        self.verticalLayout.addWidget(self.pushButton_begin_to_predict)
         self.layoutWidget2 = QtWidgets.QWidget(self.centralwidget)
         self.layoutWidget2.setGeometry(QtCore.QRect(1099, 167, 251, 581))
         self.layoutWidget2.setObjectName("layoutWidget2")
@@ -1064,14 +1087,14 @@ class Ui_MainWindow(object):
         self.pushButton_help.setGeometry(QtCore.QRect(1290, 10, 75, 23))
         self.pushButton_help.setObjectName("pushButton_help")
         self.layoutWidget8 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget8.setGeometry(QtCore.QRect(1100, 750, 251, 101))
+        self.layoutWidget8.setGeometry(QtCore.QRect(1130, 750, 201, 101))
         self.layoutWidget8.setObjectName("layoutWidget8")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.layoutWidget8)
         self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.pushButton_save_pretrained_model = QtWidgets.QPushButton(self.layoutWidget8)
         self.pushButton_save_pretrained_model.setMinimumSize(QtCore.QSize(87, 44))
-        self.pushButton_save_pretrained_model.setMaximumSize(QtCore.QSize(400, 40))
+        self.pushButton_save_pretrained_model.setMaximumSize(QtCore.QSize(200, 40))
         self.pushButton_save_pretrained_model.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */\n"
 "    border-radius: 8px;                      /* 适中圆角更显严谨 */\n"
@@ -1103,7 +1126,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_5.addWidget(self.pushButton_save_pretrained_model)
         self.pushButton_8 = QtWidgets.QPushButton(self.layoutWidget8)
         self.pushButton_8.setMinimumSize(QtCore.QSize(87, 44))
-        self.pushButton_8.setMaximumSize(QtCore.QSize(400, 40))
+        self.pushButton_8.setMaximumSize(QtCore.QSize(200, 40))
         self.pushButton_8.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */\n"
 "    border-radius: 8px;                      /* 适中圆角更显严谨 */\n"
@@ -1297,8 +1320,9 @@ class Ui_MainWindow(object):
         self.pushButton_otherpara.setText(_translate("MainWindow", "输入参数"))
         self.pushButton_dataset.setText(_translate("MainWindow", "数据集合成"))
         self.pushButton_train.setText(_translate("MainWindow", "训练验模"))
+        self.pushButton_predict.setToolTip(_translate("MainWindow", "<html><head/><body><p>点击预测按钮，可进行导入预训练模型的设置，导入预测数据，确认后可点击右下方开始预测按钮进行预测</p></body></html>"))
         self.pushButton_predict.setText(_translate("MainWindow", "预测"))
-        self.label_version.setText(_translate("MainWindow", "v4.0 2025.11.24"))
+        self.label_version.setText(_translate("MainWindow", "v4.0 2025.11.25"))
         self.label_2.setText(_translate("MainWindow", "算法模型"))
         self.pushButton_AL1.setToolTip(_translate("MainWindow", "<html><head/><body><p>决策树算法</p></body></html>"))
         self.pushButton_AL1.setText(_translate("MainWindow", "决策树"))
@@ -1324,6 +1348,8 @@ class Ui_MainWindow(object):
         self.pushButton_3.setText(_translate("MainWindow", "Reweighted\n"
 "Multitask\n"
 "Wasserstein"))
+        self.pushButton_begin_to_predict.setToolTip(_translate("MainWindow", "<html><head/><body><p>这是加载预训练模型后可点击的开始预测按钮</p></body></html>"))
+        self.pushButton_begin_to_predict.setText(_translate("MainWindow", "开始预测"))
         self.label_3.setText(_translate("MainWindow", "输入特征"))
         self.pushButton_inputall.setText(_translate("MainWindow", "全选"))
         self.label_4.setText(_translate("MainWindow", "输出特征"))

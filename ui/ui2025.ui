@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1403</width>
-    <height>913</height>
+    <height>876</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -196,6 +196,9 @@ QPushButton:pressed {
          <height>16777215</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;点击预测按钮，可进行导入预训练模型的设置，导入预测数据，确认后可点击右下方开始预测按钮进行预测&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
        <property name="styleSheet">
         <string notr="true">QPushButton{
 border:1px solid red;   /*边框的粗细，颜色*/
@@ -249,7 +252,7 @@ font: 16 px  &quot;Times New Roman&quot;;
 }</string>
     </property>
     <property name="text">
-     <string>v4.0 2025.11.24</string>
+     <string>v4.0 2025.11.25</string>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">
@@ -684,6 +687,38 @@ QPushButton:pressed {
         <string>Reweighted
 Multitask
 Wasserstein</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_begin_to_predict">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;这是加载预训练模型后可点击的开始预测按钮&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+    border:1px solid #64748B;   /* 浅灰蓝色边框，低调不突兀 */
+    border-radius:15px;          /* 保持原有圆角设计 */
+    padding:2px 4px;             /* 保持内边距 */
+    background-color:#EFF6FF;    /* 淡蓝灰色背景，柔和不刺眼 */
+    color:#1E293B;               /* 深灰蓝色文字，清晰易读 */
+    font: 16pt &quot;楷体&quot;;           /* 保持原有字体 */
+    min-width:80px;              /* 保持最小宽度 */
+    min-height:40px;             /* 保持最小高度 */
+    font:bold;
+}
+
+QPushButton:hover {
+    background-color: #93C5FD;   /* 悬停时浅天蓝色，温和反馈 */
+    color: #FFFFFF;              /* 悬停时白色文字，提升对比度 */
+}
+
+QPushButton:pressed {
+    background-color: #3B82F6;   /* 按下时标准蓝色，明确反馈（科研常用主色调） */
+}</string>
+       </property>
+       <property name="text">
+        <string>开始预测</string>
        </property>
       </widget>
      </item>
@@ -1816,9 +1851,9 @@ border-radius:10px;
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>1100</x>
+      <x>1130</x>
       <y>750</y>
-      <width>251</width>
+      <width>201</width>
       <height>101</height>
      </rect>
     </property>
@@ -1833,7 +1868,7 @@ border-radius:10px;
        </property>
        <property name="maximumSize">
         <size>
-         <width>400</width>
+         <width>200</width>
          <height>40</height>
         </size>
        </property>
@@ -1881,7 +1916,7 @@ QPushButton:disabled {
        </property>
        <property name="maximumSize">
         <size>
-         <width>400</width>
+         <width>200</width>
          <height>40</height>
         </size>
        </property>
@@ -2266,7 +2301,7 @@ color:rgb(0, 0, 0);		/*字体颜色*/
    <hints>
     <hint type="sourcelabel">
      <x>1234</x>
-     <y>97</y>
+     <y>77</y>
     </hint>
     <hint type="destinationlabel">
      <x>1147</x>
@@ -2297,8 +2332,8 @@ color:rgb(0, 0, 0);		/*字体颜色*/
    <slot>AL_REMTW_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1073</x>
-     <y>778</y>
+     <x>1074</x>
+     <y>858</y>
     </hint>
     <hint type="destinationlabel">
      <x>1143</x>
@@ -2329,8 +2364,8 @@ color:rgb(0, 0, 0);		/*字体颜色*/
    <slot>save()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>951</x>
-     <y>793</y>
+     <x>1101</x>
+     <y>860</y>
     </hint>
     <hint type="destinationlabel">
      <x>102</x>
@@ -2378,7 +2413,7 @@ color:rgb(0, 0, 0);		/*字体颜色*/
    <hints>
     <hint type="sourcelabel">
      <x>1219</x>
-     <y>777</y>
+     <y>757</y>
     </hint>
     <hint type="destinationlabel">
      <x>1221</x>
@@ -2394,7 +2429,7 @@ color:rgb(0, 0, 0);		/*字体颜色*/
    <hints>
     <hint type="sourcelabel">
      <x>1347</x>
-     <y>777</y>
+     <y>757</y>
     </hint>
     <hint type="destinationlabel">
      <x>1367</x>
@@ -2458,11 +2493,11 @@ color:rgb(0, 0, 0);		/*字体颜色*/
    <hints>
     <hint type="sourcelabel">
      <x>1279</x>
-     <y>84</y>
+     <y>77</y>
     </hint>
     <hint type="destinationlabel">
      <x>1140</x>
-     <y>95</y>
+     <y>77</y>
     </hint>
    </hints>
   </connection>
@@ -2474,7 +2509,7 @@ color:rgb(0, 0, 0);		/*字体颜色*/
    <hints>
     <hint type="sourcelabel">
      <x>1320</x>
-     <y>87</y>
+     <y>77</y>
     </hint>
     <hint type="destinationlabel">
      <x>1158</x>
@@ -2489,8 +2524,8 @@ color:rgb(0, 0, 0);		/*字体颜色*/
    <slot>AL_LR_para()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>981</x>
-     <y>425</y>
+     <x>982</x>
+     <y>473</y>
     </hint>
     <hint type="destinationlabel">
      <x>898</x>

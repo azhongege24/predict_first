@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\Load_model_para.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\beifen\新项目\ui\Load_model_para.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -14,11 +14,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Load_model_para(object):
     def setupUi(self, Load_model_para):
         Load_model_para.setObjectName("Load_model_para")
-        Load_model_para.resize(580, 326)
+        Load_model_para.resize(580, 300)
         self.centralwidget = QtWidgets.QWidget(Load_model_para)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(150, 210, 281, 42))
+        self.layoutWidget.setGeometry(QtCore.QRect(190, 210, 161, 42))
         self.layoutWidget.setObjectName("layoutWidget")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -66,7 +66,7 @@ class Ui_Load_model_para(object):
         self.pushButton_3.setObjectName("pushButton_3")
         self.horizontalLayout_2.addWidget(self.pushButton_3)
         self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(100, 60, 387, 132))
+        self.layoutWidget1.setGeometry(QtCore.QRect(30, 50, 521, 132))
         self.layoutWidget1.setObjectName("layoutWidget1")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.layoutWidget1)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -145,14 +145,14 @@ class Ui_Load_model_para(object):
 "}")
         self.label_2.setObjectName("label_2")
         self.horizontalLayout_3.addWidget(self.label_2)
-        self.lineEdit = QtWidgets.QLineEdit(self.layoutWidget1)
-        self.lineEdit.setMinimumSize(QtCore.QSize(150, 40))
+        self.lineEdit_file_predict_data = QtWidgets.QLineEdit(self.layoutWidget1)
+        self.lineEdit_file_predict_data.setMinimumSize(QtCore.QSize(150, 40))
         font = QtGui.QFont()
         font.setFamily("黑体")
         font.setPointSize(12)
-        self.lineEdit.setFont(font)
-        self.lineEdit.setObjectName("lineEdit")
-        self.horizontalLayout_3.addWidget(self.lineEdit)
+        self.lineEdit_file_predict_data.setFont(font)
+        self.lineEdit_file_predict_data.setObjectName("lineEdit_file_predict_data")
+        self.horizontalLayout_3.addWidget(self.lineEdit_file_predict_data)
         self.pushButton = QtWidgets.QPushButton(self.layoutWidget1)
         self.pushButton.setMinimumSize(QtCore.QSize(30, 30))
         self.pushButton.setMaximumSize(QtCore.QSize(30, 30))
@@ -245,7 +245,7 @@ class Ui_Load_model_para(object):
     def retranslateUi(self, Load_model_para):
         _translate = QtCore.QCoreApplication.translate
         Load_model_para.setWindowTitle(_translate("Load_model_para", "加载预训练模型：参数设置"))
-        self.pushButton_2.setText(_translate("Load_model_para", "开始预测"))
+        self.pushButton_2.setText(_translate("Load_model_para", "确认"))
         self.pushButton_3.setText(_translate("Load_model_para", "取消"))
         self.label.setText(_translate("Load_model_para", "加载预训练模型"))
         self.pushButton_load_model.setText(_translate("Load_model_para", "..."))

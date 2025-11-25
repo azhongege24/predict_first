@@ -1240,7 +1240,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("已加载预训练模型")
         loaded_model_path = self.selected_model_path  # 这里只存路径
-        self.parent_window.predict_with_loaded_model()
+        
         print("selected_model_path:", loaded_model_path)
 
     def load_pretrained_model(self):
@@ -1255,6 +1255,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         file_filter = "Data Files (*.csv *.xls *.xlsx *.mat);;Excel Files (*.xls *.xlsx);;MATLAB Files (*.mat);;CSV Files (*.csv);;All Files(*.*)"
         initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
         file_path, _ = QFileDialog.getOpenFileName(self, "选择需要预测的新数据文件", initial_dir, file_filter)
+        self.lineEdit_file_predict_data.setText(file_path)
         if not file_path:
             return
         try:
@@ -1901,7 +1902,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
 
         # 连接按钮信号
-        
+        self.pushButton_begin_to_predict.clicked.connect(self.predict_with_loaded_model)
         self.pushButton_top.clicked.connect(self.show_previous_page)
         self.pushButton_bottom.clicked.connect(self.show_next_page)
         self.pushButton_help.clicked.connect(self.AL_help_para) # 打开帮助说明窗口

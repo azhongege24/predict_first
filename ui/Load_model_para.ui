@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>580</width>
-    <height>326</height>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,9 +17,9 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>190</x>
       <y>210</y>
-      <width>281</width>
+      <width>161</width>
       <height>42</height>
      </rect>
     </property>
@@ -57,7 +57,7 @@ QPushButton:pressed {
 }</string>
        </property>
        <property name="text">
-        <string>开始预测</string>
+        <string>确认</string>
        </property>
       </widget>
      </item>
@@ -103,9 +103,9 @@ QPushButton:pressed {
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>60</y>
-      <width>387</width>
+      <x>30</x>
+      <y>50</y>
+      <width>521</width>
       <height>132</height>
      </rect>
     </property>
@@ -226,7 +226,7 @@ QLabel:pressed {
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit">
+          <widget class="QLineEdit" name="lineEdit_file_predict_data">
            <property name="minimumSize">
             <size>
              <width>150</width>
@@ -402,8 +402,8 @@ font:bold 16px;		/*设置按钮文字和大小*/
    <slot>Confirm()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>251</x>
-     <y>243</y>
+     <x>297</x>
+     <y>277</y>
     </hint>
     <hint type="destinationlabel">
      <x>132</x>
@@ -418,8 +418,8 @@ font:bold 16px;		/*设置按钮文字和大小*/
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>338</x>
-     <y>243</y>
+     <x>379</x>
+     <y>277</y>
     </hint>
     <hint type="destinationlabel">
      <x>498</x>
@@ -434,8 +434,8 @@ font:bold 16px;		/*设置按钮文字和大小*/
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>243</x>
-     <y>243</y>
+     <x>297</x>
+     <y>277</y>
     </hint>
     <hint type="destinationlabel">
      <x>93</x>
@@ -450,8 +450,8 @@ font:bold 16px;		/*设置按钮文字和大小*/
    <slot>load_pretrained_model()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>442</x>
-     <y>109</y>
+     <x>483</x>
+     <y>120</y>
     </hint>
     <hint type="destinationlabel">
      <x>491</x>
@@ -466,8 +466,8 @@ font:bold 16px;		/*设置按钮文字和大小*/
    <slot>load_predict_data()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>431</x>
-     <y>151</y>
+     <x>483</x>
+     <y>168</y>
     </hint>
     <hint type="destinationlabel">
      <x>456</x>
