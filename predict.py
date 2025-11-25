@@ -3004,7 +3004,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     y_pred=y_pred,
                     db_within_3_ratio_list = metrics['db_within_3_ratio_list'],
                     total_db_deviation_per_feature = metrics['total_db_deviation_per_feature'],
-                    data_test_index=data_index
+                    data_test=data_test
                 )
             self.lineEdit_DEVICE.setText("CPU")
     
@@ -3046,7 +3046,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     R2_list=metrics['R2_list'],
                     db_within_3_ratio_list = metrics['db_within_3_ratio_list'],
                     total_db_deviation_per_feature = metrics['total_db_deviation_per_feature'],
-                    data_test_index=data_index,
+                    data_test=data_test,  # 修改：传递完整的测试数据
                     y_test=y_test, 
                     y_pred=y_pred
                 )
@@ -3088,7 +3088,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     MAE_list=metrics['MAE_list'],
                     RMSE_list=metrics['RMSE_list'],
                     R2_list=metrics['R2_list'],
-                    data_test_index=data_index,
+                    data_test=data_test,
                     db_within_3_ratio_list = metrics['db_within_3_ratio_list'],
                     total_db_deviation_per_feature = metrics['total_db_deviation_per_feature'],
                     y_test=y_test, 

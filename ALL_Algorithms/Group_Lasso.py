@@ -189,7 +189,7 @@ def group_lasso_plot_and_evaluate(self, coef_shared, coef_specific, method, inpu
                                  MSE,MSE_list, RMSE,RMSE_list, MAE,MAE_list, 
                                  R2,R2_list,
                                  db_within_3_ratio_list,total_db_deviation_per_feature,
-                                 y_test, y_pred, data_test_index):
+                                 y_test, y_pred, data_test):
     """
     绘制Group Lasso模型的系数热力图和各输出变量的真实值-预测值对比图
     
@@ -255,9 +255,9 @@ def group_lasso_plot_and_evaluate(self, coef_shared, coef_specific, method, inpu
     plt.close(fig2)
     self.figures.append(fig2_path)
 
-    # 3. 绘制各输出变量的真实值-预测值对比图
-    n_outputs = len(output_columns)
-    test_index_range = f"[{data_test_index[0]}:{data_test_index[-1]}]" if not data_test_index.empty else "[0:0]"
+    # # 3. 绘制各输出变量的真实值-预测值对比图
+    # n_outputs = len(output_columns)
+    # test_index_range = f"[{data_test_index[0]}:{data_test_index[-1]}]" if not data_test_index.empty else "[0:0]"
     
     for i,col in enumerate(output_columns):
         # 获取当前输出的评估指标（支持单值或列表）
@@ -341,6 +341,51 @@ def group_lasso_plot_and_evaluate(self, coef_shared, coef_specific, method, inpu
         self.lineEdit_db_within_3_ratio.setText("None")
         
     self.lineEdit_Algorithm_name.setText(f"当前算法: {method}")
+    # 新增：保存预测结果到data_save属性
+    # 检查测试集数据是否包含时间列
+    # 修改：使用data_test而不是data_test_index来检查时间列
+    time_columns = ['start_time', 'end_time']
+    time_columns_present = [col for col in time_columns if col in data_test.columns] if hasattr(data_test, 'columns') else []
+    
+    if len(time_columns_present) == 2 and hasattr(data_test, 'columns'):
+        # 计算时间中心点
+        time_center = (data_test['start_time'] + data_test['end_time']) / 2
+        # 创建包含真实值、预测值和时间中心点的DataFrame
+        pred_df = pd.DataFrame(
+            y_pred, 
+            index=data_test.index,
+            columns=[f"pred_{col}" for col in output_columns]
+        )
+        true_df = pd.DataFrame(
+            y_test,
+            index=data_test.index,
+            columns=[f"true_{col}" for col in output_columns]
+        )
+        time_center_df = pd.DataFrame({
+            'original_index': data_test.index,
+            'time_center': time_center.values
+        }).reset_index(drop=True)
+        
+        pred_df_reset = pred_df.reset_index(drop=True)
+        true_df_reset = true_df.reset_index(drop=True)
+        self.data_save = pd.concat([time_center_df, true_df_reset, pred_df_reset], axis=1)
+        print("GroupLasso预测结果已保存到data_save，包含时间中心点列")
+    else:
+        # 如果没有时间列，使用基本保存方式
+        pred_df = pd.DataFrame(
+            y_pred, 
+            index=data_test.index if hasattr(data_test, 'index') else range(len(y_pred)),
+            columns=[f"pred_{col}" for col in output_columns]
+        )
+        true_df = pd.DataFrame(
+            y_test,
+            index=data_test.index if hasattr(data_test, 'index') else range(len(y_test)),
+            columns=[f"true_{col}" for col in output_columns]
+        )
+        self.data_save = pd.concat([true_df, pred_df], axis=1)
+        print("GroupLasso预测结果已保存到data_save")
+
+
 if __name__ == "__main__":
     # 示例数据
     data_train = pd.DataFrame({
