@@ -157,16 +157,21 @@ def remtw_plot_and_evaluate(self, remtw_model, method, input_columns, output_col
         fig = plt.figure(figsize=(7, 4), dpi=120)
         ax = fig.add_subplot(111)
 
+        flag = (len(np.unique(y_test)) > 1)
+        if flag:
         # 绘制真实值与预测值
-        ax.scatter(np.arange(len(y_test[:, i])), y_test[:, i],
-                  c='b', marker='o', s=10, label='真实值', alpha=0.8)
-        ax.scatter(np.arange(len(y_test[:, i])), y_pred[:, i],
-                  c='r', marker='X', s=20, label=f'预测值_{method}', alpha=0.8)
+            ax.scatter(np.arange(len(y_test[:, i])), y_test[:, i],
+                    c='b', marker='o', s=10, label='真实值', alpha=0.8)
+            ax.scatter(np.arange(len(y_test[:, i])), y_pred[:, i],
+                    c='r', marker='X', s=20, label=f'预测值_{method}', alpha=0.8)
 
-        # 绘制连接线段（显示偏差）
-        x = np.arange(len(y_test[:, i]))
-        ax.plot([x, x], [y_test[:, i], y_pred[:, i]],
-                color='#2F5597', linestyle='-', linewidth=1.5, alpha=0.6, zorder=0)
+            # 绘制连接线段（显示偏差）
+            x = np.arange(len(y_test[:, i]))
+            ax.plot([x, x], [y_test[:, i], y_pred[:, i]],
+                    color='#2F5597', linestyle='-', linewidth=1.5, alpha=0.6, zorder=0)
+        else:
+            ax.scatter(np.arange(len(y_test[:, i])), y_pred[:, i],
+                c='r', marker='X', s=20, label=f'预测值_{method}', alpha=0.8)  
 
         # 图表标题和标签
         ax.set_title(
@@ -196,22 +201,32 @@ def remtw_plot_and_evaluate(self, remtw_model, method, input_columns, output_col
     self.current_page = 0
     self.update_graphics_view()
     # 更新界面控件（显示整体指标）
-    overall_mse = np.mean(MSE) if isinstance(MSE, (list, np.ndarray)) else MSE
-    overall_rmse = np.mean(RMSE) if isinstance(RMSE, (list, np.ndarray)) else RMSE
-    overall_mae = np.mean(MAE) if isinstance(MAE, (list, np.ndarray)) else MAE
-    overall_r2 = np.mean(R2) if isinstance(R2, (list, np.ndarray)) else R2
+    if flag:
+        # 更新界面控件（显示整体指标）
+        overall_mse = np.mean(MSE) if isinstance(MSE, (list, np.ndarray)) else MSE
+        overall_rmse = np.mean(RMSE) if isinstance(RMSE, (list, np.ndarray)) else RMSE
+        overall_mae = np.mean(MAE) if isinstance(MAE, (list, np.ndarray)) else MAE
+        overall_r2 = np.mean(R2) if isinstance(R2, (list, np.ndarray)) else R2
 
 
 
-    # 更新界面控件（显示整体指标）
-    self.lineEdit_state.setText('Finish!')
-    self.lineEdit_MSE.setText(f"{overall_mse:.5f}")
-    self.lineEdit_RMSE.setText(f"{overall_rmse:.5f}")
-    self.lineEdit_MAE.setText(f"{overall_mae:.5f}")
-    self.lineEdit_R2.setText(f"{overall_r2:.5f}")
-    self.lineEdit_db_within_3_ratio.setText(f"{np.mean(db_within_3_ratio_list)*100:.2f}%")
-    # self.lineEdit_total_db_deviation.setText(f"{np.sum(total_db_deviation_per_feature):.2f}")
-    self.lineEdit_Algorithm_name.setText(f"当前算法: {method}")
+        # 更新界面控件（显示整体指标）
+        self.lineEdit_state.setText('Finish!')
+        self.lineEdit_MSE.setText(f"{overall_mse:.5f}")
+        self.lineEdit_RMSE.setText(f"{overall_rmse:.5f}")
+        self.lineEdit_MAE.setText(f"{overall_mae:.5f}")
+        self.lineEdit_R2.setText(f"{overall_r2:.5f}")
+        self.lineEdit_db_within_3_ratio.setText(f"{np.mean(db_within_3_ratio_list)*100:.2f}%")
+        self.lineEdit_Algorithm_name.setText(f"当前算法: {method}")
+    else:
+        self.lineEdit_state.setText('Finish!')
+        self.lineEdit_MSE.setText("None")
+        self.lineEdit_RMSE.setText("None")  
+        self.lineEdit_MAE.setText("None")    
+        self.lineEdit_R2.setText("None")
+        self.lineEdit_db_within_3_ratio.setText("None")  
+        
+        self.lineEdit_Algorithm_name.setText(f"当前算法: {method}")
 
 
 def test_remtw_plot_and_evaluate(model, method, input_columns, output_columns, metrics, y_test, y_pred, data_test_index):

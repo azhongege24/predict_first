@@ -1238,7 +1238,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
     def Confirm(self):
         global loaded_model_path
         if self.parent_window:
-            self.parent_window.lineEdit_Algorithm_name.setText("已加载预训练模型")
+            self.parent_window.lineEdit_Algorithm_name.setText("已加载预训练模型与预测数据")
         loaded_model_path = self.selected_model_path  # 这里只存路径
         
         print("selected_model_path:", loaded_model_path)
@@ -1278,7 +1278,11 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
             else:  # 默认处理CSV
                 self.predict_data = pd.read_csv(file_path,encoding='utf-8')
             #公共数据处理流程   
-            self.predict_data = self.predict_data.dropna()
+            print(f"self.predict_data: {self.predict_data}")
+            # 如果self.predict_data中存在nan，将其替换为-1
+            self.predict_data = self.predict_data.fillna(-1)
+            
+            # self.predict_data = self.predict_data.dropna()
             self.predict_data = self.predict_data[self.spinBox_predict_start.value():self.spinBox_predict_end.value()]
             self.predict_data.columns = self.predict_data.columns.astype(str)
             self.predict_columns = self.predict_data.columns.tolist()#确保是字符串

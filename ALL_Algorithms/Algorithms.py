@@ -384,13 +384,18 @@ def single_plot_and_evaluate(self, y_test, y_pred, method, data_test,
     ax = self.figure.add_subplot(111)
 
     # 绘制真实值与预测值散点图
-    scatter1 = ax.scatter(np.arange(len(y_test)), y_test, c='b', marker='o', s=10, label='True', alpha=0.8)
-    scatter2 = ax.scatter(np.arange(len(y_test)), y_pred, c='r', marker='X', s=20, label='pred_' + method, alpha=0.6)
+    print(f"np.unique(y_test): {np.unique(y_test)}")
+    flag = (len(np.unique(y_test)) > 1) # 检查当前输出变量是否有多个唯一值 flag=1有真实值 flag=0无真实值
+    if flag:
+        scatter1 = ax.scatter(np.arange(len(y_test)), y_test, c='b', marker='o', s=10, label='True', alpha=0.8)
+        scatter2 = ax.scatter(np.arange(len(y_test)), y_pred, c='r', marker='X', s=20, label='pred_' + method, alpha=0.6)
 
-    # 绘制垂直连接线段
-    for i in range(len(y_test)):
-        ax.plot([i, i], [y_test[i], y_pred[i]],
-                color='#2F5597', linestyle='-', linewidth=2.5, alpha=0.5, solid_capstyle='round', zorder=0)
+        # 绘制垂直连接线段
+        for i in range(len(y_test)):
+            ax.plot([i, i], [y_test[i], y_pred[i]],
+                    color='#2F5597', linestyle='-', linewidth=2.5, alpha=0.5, solid_capstyle='round', zorder=0)
+    else:
+        scatter2 = ax.scatter(np.arange(len(y_test)), y_pred, c='r', marker='X', s=20, label='pred_' + method, alpha=0.6)
 
 
     
@@ -413,13 +418,22 @@ def single_plot_and_evaluate(self, y_test, y_pred, method, data_test,
     self.graphicsView.show()
 
     # 更新界面控件
-    self.lineEdit_state.setText('Finish!')
-    self.lineEdit_MSE.setText(str(round(MSE, 5)))
-    self.lineEdit_RMSE.setText(str(round(RMSE, 5)))  # RMSE控件
-    self.lineEdit_MAE.setText(str(round(MAE, 5)))    # MAE控件
-    self.lineEdit_R2.setText(str(round(R2, 5)))
-    self.lineEdit_db_within_3_ratio.setText(f"{db_within_3_ratio*100:.2f}%")  # ±3dB内比例控件
-    # self.lineEdit_total_db_deviation.setText(f"{total_db_deviation:.2f}")  # 总分贝偏差控件
+    if flag:
+        self.lineEdit_state.setText('Finish!')
+        self.lineEdit_MSE.setText(str(round(MSE, 5)))
+        self.lineEdit_RMSE.setText(str(round(RMSE, 5)))  # 假设新增了RMSE控件
+        self.lineEdit_MAE.setText(str(round(MAE, 5)))    # 假设新增了MAE控件
+        self.lineEdit_R2.setText(str(round(R2, 5)))
+        self.lineEdit_db_within_3_ratio.setText(f"{db_within_3_ratio*100:.2f}%")  # 新增±3dB内比例控件
+        
+    else:
+        self.lineEdit_state.setText('Finish!')
+        self.lineEdit_MSE.setText("None")
+        self.lineEdit_RMSE.setText("None")  # 假设新增了RMSE控件
+        self.lineEdit_MAE.setText("None")    # 假设新增了MAE控件
+        self.lineEdit_R2.setText("None")
+        self.lineEdit_db_within_3_ratio.setText("None")  # 新增±3dB内比例控件
+       
 
     # 关键修改：保存预测结果到 DataFrame，添加时间中心点列
     # 检查测试集数据是否包含时间列
@@ -512,15 +526,21 @@ def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test,
         ax = fig.add_subplot(111)
         
         # 绘制真实值与预测值散点图
-        ax.scatter(np.arange(len(y_test[:, i])), y_test[:, i], 
-                  c='b', marker='o', s=10, label='真实值', alpha=0.8)
-        ax.scatter(np.arange(len(y_test[:, i])), y_pred[:, i], 
-                  c='r', marker='X', s=20, label=f'预测值_{method}', alpha=0.8)
-        
-        # 绘制垂直连接线段（向量方式更高效）
-        x = np.arange(len(y_test[:, i]))
-        ax.plot([x, x], [y_test[:, i], y_pred[:, i]],
-                color='#2F5597', linestyle='-', linewidth=1.5, alpha=0.6, zorder=0)
+        flag = (len(np.unique(y_test)) > 1) # 检查当前输出变量是否有多个唯一值
+        if flag:
+        # 绘制真实值与预测值散点图
+            ax.scatter(np.arange(len(y_test[:, i])), y_test[:, i], 
+                    c='b', marker='o', s=10, label='真实值', alpha=0.8)
+            ax.scatter(np.arange(len(y_test[:, i])), y_pred[:, i], 
+                    c='r', marker='X', s=20, label=f'预测值_{method}', alpha=0.8)
+            
+            # 绘制垂直连接线段（向量方式更高效）
+            x = np.arange(len(y_test[:, i]))
+            ax.plot([x, x], [y_test[:, i], y_pred[:, i]],
+                    color='#2F5597', linestyle='-', linewidth=1.5, alpha=0.6, zorder=0)
+        else:
+            ax.scatter(np.arange(len(y_test[:, i])), y_pred[:, i], 
+                    c='r', marker='X', s=20, label=f'预测值_{method}', alpha=0.8)  
         
         # 设置子图标题和标签（显示当前输出的独立指标）
         ax.set_title(
@@ -553,13 +573,22 @@ def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test,
     self.update_graphics_view()
     
     # 更新界面控件（显示整体平均指标）
-    self.lineEdit_state.setText('Finish!')
-    self.lineEdit_MSE.setText(f"{overall_mse:.5f}")
-    self.lineEdit_RMSE.setText(f"{overall_rmse:.5f}")
-    self.lineEdit_MAE.setText(f"{overall_mae:.5f}")
-    self.lineEdit_R2.setText(f"{overall_r2:.5f}")
-    self.lineEdit_db_within_3_ratio.setText(f"{np.mean(db_within_3_ratio_list)*100:.2f}%")
-    # self.lineEdit_total_db_deviation.setText(f"{np.sum(total_db_deviation_per_feature):.2f}")
+    if flag:
+        self.lineEdit_state.setText('Finish!')
+        self.lineEdit_MSE.setText(f"{overall_mse:.5f}")
+        self.lineEdit_RMSE.setText(f"{overall_rmse:.5f}")
+        self.lineEdit_MAE.setText(f"{overall_mae:.5f}")
+        self.lineEdit_R2.setText(f"{overall_r2:.5f}")
+        self.lineEdit_db_within_3_ratio.setText(f"{np.mean(db_within_3_ratio_list)*100:.2f}%")
+        
+    else:
+        self.lineEdit_state.setText('Finish!')
+        self.lineEdit_MSE.setText("None")
+        self.lineEdit_RMSE.setText("None")
+        self.lineEdit_MAE.setText("None")
+        self.lineEdit_R2.setText("None")
+        self.lineEdit_db_within_3_ratio.setText("None")
+        
     
     # 关键修改：保存预测结果到 DataFrame（包含真实值便于对比），添加时间中心点列
     # 检查测试集数据是否包含时间列
