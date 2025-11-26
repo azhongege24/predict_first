@@ -96,7 +96,7 @@ def multi_task_regression_predictor(
         'DT': DecisionTreeRegressor(max_depth=max_depth, random_state=random_state),
         'RF': RandomForestRegressor(n_estimators=n_estimators, max_depth=max_depth, n_jobs=n_jobs, random_state=random_state),
         'SVM': MultiOutputRegressor(SVR(kernel=kernel, C=C, epsilon=epsilon), n_jobs=n_jobs),
-        'MLP': MLPRegressor(hidden_layer_sizes=mlp_hidden_layers, max_iter=max_iter,alpha=alpha, random_state=random_state),
+        'MLP': MLPRegressor(hidden_layer_sizes=mlp_hidden_layers, max_iter=max_iter,alpha=alpha, random_state=random_state,learning_rate_init=5e-4,verbose=True),
         'ET': ExtraTreesRegressor(n_estimators=n_estimators, max_depth=max_depth, n_jobs=n_jobs, random_state=random_state),
         'LR': LinearRegression(fit_intercept=fit_intercept), 
         'MMoE': MMoERegressor(
