@@ -367,5 +367,5 @@ class Ui_SVM_para(object):
         self.comboBox_kernel.setItemText(1, _translate("SVM_para", "linear"))
         self.comboBox_kernel.setItemText(2, _translate("SVM_para", "poly"))
         self.comboBox_kernel.setItemText(3, _translate("SVM_para", "sigmoid"))
-        self.comboBox_scale_features.setItemText(0, _translate("SVM_para", "False"))
-        self.comboBox_scale_features.setItemText(1, _translate("SVM_para", "True"))
+        self.comboBox_scale_features.setItemText(0, _translate("SVM_para", "True"))
+        self.comboBox_scale_features.setItemText(1, _translate("SVM_para", "False"))

@@ -234,7 +234,7 @@ QSpinBox::down-button:pressed {
 }</string>
          </property>
          <property name="value">
-          <number>4</number>
+          <number>8</number>
          </property>
         </widget>
        </item>
@@ -288,12 +288,12 @@ QSpinBox::down-button:pressed {
          </property>
          <item>
           <property name="text">
-           <string>False</string>
+           <string>True</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>True</string>
+           <string>False</string>
           </property>
          </item>
         </widget>

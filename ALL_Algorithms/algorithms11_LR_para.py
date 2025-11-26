@@ -208,5 +208,5 @@ class Ui_LR_para(object):
         self.label_3.setText(_translate("LR_para", "scale_features"))
         self.comboBox_fit_intercept.setItemText(0, _translate("LR_para", "True"))
         self.comboBox_fit_intercept.setItemText(1, _translate("LR_para", "False"))
-        self.comboBox_scale_features.setItemText(0, _translate("LR_para", "False"))
-        self.comboBox_scale_features.setItemText(1, _translate("LR_para", "True"))
+        self.comboBox_scale_features.setItemText(0, _translate("LR_para", "True"))
+        self.comboBox_scale_features.setItemText(1, _translate("LR_para", "False"))

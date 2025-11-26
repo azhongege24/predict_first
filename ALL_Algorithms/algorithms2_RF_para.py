@@ -337,5 +337,5 @@ class Ui_RF_para(object):
         self.label_random_state.setText(_translate("RF_para", "random_state"))
         self.label_2.setToolTip(_translate("RF_para", "<html><head/><body><p><span style=\" font-size:12pt;\">是否对数据进行特征缩放（如标准化）。布尔值（</span><span style=\" font-family:\'Courier New\'; font-size:12pt;\">True</span><span style=\" font-size:12pt;\">/</span><span style=\" font-family:\'Courier New\'; font-size:12pt;\">False</span><span style=\" font-size:12pt;\">）。对于随机森林模型，​</span><span style=\" font-size:12pt;\">通常不需要</span><span style=\" font-size:12pt;\">进行特征缩放，因为树模型基于特征阈值分裂，不受量纲影响</span></p></body></html>"))
         self.label_2.setText(_translate("RF_para", "scale_features"))
-        self.comboBox_scale_features.setItemText(0, _translate("RF_para", "False"))
-        self.comboBox_scale_features.setItemText(1, _translate("RF_para", "True"))
+        self.comboBox_scale_features.setItemText(0, _translate("RF_para", "True"))
+        self.comboBox_scale_features.setItemText(1, _translate("RF_para", "False"))
