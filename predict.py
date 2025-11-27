@@ -2621,6 +2621,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.set_progress_value(40)       
         
         if method == 'LR':  # 添加线性回归算法实现
+            self.lineEdit_DEVICE.setText("CPU")
             self.new_model = 1
             
             self.set_progress_value(50)
@@ -2664,11 +2665,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     db_within_3_ratio=metrics['db_within_3_ratio'],
                     total_db_deviation=metrics['total_db_deviation']
                 )
-            self.lineEdit_DEVICE.setText("CPU")       
+                   
 
         
         if method == 'DT':
-            
+            self.lineEdit_DEVICE.setText("CPU")
             self.new_model = 1
             self.set_progress_value(50)
             model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
@@ -2718,11 +2719,12 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                         db_within_3_ratio=metrics['db_within_3_ratio'],
                                         total_db_deviation=metrics['total_db_deviation']
                                         )
-            self.lineEdit_DEVICE.setText("CPU")
+            
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
             
 
         if method =='RF':
+            self.lineEdit_DEVICE.setText("CPU")
             self.new_model = 1
             self.set_progress_value(50)
             model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
@@ -2766,12 +2768,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                         metrics['R2'],
                                         db_within_3_ratio=metrics['db_within_3_ratio'],
                                         total_db_deviation=metrics['total_db_deviation'])
-            self.lineEdit_DEVICE.setText("CPU")
+            
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
             
    
 
         if method =='SVM':
+            self.lineEdit_DEVICE.setText("CPU")
             self.new_model = 1
             self.set_progress_value(50)
             model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
@@ -2819,11 +2822,12 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                             metrics['R2'],
                                             db_within_3_ratio=metrics['db_within_3_ratio'],
                                         total_db_deviation=metrics['total_db_deviation'])
-            self.lineEdit_DEVICE.setText("CPU")
+            
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
             
 
         if method == 'ET':
+            self.lineEdit_DEVICE.setText("CPU")
             self.new_model = 1
             self.set_progress_value(50)
             model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
@@ -2867,12 +2871,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                             metrics['R2'],
                                             db_within_3_ratio=metrics['db_within_3_ratio'],
                                         total_db_deviation=metrics['total_db_deviation'])
-            self.lineEdit_DEVICE.setText("CPU")
+            
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
             
 
 
         if method == 'MLP':
+            self.lineEdit_DEVICE.setText("CPU")
             self.new_model = 1
             self.set_progress_value(50)
             model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
@@ -2918,12 +2923,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                         metrics['R2'],db_within_3_ratio=metrics['db_within_3_ratio'],
                                                         total_db_deviation=metrics['total_db_deviation'])
 
-            self.lineEdit_DEVICE.setText("CPU")
+            
             #这个是为了防止弹出保存模型的窗口而设置的延迟2秒功能  
             
 
         
         if method =='GP':
+            self.lineEdit_DEVICE.setText(f"{self.device if hasattr(self, 'device') else ('GPU' if torch.cuda.is_available() else 'CPU')}")
             self.new_model = 1
             self.set_progress_value(50)
             model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
@@ -2966,12 +2972,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                                                         metrics['R2'],db_within_3_ratio=metrics['db_within_3_ratio'],
                                                         total_db_deviation=metrics['total_db_deviation'])
 
-            self.lineEdit_DEVICE.setText("GPU")
+            
             
             
 
         
         if method == 'GL':
+            self.lineEdit_DEVICE.setText("CPU")
             self.new_model = 1
             self.set_progress_value(50)
             model, X_test, y_test, y_pred, metrics,data_index = group_lasso_predictor(
@@ -3014,9 +3021,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     total_db_deviation_per_feature = metrics['total_db_deviation_per_feature'],
                     data_test=data_test
                 )
-            self.lineEdit_DEVICE.setText("CPU")
+            
     
         if method == 'MTW':
+            self.lineEdit_DEVICE.setText("CPU")
             self.new_model = 1
             self.set_progress_value(50)
             model, X_test, y_test, y_pred, metrics,data_index = MTW_Lasso(
@@ -3058,9 +3066,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     y_test=y_test, 
                     y_pred=y_pred
                 )
-            self.lineEdit_DEVICE.setText("GPU")
+            
         
         if method == 'REMTW':
+            self.lineEdit_DEVICE.setText("CPU")
             self.new_model = 1
             self.set_progress_value(50)
             model, X_test, y_test, y_pred, metrics,data_index = REMTW_Lasso(
@@ -3103,8 +3112,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     y_pred=y_pred
                     
                 )
-            self.lineEdit_DEVICE.setText("GPU")
+            
         if method == 'MMoE':
+            self.lineEdit_DEVICE.setText("GPU" if torch.cuda.is_available() else "CPU")
             self.new_model = 1
             
             model, mmoe_scale_features, y_test, y_pred, metrics = multi_task_regression_predictor(
@@ -3158,7 +3168,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     db_within_3_ratio=metrics['db_within_3_ratio'],
                     total_db_deviation=metrics['total_db_deviation']
                 )
-            self.lineEdit_DEVICE.setText("GPU" if torch.cuda.is_available() else "CPU")
+            
             
         self.set_progress_value(100)
         self.stop_progress_indicator()      
