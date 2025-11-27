@@ -85,15 +85,13 @@ def group_lasso_predictor(
         X_test_scaled = scaler_X.transform(X_test)
         
         # 对目标变量进行标准化
-        scaler_y = StandardScaler()
-        y_train_scaled = scaler_y.fit_transform(y_train)
-        y_test_scaled = scaler_y.transform(y_test)
+        
         
         # 使用标准化后的数据
         X_train = X_train_scaled
-        y_train = y_train_scaled
+        
         X_test = X_test_scaled
-        y_test = y_test_scaled
+        
 
 
     # 转换为 3D 格式 (n_tasks, n_samples, n_features)

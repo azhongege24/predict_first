@@ -195,7 +195,7 @@ class Ui_GL_para(object):
 "}")
         self.doubleSpinBox_alpha.setDecimals(6)
         self.doubleSpinBox_alpha.setSingleStep(0.1)
-        self.doubleSpinBox_alpha.setProperty("value", 0.001)
+        self.doubleSpinBox_alpha.setProperty("value", 0.01)
         self.doubleSpinBox_alpha.setObjectName("doubleSpinBox_alpha")
         self.verticalLayout_2.addWidget(self.doubleSpinBox_alpha)
         self.spinBox_max_iter = QtWidgets.QSpinBox(self.layoutWidget1)
