@@ -70,13 +70,13 @@ def MTW_Lasso(data_train,
         db_within_3_ratio_list.append(ratio)
     db_within_3_ratio = np.mean(db_within_3_ratio_list)  # 整体平均比例
     # 指标2：所有特征的偏差分贝数绝对值之和
-    total_db_deviation = np.sum(np.abs(db_diff))
+    # total_db_deviation = np.sum(np.abs(db_diff))
     total_db_deviation_per_feature = [np.sum(np.abs(db_diff[:, j])) for j in range(n_tasks)]
     # 更新metrics字典
     metrics.update({
         'db_within_3_ratio': db_within_3_ratio,  # 整体±3dB内比例
         'db_within_3_ratio_list': db_within_3_ratio_list,  # 各特征±3dB内比例
-        'total_db_deviation': total_db_deviation,  # 总分贝偏差和
+        # 'total_db_deviation': total_db_deviation,  # 总分贝偏差和
         'total_db_deviation_per_feature': total_db_deviation_per_feature  # 各特征分贝偏差和
     })
     
@@ -182,8 +182,8 @@ def mtw_plot_and_evaluate(self, mtw_model, method, input_columns, output_columns
             f'输出变量: {col}\n'
             f'MSE: {current_mse:.4f}, RMSE: {current_rmse:.4f}\n'
             f'MAE: {current_mae:.4f}, R^2: {current_r2:.4f}\n'
-            f'±3dB比例: {current_db_within_3_ratio:.2%}\n'
-            f'总分贝偏差: {current_total_db_deviation_per_feature:.2f} dB',
+            f'±3dB比例: {current_db_within_3_ratio:.2%}\n',
+            # f'总分贝偏差: {current_total_db_deviation_per_feature:.2f} dB',
             fontsize=10
         )
         ax.set_xlabel('样本索引', fontsize=10)
