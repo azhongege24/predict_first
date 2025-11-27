@@ -256,9 +256,9 @@ class Ui_SVM_para(object):
 "QSpinBox::down-button:pressed {\n"
 "    margin-top: 4px;\n"
 "}")
-        self.spinBox_C.setMaximum(999)
+        self.spinBox_C.setMaximum(999999)
         self.spinBox_C.setSingleStep(1)
-        self.spinBox_C.setProperty("value", 500)
+        self.spinBox_C.setProperty("value", 2000)
         self.spinBox_C.setObjectName("spinBox_C")
         self.verticalLayout_2.addWidget(self.spinBox_C)
         self.doubleSpinBox_epsilon = QtWidgets.QDoubleSpinBox(self.layoutWidget1)

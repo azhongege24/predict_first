@@ -416,13 +416,13 @@ QSpinBox::down-button:pressed {
 }</string>
          </property>
          <property name="maximum">
-          <number>999</number>
+          <number>999999</number>
          </property>
          <property name="singleStep">
           <number>1</number>
          </property>
          <property name="value">
-          <number>500</number>
+          <number>2000</number>
          </property>
         </widget>
        </item>
