@@ -268,7 +268,7 @@ class PowerSpectrumAnalyzer:
             
         # 确定每段点数
         if nperseg is None:
-            nperseg = min(8192, len(signal_data))  # 默认最大8192点
+            nperseg = min(99999, len(signal_data))  # 默认最大8192点
         nperseg = max(128, nperseg)  # 确保有足够的点数
         
         # 计算重叠点数
