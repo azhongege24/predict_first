@@ -193,8 +193,9 @@ class Ui_GL_para(object):
 "QDoubleSpinBox::down-button:pressed {\n"
 "    margin-top: 4px;\n"
 "}")
+        self.doubleSpinBox_alpha.setDecimals(6)
         self.doubleSpinBox_alpha.setSingleStep(0.1)
-        self.doubleSpinBox_alpha.setProperty("value", 0.1)
+        self.doubleSpinBox_alpha.setProperty("value", 0.001)
         self.doubleSpinBox_alpha.setObjectName("doubleSpinBox_alpha")
         self.verticalLayout_2.addWidget(self.doubleSpinBox_alpha)
         self.spinBox_max_iter = QtWidgets.QSpinBox(self.layoutWidget1)

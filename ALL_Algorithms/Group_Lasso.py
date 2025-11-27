@@ -7,6 +7,7 @@ from mutar import GroupLasso
 from sklearn.metrics import mean_squared_error, r2_score
 from matplotlib import rcParams
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
 import seaborn as sns
 from ALL_Algorithms.Algorithms import Multi_output_plot_and_evaluate
 
@@ -23,6 +24,7 @@ def group_lasso_predictor(
     max_iter=2000,
     tol=1e-4,
     random_state=42,
+    scale=True,
     show_plots=False,
     show_prints=False
 ):
@@ -74,6 +76,25 @@ def group_lasso_predictor(
     y_train = clean_data(y_train)
     X_test = clean_data(X_test)
     y_test = clean_data(y_test)
+
+    if scale:
+        
+        # 对特征进行标准化
+        scaler_X = StandardScaler()
+        X_train_scaled = scaler_X.fit_transform(X_train)
+        X_test_scaled = scaler_X.transform(X_test)
+        
+        # 对目标变量进行标准化
+        scaler_y = StandardScaler()
+        y_train_scaled = scaler_y.fit_transform(y_train)
+        y_test_scaled = scaler_y.transform(y_test)
+        
+        # 使用标准化后的数据
+        X_train = X_train_scaled
+        y_train = y_train_scaled
+        X_test = X_test_scaled
+        y_test = y_test_scaled
+
 
     # 转换为 3D 格式 (n_tasks, n_samples, n_features)
     n_tasks = len(output_columns)
