@@ -56,6 +56,7 @@ from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as font_manager
 import matplotlib.ticker as ticker
+from sklearn.preprocessing import StandardScaler  # 新增：导入StandardScaler
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 global max_depth, random_state,n_estimators,kernel, C, epsilon,scale_features
@@ -64,7 +65,7 @@ global mmoe_num_experts,mmoe_expert_hidden,mmoe_learning_rate,mmoe_dropout_rate
 global mmoe_epochs,mmoe_batch_size,mmoe_lambda_balance,mmoe_scale_features,fit_intercept
 method = 'NONE'  # 初始化方法为NONE
 # 读取输入参数
-
+scale_features=True
 class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
     def __init__(self, parent=None):
         super(POP_VA_para, self).__init__()
@@ -2272,6 +2273,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             X_2d = predict_data[self.predict_input_columns].values  # 基础2D输入 (样本×特征)
             y_test = predict_data[self.predict_output_columns].values  # 真实值 (样本×任务)
             n_tasks = len(self.predict_output_columns)  # 任务数量
+
+            if scale_features:
+                print("启用特征缩放：对输入特征进行标准化处理")
+                scaler_X = StandardScaler()
+                X_2d = scaler_X.fit_transform(X_2d)
+
+
 
             # 3. 根据模型类型处理输入格式并预测
             model_type = None
