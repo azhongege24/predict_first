@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\beifen\新项目\ui\ui2025.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\ui2025.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -1369,11 +1369,11 @@ class Ui_MainWindow(object):
         self.label_state.setText(_translate("MainWindow", "状态:"))
         self.label_DEVICE.setToolTip(_translate("MainWindow", "<html><head/><body><p>当前使用的设备</p></body></html>"))
         self.label_DEVICE.setText(_translate("MainWindow", "DEVICE"))
-        self.label_MSE.setToolTip(_translate("MainWindow", "<html><head/><body><p>均方误差</p></body></html>"))
+        self.label_MSE.setToolTip(_translate("MainWindow", "<html><head/><body><p><a href=\"https://so.csdn.net/so/search?q=%E5%9D%87%E6%96%B9%E8%AF%AF%E5%B7%AE&amp;spm=1001.2101.3001.7020\"><span style=\" font-family:\'-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif\'; font-size:16px; color:#000000;\">均方误差，</span></a><span style=\" font-family:\'-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif\'; font-size:16px; font-weight:400; color:#000000; background-color:#ffffff;\">常用于评估模型的预测值与真实值之间的差异。它通过计算预测值和真实值之间的误差平方的平均值，来衡量模型的预测性能。</span><a href=\"https://so.csdn.net/so/search?q=%E5%9D%87%E6%96%B9%E8%AF%AF%E5%B7%AE&amp;spm=1001.2101.3001.7020\"><span style=\" font-family:\'-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif\'; font-size:16px; font-weight:400; color:#000000;\">均方误差</span></a><span style=\" font-family:\'-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif\'; font-size:16px; font-weight:400; color:#000000; background-color:#ffffff;\">越小，表示模型的预测越准确；均方误差越大，表示模型的预测误差越大。</span></p></body></html>"))
         self.label_MSE.setText(_translate("MainWindow", "MSE"))
-        self.label_RMSE.setToolTip(_translate("MainWindow", "<html><head/><body><p>均方误差</p></body></html>"))
+        self.label_RMSE.setToolTip(_translate("MainWindow", "<html><head/><body><p><span style=\" font-family:\'-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif\'; font-size:16px; font-weight:400; color:#4d4d4d; background-color:#ffffff;\">均方根误差，它表示预测值和观测值之间差异（称为残差）的样本标准差。均方根误差为了说明样本的离散程度。做非</span><span style=\" font-family:\'-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif\'; font-size:16px; font-weight:400; color:#4ea1db;\">线性</span><span style=\" font-family:\'-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif\'; font-size:16px; font-weight:400; color:#4d4d4d; background-color:#ffffff;\">拟合时,RMSE越小越好。</span></p></body></html>"))
         self.label_RMSE.setText(_translate("MainWindow", "RMSE"))
-        self.label_MAE.setToolTip(_translate("MainWindow", "<html><head/><body><p>均方误差</p></body></html>"))
+        self.label_MAE.setToolTip(_translate("MainWindow", "<html><head/><body><p><span style=\" font-family:\'-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif\'; font-size:16px; font-weight:400; color:#4d4d4d; background-color:#ffffff;\">平均绝对值误差，它表示预测值和观测值之间绝对误差的平均值</span></p></body></html>"))
         self.label_MAE.setText(_translate("MainWindow", "MAE"))
         self.pushButton_top.setToolTip(_translate("MainWindow", "<html><head/><body><p>上翻页</p></body></html>"))
         self.pushButton_top.setText(_translate("MainWindow", "↑"))

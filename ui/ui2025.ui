@@ -1549,7 +1549,7 @@ border-radius:10px;
         </font>
        </property>
        <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;均方误差&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://so.csdn.net/so/search?q=%E5%9D%87%E6%96%B9%E8%AF%AF%E5%B7%AE&amp;amp;spm=1001.2101.3001.7020&quot;&gt;&lt;span style=&quot; font-family:'-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif'; font-size:16px; color:#000000;&quot;&gt;均方误差，&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif'; font-size:16px; font-weight:400; color:#000000; background-color:#ffffff;&quot;&gt;常用于评估模型的预测值与真实值之间的差异。它通过计算预测值和真实值之间的误差平方的平均值，来衡量模型的预测性能。&lt;/span&gt;&lt;a href=&quot;https://so.csdn.net/so/search?q=%E5%9D%87%E6%96%B9%E8%AF%AF%E5%B7%AE&amp;amp;spm=1001.2101.3001.7020&quot;&gt;&lt;span style=&quot; font-family:'-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif'; font-size:16px; font-weight:400; color:#000000;&quot;&gt;均方误差&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif'; font-size:16px; font-weight:400; color:#000000; background-color:#ffffff;&quot;&gt;越小，表示模型的预测越准确；均方误差越大，表示模型的预测误差越大。&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="styleSheet">
         <string notr="true">QLabel{
@@ -1616,7 +1616,7 @@ border-radius:10px;
         </font>
        </property>
        <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;均方误差&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif'; font-size:16px; font-weight:400; color:#4d4d4d; background-color:#ffffff;&quot;&gt;均方根误差，它表示预测值和观测值之间差异（称为残差）的样本标准差。均方根误差为了说明样本的离散程度。做非&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif'; font-size:16px; font-weight:400; color:#4ea1db;&quot;&gt;线性&lt;/span&gt;&lt;span style=&quot; font-family:'-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif'; font-size:16px; font-weight:400; color:#4d4d4d; background-color:#ffffff;&quot;&gt;拟合时,RMSE越小越好。&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="styleSheet">
         <string notr="true">QLabel{
@@ -1683,7 +1683,7 @@ border-radius:10px;
         </font>
        </property>
        <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;均方误差&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif'; font-size:16px; font-weight:400; color:#4d4d4d; background-color:#ffffff;&quot;&gt;平均绝对值误差，它表示预测值和观测值之间绝对误差的平均值&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="styleSheet">
         <string notr="true">QLabel{
