@@ -1552,7 +1552,7 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
                 combined_df.to_excel(save_path, index=False, engine="openpyxl", float_format="%.15g")
             else:
                 # CSV保存：用科学计数法保留15位有效数字，确保极小值不被截断
-                combined_df.to_csv(save_path, index=False, float_format="%.15g")  # 关键修改：调整float_format
+                combined_df.to_csv(save_path, index=False, float_format="%.15g",encoding='utf-8-sig')  # 关键修改：调整float_format
 
             self.lastSelectedPath = os.path.dirname(save_path)
 
