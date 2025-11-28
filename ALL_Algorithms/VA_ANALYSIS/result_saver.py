@@ -198,7 +198,7 @@ class ResultSaver:
                     df['segment_index'] = segment_indices
                 
                 # 保存CSV文件
-                df.to_csv(full_path, index=False)
+                df.to_csv(full_path, index=False, encoding='utf-8-sig')
                 
                 # 保存元数据到单独的文件
                 meta_path = f"{base_path}_metadata.txt"
