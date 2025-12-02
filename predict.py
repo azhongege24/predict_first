@@ -90,6 +90,8 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         self.figure = Figure(figsize=(8, 6), dpi=100)
         self.canvas = FigureCanvas(self.figure)
         self.sampling_freq = None
+        self.VA_data_start_time =None
+        self.VA_data_end_time =None
         
         # 将matplotlib画布添加到graphicsView中
         scene = QGraphicsScene()
@@ -120,6 +122,10 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         self.ui_pop = POP_VA_method_para(self)
         if hasattr(self, 'sampling_freq') and self.sampling_freq is not None and self.sampling_freq > 0:
             self.ui_pop.spinBox_frequence.setValue(int(round(self.sampling_freq)))
+        if hasattr(self, 'VA_data_start_time') and self.VA_data_start_time is not None:
+            self.ui_pop.doubleSpinBox_start_time.setValue(self.VA_data_start_time)
+        if hasattr(self, 'VA_data_end_time') and self.VA_data_end_time is not None:
+            self.ui_pop.doubleSpinBox_end_time.setValue(self.VA_data_end_time)
         self.ui_pop.show()   
     
     def select_output_directory(self):
@@ -248,7 +254,8 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
                     
                     # 计算数据长度（总时长）
                     data_length = time_data[-1] - time_data[0] if len(time_data) > 1 else 0
-                    
+                    self.VA_data_start_time = time_data[0]
+                    self.VA_data_end_time = time_data[-1]
                     # 添加到文本信息中
                     file_name = os.path.basename(file_path)
                     file_info_text += f"文件 {i}: {file_name}\n"

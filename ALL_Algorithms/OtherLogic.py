@@ -186,104 +186,7 @@ class OtherParameterModule(QMainWindow, Ui_Other):
             QMessageBox.critical(self, "对齐失败", f"数据对齐过程中出错: {str(e)}")
         finally:
             progress.setValue(len(self.other_parameter_files) + 3)
-    '''  
-    老的对齐算法，是把所有的都放在一起的目标文件列和其他参数文件都列放在一起了 
-    def time_align_data(self):
-        """时间对齐核心算法"""
-        # 检查目标文件是否包含必要的时间信息
-        required_columns = ['start_time', 'end_time']
-        missing_cols = [col for col in required_columns if col not in self.target_data.columns]
-        if missing_cols:
-            raise Exception(f"目标文件缺少必要的时间列: {missing_cols}")
-        
-        # 创建对齐后的数据副本
-        aligned_df = self.target_data.copy()
-        
-        # 为每个其他参数文件创建对齐列
-        for i, other_data_info in enumerate(self.other_data_list):
-            other_data = other_data_info['data']
-            file_name = other_data_info['file_name']
-            
-            # 检查其他参数文件是否包含时间列
-            if 'time' not in other_data.columns:
-                raise Exception(f"文件 {file_name} 缺少时间列")
-            
-            # 为每个时间段计算其他参数的平均值
-            aligned_values = []
-            
-            for idx, row in self.target_data.iterrows():
-                start_time = row['start_time']
-                end_time = row['end_time']
-                
-                # 找到在当前时间段内的其他参数数据点
-                time_mask = (other_data['time'] >= start_time) & (other_data['time'] <= end_time)
-                time_data_in_range = other_data[time_mask]
-                
-                if len(time_data_in_range) > 0:
-                    # 计算该时间段内参数值的平均值
-                    if 'value' in time_data_in_range.columns:
-                        avg_value = time_data_in_range['value'].mean()
-                    else:
-                        # 如果没有value列，使用第二列
-                        value_col = time_data_in_range.columns[1]
-                        avg_value = time_data_in_range[value_col].mean()
-                else:
-                    # 如果没有数据点，使用线性插值
-                    try:
-                        # 找到前后最近的数据点进行插值
-                        before_data = other_data[other_data['time'] <= start_time]
-                        after_data = other_data[other_data['time'] >= end_time]
-                        
-                        if len(before_data) > 0 and len(after_data) > 0:
-                            before_time = before_data['time'].iloc[-1]
-                            after_time = after_data['time'].iloc[0]
-                            
-                            if 'value' in other_data.columns:
-                                before_value = before_data['value'].iloc[-1]
-                                after_value = after_data['value'].iloc[0]
-                            else:
-                                value_col = other_data.columns[1]
-                                before_value = before_data[value_col].iloc[-1]
-                                after_value = after_data[value_col].iloc[0]
-                            
-                            # 线性插值
-                            time_ratio = (start_time - before_time) / (after_time - before_time)
-                            avg_value = before_value + time_ratio * (after_value - before_value)
-                        else:
-                            avg_value = np.nan
-                    except:
-                        avg_value = np.nan
-                
-                aligned_values.append(avg_value)
-            
-            # 添加对齐后的列到结果数据框
-            column_name = f"other_param_{i+1}_{os.path.splitext(file_name)[0]}"
-            aligned_df[column_name] = aligned_values
-        
-        return aligned_df
-    
-    def save_aligned_data(self):
-        """保存对齐后的数据"""
-        if self.aligned_data is None:
-            QMessageBox.warning(self, "警告", "请先执行数据对齐操作")
-            return
-        
-        file_filter = "CSV文件 (*.csv);;Excel文件 (*.xlsx);;所有文件 (*.*)"
-        file_path, _ = QFileDialog.getSaveFileName(
-            self, "保存对齐数据", "aligned_dataset.csv", file_filter)
-        
-        if file_path:
-            try:
-                if file_path.endswith('.xlsx'):
-                    self.aligned_data.to_excel(file_path, index=False)
-                else:
-                    self.aligned_data.to_csv(file_path, index=False)
-                
-                QMessageBox.information(self, "保存成功", 
-                                      f"对齐数据已保存到: {file_path}")
-            except Exception as e:
-                QMessageBox.critical(self, "保存失败", f"保存文件时出错: {str(e)}")
-    '''
+
     def time_align_data(self):
         """时间对齐核心算法"""
         # 检查目标文件是否包含必要的时间信息
@@ -382,8 +285,11 @@ class OtherParameterModule(QMainWindow, Ui_Other):
             return
         
         file_filter = "CSV文件 (*.csv);;Excel文件 (*.xlsx);;所有文件 (*.*)"
+        default_path = "./data/allagin_data" if os.path.exists("./data/allagin_data") else "./"
+        # 构建完整的默认文件路径
+        default_file_path = os.path.join(default_path, "other_parameters_dataset.csv")
         file_path, _ = QFileDialog.getSaveFileName(
-            self, "保存其他参数整合数据", "other_parameters_dataset.csv", file_filter)
+            self, "保存其他参数整合数据", default_file_path, file_filter)
         
         if file_path:
             try:
