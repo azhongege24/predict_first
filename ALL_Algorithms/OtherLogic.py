@@ -49,8 +49,9 @@ class OtherParameterModule(QMainWindow, Ui_Other):
     def load_other_parameter_files(self):
         """导入其他参数文件（支持多文件）"""
         file_filter = "数据文件 (*.csv *.txt *.xls *.xlsx);;所有文件 (*.*)"
+        default_path = "./data/generated_files" if os.path.exists("./data/generated_files") else "./"
         files, _ = QFileDialog.getOpenFileNames(
-            self, "选择其他参数文件", "", file_filter)
+            self, "选择其他参数文件", default_path, file_filter)
         
         if files:
             self.other_parameter_files.extend(files)
@@ -68,8 +69,9 @@ class OtherParameterModule(QMainWindow, Ui_Other):
     def select_target_alignment_file(self):
         """选择需要对齐的目标文件（功率谱分析结果文件）"""
         file_filter = "CSV文件 (*.csv);;所有文件 (*.*)"
+        default_path = "./data/data_va_analysis" if os.path.exists("./data/data_va_analysis") else "./"
         file_path, _ = QFileDialog.getOpenFileName(
-            self, "选择目标对齐文件", "", file_filter)
+            self, "选择目标对齐文件", default_path, file_filter)
         
         if file_path:
             self.target_file_path = file_path
