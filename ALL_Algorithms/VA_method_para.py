@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\VA_method_para.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\beifen\新项目\ui\VA_method_para.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -234,7 +234,7 @@ class Ui_VA_method_para(object):
         font.setWeight(75)
         self.spinBox_frequence.setFont(font)
         self.spinBox_frequence.setMaximum(99999)
-        self.spinBox_frequence.setProperty("value", 5000)
+        self.spinBox_frequence.setProperty("value", 4000)
         self.spinBox_frequence.setObjectName("spinBox_frequence")
         self.horizontalLayout_4.addWidget(self.spinBox_frequence)
         self.verticalLayout.addLayout(self.horizontalLayout_4)

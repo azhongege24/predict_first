@@ -89,6 +89,7 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         # 创建matplotlib图形画布
         self.figure = Figure(figsize=(8, 6), dpi=100)
         self.canvas = FigureCanvas(self.figure)
+        self.sampling_freq = None
         
         # 将matplotlib画布添加到graphicsView中
         scene = QGraphicsScene()
@@ -114,52 +115,16 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         # 启用滚轮事件
         self.graphicsView.wheelEvent = self.graphics_view_wheel_event        
 
-    def AL_VA_method_para(self):
+    def AL_VA_method_para(self):#这里可以看出他是va_metod_para类窗口的parent
       
         self.ui_pop = POP_VA_method_para(self)
+        if hasattr(self, 'sampling_freq') and self.sampling_freq is not None and self.sampling_freq > 0:
+            self.ui_pop.spinBox_frequence.setValue(int(round(self.sampling_freq)))
         self.ui_pop.show()   
-    def browse_data_file(self):
-        """浏览数据文件"""
-        file_filter = "数据文件 (*.txt *.mat);;文本文件 (*.txt);;MAT文件 (*.mat);;所有文件 (*.*)"
-        initial_dir = "data/" if os.path.exists("data/") else "./"
-        
-        file_path, _ = QFileDialog.getOpenFileName(
-            self, "选择振动数据文件", initial_dir, file_filter
-        )
-        
-        if file_path:
-            self.current_file_path = file_path
-            self.lineEdit.setText(file_path)
-            
-            try:
-                # 尝试加载数据以验证文件格式
-                time_data, signal_data = self.va_controller.data_loader.load_data(file_path)
-                self.current_time_data = time_data
-                self.current_signal_data = signal_data
-                
-                # 解析文件信息
-                file_name = os.path.basename(file_path)
-                channel, direction = self.va_controller.data_loader.parse_channel_info(file_name)
-                
-                info_msg = f"文件加载成功\n"
-                info_msg += f"数据点数: {len(time_data)}\n"
-                info_msg += f"时间范围: {time_data[0]:.3f} - {time_data[-1]:.3f}秒\n"
-                if channel:
-                    info_msg += f"通道: {channel}\n"
-                if direction:
-                    info_msg += f"方向: {direction}"
-                
-                QMessageBox.information(self, "文件信息", info_msg)
-                
-            except Exception as e:
-                QMessageBox.warning(self, "加载失败", f"文件加载失败: {str(e)}")
-                self.current_file_path = None
-                self.current_time_data = None
-                self.current_signal_data = None
     
     def select_output_directory(self):
         """选择输出目录"""
-        initial_dir = "results/" if os.path.exists("results/") else "./"
+        initial_dir = "data/data_va_analysis/" if os.path.exists("data/data_va_analysis/") else "./"
         directory = QFileDialog.getExistingDirectory(
             self, "选择结果保存目录", initial_dir
         )
@@ -230,12 +195,14 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
     def browse_multiple_files(self):
         """浏览多个数据文件"""
         file_filter = "数据文件 (*.txt *.mat);;文本文件 (*.txt);;MAT文件 (*.mat);;所有文件 (*.*)"
-        initial_dir = "data/" if os.path.exists("data/") else "./"
+        initial_dir = "测试数据/产品代号A1/产品序号B1/" if os.path.exists("测试数据/产品代号A1/产品序号B1/") else "./"
         
         file_paths, _ = QFileDialog.getOpenFileNames(
             self, "选择多个振动数据文件", initial_dir, file_filter
         )
+
         
+
         if file_paths:
             self.current_file_paths = file_paths
             # 在界面上显示文件列表 - 显示第一个文件名和文件总数
@@ -256,21 +223,47 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
                 self.current_time_data = None
                 self.current_signal_data = None
                 self.current_file_path = None
+
+            # 在textEdit_file_info中显示每个文件的采样频率、长度和点数
+            self.textEdit_file_info.clear()
+            file_info_text = "振动数据文件信息:\n"
             
-            
-            # 显示文件信息
-            info_msg = f"已选择 {len(file_paths)} 个文件：\n\n"
             for i, file_path in enumerate(file_paths, 1):
-                file_name = os.path.basename(file_path)
-                channel, direction = self.va_controller.data_loader.parse_channel_info(file_name)
-                info_msg += f"{i}. {file_name}\n"
-                if channel:
-                    info_msg += f"   通道: {channel}\n"
-                if direction:
-                    info_msg += f"   方向: {direction}\n"
-                info_msg += "\n"
+                try:
+                    # 加载文件数据
+                    time_data, signal_data = self.va_controller.data_loader.load_data(file_path)
+                    
+                    # 计算数据信息
+                    num_points = len(signal_data)  # 数据点数
+                    
+                    # 计算采样频率
+                    if len(time_data) > 1:
+                        time_diff = np.diff(time_data)
+                        avg_time_interval = np.mean(time_diff)
+                        sampling_freq = 1.0 / avg_time_interval if avg_time_interval > 0 else 0
+                        if i==1:
+                            self.sampling_freq = sampling_freq
+                    else:
+                        sampling_freq = 0
+                    
+                    # 计算数据长度（总时长）
+                    data_length = time_data[-1] - time_data[0] if len(time_data) > 1 else 0
+                    
+                    # 添加到文本信息中
+                    file_name = os.path.basename(file_path)
+                    file_info_text += f"文件 {i}: {file_name}\n"
+                    file_info_text += f"采样频率: {round(sampling_freq)} Hz 数据点数: {num_points} 数据长度: {data_length:.4f} s\n\n"
+                    
+                except Exception as e:
+                    file_name = os.path.basename(file_path)
+                    file_info_text += f"文件 {i}: {file_name}\n"
+                    file_info_text += f"   无法读取文件信息: {str(e)}\n\n"
             
-            QMessageBox.information(self, "文件选择完成", info_msg)
+            # 显示到textEdit_file_info
+            self.textEdit_file_info.setPlainText(file_info_text)
+
+
+
 
     def perform_psd_analysis_multiple(self):
         """执行多文件功率谱分析"""
@@ -1345,11 +1338,10 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
     def add_input_features(self):
         """添加输入特征文件（支持多选）"""
         file_filter = "数据文件 (*.csv *.txt);;CSV文件 (*.csv);;文本文件 (*.txt);;所有文件 (*.*)"
-        initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
+        initial_dir = "data/allagin_data/" if os.path.exists("data/allagin_data/") else "./"
         files, _ = QFileDialog.getOpenFileNames(self, "选择输入特征文件", initial_dir, file_filter)
         
         if files:
-            self.lastSelectedPath = os.path.dirname(files[0])
             for file in files:
                 if file not in self.input_files:
                     self.input_files.append(file)
@@ -1362,11 +1354,10 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
     def add_output_features(self):
         """添加输出特征文件（支持多选）"""
         file_filter = "数据文件 (*.csv *.txt);;CSV文件 (*.csv);;文本文件 (*.txt);;所有文件 (*.*)"
-        initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
+        initial_dir = "data/data_va_analysis/" if os.path.exists("data/data_va_analysis/") else "./"
         files, _ = QFileDialog.getOpenFileNames(self, "选择输出特征文件", initial_dir, file_filter)
         
         if files:
-            self.lastSelectedPath = os.path.dirname(files[0])
             for file in files:
                 if file not in self.output_files:
                     self.output_files.append(file)

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\VA_para.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\beifen\新项目\ui\VA_para.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -14,116 +14,42 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_VA_para(object):
     def setupUi(self, VA_para):
         VA_para.setObjectName("VA_para")
-        VA_para.resize(1284, 787)
+        VA_para.resize(1284, 848)
         self.centralwidget = QtWidgets.QWidget(VA_para)
         self.centralwidget.setObjectName("centralwidget")
-        self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(60, 20, 1171, 721))
-        self.layoutWidget.setObjectName("layoutWidget")
-        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.layoutWidget)
-        self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_6.setObjectName("verticalLayout_6")
-        self.verticalLayout_5 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_5.setObjectName("verticalLayout_5")
-        self.label_8 = QtWidgets.QLabel(self.layoutWidget)
-        self.label_8.setMinimumSize(QtCore.QSize(88, 34))
-        self.label_8.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.layoutWidget_2 = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget_2.setGeometry(QtCore.QRect(1240, 320, 42, 70))
+        self.layoutWidget_2.setObjectName("layoutWidget_2")
+        self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.layoutWidget_2)
+        self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_7.setObjectName("verticalLayout_7")
+        self.pushButton_top = QtWidgets.QPushButton(self.layoutWidget_2)
+        self.pushButton_top.setMinimumSize(QtCore.QSize(32, 32))
+        self.pushButton_top.setMaximumSize(QtCore.QSize(40, 30))
         font = QtGui.QFont()
-        font.setFamily("楷体")
-        font.setPointSize(14)
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
         font.setBold(True)
-        font.setItalic(False)
         font.setWeight(75)
-        self.label_8.setFont(font)
-        self.label_8.setStyleSheet("QLabel {\n"
-"\n"
-"    color:white;    \n"
-"    padding: 2px 4px;  \n"
-"    background-color:#5F9EA0; \n"
-"    font: 14pt \"楷体\";  /* 推荐使用无衬线字体更清晰  */\n"
-"    min-width: 80px;\n"
-"    min-height: 30px;\n"
-"    font-weight: bold;\n"
-"qproperty-alignment: \'AlignCenter\'; \n"
-"}")
-        self.label_8.setObjectName("label_8")
-        self.verticalLayout_5.addWidget(self.label_8)
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.verticalLayout = QtWidgets.QVBoxLayout()
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.horizontalLayout_2.addLayout(self.verticalLayout)
-        self.verticalLayout_4 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.pushButton_browse_multiple_files = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton_browse_multiple_files.setStyleSheet("QPushButton {\n"
-"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
-"    border-radius: 8px;\n"
-"    padding: 4px 8px;\n"
-"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
-"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
-"    font: bold 16pt \"Times New Roman\";     \n"
-"    /* 强化阴影效果 */\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
-"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
-"}")
-        self.pushButton_browse_multiple_files.setObjectName("pushButton_browse_multiple_files")
-        self.verticalLayout_4.addWidget(self.pushButton_browse_multiple_files)
-        self.pushButton_select = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton_select.setStyleSheet("QPushButton {\n"
-"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
-"    border-radius: 8px;\n"
-"    padding: 4px 8px;\n"
-"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
-"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
-"    font: bold 16pt \"Times New Roman\";     \n"
-"    /* 强化阴影效果 */\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
-"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
-"}")
-        self.pushButton_select.setObjectName("pushButton_select")
-        self.verticalLayout_4.addWidget(self.pushButton_select)
-        self.horizontalLayout_2.addLayout(self.verticalLayout_4)
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.lineEdit = QtWidgets.QLineEdit(self.layoutWidget)
-        self.lineEdit.setMinimumSize(QtCore.QSize(0, 30))
+        self.pushButton_top.setFont(font)
+        self.pushButton_top.setObjectName("pushButton_top")
+        self.verticalLayout_7.addWidget(self.pushButton_top)
+        self.pushButton_bottom = QtWidgets.QPushButton(self.layoutWidget_2)
+        self.pushButton_bottom.setMinimumSize(QtCore.QSize(0, 30))
+        self.pushButton_bottom.setMaximumSize(QtCore.QSize(40, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
         font.setPointSize(12)
-        self.lineEdit.setFont(font)
-        self.lineEdit.setText("")
-        self.lineEdit.setReadOnly(True)
-        self.lineEdit.setObjectName("lineEdit")
-        self.verticalLayout_2.addWidget(self.lineEdit)
-        self.lineEdit_2 = QtWidgets.QLineEdit(self.layoutWidget)
-        self.lineEdit_2.setMinimumSize(QtCore.QSize(0, 30))
-        font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(12)
-        self.lineEdit_2.setFont(font)
-        self.lineEdit_2.setText("")
-        self.lineEdit_2.setReadOnly(True)
-        self.lineEdit_2.setObjectName("lineEdit_2")
-        self.verticalLayout_2.addWidget(self.lineEdit_2)
-        self.horizontalLayout_2.addLayout(self.verticalLayout_2)
-        self.verticalLayout_5.addLayout(self.horizontalLayout_2)
-        self.verticalLayout_6.addLayout(self.verticalLayout_5)
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        font.setBold(True)
+        font.setWeight(75)
+        self.pushButton_bottom.setFont(font)
+        self.pushButton_bottom.setObjectName("pushButton_bottom")
+        self.verticalLayout_7.addWidget(self.pushButton_bottom)
+        self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget.setGeometry(QtCore.QRect(61, 159, 1171, 641))
+        self.layoutWidget.setObjectName("layoutWidget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
         self.verticalLayout_3.setObjectName("verticalLayout_3")
@@ -334,35 +260,118 @@ class Ui_VA_para(object):
         self.graphicsView = QtWidgets.QGraphicsView(self.layoutWidget)
         self.graphicsView.setObjectName("graphicsView")
         self.horizontalLayout.addWidget(self.graphicsView)
-        self.verticalLayout_6.addLayout(self.horizontalLayout)
-        self.layoutWidget_2 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget_2.setGeometry(QtCore.QRect(1240, 320, 42, 70))
-        self.layoutWidget_2.setObjectName("layoutWidget_2")
-        self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.layoutWidget_2)
-        self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_7.setObjectName("verticalLayout_7")
-        self.pushButton_top = QtWidgets.QPushButton(self.layoutWidget_2)
-        self.pushButton_top.setMinimumSize(QtCore.QSize(32, 32))
-        self.pushButton_top.setMaximumSize(QtCore.QSize(40, 30))
+        self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget1.setGeometry(QtCore.QRect(62, 22, 1171, 131))
+        self.layoutWidget1.setObjectName("layoutWidget1")
+        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.layoutWidget1)
+        self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_5.setObjectName("verticalLayout_5")
+        self.label_8 = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_8.setMinimumSize(QtCore.QSize(88, 34))
+        self.label_8.setMaximumSize(QtCore.QSize(16777215, 40))
+        font = QtGui.QFont()
+        font.setFamily("楷体")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.label_8.setFont(font)
+        self.label_8.setStyleSheet("QLabel {\n"
+"\n"
+"    color:white;    \n"
+"    padding: 2px 4px;  \n"
+"    background-color:#5F9EA0; \n"
+"    font: 14pt \"楷体\";  /* 推荐使用无衬线字体更清晰  */\n"
+"    min-width: 80px;\n"
+"    min-height: 30px;\n"
+"    font-weight: bold;\n"
+"qproperty-alignment: \'AlignCenter\'; \n"
+"}")
+        self.label_8.setObjectName("label_8")
+        self.verticalLayout_5.addWidget(self.label_8)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.horizontalLayout_2.addLayout(self.verticalLayout)
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.pushButton_browse_multiple_files = QtWidgets.QPushButton(self.layoutWidget1)
+        self.pushButton_browse_multiple_files.setStyleSheet("QPushButton {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.pushButton_browse_multiple_files.setObjectName("pushButton_browse_multiple_files")
+        self.verticalLayout_4.addWidget(self.pushButton_browse_multiple_files)
+        self.pushButton_select = QtWidgets.QPushButton(self.layoutWidget1)
+        self.pushButton_select.setStyleSheet("QPushButton {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.pushButton_select.setObjectName("pushButton_select")
+        self.verticalLayout_4.addWidget(self.pushButton_select)
+        self.horizontalLayout_2.addLayout(self.verticalLayout_4)
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.lineEdit = QtWidgets.QLineEdit(self.layoutWidget1)
+        self.lineEdit.setMinimumSize(QtCore.QSize(0, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
         font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.pushButton_top.setFont(font)
-        self.pushButton_top.setObjectName("pushButton_top")
-        self.verticalLayout_7.addWidget(self.pushButton_top)
-        self.pushButton_bottom = QtWidgets.QPushButton(self.layoutWidget_2)
-        self.pushButton_bottom.setMinimumSize(QtCore.QSize(0, 30))
-        self.pushButton_bottom.setMaximumSize(QtCore.QSize(40, 30))
+        self.lineEdit.setFont(font)
+        self.lineEdit.setText("")
+        self.lineEdit.setReadOnly(True)
+        self.lineEdit.setObjectName("lineEdit")
+        self.verticalLayout_2.addWidget(self.lineEdit)
+        self.lineEdit_2 = QtWidgets.QLineEdit(self.layoutWidget1)
+        self.lineEdit_2.setMinimumSize(QtCore.QSize(0, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
         font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.pushButton_bottom.setFont(font)
-        self.pushButton_bottom.setObjectName("pushButton_bottom")
-        self.verticalLayout_7.addWidget(self.pushButton_bottom)
+        self.lineEdit_2.setFont(font)
+        self.lineEdit_2.setText("")
+        self.lineEdit_2.setReadOnly(True)
+        self.lineEdit_2.setObjectName("lineEdit_2")
+        self.verticalLayout_2.addWidget(self.lineEdit_2)
+        self.horizontalLayout_2.addLayout(self.verticalLayout_2)
+        self.textEdit_file_info = QtWidgets.QTextEdit(self.layoutWidget1)
+        self.textEdit_file_info.setMinimumSize(QtCore.QSize(0, 40))
+        self.textEdit_file_info.setMaximumSize(QtCore.QSize(16777215, 100))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        self.textEdit_file_info.setFont(font)
+        self.textEdit_file_info.setObjectName("textEdit_file_info")
+        self.horizontalLayout_2.addWidget(self.textEdit_file_info)
+        self.verticalLayout_5.addLayout(self.horizontalLayout_2)
         VA_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(VA_para)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1284, 23))
@@ -378,9 +387,10 @@ class Ui_VA_para(object):
     def retranslateUi(self, VA_para):
         _translate = QtCore.QCoreApplication.translate
         VA_para.setWindowTitle(_translate("VA_para", "VibrationAnalyzer参数设置"))
-        self.label_8.setText(_translate("VA_para", "分析功能区"))
-        self.pushButton_browse_multiple_files.setText(_translate("VA_para", "浏览数据文件"))
-        self.pushButton_select.setText(_translate("VA_para", "选择输出目录"))
+        self.pushButton_top.setToolTip(_translate("VA_para", "<html><head/><body><p>上翻页</p></body></html>"))
+        self.pushButton_top.setText(_translate("VA_para", "↑"))
+        self.pushButton_bottom.setToolTip(_translate("VA_para", "<html><head/><body><p>下翻页</p></body></html>"))
+        self.pushButton_bottom.setText(_translate("VA_para", "↓"))
         self.label_6.setText(_translate("VA_para", "分析功能区"))
         self.pushButton_preview_data_file.setText(_translate("VA_para", "预览数据"))
         self.pushButton_set_para.setText(_translate("VA_para", "参数设置"))
@@ -390,7 +400,6 @@ class Ui_VA_para(object):
         self.label_7.setText(_translate("VA_para", "辅助设置区"))
         self.pushButton_help.setText(_translate("VA_para", "帮助"))
         self.pushButton_jump.setText(_translate("VA_para", "指定页数跳转"))
-        self.pushButton_top.setToolTip(_translate("VA_para", "<html><head/><body><p>上翻页</p></body></html>"))
-        self.pushButton_top.setText(_translate("VA_para", "↑"))
-        self.pushButton_bottom.setToolTip(_translate("VA_para", "<html><head/><body><p>下翻页</p></body></html>"))
-        self.pushButton_bottom.setText(_translate("VA_para", "↓"))
+        self.label_8.setText(_translate("VA_para", "分析功能区"))
+        self.pushButton_browse_multiple_files.setText(_translate("VA_para", "浏览数据文件"))
+        self.pushButton_select.setText(_translate("VA_para", "选择输出目录"))
