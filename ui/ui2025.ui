@@ -220,7 +220,7 @@ QPushButton:pressed {
 }</string>
        </property>
        <property name="text">
-        <string>预测</string>
+        <string>振动预测</string>
        </property>
        <property name="autoDefault">
         <bool>false</bool>
@@ -252,7 +252,7 @@ font: 16 px  &quot;Times New Roman&quot;;
 }</string>
     </property>
     <property name="text">
-     <string>v4.0 2025.11.28</string>
+     <string>v4.0 2025.12.2</string>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">
