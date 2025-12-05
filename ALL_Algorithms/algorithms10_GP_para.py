@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\algorithms10_GP_para.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\beifen\新项目\ui\algorithms10_GP_para.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -18,60 +18,14 @@ class Ui_GP_para(object):
         self.centralwidget = QtWidgets.QWidget(GP_para)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(120, 220, 241, 51))
+        self.layoutWidget.setGeometry(QtCore.QRect(66, 84, 361, 111))
         self.layoutWidget.setObjectName("layoutWidget")
-        self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.layoutWidget)
-        self.horizontalLayout_5.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
-        self.pushButton = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton.setMinimumSize(QtCore.QSize(0, 40))
-        self.pushButton.setStyleSheet("QPushButton{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
-"\n"
-"font:bold;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
-"}")
-        self.pushButton.setObjectName("pushButton")
-        self.horizontalLayout_5.addWidget(self.pushButton)
-        self.pushButton_2 = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
-        self.pushButton_2.setStyleSheet("QPushButton{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
-"\n"
-"font:bold;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
-"}")
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.horizontalLayout_5.addWidget(self.pushButton_2)
-        self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(66, 84, 361, 111))
-        self.layoutWidget1.setObjectName("layoutWidget1")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget1)
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.label_3 = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_3 = QtWidgets.QLabel(self.layoutWidget)
         self.label_3.setMinimumSize(QtCore.QSize(100, 30))
         self.label_3.setMaximumSize(QtCore.QSize(250, 16777215))
         self.label_3.setStyleSheet("QLabel {\n"
@@ -95,7 +49,7 @@ class Ui_GP_para(object):
 "}")
         self.label_3.setObjectName("label_3")
         self.horizontalLayout_2.addWidget(self.label_3)
-        self.doubleSpinBox_learning_rate = QtWidgets.QDoubleSpinBox(self.layoutWidget1)
+        self.doubleSpinBox_learning_rate = QtWidgets.QDoubleSpinBox(self.layoutWidget)
         self.doubleSpinBox_learning_rate.setMinimumSize(QtCore.QSize(80, 30))
         self.doubleSpinBox_learning_rate.setMaximumSize(QtCore.QSize(1600, 40))
         font = QtGui.QFont()
@@ -118,7 +72,7 @@ class Ui_GP_para(object):
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.label_4 = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_4 = QtWidgets.QLabel(self.layoutWidget)
         self.label_4.setMinimumSize(QtCore.QSize(100, 30))
         self.label_4.setMaximumSize(QtCore.QSize(250, 16777215))
         self.label_4.setStyleSheet("QLabel {\n"
@@ -142,7 +96,7 @@ class Ui_GP_para(object):
 "}")
         self.label_4.setObjectName("label_4")
         self.horizontalLayout_4.addWidget(self.label_4)
-        self.spinBox_training_iterations = QtWidgets.QSpinBox(self.layoutWidget1)
+        self.spinBox_training_iterations = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_training_iterations.setMinimumSize(QtCore.QSize(110, 40))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -162,6 +116,72 @@ class Ui_GP_para(object):
         self.spinBox_training_iterations.setObjectName("spinBox_training_iterations")
         self.horizontalLayout_4.addWidget(self.spinBox_training_iterations)
         self.verticalLayout.addLayout(self.horizontalLayout_4)
+        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.widget.setGeometry(QtCore.QRect(120, 230, 244, 42))
+        self.widget.setObjectName("widget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.pushButton = QtWidgets.QPushButton(self.widget)
+        self.pushButton.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton.setObjectName("pushButton")
+        self.horizontalLayout.addWidget(self.pushButton)
+        self.pushButton_2 = QtWidgets.QPushButton(self.widget)
+        self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton_2.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.horizontalLayout.addWidget(self.pushButton_2)
+        self.pushButton_save_params = QtWidgets.QPushButton(self.widget)
+        self.pushButton_save_params.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton_save_params.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton_save_params.setObjectName("pushButton_save_params")
+        self.horizontalLayout.addWidget(self.pushButton_save_params)
         GP_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(GP_para)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 481, 23))
@@ -180,9 +200,10 @@ class Ui_GP_para(object):
     def retranslateUi(self, GP_para):
         _translate = QtCore.QCoreApplication.translate
         GP_para.setWindowTitle(_translate("GP_para", "MainWindow"))
-        self.pushButton.setText(_translate("GP_para", "确认"))
-        self.pushButton_2.setText(_translate("GP_para", "取消"))
         self.label_3.setToolTip(_translate("GP_para", "<html><head/><body><p><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">控制优化算法中</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; color:rgba(0,0,0,0.898039);\">参数更新的步长</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">，是高斯过程模型优化过程中最关键的超参数之一。通常尝试 </span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);\">0.01</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">、</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);\">0.1</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">，有时也可从 </span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);\">0.001</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\"> 开始。对于使用Adam优化器的复杂模型，常从 </span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);\">0.1</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\"> 开始尝试。值过小会导致收敛缓慢，耗时增加；值过大可能导致优化过程在最优值附近震荡甚至发散，无法收敛。建议从一个初始值（如0.1）开始，观察损失函数下降情况，必要时采用学习率调度器</span></p></body></html>"))
         self.label_3.setText(_translate("GP_para", "learning_rate"))
         self.label_4.setToolTip(_translate("GP_para", "<html><head/><body><p><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">定义优化过程运行的</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; color:rgba(0,0,0,0.898039);\">最大迭代次数（epoch数）​</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">，决定了模型在训练数据上学习的轮数。需要根据数据集大小和问题复杂度调整，例如100、200、500甚至更多。迭代次数过少可能导致模型欠拟合；过多则可能导致过拟合且增加不必要的计算开销。建议结合早停法（Early Stopping）或在验证集上性能不再提升时终止训练</span></p><p><br/></p></body></html>"))
         self.label_4.setText(_translate("GP_para", "training_iterations"))
+        self.pushButton.setText(_translate("GP_para", "确认"))
+        self.pushButton_2.setText(_translate("GP_para", "取消"))
+        self.pushButton_save_params.setText(_translate("GP_para", "保存参数"))

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\algorithms2_RF_para.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\beifen\新项目\ui\algorithms2_RF_para.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -14,64 +14,18 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_RF_para(object):
     def setupUi(self, RF_para):
         RF_para.setObjectName("RF_para")
-        RF_para.resize(555, 447)
+        RF_para.resize(493, 378)
         self.centralwidget = QtWidgets.QWidget(RF_para)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(180, 280, 181, 71))
+        self.layoutWidget.setGeometry(QtCore.QRect(140, 50, 261, 182))
         self.layoutWidget.setObjectName("layoutWidget")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.pushButton = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton.setMinimumSize(QtCore.QSize(0, 40))
-        self.pushButton.setStyleSheet("QPushButton{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
-"\n"
-"font:bold;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
-"}")
-        self.pushButton.setObjectName("pushButton")
-        self.horizontalLayout.addWidget(self.pushButton)
-        self.pushButton_2 = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
-        self.pushButton_2.setStyleSheet("QPushButton{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
-"\n"
-"font:bold;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
-"}")
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.horizontalLayout.addWidget(self.pushButton_2)
-        self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(140, 50, 261, 182))
-        self.layoutWidget1.setObjectName("layoutWidget1")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget1)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.labeln_estimators = QtWidgets.QLabel(self.layoutWidget1)
+        self.labeln_estimators = QtWidgets.QLabel(self.layoutWidget)
         self.labeln_estimators.setMinimumSize(QtCore.QSize(120, 30))
         self.labeln_estimators.setMaximumSize(QtCore.QSize(200, 35))
         font = QtGui.QFont()
@@ -102,7 +56,7 @@ class Ui_RF_para(object):
 "}")
         self.labeln_estimators.setObjectName("labeln_estimators")
         self.verticalLayout.addWidget(self.labeln_estimators)
-        self.label_max_depth = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_max_depth = QtWidgets.QLabel(self.layoutWidget)
         self.label_max_depth.setMinimumSize(QtCore.QSize(0, 30))
         self.label_max_depth.setMaximumSize(QtCore.QSize(16777215, 35))
         font = QtGui.QFont()
@@ -133,7 +87,7 @@ class Ui_RF_para(object):
 "}")
         self.label_max_depth.setObjectName("label_max_depth")
         self.verticalLayout.addWidget(self.label_max_depth)
-        self.label = QtWidgets.QLabel(self.layoutWidget1)
+        self.label = QtWidgets.QLabel(self.layoutWidget)
         self.label.setMinimumSize(QtCore.QSize(0, 30))
         self.label.setMaximumSize(QtCore.QSize(16777215, 35))
         font = QtGui.QFont()
@@ -164,7 +118,7 @@ class Ui_RF_para(object):
 "}")
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
-        self.label_random_state = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_random_state = QtWidgets.QLabel(self.layoutWidget)
         self.label_random_state.setMinimumSize(QtCore.QSize(0, 30))
         self.label_random_state.setMaximumSize(QtCore.QSize(16777215, 35))
         font = QtGui.QFont()
@@ -195,7 +149,7 @@ class Ui_RF_para(object):
 "}")
         self.label_random_state.setObjectName("label_random_state")
         self.verticalLayout.addWidget(self.label_random_state)
-        self.label_2 = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_2 = QtWidgets.QLabel(self.layoutWidget)
         self.label_2.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -220,7 +174,7 @@ class Ui_RF_para(object):
         self.horizontalLayout_2.addLayout(self.verticalLayout)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.spinBox_n_estimators = QtWidgets.QSpinBox(self.layoutWidget1)
+        self.spinBox_n_estimators = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_n_estimators.setMinimumSize(QtCore.QSize(80, 30))
         self.spinBox_n_estimators.setMaximumSize(QtCore.QSize(16777215, 35))
         font = QtGui.QFont()
@@ -239,7 +193,7 @@ class Ui_RF_para(object):
         self.spinBox_n_estimators.setProperty("value", 200)
         self.spinBox_n_estimators.setObjectName("spinBox_n_estimators")
         self.verticalLayout_2.addWidget(self.spinBox_n_estimators)
-        self.spinBox_max_depth = QtWidgets.QSpinBox(self.layoutWidget1)
+        self.spinBox_max_depth = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_max_depth.setMinimumSize(QtCore.QSize(80, 30))
         self.spinBox_max_depth.setMaximumSize(QtCore.QSize(16777215, 35))
         font = QtGui.QFont()
@@ -257,7 +211,7 @@ class Ui_RF_para(object):
         self.spinBox_max_depth.setProperty("value", 12)
         self.spinBox_max_depth.setObjectName("spinBox_max_depth")
         self.verticalLayout_2.addWidget(self.spinBox_max_depth)
-        self.spinBox_n_jobs = QtWidgets.QSpinBox(self.layoutWidget1)
+        self.spinBox_n_jobs = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_n_jobs.setMinimumSize(QtCore.QSize(80, 30))
         self.spinBox_n_jobs.setMaximumSize(QtCore.QSize(16777215, 35))
         font = QtGui.QFont()
@@ -277,7 +231,7 @@ class Ui_RF_para(object):
         self.spinBox_n_jobs.setProperty("value", -1)
         self.spinBox_n_jobs.setObjectName("spinBox_n_jobs")
         self.verticalLayout_2.addWidget(self.spinBox_n_jobs)
-        self.spinBox_random_state = QtWidgets.QSpinBox(self.layoutWidget1)
+        self.spinBox_random_state = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_random_state.setMinimumSize(QtCore.QSize(80, 30))
         self.spinBox_random_state.setMaximumSize(QtCore.QSize(16777215, 35))
         font = QtGui.QFont()
@@ -295,7 +249,7 @@ class Ui_RF_para(object):
         self.spinBox_random_state.setProperty("value", 42)
         self.spinBox_random_state.setObjectName("spinBox_random_state")
         self.verticalLayout_2.addWidget(self.spinBox_random_state)
-        self.comboBox_scale_features = QtWidgets.QComboBox(self.layoutWidget1)
+        self.comboBox_scale_features = QtWidgets.QComboBox(self.layoutWidget)
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
         font.setPointSize(12)
@@ -307,9 +261,75 @@ class Ui_RF_para(object):
         self.comboBox_scale_features.addItem("")
         self.verticalLayout_2.addWidget(self.comboBox_scale_features)
         self.horizontalLayout_2.addLayout(self.verticalLayout_2)
+        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.widget.setGeometry(QtCore.QRect(150, 270, 244, 42))
+        self.widget.setObjectName("widget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.pushButton = QtWidgets.QPushButton(self.widget)
+        self.pushButton.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton.setObjectName("pushButton")
+        self.horizontalLayout.addWidget(self.pushButton)
+        self.pushButton_2 = QtWidgets.QPushButton(self.widget)
+        self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton_2.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.horizontalLayout.addWidget(self.pushButton_2)
+        self.pushButton_save_params = QtWidgets.QPushButton(self.widget)
+        self.pushButton_save_params.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton_save_params.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton_save_params.setObjectName("pushButton_save_params")
+        self.horizontalLayout.addWidget(self.pushButton_save_params)
         RF_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(RF_para)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 555, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 493, 23))
         self.menubar.setObjectName("menubar")
         RF_para.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(RF_para)
@@ -325,8 +345,6 @@ class Ui_RF_para(object):
     def retranslateUi(self, RF_para):
         _translate = QtCore.QCoreApplication.translate
         RF_para.setWindowTitle(_translate("RF_para", "随机森林：参数设置"))
-        self.pushButton.setText(_translate("RF_para", "确认"))
-        self.pushButton_2.setText(_translate("RF_para", "取消"))
         self.labeln_estimators.setToolTip(_translate("RF_para", "<html><head/><body><p><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">森林里树的数量。树越多，模型通常越稳定，但计算也越慢。通常从 ​</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; color:rgba(0,0,0,0.898039);\">100</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">​ 开始尝试，范围可在 ​</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; color:rgba(0,0,0,0.898039);\">100~500</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">​ 之间</span></p><p><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">达到一定数量后，性能提升会变得微乎其微。目标是找到性能稳定且训练时间可接受的平衡点</span><br/></p></body></html>"))
         self.labeln_estimators.setText(_translate("RF_para", "n_estimators"))
         self.label_max_depth.setToolTip(_translate("RF_para", "<html><head/><body><table border=\"0\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#fcfcfc\"><tr><td bgcolor=\"#ffffff\" style=\" vertical-align:middle; padding-left:12; padding-right:12; padding-top:9; padding-bottom:9;\"><p><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;\">每棵树的最大深度。限制深度可以有效防止模型过于复杂。</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;\">常用 ​</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:12pt; color:rgba(0,0,0,0.894118);\">5~15</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;\">，或不限制（</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.894118);\">None</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;\">）。样本量很大时可尝试10~100，</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:12pt; color:rgba(0,0,0,0.894118);\">防止过拟合</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:12pt; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;\">的关键参数。深度太小可能导致欠拟合，太深（尤其是不限制时）极易过拟合</span></p></td><td bgcolor=\"#ffffff\" style=\" vertical-align:middle; padding-left:12; padding-right:12; padding-top:9; padding-bottom:9;\"/></tr></table><p><span style=\" font-size:12pt;\"><br/></span></p></body></html>"))
@@ -339,3 +357,6 @@ class Ui_RF_para(object):
         self.label_2.setText(_translate("RF_para", "scale_features"))
         self.comboBox_scale_features.setItemText(0, _translate("RF_para", "True"))
         self.comboBox_scale_features.setItemText(1, _translate("RF_para", "False"))
+        self.pushButton.setText(_translate("RF_para", "确认"))
+        self.pushButton_2.setText(_translate("RF_para", "取消"))
+        self.pushButton_save_params.setText(_translate("RF_para", "保存参数"))

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\algorithms8_REMTW_para.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\beifen\新项目\ui\algorithms8_REMTW_para.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -14,64 +14,18 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_REMTW_para(object):
     def setupUi(self, REMTW_para):
         REMTW_para.setObjectName("REMTW_para")
-        REMTW_para.resize(469, 373)
+        REMTW_para.resize(444, 346)
         self.centralwidget = QtWidgets.QWidget(REMTW_para)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(120, 260, 201, 42))
+        self.layoutWidget.setGeometry(QtCore.QRect(70, 20, 332, 198))
         self.layoutWidget.setObjectName("layoutWidget")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.pushButton = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton.setMinimumSize(QtCore.QSize(0, 40))
-        self.pushButton.setStyleSheet("QPushButton{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
-"\n"
-"font:bold;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
-"}")
-        self.pushButton.setObjectName("pushButton")
-        self.horizontalLayout.addWidget(self.pushButton)
-        self.pushButton_2 = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
-        self.pushButton_2.setStyleSheet("QPushButton{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
-"\n"
-"font:bold;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
-"}")
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.horizontalLayout.addWidget(self.pushButton_2)
-        self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(70, 20, 332, 198))
-        self.layoutWidget1.setObjectName("layoutWidget1")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget1)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.label = QtWidgets.QLabel(self.layoutWidget1)
+        self.label = QtWidgets.QLabel(self.layoutWidget)
         self.label.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -93,7 +47,7 @@ class Ui_REMTW_para(object):
 "}")
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
-        self.label_2 = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_2 = QtWidgets.QLabel(self.layoutWidget)
         self.label_2.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -115,7 +69,7 @@ class Ui_REMTW_para(object):
 "}")
         self.label_2.setObjectName("label_2")
         self.verticalLayout.addWidget(self.label_2)
-        self.label_3 = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_3 = QtWidgets.QLabel(self.layoutWidget)
         self.label_3.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -137,7 +91,7 @@ class Ui_REMTW_para(object):
 "}")
         self.label_3.setObjectName("label_3")
         self.verticalLayout.addWidget(self.label_3)
-        self.label_max_iter = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_max_iter = QtWidgets.QLabel(self.layoutWidget)
         self.label_max_iter.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -159,7 +113,7 @@ class Ui_REMTW_para(object):
 "}")
         self.label_max_iter.setObjectName("label_max_iter")
         self.verticalLayout.addWidget(self.label_max_iter)
-        self.label_4_tol = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_4_tol = QtWidgets.QLabel(self.layoutWidget)
         self.label_4_tol.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -184,7 +138,7 @@ class Ui_REMTW_para(object):
         self.horizontalLayout_2.addLayout(self.verticalLayout)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.doubleSpinBox_alpha = QtWidgets.QDoubleSpinBox(self.layoutWidget1)
+        self.doubleSpinBox_alpha = QtWidgets.QDoubleSpinBox(self.layoutWidget)
         self.doubleSpinBox_alpha.setMinimumSize(QtCore.QSize(80, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -201,7 +155,7 @@ class Ui_REMTW_para(object):
         self.doubleSpinBox_alpha.setProperty("value", 0.2)
         self.doubleSpinBox_alpha.setObjectName("doubleSpinBox_alpha")
         self.verticalLayout_2.addWidget(self.doubleSpinBox_alpha)
-        self.doubleSpinBox_beta = QtWidgets.QDoubleSpinBox(self.layoutWidget1)
+        self.doubleSpinBox_beta = QtWidgets.QDoubleSpinBox(self.layoutWidget)
         self.doubleSpinBox_beta.setMinimumSize(QtCore.QSize(80, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -218,7 +172,7 @@ class Ui_REMTW_para(object):
         self.doubleSpinBox_beta.setProperty("value", 0.1)
         self.doubleSpinBox_beta.setObjectName("doubleSpinBox_beta")
         self.verticalLayout_2.addWidget(self.doubleSpinBox_beta)
-        self.spinBox_random_state = QtWidgets.QSpinBox(self.layoutWidget1)
+        self.spinBox_random_state = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_random_state.setMinimumSize(QtCore.QSize(80, 30))
         self.spinBox_random_state.setMaximumSize(QtCore.QSize(16777210, 16777215))
         font = QtGui.QFont()
@@ -236,7 +190,7 @@ class Ui_REMTW_para(object):
         self.spinBox_random_state.setProperty("value", 42)
         self.spinBox_random_state.setObjectName("spinBox_random_state")
         self.verticalLayout_2.addWidget(self.spinBox_random_state)
-        self.spinBox_max_iter = QtWidgets.QSpinBox(self.layoutWidget1)
+        self.spinBox_max_iter = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_max_iter.setMinimumSize(QtCore.QSize(0, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -254,7 +208,7 @@ class Ui_REMTW_para(object):
         self.spinBox_max_iter.setProperty("value", 2000)
         self.spinBox_max_iter.setObjectName("spinBox_max_iter")
         self.verticalLayout_2.addWidget(self.spinBox_max_iter)
-        self.doubleSpinBox_tol = QtWidgets.QDoubleSpinBox(self.layoutWidget1)
+        self.doubleSpinBox_tol = QtWidgets.QDoubleSpinBox(self.layoutWidget)
         self.doubleSpinBox_tol.setMinimumSize(QtCore.QSize(0, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -274,9 +228,75 @@ class Ui_REMTW_para(object):
         self.doubleSpinBox_tol.setObjectName("doubleSpinBox_tol")
         self.verticalLayout_2.addWidget(self.doubleSpinBox_tol)
         self.horizontalLayout_2.addLayout(self.verticalLayout_2)
+        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.widget.setGeometry(QtCore.QRect(120, 250, 244, 42))
+        self.widget.setObjectName("widget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.pushButton = QtWidgets.QPushButton(self.widget)
+        self.pushButton.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton.setObjectName("pushButton")
+        self.horizontalLayout.addWidget(self.pushButton)
+        self.pushButton_2 = QtWidgets.QPushButton(self.widget)
+        self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton_2.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.horizontalLayout.addWidget(self.pushButton_2)
+        self.pushButton_save_params = QtWidgets.QPushButton(self.widget)
+        self.pushButton_save_params.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton_save_params.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton_save_params.setObjectName("pushButton_save_params")
+        self.horizontalLayout.addWidget(self.pushButton_save_params)
         REMTW_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(REMTW_para)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 469, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 444, 23))
         self.menubar.setObjectName("menubar")
         REMTW_para.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(REMTW_para)
@@ -292,8 +312,6 @@ class Ui_REMTW_para(object):
     def retranslateUi(self, REMTW_para):
         _translate = QtCore.QCoreApplication.translate
         REMTW_para.setWindowTitle(_translate("REMTW_para", "REMTW参数设置"))
-        self.pushButton.setText(_translate("REMTW_para", "确认"))
-        self.pushButton_2.setText(_translate("REMTW_para", "取消"))
         self.label.setToolTip(_translate("REMTW_para", "<html><head/><body><p><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">控制</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; color:rgba(0,0,0,0.898039);\">多任务Wasserstein正则化</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">的强度，促进不同任务的模型参数向共同重心聚集。通常较小，如 </span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);\">0.01, 0.1, 1.0</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">。可在 </span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);\">[0.001, 0.01, 0.1, 1, 10]</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\"> 范围搜索。值越大，任务间一致性约束越强，可能削弱个体任务特性；值过小则模型近乎独立训练各任务。</span></p></body></html>"))
         self.label.setText(_translate("REMTW_para", "alpha"))
         self.label_2.setToolTip(_translate("REMTW_para", "<html><head/><body><p><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">控制</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; color:rgba(0,0,0,0.898039);\">L0.5正则化</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">的强度，诱导参数稀疏性。通常较小，如 </span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);\">0.01, 0.1, 1.0</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">。可在 </span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);\">[0.001, 0.01, 0.1, 1, 10]</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\"> 范围搜索。值越大，对系数绝对值的惩罚越重，模型越稀疏。这是实现特征选择的关键。</span></p></body></html>"))
@@ -304,3 +322,6 @@ class Ui_REMTW_para(object):
         self.label_max_iter.setText(_translate("REMTW_para", "max_iter"))
         self.label_4_tol.setToolTip(_translate("REMTW_para", "<html><head/><body><p><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">算法</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; color:rgba(0,0,0,0.898039);\">整体优化</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">的收敛容差。当参数更新变化小于此阈值时停止迭代。较小的正数，如 </span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);\">1e-4</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\"> 或 </span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);\">1e-3</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">。值越小，收敛判定越严格，解可能更精确，但迭代可能更多。需与</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);\">max_iter</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">配合调整。</span></p></body></html>"))
         self.label_4_tol.setText(_translate("REMTW_para", "tol"))
+        self.pushButton.setText(_translate("REMTW_para", "确认"))
+        self.pushButton_2.setText(_translate("REMTW_para", "取消"))
+        self.pushButton_save_params.setText(_translate("REMTW_para", "保存参数"))

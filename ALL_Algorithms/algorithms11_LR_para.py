@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\algorithms11_LR_para.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\beifen\新项目\ui\algorithms11_LR_para.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -17,44 +17,6 @@ class Ui_LR_para(object):
         LR_para.resize(448, 326)
         self.centralwidget = QtWidgets.QWidget(LR_para)
         self.centralwidget.setObjectName("centralwidget")
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(140, 220, 81, 41))
-        self.pushButton.setStyleSheet("QPushButton{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
-"\n"
-"font:bold;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
-"}")
-        self.pushButton.setObjectName("pushButton")
-        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(240, 220, 91, 41))
-        self.pushButton_2.setStyleSheet("QPushButton{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
-"\n"
-"font:bold;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
-"}")
-        self.pushButton_2.setObjectName("pushButton_2")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.layoutWidget.setGeometry(QtCore.QRect(90, 40, 272, 162))
         self.layoutWidget.setObjectName("layoutWidget")
@@ -180,6 +142,72 @@ class Ui_LR_para(object):
         self.comboBox_scale_features.addItem("")
         self.verticalLayout_2.addWidget(self.comboBox_scale_features)
         self.horizontalLayout.addLayout(self.verticalLayout_2)
+        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.widget.setGeometry(QtCore.QRect(103, 220, 281, 51))
+        self.widget.setObjectName("widget")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget)
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.pushButton = QtWidgets.QPushButton(self.widget)
+        self.pushButton.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton.setObjectName("pushButton")
+        self.horizontalLayout_2.addWidget(self.pushButton)
+        self.pushButton_2 = QtWidgets.QPushButton(self.widget)
+        self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton_2.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.horizontalLayout_2.addWidget(self.pushButton_2)
+        self.pushButton_save_params = QtWidgets.QPushButton(self.widget)
+        self.pushButton_save_params.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton_save_params.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton_save_params.setObjectName("pushButton_save_params")
+        self.horizontalLayout_2.addWidget(self.pushButton_save_params)
         LR_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(LR_para)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 448, 23))
@@ -198,8 +226,6 @@ class Ui_LR_para(object):
     def retranslateUi(self, LR_para):
         _translate = QtCore.QCoreApplication.translate
         LR_para.setWindowTitle(_translate("LR_para", "线性回归参数设置"))
-        self.pushButton.setText(_translate("LR_para", "确定"))
-        self.pushButton_2.setText(_translate("LR_para", "取消"))
         self.label_fit_intercept.setToolTip(_translate("LR_para", "<html><head/><body><p><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:15px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#fcfcfc;\">这是一个通过限制树的最大深度来防止过拟合的关键参数。实践中最优值需通过实验确定，通常建议从一个较小的深度（如3）开始，逐步增加并通过验证集评估效果来选择</span></p></body></html>"))
         self.label_fit_intercept.setText(_translate("LR_para", "fit_intercept"))
         self.label_2.setToolTip(_translate("LR_para", "<html><head/><body><p><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:15px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#fcfcfc;\">随机种子本身并不提升模型的</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:15px; color:rgba(0,0,0,0.898039); background-color:#fcfcfc;\">理论性能</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:15px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#fcfcfc;\">上限。它只是将随机性“固定”下来，让你得到一個确定的、可比较的结果。</span></p></body></html>"))
@@ -210,3 +236,6 @@ class Ui_LR_para(object):
         self.comboBox_fit_intercept.setItemText(1, _translate("LR_para", "False"))
         self.comboBox_scale_features.setItemText(0, _translate("LR_para", "True"))
         self.comboBox_scale_features.setItemText(1, _translate("LR_para", "False"))
+        self.pushButton.setText(_translate("LR_para", "确定"))
+        self.pushButton_2.setText(_translate("LR_para", "取消"))
+        self.pushButton_save_params.setText(_translate("LR_para", "保存参数"))

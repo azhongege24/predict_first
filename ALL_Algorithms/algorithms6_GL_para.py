@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\algorithms6_GL_para.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\beifen\新项目\ui\algorithms6_GL_para.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -18,60 +18,14 @@ class Ui_GL_para(object):
         self.centralwidget = QtWidgets.QWidget(GL_para)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(140, 220, 181, 42))
+        self.layoutWidget.setGeometry(QtCore.QRect(100, 40, 281, 158))
         self.layoutWidget.setObjectName("layoutWidget")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.pushButton = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton.setMinimumSize(QtCore.QSize(0, 40))
-        self.pushButton.setStyleSheet("QPushButton{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
-"\n"
-"font:bold;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
-"}")
-        self.pushButton.setObjectName("pushButton")
-        self.horizontalLayout.addWidget(self.pushButton)
-        self.pushButton_2 = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
-        self.pushButton_2.setStyleSheet("QPushButton{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
-"\n"
-"font:bold;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
-"}")
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.horizontalLayout.addWidget(self.pushButton_2)
-        self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(100, 40, 281, 158))
-        self.layoutWidget1.setObjectName("layoutWidget1")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget1)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.label = QtWidgets.QLabel(self.layoutWidget1)
+        self.label = QtWidgets.QLabel(self.layoutWidget)
         self.label.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -93,7 +47,7 @@ class Ui_GL_para(object):
 "}")
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
-        self.label_2 = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_2 = QtWidgets.QLabel(self.layoutWidget)
         self.label_2.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -115,7 +69,7 @@ class Ui_GL_para(object):
 "}")
         self.label_2.setObjectName("label_2")
         self.verticalLayout.addWidget(self.label_2)
-        self.label_max_iter = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_max_iter = QtWidgets.QLabel(self.layoutWidget)
         self.label_max_iter.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -137,7 +91,7 @@ class Ui_GL_para(object):
 "}")
         self.label_max_iter.setObjectName("label_max_iter")
         self.verticalLayout.addWidget(self.label_max_iter)
-        self.label_tol = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_tol = QtWidgets.QLabel(self.layoutWidget)
         self.label_tol.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -162,7 +116,7 @@ class Ui_GL_para(object):
         self.horizontalLayout_2.addLayout(self.verticalLayout)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.spinBox_random_state = QtWidgets.QSpinBox(self.layoutWidget1)
+        self.spinBox_random_state = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_random_state.setMinimumSize(QtCore.QSize(80, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -179,7 +133,7 @@ class Ui_GL_para(object):
         self.spinBox_random_state.setProperty("value", 42)
         self.spinBox_random_state.setObjectName("spinBox_random_state")
         self.verticalLayout_2.addWidget(self.spinBox_random_state)
-        self.doubleSpinBox_alpha = QtWidgets.QDoubleSpinBox(self.layoutWidget1)
+        self.doubleSpinBox_alpha = QtWidgets.QDoubleSpinBox(self.layoutWidget)
         self.doubleSpinBox_alpha.setMinimumSize(QtCore.QSize(80, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -198,7 +152,7 @@ class Ui_GL_para(object):
         self.doubleSpinBox_alpha.setProperty("value", 0.05)
         self.doubleSpinBox_alpha.setObjectName("doubleSpinBox_alpha")
         self.verticalLayout_2.addWidget(self.doubleSpinBox_alpha)
-        self.spinBox_max_iter = QtWidgets.QSpinBox(self.layoutWidget1)
+        self.spinBox_max_iter = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_max_iter.setMinimumSize(QtCore.QSize(80, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -216,7 +170,7 @@ class Ui_GL_para(object):
         self.spinBox_max_iter.setProperty("value", 2000)
         self.spinBox_max_iter.setObjectName("spinBox_max_iter")
         self.verticalLayout_2.addWidget(self.spinBox_max_iter)
-        self.doubleSpinBox_tol = QtWidgets.QDoubleSpinBox(self.layoutWidget1)
+        self.doubleSpinBox_tol = QtWidgets.QDoubleSpinBox(self.layoutWidget)
         self.doubleSpinBox_tol.setMinimumSize(QtCore.QSize(0, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -236,6 +190,72 @@ class Ui_GL_para(object):
         self.doubleSpinBox_tol.setObjectName("doubleSpinBox_tol")
         self.verticalLayout_2.addWidget(self.doubleSpinBox_tol)
         self.horizontalLayout_2.addLayout(self.verticalLayout_2)
+        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.widget.setGeometry(QtCore.QRect(120, 220, 244, 42))
+        self.widget.setObjectName("widget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.pushButton = QtWidgets.QPushButton(self.widget)
+        self.pushButton.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton.setObjectName("pushButton")
+        self.horizontalLayout.addWidget(self.pushButton)
+        self.pushButton_2 = QtWidgets.QPushButton(self.widget)
+        self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton_2.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.horizontalLayout.addWidget(self.pushButton_2)
+        self.pushButton_save_params = QtWidgets.QPushButton(self.widget)
+        self.pushButton_save_params.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton_save_params.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton_save_params.setObjectName("pushButton_save_params")
+        self.horizontalLayout.addWidget(self.pushButton_save_params)
         GL_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(GL_para)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 449, 23))
@@ -254,8 +274,6 @@ class Ui_GL_para(object):
     def retranslateUi(self, GL_para):
         _translate = QtCore.QCoreApplication.translate
         GL_para.setWindowTitle(_translate("GL_para", "Group_Lasso参数选择"))
-        self.pushButton.setText(_translate("GL_para", "确认"))
-        self.pushButton_2.setText(_translate("GL_para", "取消"))
         self.label.setToolTip(_translate("GL_para", "<html><head/><body><p><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;\">控制算法中所有随机过程的种子，确保结果可重现。任意整数（如 </span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.894118);\">0</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;\">, </span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.894118);\">42</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.894118); background-color:#ffffff;\">）。设置为固定整数值，以保证每次运行结果一致，便于结果复现和调试。</span></p></body></html>"))
         self.label.setText(_translate("GL_para", "random_state"))
         self.label_2.setToolTip(_translate("GL_para", "<html><head/><body><p><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">正则化系数，平衡模型拟合优度与分组稀疏性强度。通常是一个较小的正数，如 </span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);\">0.01</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">, </span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);\">0.1</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">, </span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);\">1.0</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">；可通过网格搜索在对数尺度上尝试（如 </span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);\">[0.001, 0.01, 0.1, 1]</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">）。值越大，对组的惩罚越强，更多组的系数会整体变为零，模型更稀疏，值太小可能导致过拟合。</span></p></body></html>"))
@@ -264,3 +282,6 @@ class Ui_GL_para(object):
         self.label_max_iter.setText(_translate("GL_para", "max_iter"))
         self.label_tol.setToolTip(_translate("GL_para", "<html><head/><body><p><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">优化算法的收敛容差。当参数变化小于此阈值时，停止迭代，较小的正数，如 </span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);\">1e-4</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\"> 或 </span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);\">1e-3</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">。值越小，求解越精细，但迭代可能更多。若结果波动或提前停止，可尝试减小此值。</span></p></body></html>"))
         self.label_tol.setText(_translate("GL_para", "tol"))
+        self.pushButton.setText(_translate("GL_para", "确认"))
+        self.pushButton_2.setText(_translate("GL_para", "取消"))
+        self.pushButton_save_params.setText(_translate("GL_para", "保存参数"))

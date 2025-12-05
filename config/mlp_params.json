@@ -1,0 +1,7 @@
+{
+    "hidden_layer_sizes": "200,100",
+    "max_iter": 500,
+    "mlp_alpha": 0.0001,
+    "random_state": 42,
+    "scale_features": "True"
+}

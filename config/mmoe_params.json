@@ -1,0 +1,13 @@
+{
+    "alpha": 0.5,
+    "max_iter": 1000,
+    "random_state": 42,
+    "mmoe_num_experts": 5,
+    "mmoe_expert_hidden": 64,
+    "mmoe_learning_rate": 0.005,
+    "mmoe_dropout_rate": 0.1,
+    "mmoe_epochs": 100,
+    "mmoe_batch_size": 32,
+    "mmoe_lambda_balance": 0.1,
+    "mmoe_scale_features": "True"
+}

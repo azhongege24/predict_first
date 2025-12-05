@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1403</width>
-    <height>876</height>
+    <height>869</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,9 +26,9 @@ background-color:;	/*背景颜色*/
     <property name="geometry">
      <rect>
       <x>71</x>
-      <y>227</y>
+      <y>207</y>
       <width>871</width>
-      <height>491</height>
+      <height>511</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -73,12 +73,18 @@ font: 30px;		/*设置按钮文字和大小*/
       <x>71</x>
       <y>117</y>
       <width>871</width>
-      <height>108</height>
+      <height>91</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
       <widget class="QPushButton" name="pushButton_vibration_analysis">
+       <property name="minimumSize">
+        <size>
+         <width>110</width>
+         <height>86</height>
+        </size>
+       </property>
        <property name="toolTip">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;设置采样频率并导入振动数据，可以是多组或者是单组&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
@@ -109,6 +115,12 @@ QPushButton:pressed {
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_otherpara">
+       <property name="minimumSize">
+        <size>
+         <width>110</width>
+         <height>86</height>
+        </size>
+       </property>
        <property name="styleSheet">
         <string notr="true">QPushButton{
 border:1px solid red;   /*边框的粗细，颜色*/
@@ -136,6 +148,12 @@ QPushButton:pressed {
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_dataset">
+       <property name="minimumSize">
+        <size>
+         <width>110</width>
+         <height>86</height>
+        </size>
+       </property>
        <property name="styleSheet">
         <string notr="true">QPushButton{
 border:1px solid red;   /*边框的粗细，颜色*/
@@ -163,6 +181,12 @@ QPushButton:pressed {
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_train">
+       <property name="minimumSize">
+        <size>
+         <width>110</width>
+         <height>86</height>
+        </size>
+       </property>
        <property name="styleSheet">
         <string notr="true">QPushButton{
 border:1px solid red;   /*边框的粗细，颜色*/
@@ -190,6 +214,12 @@ QPushButton:pressed {
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_predict">
+       <property name="minimumSize">
+        <size>
+         <width>110</width>
+         <height>86</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
          <width>131</width>
@@ -252,7 +282,7 @@ font: 16 px  &quot;Times New Roman&quot;;
 }</string>
     </property>
     <property name="text">
-     <string>v4.0 2025.12.2</string>
+     <string>v4.0 2025.12.5</string>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">
@@ -2177,6 +2207,78 @@ color:rgb(0, 0, 0);		/*字体颜色*/
        </property>
        <property name="value">
         <number>0</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>640</y>
+      <width>58</width>
+      <height>68</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_6">
+     <item>
+      <widget class="QLabel" name="label_7">
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>楷体</family>
+         <pointsize>12</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel{
+
+
+padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
+color:rgb(0, 0, 0);		/*字体颜色*/
+	font: 12pt &quot;楷体&quot;;
+
+}</string>
+       </property>
+       <property name="text">
+        <string>页数</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="spinBox_jump_value">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="maximum">
+        <number>9999</number>
+       </property>
+       <property name="value">
+        <number>1</number>
        </property>
       </widget>
      </item>

@@ -1,0 +1,5 @@
+{
+    "max_depth": 8,
+    "random_state": 42,
+    "scale_features": "True"
+}

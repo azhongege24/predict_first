@@ -1,0 +1,5 @@
+{
+    "fit_intercept": "True",
+    "random_state": 42,
+    "scale_features": "True"
+}

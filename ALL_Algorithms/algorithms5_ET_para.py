@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\algorithms5_ET_para.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\beifen\新项目\ui\algorithms5_ET_para.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -221,13 +221,13 @@ class Ui_ET_para(object):
         self.comboBox_scale_features.addItem("")
         self.verticalLayout_2.addWidget(self.comboBox_scale_features)
         self.horizontalLayout.addLayout(self.verticalLayout_2)
-        self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(180, 270, 151, 42))
-        self.layoutWidget1.setObjectName("layoutWidget1")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget1)
+        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.widget.setGeometry(QtCore.QRect(140, 270, 244, 42))
+        self.widget.setObjectName("widget")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.pushButton = QtWidgets.QPushButton(self.layoutWidget1)
+        self.pushButton = QtWidgets.QPushButton(self.widget)
         self.pushButton.setMinimumSize(QtCore.QSize(0, 40))
         self.pushButton.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
@@ -247,7 +247,7 @@ class Ui_ET_para(object):
 "}")
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout_2.addWidget(self.pushButton)
-        self.pushButton_2 = QtWidgets.QPushButton(self.layoutWidget1)
+        self.pushButton_2 = QtWidgets.QPushButton(self.widget)
         self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
         self.pushButton_2.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
@@ -267,6 +267,26 @@ class Ui_ET_para(object):
 "}")
         self.pushButton_2.setObjectName("pushButton_2")
         self.horizontalLayout_2.addWidget(self.pushButton_2)
+        self.pushButton_save_params = QtWidgets.QPushButton(self.widget)
+        self.pushButton_save_params.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton_save_params.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton_save_params.setObjectName("pushButton_save_params")
+        self.horizontalLayout_2.addWidget(self.pushButton_save_params)
         ET_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(ET_para)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 506, 23))
@@ -299,3 +319,4 @@ class Ui_ET_para(object):
         self.comboBox_scale_features.setItemText(1, _translate("ET_para", "False"))
         self.pushButton.setText(_translate("ET_para", "确认"))
         self.pushButton_2.setText(_translate("ET_para", "取消"))
+        self.pushButton_save_params.setText(_translate("ET_para", "保存参数"))

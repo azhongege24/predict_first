@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\algorithms3_SVM_para.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\beifen\新项目\ui\algorithms3_SVM_para.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -14,64 +14,18 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_SVM_para(object):
     def setupUi(self, SVM_para):
         SVM_para.setObjectName("SVM_para")
-        SVM_para.resize(546, 475)
+        SVM_para.resize(518, 410)
         self.centralwidget = QtWidgets.QWidget(SVM_para)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(130, 350, 241, 51))
+        self.layoutWidget.setGeometry(QtCore.QRect(80, 30, 381, 238))
         self.layoutWidget.setObjectName("layoutWidget")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.pushButton = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton.setMinimumSize(QtCore.QSize(0, 40))
-        self.pushButton.setStyleSheet("QPushButton{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
-"\n"
-"font:bold;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
-"}")
-        self.pushButton.setObjectName("pushButton")
-        self.horizontalLayout.addWidget(self.pushButton)
-        self.pushButton_2 = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
-        self.pushButton_2.setStyleSheet("QPushButton{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
-"\n"
-"font:bold;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
-"}")
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.horizontalLayout.addWidget(self.pushButton_2)
-        self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(80, 30, 381, 238))
-        self.layoutWidget1.setObjectName("layoutWidget1")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget1)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.label_3 = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_3 = QtWidgets.QLabel(self.layoutWidget)
         self.label_3.setMinimumSize(QtCore.QSize(0, 30))
         self.label_3.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
@@ -94,7 +48,7 @@ class Ui_SVM_para(object):
 "}")
         self.label_3.setObjectName("label_3")
         self.verticalLayout.addWidget(self.label_3)
-        self.label_2_C = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_2_C = QtWidgets.QLabel(self.layoutWidget)
         self.label_2_C.setMinimumSize(QtCore.QSize(0, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -124,7 +78,7 @@ class Ui_SVM_para(object):
 "}")
         self.label_2_C.setObjectName("label_2_C")
         self.verticalLayout.addWidget(self.label_2_C)
-        self.label_epsilon = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_epsilon = QtWidgets.QLabel(self.layoutWidget)
         self.label_epsilon.setMinimumSize(QtCore.QSize(0, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -154,7 +108,7 @@ class Ui_SVM_para(object):
 "}")
         self.label_epsilon.setObjectName("label_epsilon")
         self.verticalLayout.addWidget(self.label_epsilon)
-        self.label = QtWidgets.QLabel(self.layoutWidget1)
+        self.label = QtWidgets.QLabel(self.layoutWidget)
         self.label.setMinimumSize(QtCore.QSize(0, 30))
         self.label.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
@@ -177,7 +131,7 @@ class Ui_SVM_para(object):
 "}")
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
-        self.label_random_state = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_random_state = QtWidgets.QLabel(self.layoutWidget)
         self.label_random_state.setMinimumSize(QtCore.QSize(0, 30))
         self.label_random_state.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
@@ -200,7 +154,7 @@ class Ui_SVM_para(object):
 "}")
         self.label_random_state.setObjectName("label_random_state")
         self.verticalLayout.addWidget(self.label_random_state)
-        self.label_4 = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_4 = QtWidgets.QLabel(self.layoutWidget)
         self.label_4.setMinimumSize(QtCore.QSize(0, 30))
         self.label_4.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
@@ -226,7 +180,7 @@ class Ui_SVM_para(object):
         self.horizontalLayout_2.addLayout(self.verticalLayout)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.comboBox_kernel = QtWidgets.QComboBox(self.layoutWidget1)
+        self.comboBox_kernel = QtWidgets.QComboBox(self.layoutWidget)
         self.comboBox_kernel.setMinimumSize(QtCore.QSize(80, 30))
         self.comboBox_kernel.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
@@ -241,7 +195,7 @@ class Ui_SVM_para(object):
         self.comboBox_kernel.addItem("")
         self.comboBox_kernel.addItem("")
         self.verticalLayout_2.addWidget(self.comboBox_kernel)
-        self.spinBox_C = QtWidgets.QSpinBox(self.layoutWidget1)
+        self.spinBox_C = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_C.setMinimumSize(QtCore.QSize(80, 30))
         self.spinBox_C.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
@@ -261,7 +215,7 @@ class Ui_SVM_para(object):
         self.spinBox_C.setProperty("value", 2000)
         self.spinBox_C.setObjectName("spinBox_C")
         self.verticalLayout_2.addWidget(self.spinBox_C)
-        self.doubleSpinBox_epsilon = QtWidgets.QDoubleSpinBox(self.layoutWidget1)
+        self.doubleSpinBox_epsilon = QtWidgets.QDoubleSpinBox(self.layoutWidget)
         self.doubleSpinBox_epsilon.setMinimumSize(QtCore.QSize(80, 30))
         self.doubleSpinBox_epsilon.setMaximumSize(QtCore.QSize(1600, 40))
         font = QtGui.QFont()
@@ -281,7 +235,7 @@ class Ui_SVM_para(object):
         self.doubleSpinBox_epsilon.setProperty("value", 0.1)
         self.doubleSpinBox_epsilon.setObjectName("doubleSpinBox_epsilon")
         self.verticalLayout_2.addWidget(self.doubleSpinBox_epsilon)
-        self.spinBox_n_jobs = QtWidgets.QSpinBox(self.layoutWidget1)
+        self.spinBox_n_jobs = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_n_jobs.setMinimumSize(QtCore.QSize(80, 30))
         self.spinBox_n_jobs.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
@@ -301,7 +255,7 @@ class Ui_SVM_para(object):
         self.spinBox_n_jobs.setProperty("value", -1)
         self.spinBox_n_jobs.setObjectName("spinBox_n_jobs")
         self.verticalLayout_2.addWidget(self.spinBox_n_jobs)
-        self.spinBox_random_state = QtWidgets.QSpinBox(self.layoutWidget1)
+        self.spinBox_random_state = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_random_state.setMinimumSize(QtCore.QSize(80, 30))
         self.spinBox_random_state.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
@@ -319,7 +273,7 @@ class Ui_SVM_para(object):
         self.spinBox_random_state.setProperty("value", 42)
         self.spinBox_random_state.setObjectName("spinBox_random_state")
         self.verticalLayout_2.addWidget(self.spinBox_random_state)
-        self.comboBox_scale_features = QtWidgets.QComboBox(self.layoutWidget1)
+        self.comboBox_scale_features = QtWidgets.QComboBox(self.layoutWidget)
         self.comboBox_scale_features.setMinimumSize(QtCore.QSize(0, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -332,9 +286,75 @@ class Ui_SVM_para(object):
         self.comboBox_scale_features.addItem("")
         self.verticalLayout_2.addWidget(self.comboBox_scale_features)
         self.horizontalLayout_2.addLayout(self.verticalLayout_2)
+        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.widget.setGeometry(QtCore.QRect(140, 310, 271, 42))
+        self.widget.setObjectName("widget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.pushButton = QtWidgets.QPushButton(self.widget)
+        self.pushButton.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton.setObjectName("pushButton")
+        self.horizontalLayout.addWidget(self.pushButton)
+        self.pushButton_2 = QtWidgets.QPushButton(self.widget)
+        self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton_2.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.horizontalLayout.addWidget(self.pushButton_2)
+        self.pushButton_save_params = QtWidgets.QPushButton(self.widget)
+        self.pushButton_save_params.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton_save_params.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton_save_params.setObjectName("pushButton_save_params")
+        self.horizontalLayout.addWidget(self.pushButton_save_params)
         SVM_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(SVM_para)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 546, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 518, 23))
         self.menubar.setObjectName("menubar")
         SVM_para.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(SVM_para)
@@ -350,8 +370,6 @@ class Ui_SVM_para(object):
     def retranslateUi(self, SVM_para):
         _translate = QtCore.QCoreApplication.translate
         SVM_para.setWindowTitle(_translate("SVM_para", "支持向量机：参数设置"))
-        self.pushButton.setText(_translate("SVM_para", "确认"))
-        self.pushButton_2.setText(_translate("SVM_para", "取消"))
         self.label_3.setToolTip(_translate("SVM_para", "<html><head/><body><p>将数据映射到高维空间的函数，用于处理非线性问题。<span style=\" font-family:\'Courier New\';\">linear</span>（线性）, <span style=\" font-family:\'Courier New\';\">rbf</span>（径向基）, <span style=\" font-family:\'Courier New\';\">poly</span>（多项式）, <span style=\" font-family:\'Courier New\';\">sigmoid</span></p><p>。默认为 <span style=\" font-family:\'Courier New\';\">rbf</span>。模型性能的关键。线性可分或特征维度高时用<span style=\" font-family:\'Courier New\';\">linear</span>（速度快）；非线性问题优先尝试<span style=\" font-family:\'Courier New\';\">rbf</span>；特定领域（如文本）可能用<span style=\" font-family:\'Courier New\';\">poly</span>或<span style=\" font-family:\'Courier New\';\">sigmoid</span></p></body></html>"))
         self.label_3.setText(_translate("SVM_para", "kernel"))
         self.label_2_C.setToolTip(_translate("SVM_para", "<html><head/><body><p><span style=\" font-size:12pt;\">惩罚系数，平衡“分类间隔最大化”和“误分类点容忍度”。通常在对数尺度上搜索，如 </span><span style=\" font-family:\'Courier New\'; font-size:12pt;\">[0.01, 0.1, 1, 10, 100]</span><span style=\" font-size:12pt;\">控制过拟合与欠拟合。</span><span style=\" font-family:\'Courier New\'; font-size:12pt;\">C</span><span style=\" font-size:12pt;\">值越大，对误分类惩罚越重，模型越复杂，易过拟合；</span><span style=\" font-family:\'Courier New\'; font-size:12pt;\">C</span><span style=\" font-size:12pt;\">值越小，模型泛化能力越强，但可能欠拟合</span></p></body></html>"))
@@ -369,3 +387,6 @@ class Ui_SVM_para(object):
         self.comboBox_kernel.setItemText(3, _translate("SVM_para", "sigmoid"))
         self.comboBox_scale_features.setItemText(0, _translate("SVM_para", "True"))
         self.comboBox_scale_features.setItemText(1, _translate("SVM_para", "False"))
+        self.pushButton.setText(_translate("SVM_para", "确认"))
+        self.pushButton_2.setText(_translate("SVM_para", "取消"))
+        self.pushButton_save_params.setText(_translate("SVM_para", "保存参数"))

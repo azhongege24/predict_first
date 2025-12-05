@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\algorithms4_MLP_para.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\beifen\新项目\ui\algorithms4_MLP_para.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -24,60 +24,14 @@ class Ui_MLP_para(object):
         self.centralwidget = QtWidgets.QWidget(MLP_para)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(200, 300, 211, 42))
+        self.layoutWidget.setGeometry(QtCore.QRect(120, 70, 362, 198))
         self.layoutWidget.setObjectName("layoutWidget")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget)
-        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.pushButton = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton.setMinimumSize(QtCore.QSize(0, 40))
-        self.pushButton.setStyleSheet("QPushButton{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
-"\n"
-"font:bold;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
-"}")
-        self.pushButton.setObjectName("pushButton")
-        self.horizontalLayout_2.addWidget(self.pushButton)
-        self.pushButton_2 = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
-        self.pushButton_2.setStyleSheet("QPushButton{\n"
-"border:1px solid red;   /*边框的粗细，颜色*/\n"
-"border-radius:15px;    /*设置圆角半径 */\n"
-"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
-"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
-"color:rgb(0, 0, 0);        /*字体颜色*/\n"
-"    font: 18pt \"楷体\";\n"
-"\n"
-"font:bold;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
-"}")
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.horizontalLayout_2.addWidget(self.pushButton_2)
-        self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(120, 70, 362, 198))
-        self.layoutWidget1.setObjectName("layoutWidget1")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget1)
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.label_hidden_layer_sizes = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_hidden_layer_sizes = QtWidgets.QLabel(self.layoutWidget)
         self.label_hidden_layer_sizes.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -99,7 +53,7 @@ class Ui_MLP_para(object):
 "}")
         self.label_hidden_layer_sizes.setObjectName("label_hidden_layer_sizes")
         self.verticalLayout.addWidget(self.label_hidden_layer_sizes)
-        self.label_max_iter = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_max_iter = QtWidgets.QLabel(self.layoutWidget)
         self.label_max_iter.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -121,7 +75,7 @@ class Ui_MLP_para(object):
 "}")
         self.label_max_iter.setObjectName("label_max_iter")
         self.verticalLayout.addWidget(self.label_max_iter)
-        self.label_2 = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_2 = QtWidgets.QLabel(self.layoutWidget)
         self.label_2.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -143,7 +97,7 @@ class Ui_MLP_para(object):
 "}")
         self.label_2.setObjectName("label_2")
         self.verticalLayout.addWidget(self.label_2)
-        self.label_random_state = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_random_state = QtWidgets.QLabel(self.layoutWidget)
         self.label_random_state.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -165,7 +119,7 @@ class Ui_MLP_para(object):
 "}")
         self.label_random_state.setObjectName("label_random_state")
         self.verticalLayout.addWidget(self.label_random_state)
-        self.label = QtWidgets.QLabel(self.layoutWidget1)
+        self.label = QtWidgets.QLabel(self.layoutWidget)
         self.label.setStyleSheet("QLabel {\n"
 "    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
 "    border-radius: 8px;\n"
@@ -190,11 +144,11 @@ class Ui_MLP_para(object):
         self.horizontalLayout.addLayout(self.verticalLayout)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.lineEdit_hidden_layer_sizes = QtWidgets.QLineEdit(self.layoutWidget1)
+        self.lineEdit_hidden_layer_sizes = QtWidgets.QLineEdit(self.layoutWidget)
         self.lineEdit_hidden_layer_sizes.setMinimumSize(QtCore.QSize(80, 30))
         self.lineEdit_hidden_layer_sizes.setObjectName("lineEdit_hidden_layer_sizes")
         self.verticalLayout_2.addWidget(self.lineEdit_hidden_layer_sizes)
-        self.spinBox_max_iter = QtWidgets.QSpinBox(self.layoutWidget1)
+        self.spinBox_max_iter = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_max_iter.setMinimumSize(QtCore.QSize(80, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -212,7 +166,7 @@ class Ui_MLP_para(object):
         self.spinBox_max_iter.setProperty("value", 500)
         self.spinBox_max_iter.setObjectName("spinBox_max_iter")
         self.verticalLayout_2.addWidget(self.spinBox_max_iter)
-        self.doubleSpinBox_mlp_alpha = QtWidgets.QDoubleSpinBox(self.layoutWidget1)
+        self.doubleSpinBox_mlp_alpha = QtWidgets.QDoubleSpinBox(self.layoutWidget)
         self.doubleSpinBox_mlp_alpha.setMinimumSize(QtCore.QSize(0, 30))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -230,7 +184,7 @@ class Ui_MLP_para(object):
         self.doubleSpinBox_mlp_alpha.setProperty("value", 0.0001)
         self.doubleSpinBox_mlp_alpha.setObjectName("doubleSpinBox_mlp_alpha")
         self.verticalLayout_2.addWidget(self.doubleSpinBox_mlp_alpha)
-        self.spinBox_random_state = QtWidgets.QSpinBox(self.layoutWidget1)
+        self.spinBox_random_state = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox_random_state.setMinimumSize(QtCore.QSize(80, 30))
         self.spinBox_random_state.setStyleSheet("QSpinBox::up-button:pressed {\n"
 "    margin-top: 4px;  /* 模拟按压下沉 */\n"
@@ -241,13 +195,88 @@ class Ui_MLP_para(object):
         self.spinBox_random_state.setProperty("value", 42)
         self.spinBox_random_state.setObjectName("spinBox_random_state")
         self.verticalLayout_2.addWidget(self.spinBox_random_state)
-        self.comboBox_scale_features = QtWidgets.QComboBox(self.layoutWidget1)
+        self.comboBox_scale_features = QtWidgets.QComboBox(self.layoutWidget)
         self.comboBox_scale_features.setMinimumSize(QtCore.QSize(0, 30))
         self.comboBox_scale_features.setObjectName("comboBox_scale_features")
         self.comboBox_scale_features.addItem("")
         self.comboBox_scale_features.addItem("")
         self.verticalLayout_2.addWidget(self.comboBox_scale_features)
         self.horizontalLayout.addLayout(self.verticalLayout_2)
+        self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget1.setGeometry(QtCore.QRect(201, 300, 244, 42))
+        self.layoutWidget1.setObjectName("layoutWidget1")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget1)
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.pushButton = QtWidgets.QPushButton(self.layoutWidget1)
+        self.pushButton.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton.setObjectName("pushButton")
+        self.horizontalLayout_2.addWidget(self.pushButton)
+        self.pushButton_2 = QtWidgets.QPushButton(self.layoutWidget1)
+        self.pushButton_2.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton_2.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.horizontalLayout_2.addWidget(self.pushButton_2)
+        self.pushButton_save_params = QtWidgets.QPushButton(self.layoutWidget1)
+        self.pushButton_save_params.setMinimumSize(QtCore.QSize(0, 40))
+        self.pushButton_save_params.setStyleSheet("QPushButton{\n"
+"border:1px solid red;   /*边框的粗细，颜色*/\n"
+"border-radius:15px;    /*设置圆角半径 */\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"background-color: rgb(149, 236, 165);    /*背景颜色*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 18pt \"楷体\";\n"
+"\n"
+"font:bold;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color:rgb(99, 181, 255);     /* 点击时背景色 */\n"
+"}")
+        self.pushButton_save_params.setObjectName("pushButton_save_params")
+        self.horizontalLayout_2.addWidget(self.pushButton_save_params)
+        self.label_3 = QtWidgets.QLabel(self.centralwidget)
+        self.label_3.setGeometry(QtCore.QRect(490, 80, 121, 21))
+        font = QtGui.QFont()
+        font.setFamily("楷体")
+        font.setPointSize(14)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_3.setFont(font)
+        self.label_3.setObjectName("label_3")
         MLP_para.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MLP_para)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 639, 23))
@@ -266,8 +295,6 @@ class Ui_MLP_para(object):
     def retranslateUi(self, MLP_para):
         _translate = QtCore.QCoreApplication.translate
         MLP_para.setWindowTitle(_translate("MLP_para", "MLP：参数设置"))
-        self.pushButton.setText(_translate("MLP_para", "确认"))
-        self.pushButton_2.setText(_translate("MLP_para", "取消"))
         self.label_hidden_layer_sizes.setToolTip(_translate("MLP_para", "<html><head/><body><p><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">定义神经网络的</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; color:rgba(0,0,0,0.898039);\">隐藏层结构和大小</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">，即有多少隐藏层，每层有多少神经元。元组格式，例如 </span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);\">(100,)</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\"> 表示1层100神经元；</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039);\">(10, 10)</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\"> 表示2层，每层10神经元。</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; color:rgba(0,0,0,0.898039);\">控制模型复杂度</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">。结构过于简单（如神经元过少或层数过少）可能导致模型无法学习数据中的复杂模式（欠拟合）；结构过于复杂则可能导致对训练数据学习过度，泛化能力差（过拟合）</span></p></body></html>"))
         self.label_hidden_layer_sizes.setText(_translate("MLP_para", "hidden_layer_sizes"))
         self.label_max_iter.setToolTip(_translate("MLP_para", "<html><head/><body><p><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">模型训练的</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; color:rgba(0,0,0,0.898039);\">最大迭代次数</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">。求解器（优化算法）最多运行多少轮迭代来更新权重。默认200。对于复杂问题或大数据集，常需要增加，如500-1000甚至更多。确保模型</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei\'; font-size:14px; color:rgba(0,0,0,0.898039);\">充分训练至收敛</span><span style=\" font-family:\'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Roboto,Ubuntu,Helvetica Neue,Helvetica,Arial,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif\'; font-size:14px; font-weight:400; color:rgba(0,0,0,0.898039); background-color:#ffffff;\">。若设置过小，模型可能未收敛就停止（训练不充分），控制台可能出现收敛警告；若设置过大，只要配有早停法，通常只是增加一点计算成本。</span></p></body></html>"))
@@ -281,3 +308,7 @@ class Ui_MLP_para(object):
         self.lineEdit_hidden_layer_sizes.setText(_translate("MLP_para", "200,100"))
         self.comboBox_scale_features.setItemText(0, _translate("MLP_para", "True"))
         self.comboBox_scale_features.setItemText(1, _translate("MLP_para", "False"))
+        self.pushButton.setText(_translate("MLP_para", "确认"))
+        self.pushButton_2.setText(_translate("MLP_para", "取消"))
+        self.pushButton_save_params.setText(_translate("MLP_para", "保存参数"))
+        self.label_3.setText(_translate("MLP_para", "英文逗号间隔"))

@@ -1583,7 +1583,56 @@ class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):
         super(POP_DT_para, self).__init__()
         self.setupUi(self)
         self.parent_window = parent#保存主窗口的引用
+
+        # 定义参数配置文件路径
+        self.config_dir = os.path.join(os.getcwd(), "config")
+        self.config_path = os.path.join(self.config_dir, "dt_params.json")
+
+        self.pushButton_save_params.clicked.connect(self.save_params)
+        # 初始状态设置 - 加载历史参数
+        self.load_params()
     
+    def save_params(self):
+        """保存当前参数到JSON文件"""
+        # 收集所有需要记忆的参数
+        params = {
+            "max_depth": self.spinBox_max_depth.value(),
+            "random_state": self.spinBox_random_state.value(),
+            "scale_features": self.comboBox_scale_features.currentText()
+        }
+        
+        try:
+            # 确保配置目录存在
+            if not os.path.exists(self.config_dir):
+                os.makedirs(self.config_dir)
+            
+            # 写入JSON文件
+            with open(self.config_path, "w", encoding="utf-8") as f:
+                json.dump(params, f, ensure_ascii=False, indent=4)
+            
+            QMessageBox.information(self, "保存成功", "决策树参数已保存！")
+        except Exception as e:
+            QMessageBox.warning(self, "保存失败", f"参数记忆失败：{str(e)}")
+    
+    def load_params(self):
+        """从JSON文件加载历史参数"""
+        if not os.path.exists(self.config_path):
+            return  # 无历史参数，使用默认值
+        
+        try:
+            with open(self.config_path, "r", encoding="utf-8") as f:
+                params = json.load(f)
+            
+            # 恢复参数到控件
+            self.spinBox_max_depth.setValue(params.get("max_depth", 8))
+            self.spinBox_random_state.setValue(params.get("random_state", 42))
+            self.comboBox_scale_features.setCurrentText(params.get("scale_features", "True"))
+            
+        except Exception as e:
+            QMessageBox.warning(self, "加载失败", f"历史参数加载失败：{str(e)}")
+
+
+
     def Confirm(self):
          # 读取输入参数
         global max_depth, random_state,method,scale_features
@@ -1604,6 +1653,58 @@ class POP_RF_para(QMainWindow, Ui_RF_para, Ui_MainWindow):
         super(POP_RF_para, self).__init__()
         self.setupUi(self)
         self.parent_window = parent#保存主窗口的引用
+        #定义参数配置文件路径
+        self.config_dir = os.path.join(os.getcwd(), "config")
+        self.config_path = os.path.join(self.config_dir, "rf_params.json")
+        self.pushButton_save_params.clicked.connect(self.save_params)
+
+        # 初始状态设置 - 加载历史参数
+        self.load_params()     
+
+    def save_params(self):
+        """保存当前参数到JSON文件"""
+        # 收集所有需要记忆的参数
+        params = {
+            "n_estimators": self.spinBox_n_estimators.value(),
+            "max_depth": self.spinBox_max_depth.value(),
+            "n_jobs": self.spinBox_n_jobs.value(),
+            "random_state": self.spinBox_random_state.value(),
+            "scale_features": self.comboBox_scale_features.currentText()
+        }
+        
+        try:
+            # 确保配置目录存在
+            if not os.path.exists(self.config_dir):
+                os.makedirs(self.config_dir)
+            
+            # 写入JSON文件
+            with open(self.config_path, "w", encoding="utf-8") as f:
+                json.dump(params, f, ensure_ascii=False, indent=4)
+            
+            QMessageBox.information(self, "保存成功", "随机森林参数已保存！")
+        except Exception as e:
+            QMessageBox.warning(self, "保存失败", f"参数记忆失败：{str(e)}")
+    
+    def load_params(self):
+        """从JSON文件加载历史参数"""
+        if not os.path.exists(self.config_path):
+            return  # 无历史参数，使用默认值
+        
+        try:
+            with open(self.config_path, "r", encoding="utf-8") as f:
+                params = json.load(f)
+            
+            # 恢复参数到控件
+            self.spinBox_n_estimators.setValue(params.get("n_estimators", 200))
+            self.spinBox_max_depth.setValue(params.get("max_depth", 12))
+            self.spinBox_n_jobs.setValue(params.get("n_jobs", -1))
+            self.spinBox_random_state.setValue(params.get("random_state", 42))
+            self.comboBox_scale_features.setCurrentText(params.get("scale_features", "True"))
+            
+        except Exception as e:
+            QMessageBox.warning(self, "加载失败", f"历史参数加载失败：{str(e)}")
+
+
     def Confirm(self):
         # 读取输入参数
         global max_depth, random_state,n_estimators,method,scale_features
@@ -1627,6 +1728,60 @@ class POP_SVM_para(QMainWindow, Ui_SVM_para, Ui_MainWindow):
         super(POP_SVM_para, self).__init__()
         self.setupUi(self)
         self.parent_window = parent#保存主窗口的引用
+
+        # 参数记忆功能初始化
+        self.config_dir = os.path.join(os.path.dirname(__file__), "config")
+        self.config_path = os.path.join(self.config_dir, "svm_params.json")
+        
+        # 连接保存参数按钮
+        self.pushButton_save_params.clicked.connect(self.save_params)
+        
+        # 初始化时加载历史参数
+        self.load_params()
+    def save_params(self):
+        """保存当前参数到JSON文件"""
+        params = {
+            "kernel": self.comboBox_kernel.currentText(),
+            "C": self.spinBox_C.value(),
+            "epsilon": self.doubleSpinBox_epsilon.value(),
+            "n_jobs": self.spinBox_n_jobs.value(),
+            "random_state": self.spinBox_random_state.value(),
+            "scale_features": self.comboBox_scale_features.currentText()
+        }
+        
+        try:
+            # 确保配置目录存在
+            if not os.path.exists(self.config_dir):
+                os.makedirs(self.config_dir)
+            
+            # 写入JSON文件
+            with open(self.config_path, "w", encoding="utf-8") as f:
+                json.dump(params, f, ensure_ascii=False, indent=4)
+            
+            QMessageBox.information(self, "保存成功", "SVM参数已保存！")
+        except Exception as e:
+            QMessageBox.warning(self, "保存失败", f"参数记忆失败：{str(e)}")
+    
+    def load_params(self):
+        """从JSON文件加载历史参数"""
+        if not os.path.exists(self.config_path):
+            return  # 无历史参数，使用默认值
+        
+        try:
+            with open(self.config_path, "r", encoding="utf-8") as f:
+                params = json.load(f)
+            
+            # 恢复参数到控件
+            self.comboBox_kernel.setCurrentText(params.get("kernel", "rbf"))
+            self.spinBox_C.setValue(params.get("C", 2000))
+            self.doubleSpinBox_epsilon.setValue(params.get("epsilon", 0.1))
+            self.spinBox_n_jobs.setValue(params.get("n_jobs", -1))
+            self.spinBox_random_state.setValue(params.get("random_state", 42))
+            self.comboBox_scale_features.setCurrentText(params.get("scale_features", "True"))
+            
+        except Exception as e:
+            QMessageBox.warning(self, "加载失败", f"历史参数加载失败：{str(e)}")
+
     def Confirm(self):
         # 读取输入参数
         global kernel, C, epsilon,n_jobs,method,random_state,scale_features
@@ -1652,7 +1807,59 @@ class POP_MLP_para(QMainWindow, Ui_MLP_para, Ui_MainWindow):
         super(POP_MLP_para, self).__init__()
         self.setupUi(self)
         self.parent_window = parent#保存主窗口的引用
+
+        # 参数记忆功能初始化
+        self.config_dir = os.path.join(os.path.dirname(__file__), "config")
+        self.config_path = os.path.join(self.config_dir, "mlp_params.json")
+        
+        # 连接保存参数按钮
+        self.pushButton_save_params.clicked.connect(self.save_params)
+
+        # 初始化时加载历史参数
+        self.load_params()
+
+    def save_params(self):
+        """保存当前参数到JSON文件"""
+        params = {
+            "hidden_layer_sizes": self.lineEdit_hidden_layer_sizes.text(),
+            "max_iter": self.spinBox_max_iter.value(),
+            "mlp_alpha": self.doubleSpinBox_mlp_alpha.value(),
+            "random_state": self.spinBox_random_state.value(),
+            "scale_features": self.comboBox_scale_features.currentText()
+        }
+        
+        try:
+            # 确保配置目录存在
+            if not os.path.exists(self.config_dir):
+                os.makedirs(self.config_dir)
+            
+            # 写入JSON文件
+            with open(self.config_path, "w", encoding="utf-8") as f:
+                json.dump(params, f, ensure_ascii=False, indent=4)
+            
+            QMessageBox.information(self, "保存成功", "MLP参数已保存！")
+        except Exception as e:
+            QMessageBox.warning(self, "保存失败", f"参数记忆失败：{str(e)}")
     
+    def load_params(self):
+        """从JSON文件加载历史参数"""
+        if not os.path.exists(self.config_path):
+            return  # 无历史参数，使用默认值
+        
+        try:
+            with open(self.config_path, "r", encoding="utf-8") as f:
+                params = json.load(f)
+            
+            # 恢复参数到控件
+            self.lineEdit_hidden_layer_sizes.setText(params.get("hidden_layer_sizes", "200,100"))
+            self.spinBox_max_iter.setValue(params.get("max_iter", 500))
+            self.doubleSpinBox_mlp_alpha.setValue(params.get("mlp_alpha", 0.0001))
+            self.spinBox_random_state.setValue(params.get("random_state", 42))
+            self.comboBox_scale_features.setCurrentText(params.get("scale_features", "True"))
+            
+        except Exception as e:
+            QMessageBox.warning(self, "加载失败", f"历史参数加载失败：{str(e)}")
+
     def Confirm(self):
          # 读取输入参数
         global hidden_layer_sizes, max_iter,random_state,method,scale_features, mlp_alpha
@@ -1676,6 +1883,58 @@ class POP_ET_para(QMainWindow, Ui_ET_para, Ui_MainWindow):
         super(POP_ET_para, self).__init__()
         self.setupUi(self)  
         self.parent_window = parent#保存主窗口的引用
+
+        # 参数记忆功能初始化
+        self.config_dir = os.path.join(os.path.dirname(__file__), "config")
+        self.config_path = os.path.join(self.config_dir, "et_params.json")
+        
+        # 连接保存参数按钮
+        self.pushButton_save_params.clicked.connect(self.save_params)
+
+        # 初始化时加载历史参数
+        self.load_params()
+
+    def save_params(self):
+        """保存当前参数到JSON文件"""
+        params = {
+            "n_estimators": self.spinBox_n_estimators.value(),
+            "max_depth": self.spinBox_max_depth.value(),
+            "n_jobs": self.spinBox_n_jobs.value(),
+            "random_state": self.spinBox_random_state.value(),
+            "scale_features": self.comboBox_scale_features.currentText()
+        }
+        
+        try:
+            # 确保配置目录存在
+            if not os.path.exists(self.config_dir):
+                os.makedirs(self.config_dir)
+            
+            # 写入JSON文件
+            with open(self.config_path, "w", encoding="utf-8") as f:
+                json.dump(params, f, ensure_ascii=False, indent=4)
+            
+            QMessageBox.information(self, "保存成功", "ET参数已保存！")
+        except Exception as e:
+            QMessageBox.warning(self, "保存失败", f"参数记忆失败：{str(e)}")
+    
+    def load_params(self):
+        """从JSON文件加载历史参数"""
+        if not os.path.exists(self.config_path):
+            return  # 无历史参数，使用默认值
+        
+        try:
+            with open(self.config_path, "r", encoding="utf-8") as f:
+                params = json.load(f)
+            
+            # 恢复参数到控件
+            self.spinBox_n_estimators.setValue(params.get("n_estimators", 200))
+            self.spinBox_max_depth.setValue(params.get("max_depth", 10))
+            self.spinBox_n_jobs.setValue(params.get("n_jobs", 1))
+            self.spinBox_random_state.setValue(params.get("random_state", 42))
+            self.comboBox_scale_features.setCurrentText(params.get("scale_features", "True"))
+            
+        except Exception as e:
+            QMessageBox.warning(self, "加载失败", f"历史参数加载失败：{str(e)}")
     
     def Confirm(self):
         # 读取输入参数
@@ -1700,6 +1959,55 @@ class POP_GL_para(QMainWindow, Ui_GL_para, Ui_MainWindow):
         super(POP_GL_para, self).__init__()
         self.setupUi(self)
         self.parent_window = parent#保存主窗口的引用
+        # 参数记忆功能初始化
+        self.config_dir = os.path.join(os.path.dirname(__file__), "config")
+        self.config_path = os.path.join(self.config_dir, "gl_params.json")
+        # 连接保存参数按钮
+        self.pushButton_save_params.clicked.connect(self.save_params)
+        # 初始化时加载历史参数
+        self.load_params()
+
+
+
+    def save_params(self):
+        """保存当前参数到JSON文件"""
+        params = {
+            "alpha": self.doubleSpinBox_alpha.value(),
+            "max_iter": self.spinBox_max_iter.value(),
+            "tol": self.doubleSpinBox_tol.value(),
+            "random_state": self.spinBox_random_state.value()
+        }
+        
+        try:
+            # 确保配置目录存在
+            if not os.path.exists(self.config_dir):
+                os.makedirs(self.config_dir)
+            
+            # 写入JSON文件
+            with open(self.config_path, "w", encoding="utf-8") as f:
+                json.dump(params, f, ensure_ascii=False, indent=4)
+            
+            QMessageBox.information(self, "保存成功", "GL参数已保存！")
+        except Exception as e:
+            QMessageBox.warning(self, "保存失败", f"参数记忆失败：{str(e)}")
+    
+    def load_params(self):
+        """从JSON文件加载历史参数"""
+        if not os.path.exists(self.config_path):
+            return  # 无历史参数，使用默认值
+        
+        try:
+            with open(self.config_path, "r", encoding="utf-8") as f:
+                params = json.load(f)
+            
+            # 恢复参数到控件
+            self.doubleSpinBox_alpha.setValue(params.get("alpha", 0.1))
+            self.spinBox_max_iter.setValue(params.get("max_iter", 1000))
+            self.doubleSpinBox_tol.setValue(params.get("tol", 0.0001))
+            self.spinBox_random_state.setValue(params.get("random_state", 42))
+            
+        except Exception as e:
+            QMessageBox.warning(self, "加载失败", f"历史参数加载失败：{str(e)}")
     
     def Confirm(self):
          # 读取输入参数
@@ -1722,7 +2030,57 @@ class POP_MTW_para(QMainWindow, Ui_MTW_para, Ui_MainWindow):#mtw算法改
         super(POP_MTW_para, self).__init__()
         self.setupUi(self)
         self.parent_window = parent#保存主窗口的引用
+
+        # 参数记忆功能初始化
+        self.config_dir = os.path.join(os.path.dirname(__file__), "config")
+        self.config_path = os.path.join(self.config_dir, "mtw_params.json")
+        
+        # 连接保存参数按钮
+        self.pushButton_save_params.clicked.connect(self.save_params)
+        self.load_params()
+
+    def save_params(self):
+        """保存当前参数到JSON文件"""
+        params = {
+            "alpha": self.doubleSpinBox_alpha.value(),
+            "beta": self.doubleSpinBox_beta.value(),
+            "max_iter": self.spinBox_max_iter.value(),
+            "tol": self.doubleSpinBox_tol.value(),
+            "random_state": self.spinBox_random_state.value()
+        }
+        
+        try:
+            # 确保配置目录存在
+            if not os.path.exists(self.config_dir):
+                os.makedirs(self.config_dir)
+            
+            # 写入JSON文件
+            with open(self.config_path, "w", encoding="utf-8") as f:
+                json.dump(params, f, ensure_ascii=False, indent=4)
+            
+            QMessageBox.information(self, "保存成功", "MTW参数已保存！")
+        except Exception as e:
+            QMessageBox.warning(self, "保存失败", f"参数记忆失败：{str(e)}")
     
+    def load_params(self):
+        """从JSON文件加载历史参数"""
+        if not os.path.exists(self.config_path):
+            return  # 无历史参数，使用默认值
+        
+        try:
+            with open(self.config_path, "r", encoding="utf-8") as f:
+                params = json.load(f)
+            
+            # 恢复参数到控件
+            self.doubleSpinBox_alpha.setValue(params.get("alpha", 1.0))
+            self.doubleSpinBox_beta.setValue(params.get("beta", 0.8))
+            self.spinBox_max_iter.setValue(params.get("max_iter", 2000))
+            self.doubleSpinBox_tol.setValue(params.get("tol", 0.0001))
+            self.spinBox_random_state.setValue(params.get("random_state", 42))
+            
+        except Exception as e:
+            QMessageBox.warning(self, "加载失败", f"历史参数加载失败：{str(e)}")
+            
     def Confirm(self):
          # 读取输入参数
         global alpha,beta,random_state,method,max_iter,tol
@@ -1747,6 +2105,56 @@ class POP_REMTW_para(QMainWindow, Ui_REMTW_para, Ui_MainWindow):#remtw算法改
         super(POP_REMTW_para, self).__init__()
         self.setupUi(self)
         self.parent_window = parent#保存主窗口的引用
+
+        # 参数记忆功能初始化
+        self.config_dir = os.path.join(os.path.dirname(__file__), "config")
+        self.config_path = os.path.join(self.config_dir, "remtw_params.json")
+        
+        # 连接保存参数按钮
+        self.pushButton_save_params.clicked.connect(self.save_params)
+        self.load_params()
+
+    def save_params(self):
+        """保存当前参数到JSON文件"""
+        params = {
+            "alpha": self.doubleSpinBox_alpha.value(),
+            "beta": self.doubleSpinBox_beta.value(),
+            "max_iter": self.spinBox_max_iter.value(),
+            "tol": self.doubleSpinBox_tol.value(),
+            "random_state": self.spinBox_random_state.value()
+        }
+        
+        try:
+            # 确保配置目录存在
+            if not os.path.exists(self.config_dir):
+                os.makedirs(self.config_dir)
+            
+            # 写入JSON文件
+            with open(self.config_path, "w", encoding="utf-8") as f:
+                json.dump(params, f, ensure_ascii=False, indent=4)
+            
+            QMessageBox.information(self, "保存成功", "REMTW参数已保存！")
+        except Exception as e:
+            QMessageBox.warning(self, "保存失败", f"参数记忆失败：{str(e)}")
+    
+    def load_params(self):
+        """从JSON文件加载历史参数"""
+        if not os.path.exists(self.config_path):
+            return  # 无历史参数，使用默认值
+        
+        try:
+            with open(self.config_path, "r", encoding="utf-8") as f:
+                params = json.load(f)
+            
+            # 恢复参数到控件
+            self.doubleSpinBox_alpha.setValue(params.get("alpha", 0.2))
+            self.doubleSpinBox_beta.setValue(params.get("beta", 0.1))
+            self.spinBox_max_iter.setValue(params.get("max_iter", 2000))
+            self.doubleSpinBox_tol.setValue(params.get("tol", 0.0001))
+            self.spinBox_random_state.setValue(params.get("random_state", 42))
+            
+        except Exception as e:
+            QMessageBox.warning(self, "加载失败", f"历史参数加载失败：{str(e)}")
     
     def Confirm(self):
          # 读取输入参数
@@ -1767,12 +2175,73 @@ class POP_REMTW_para(QMainWindow, Ui_REMTW_para, Ui_MainWindow):#remtw算法改
         print("max_iter:", max_iter)
         print("tol:", tol)
      
-class POP_MMoE_para(QMainWindow, Ui_MMoE_para, Ui_MainWindow):#remtw算法改
+class POP_MMoE_para(QMainWindow, Ui_MMoE_para, Ui_MainWindow):
     def __init__(self,parent=None):
         super(POP_MMoE_para, self).__init__()
         self.setupUi(self)
         self.parent_window = parent#保存主窗口的引用
+
+        # 参数记忆功能配置
+        self.config_dir = os.path.join(os.path.dirname(__file__), 'config')
+        
+        self.config_path = os.path.join(self.config_dir, 'mmoe_params.json')
+        
+        # 连接保存参数按钮
+        self.pushButton_save_params.clicked.connect(self.save_params)
+    def save_params(self):
+        """保存参数到JSON文件"""
+        try:
+            params = {
+                'alpha': self.doubleSpinBox_alpha.value(),
+                'max_iter': self.spinBox_max_iter.value(),
+                'random_state': self.spinBox_random_state.value(),
+                'mmoe_num_experts': self.spinBox_mmoe_num_experts.value(),
+                'mmoe_expert_hidden': self.spinBox_mmoe_expert_hidden.value(),
+                'mmoe_learning_rate': self.doubleSpinBox_mmoe_learning_rate.value(),
+                'mmoe_dropout_rate': self.doubleSpinBox_mmoe_dropout_rate.value(),
+                'mmoe_epochs': self.spinBox_mmoe_epochs.value(),
+                'mmoe_batch_size': self.spinBox_mmoe_batch_size.value(),
+                'mmoe_lambda_balance': self.doubleSpinBox_mmoe_lambda_balance.value(),
+                'mmoe_scale_features': self.comboBox_mmoe_scale_features.currentText()
+            }
+            
+            with open(self.config_path, 'w', encoding='utf-8') as f:
+                json.dump(params, f, indent=4, ensure_ascii=False)
+            
+            QMessageBox.information(self, "保存成功", "MMoE参数已保存！")
+            
+        except Exception as e:
+            QMessageBox.warning(self, "保存失败", f"保存参数时出错: {str(e)}")
     
+    def load_params(self):
+        """从JSON文件加载参数"""
+        try:
+            if os.path.exists(self.config_path):
+                with open(self.config_path, 'r', encoding='utf-8') as f:
+                    params = json.load(f)
+                
+                # 加载参数到对应控件
+                self.doubleSpinBox_alpha.setValue(params.get('alpha', 0.5))
+                self.spinBox_max_iter.setValue(params.get('max_iter', 1000))
+                self.spinBox_random_state.setValue(params.get('random_state', 42))
+                self.spinBox_mmoe_num_experts.setValue(params.get('mmoe_num_experts', 5))
+                self.spinBox_mmoe_expert_hidden.setValue(params.get('mmoe_expert_hidden', 64))
+                self.doubleSpinBox_mmoe_learning_rate.setValue(params.get('mmoe_learning_rate', 0.005))
+                self.doubleSpinBox_mmoe_dropout_rate.setValue(params.get('mmoe_dropout_rate', 0.1))
+                self.spinBox_mmoe_epochs.setValue(params.get('mmoe_epochs', 100))
+                self.spinBox_mmoe_batch_size.setValue(params.get('mmoe_batch_size', 32))
+                self.doubleSpinBox_mmoe_lambda_balance.setValue(params.get('mmoe_lambda_balance', 0.1))
+                
+                scale_features_text = params.get('mmoe_scale_features', 'True')
+                index = self.comboBox_mmoe_scale_features.findText(scale_features_text)
+                if index >= 0:
+                    self.comboBox_mmoe_scale_features.setCurrentIndex(index)
+                
+                print("MMoE参数已从配置文件加载")
+                
+        except Exception as e:
+            print(f"加载MMoE参数时出错: {str(e)}")
+
     def Confirm(self):
          # 读取输入参数
         global alpha,beta,random_state,method,tol,max_iter,mmoe_num_experts,mmoe_expert_hidden
@@ -1811,6 +2280,49 @@ class POP_GP_para(QMainWindow, Ui_GP_para, Ui_MainWindow):
         super(POP_GP_para, self).__init__()
         self.setupUi(self)
         self.parent_window = parent#保存主窗口的引用
+
+        # 参数记忆功能配置
+        self.config_dir = os.path.join(os.path.dirname(__file__), 'config')
+        os.makedirs(self.config_dir, exist_ok=True)
+        self.config_path = os.path.join(self.config_dir, 'gp_params.json')
+        
+        # 连接保存参数按钮
+        self.pushButton_save_params.clicked.connect(self.save_params)
+        
+        # 加载保存的参数
+        self.load_params()
+    def save_params(self):
+        """保存参数到JSON文件"""
+        try:
+            params = {
+                'learning_rate': self.doubleSpinBox_learning_rate.value(),
+                'training_iterations': self.spinBox_training_iterations.value()
+            }
+            
+            with open(self.config_path, 'w', encoding='utf-8') as f:
+                json.dump(params, f, indent=4, ensure_ascii=False)
+            
+            QMessageBox.information(self, "保存成功", "GP参数已保存!")
+            
+        except Exception as e:
+            QMessageBox.warning(self, "保存失败", f"保存参数时出错: {str(e)}")
+    
+    def load_params(self):
+        """从JSON文件加载参数"""
+        try:
+            if os.path.exists(self.config_path):
+                with open(self.config_path, 'r', encoding='utf-8') as f:
+                    params = json.load(f)
+                
+                # 加载参数到对应控件
+                self.doubleSpinBox_learning_rate.setValue(params.get('learning_rate', 0.1))
+                self.spinBox_training_iterations.setValue(params.get('training_iterations', 500))
+                
+                print("GP参数已从配置文件加载")
+                
+        except Exception as e:
+            print(f"加载GP参数时出错: {str(e)}")
+
     def Confirm(self):
         global learning_rate,training_iterations,method
         learning_rate = self.doubleSpinBox_learning_rate.text()
@@ -1819,11 +2331,65 @@ class POP_GP_para(QMainWindow, Ui_GP_para, Ui_MainWindow):
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("GassuProcessing")
         self.parent_window.All_Methods_Begin()
+        print(f"学习率(learning_rate): {learning_rate}")
+        print(f"训练迭代次数(training_iterations): {training_iterations}")
 class POP_LR_para(QMainWindow, Ui_LR_para, Ui_MainWindow):
     def __init__(self, parent=None):
         super(POP_LR_para, self).__init__()
         self.setupUi(self)
         self.parent_window = parent  # 保存主窗口的引用
+        # 参数记忆功能配置
+        self.config_dir = os.path.join(os.path.dirname(__file__), 'config')
+        os.makedirs(self.config_dir, exist_ok=True)
+        self.config_path = os.path.join(self.config_dir, 'lr_params.json')
+        
+        # 连接保存参数按钮
+        self.pushButton_save_params.clicked.connect(self.save_params)
+        
+        # 加载保存的参数
+        self.load_params()
+
+    def save_params(self):
+        """保存参数到JSON文件"""
+        try:
+            params = {
+                'fit_intercept': self.comboBox_fit_intercept.currentText(),
+                'random_state': self.spinBox_random_state.value(),
+                'scale_features': self.comboBox_scale_features.currentText()
+            }
+            
+            with open(self.config_path, 'w', encoding='utf-8') as f:
+                json.dump(params, f, indent=4, ensure_ascii=False)
+            
+            QMessageBox.information(self, "保存成功", "LR参数已保存!")
+            
+        except Exception as e:
+            QMessageBox.warning(self, "保存失败", f"保存参数时出错: {str(e)}")
+    
+    def load_params(self):
+        """从JSON文件加载参数"""
+        try:
+            if os.path.exists(self.config_path):
+                with open(self.config_path, 'r', encoding='utf-8') as f:
+                    params = json.load(f)
+                
+                # 加载参数到对应控件
+                if 'fit_intercept' in params:
+                    index = self.comboBox_fit_intercept.findText(params['fit_intercept'])
+                    if index >= 0:
+                        self.comboBox_fit_intercept.setCurrentIndex(index)
+                
+                self.spinBox_random_state.setValue(params.get('random_state', 42))
+                
+                if 'scale_features' in params:
+                    index = self.comboBox_scale_features.findText(params['scale_features'])
+                    if index >= 0:
+                        self.comboBox_scale_features.setCurrentIndex(index)
+                
+                print("LR参数已从配置文件加载")
+                
+        except Exception as e:
+            print(f"加载LR参数时出错: {str(e)}")
 
     def Confirm(self):
         # 读取输入参数
@@ -1914,6 +2480,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.pushButton_save_pretrained_model.clicked.connect(
                     lambda: self.ask_and_save_model(self.trained_model, method)
                 ) # 保存预训练模型
+        # 添加跳转按钮和数值框的连接
+        
+        self.spinBox_jump_value.valueChanged.connect(self.jump_to_page)
+        # 为graphicsView添加鼠标滚轮事件
+        self.graphicsView.wheelEvent = self.graphics_view_wheel_event
+
+
     def ask_and_save_model(self,model, method):
          ask_and_save_model(self, model, f"{method}_model.pkl")
          
@@ -1970,6 +2543,39 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         if self.current_page < len(self.figures) - 1:
             self.current_page += 1
             self.update_graphics_view()
+    def graphics_view_wheel_event(self, event):
+        """处理graphicsView的鼠标滚轮事件，用于翻页"""
+        if not self.figures:
+            return
+            
+        # 获取滚轮滚动的角度
+        delta = event.angleDelta().y()
+        
+        if delta > 0:
+            # 向上滚动，显示上一页
+            self.show_previous_page()
+        elif delta < 0:
+            # 向下滚动，显示下一页
+            self.show_next_page()
+        
+        # 阻止事件继续传播
+        event.accept()
+
+    def jump_to_page(self):
+        """跳转到指定页面"""
+        if not self.figures:
+            return
+            
+        # 获取要跳转的页面号
+        target_page = self.spinBox_jump_value.value() - 1  # 转换为0-based索引
+        
+        # 确保页面号在有效范围内
+        if 0 <= target_page < len(self.figures):
+            self.current_page = target_page
+            self.update_graphics_view()
+        else:
+            # 如果页面号超出范围，显示警告信息
+            QMessageBox.warning(self, "警告", f"页面号超出范围！有效范围：1-{len(self.figures)}")
 
     def update_graphics_view(self):
         """更新 graphicsView 中显示的内容"""
@@ -1981,7 +2587,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             self.graphicsView.setScene(self.graphicscene)
             self.graphicsView.show()
 
-
+            # 更新spinBox_jump_value的值为当前页面（1-based）
+            self.spinBox_jump_value.setValue(self.current_page + 1)
 
     @pyqtSlot()
     def AL_VA_para(self):

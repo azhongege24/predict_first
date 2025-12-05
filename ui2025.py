@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\ui2025.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\beifen\新项目\ui\ui2025.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1403, 876)
+        MainWindow.resize(1403, 869)
         MainWindow.setStyleSheet("QMainWindow{\n"
 "\n"
 "\n"
@@ -24,7 +24,7 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.graphicsView = QtWidgets.QGraphicsView(self.centralwidget)
-        self.graphicsView.setGeometry(QtCore.QRect(71, 227, 871, 491))
+        self.graphicsView.setGeometry(QtCore.QRect(71, 207, 871, 511))
         self.graphicsView.setStyleSheet("QGraphicsView{\n"
 "\n"
 "border:1px solid  black;   /*边框的粗细，颜色*/\n"
@@ -48,12 +48,13 @@ class Ui_MainWindow(object):
 "}")
         self.label_headline.setObjectName("label_headline")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(71, 117, 871, 108))
+        self.layoutWidget.setGeometry(QtCore.QRect(71, 117, 871, 91))
         self.layoutWidget.setObjectName("layoutWidget")
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.pushButton_vibration_analysis = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButton_vibration_analysis.setMinimumSize(QtCore.QSize(110, 86))
         self.pushButton_vibration_analysis.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
 "border-radius:15px;    /*设置圆角半径 */\n"
@@ -75,6 +76,7 @@ class Ui_MainWindow(object):
         self.pushButton_vibration_analysis.setObjectName("pushButton_vibration_analysis")
         self.horizontalLayout_4.addWidget(self.pushButton_vibration_analysis)
         self.pushButton_otherpara = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButton_otherpara.setMinimumSize(QtCore.QSize(110, 86))
         self.pushButton_otherpara.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
 "border-radius:15px;    /*设置圆角半径 */\n"
@@ -96,6 +98,7 @@ class Ui_MainWindow(object):
         self.pushButton_otherpara.setObjectName("pushButton_otherpara")
         self.horizontalLayout_4.addWidget(self.pushButton_otherpara)
         self.pushButton_dataset = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButton_dataset.setMinimumSize(QtCore.QSize(110, 86))
         self.pushButton_dataset.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
 "border-radius:15px;    /*设置圆角半径 */\n"
@@ -117,6 +120,7 @@ class Ui_MainWindow(object):
         self.pushButton_dataset.setObjectName("pushButton_dataset")
         self.horizontalLayout_4.addWidget(self.pushButton_dataset)
         self.pushButton_train = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButton_train.setMinimumSize(QtCore.QSize(110, 86))
         self.pushButton_train.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
 "border-radius:15px;    /*设置圆角半径 */\n"
@@ -138,6 +142,7 @@ class Ui_MainWindow(object):
         self.pushButton_train.setObjectName("pushButton_train")
         self.horizontalLayout_4.addWidget(self.pushButton_train)
         self.pushButton_predict = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButton_predict.setMinimumSize(QtCore.QSize(110, 86))
         self.pushButton_predict.setMaximumSize(QtCore.QSize(131, 16777215))
         self.pushButton_predict.setStyleSheet("QPushButton{\n"
 "border:1px solid red;   /*边框的粗细，颜色*/\n"
@@ -1282,6 +1287,42 @@ class Ui_MainWindow(object):
         self.progressBar.setProperty("value", 0)
         self.progressBar.setObjectName("progressBar")
         self.horizontalLayout_8.addWidget(self.progressBar)
+        self.layoutWidget11 = QtWidgets.QWidget(self.centralwidget)
+        self.layoutWidget11.setGeometry(QtCore.QRect(880, 640, 58, 68))
+        self.layoutWidget11.setObjectName("layoutWidget11")
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.layoutWidget11)
+        self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_6.setObjectName("verticalLayout_6")
+        self.label_7 = QtWidgets.QLabel(self.layoutWidget11)
+        self.label_7.setMinimumSize(QtCore.QSize(50, 30))
+        self.label_7.setMaximumSize(QtCore.QSize(100, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("楷体")
+        font.setPointSize(12)
+        font.setBold(False)
+        font.setItalic(False)
+        font.setWeight(50)
+        self.label_7.setFont(font)
+        self.label_7.setStyleSheet("QLabel{\n"
+"\n"
+"\n"
+"padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/\n"
+"color:rgb(0, 0, 0);        /*字体颜色*/\n"
+"    font: 12pt \"楷体\";\n"
+"\n"
+"}")
+        self.label_7.setObjectName("label_7")
+        self.verticalLayout_6.addWidget(self.label_7)
+        self.spinBox_jump_value = QtWidgets.QSpinBox(self.layoutWidget11)
+        self.spinBox_jump_value.setMinimumSize(QtCore.QSize(0, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        self.spinBox_jump_value.setFont(font)
+        self.spinBox_jump_value.setMaximum(9999)
+        self.spinBox_jump_value.setProperty("value", 1)
+        self.spinBox_jump_value.setObjectName("spinBox_jump_value")
+        self.verticalLayout_6.addWidget(self.spinBox_jump_value)
         MainWindow.setCentralWidget(self.centralwidget)
         self.toolBar = QtWidgets.QToolBar(MainWindow)
         self.toolBar.setObjectName("toolBar")
@@ -1322,7 +1363,7 @@ class Ui_MainWindow(object):
         self.pushButton_train.setText(_translate("MainWindow", "训练验模"))
         self.pushButton_predict.setToolTip(_translate("MainWindow", "<html><head/><body><p>点击预测按钮，可进行导入预训练模型的设置，导入预测数据，确认后可点击右下方开始预测按钮进行预测</p></body></html>"))
         self.pushButton_predict.setText(_translate("MainWindow", "振动预测"))
-        self.label_version.setText(_translate("MainWindow", "v4.0 2025.12.2"))
+        self.label_version.setText(_translate("MainWindow", "v4.0 2025.12.5"))
         self.label_2.setText(_translate("MainWindow", "算法模型"))
         self.pushButton_AL1.setToolTip(_translate("MainWindow", "<html><head/><body><p>决策树算法</p></body></html>"))
         self.pushButton_AL1.setText(_translate("MainWindow", "决策树"))
@@ -1389,4 +1430,5 @@ class Ui_MainWindow(object):
         self.label_R2_db_within_3_ratio.setText(_translate("MainWindow", "±3dB内比例"))
         self.label_AL_2.setToolTip(_translate("MainWindow", "<html><head/><body><p>当前使用的算法</p></body></html>"))
         self.label_AL_2.setText(_translate("MainWindow", "训练进度"))
+        self.label_7.setText(_translate("MainWindow", "页数"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
