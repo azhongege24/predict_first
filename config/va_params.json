@@ -1,0 +1,12 @@
+{
+    "analysis_method": "welch",
+    "window_funtion": "hann",
+    "overlap_rate": 0.5,
+    "frequence": 4000,
+    "number_psd": 160,
+    "segment_mode": "时间分段",
+    "start_time": 0.0,
+    "end_time": 100.0,
+    "segment_duration": 0.5,
+    "amounts": 1024
+}

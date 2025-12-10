@@ -1057,6 +1057,8 @@ class POP_VA_method_para(QMainWindow, Ui_VA_method_para, Ui_MainWindow):
         self.doubleSpinBox_start_time.valueChanged.connect(self.validate_segment_duration)
         self.doubleSpinBox_end_time.valueChanged.connect(self.validate_segment_duration)
         self.doubleSpinBox_segment_duration.valueChanged.connect(self.validate_segment_duration)
+        # 连接保存参数按钮
+        self.pushButton_save_para.clicked.connect(self.save_params)
         # 初始状态设置
         self.load_params()  # 加载历史参数
         
@@ -1137,6 +1139,10 @@ class POP_VA_method_para(QMainWindow, Ui_VA_method_para, Ui_MainWindow):
             # 写入JSON文件
             with open(self.config_path, "w", encoding="utf-8") as f:
                 json.dump(params, f, ensure_ascii=False, indent=4)
+            
+            # 添加保存成功提示
+            QMessageBox.information(self, "保存成功", "振动分析参数已成功保存！")
+            
         except Exception as e:
             QMessageBox.warning(self, "保存失败", f"参数记忆失败：{str(e)}")
     
