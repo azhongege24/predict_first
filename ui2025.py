@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\beifen\新项目\ui\ui2025.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\ui2025.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -1363,7 +1363,7 @@ class Ui_MainWindow(object):
         self.pushButton_train.setText(_translate("MainWindow", "训练验模"))
         self.pushButton_predict.setToolTip(_translate("MainWindow", "<html><head/><body><p>点击预测按钮，可进行导入预训练模型的设置，导入预测数据，确认后可点击右下方开始预测按钮进行预测</p></body></html>"))
         self.pushButton_predict.setText(_translate("MainWindow", "振动预测"))
-        self.label_version.setText(_translate("MainWindow", "v4.0 2025.12.5"))
+        self.label_version.setText(_translate("MainWindow", "v4.0 2025.12.10"))
         self.label_2.setText(_translate("MainWindow", "算法模型"))
         self.pushButton_AL1.setToolTip(_translate("MainWindow", "<html><head/><body><p>决策树算法</p></body></html>"))
         self.pushButton_AL1.setText(_translate("MainWindow", "决策树"))
