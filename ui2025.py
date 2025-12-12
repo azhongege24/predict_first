@@ -666,6 +666,7 @@ class Ui_MainWindow(object):
         font.setPointSize(12)
         self.spinBox_test_start.setFont(font)
         self.spinBox_test_start.setMaximum(999999)
+        self.spinBox_test_start.setProperty("value", 9000)
         self.spinBox_test_start.setObjectName("spinBox_test_start")
         self.horizontalLayout_6.addWidget(self.spinBox_test_start)
         self.label_6 = QtWidgets.QLabel(self.layoutWidget3)

@@ -1048,6 +1048,9 @@ font:bold 16px;		/*设置按钮文字和大小*/
          <property name="maximum">
           <number>999999</number>
          </property>
+         <property name="value">
+          <number>9000</number>
+         </property>
         </widget>
        </item>
        <item>
