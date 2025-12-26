@@ -1244,7 +1244,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         self.lastSelectedPath = ""
     def Confirm(self):
         global loaded_model_path
-        self.parent_window.clear_inteface()
+        self.parent_window.clear_interface()
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("已加载预训练模型与预测数据")
         loaded_model_path = self.selected_model_path  # 这里只存路径
