@@ -461,12 +461,12 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
                     "请选择合并数据集的保存格式：\n\n"
                     "• MATLAB格式 (.mat)：适合MATLAB分析\n"
                     "• CSV格式 (.csv)：适合Excel和Python分析\n\n"
-                    "点击'是'保存为MATLAB格式，点击'否'保存为CSV格式",
+                    "点击'是'保存为CSV格式，点击'否'保存为MATLAB格式",
                     QMessageBox.Yes | QMessageBox.No,
                     QMessageBox.Yes
                 )
                 
-                format_type = 'mat' if format_reply == QMessageBox.Yes else 'csv'
+                format_type = 'csv' if format_reply == QMessageBox.Yes else 'mat'
                 
                 # 合并所有文件的功率谱结果
                 all_results = []
@@ -1595,9 +1595,183 @@ class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):
         self.config_path = os.path.join(self.config_dir, "dt_params.json")
 
         self.pushButton_save_params.clicked.connect(self.save_params)
+        #添加随即搜索按钮
+        if hasattr(self, 'pushButton_random_search'):
+            self.pushButton_random_search.clicked.connect(self.random_search)
         # 初始状态设置 - 加载历史参数
         self.load_params()
-    
+
+    def random_search(self):
+        """随机搜索最优参数 - 通过交叉验证评估性能"""
+        try:
+            # 检查是否有可用的数据
+            if not hasattr(self.parent_window, 'data') or self.parent_window.data is None:
+                QMessageBox.warning(self, "数据缺失", "请先加载数据！")
+                return
+            
+            # 获取输入和输出特征
+            input_columns, flag1 = self.parent_window.get_input()
+            output_columns, flag2 = self.parent_window.get_output()
+            
+            if not input_columns or not output_columns:
+                QMessageBox.warning(self, "特征缺失", "请选择输入和输出特征！")
+                return
+            
+            # 获取数据索引设置
+            if self.parent_window.checkBox_percentage.isChecked():
+                total_rows = self.parent_window.data.shape[0]
+                N_start_train = round(total_rows * int(self.parent_window.spinBox_train_start.text()) / 100)
+                N_end_train = round(total_rows * int(self.parent_window.spinBox_train_end.text()) / 100)
+            else:
+                N_start_train = int(self.parent_window.spinBox_train_start.text())
+                N_end_train = int(self.parent_window.spinBox_train_end.text())
+            
+            # 验证索引范围
+            if (N_start_train >= N_end_train) or (N_end_train > self.parent_window.data.shape[0]):
+                QMessageBox.warning(self, "索引错误", "训练数据索引范围无效！")
+                return
+            
+            # 生成训练数据（与All_Methods_Begin相同的逻辑）
+            data = self.parent_window.data
+            data_X = data[input_columns]   # 选择输入特征
+            data_y = data[output_columns]  # 选择输出特征
+            
+            # 检查并保留时间列
+            time_columns = ['start_time', 'end_time']
+            time_columns_present = [col for col in time_columns if col in data.columns]
+            
+            if len(time_columns_present) == 2:
+                # 如果存在时间列，将它们包含在数据中
+                data_time = data[time_columns_present]
+                data_filter = pd.concat([data_X, data_y, data_time], axis=1)
+            else:
+                # 如果没有时间列，使用原来的合并方式
+                data_filter = pd.concat([data_X, data_y], axis=1)
+            
+            # 根据索引选择训练数据
+            data_train = data_filter.iloc[N_start_train:N_end_train]
+            
+            # 检查是否启用shuffle
+            # if self.parent_window.checkBox_shuffle.isChecked():
+            #     data_train = data_train.sample(frac=1, random_state=42).reset_index(drop=True)
+            
+            # 参数搜索空间
+            param_distributions = {
+                'max_depth': list(range(1, 31)) + [None],  # 包含1-30所有整数和无限制
+                'random_state': list(range(1, 101)),       # 包含1-100
+                'scale_features': [True, False]
+            }
+            
+            # 随机搜索设置
+            n_iter = 20  # 随机搜索迭代次数
+            cv_folds = 5  # 交叉验证折数
+            
+            # 导入必要的库
+            from sklearn.model_selection import cross_val_score
+            from sklearn.tree import DecisionTreeRegressor
+            from sklearn.preprocessing import StandardScaler
+            from sklearn.metrics import mean_squared_error, make_scorer
+            import numpy as np
+            import random
+            
+            # 准备数据
+            X = data_train[input_columns].values
+            y = data_train[output_columns].values
+            
+            # 如果多输出，取第一个输出进行评估
+            if y.ndim > 1 and y.shape[1] > 1:
+                y = y[:, 0]  # 取第一个输出进行参数调优
+            
+            best_score = float('inf')  # 最小化MSE
+            best_params = None
+            
+            # 进度对话框
+            progress_dialog = QProgressDialog("正在进行随机搜索...", "取消", 0, n_iter, self)
+            progress_dialog.setWindowTitle("随机搜索进行中")
+            progress_dialog.setWindowModality(Qt.WindowModal)
+            progress_dialog.setMinimumDuration(0)  # 立即显示
+            progress_dialog.show()
+            
+            # 执行随机搜索
+            # 执行随机搜索
+            for i in range(n_iter):
+                # 检查是否取消了操作
+                if progress_dialog.wasCanceled():
+                    break
+                
+                # 更新进度
+                progress_dialog.setValue(i)
+                progress_dialog.setLabelText(f"正在进行随机搜索 ({i+1}/{n_iter})...")
+                QApplication.processEvents()  # 处理UI事件
+                
+                # 随机选择参数
+                max_depth = random.choice(param_distributions['max_depth'])
+                random_state = random.choice(param_distributions['random_state'])
+                scale_features = random.choice(param_distributions['scale_features'])
+                
+                try:
+                    # 数据预处理
+                    X_processed = X.copy()
+                    if scale_features:
+                        scaler = StandardScaler()
+                        X_processed = scaler.fit_transform(X_processed)
+                    
+                    # 创建模型
+                    model = DecisionTreeRegressor(
+                        max_depth=max_depth,
+                        random_state=random_state
+                    )
+                    
+                    # 交叉验证评估
+                    mse_scorer = make_scorer(mean_squared_error, greater_is_better=False)
+                    scores = cross_val_score(model, X_processed, y, 
+                                           cv=cv_folds, scoring=mse_scorer)
+                    avg_score = -np.mean(scores)  # 转换为正数
+                    
+                    # 更新最佳参数
+                    if avg_score < best_score:
+                        best_score = avg_score
+                        best_params = {
+                            'max_depth': max_depth,
+                            'random_state': random_state,
+                            'scale_features': scale_features,
+                            'score': avg_score
+                        }
+                        
+                except Exception as e:
+                    print(f"参数组合评估失败: max_depth={max_depth}, random_state={random_state}, error={e}")
+                    continue
+            
+            # 关闭进度对话框
+            progress_dialog.close()
+            
+            if best_params is None:
+                QMessageBox.warning(self, "搜索失败", "所有参数组合评估都失败了！")
+                return
+            
+            # 更新界面控件
+            if best_params['max_depth'] is None:
+                self.spinBox_max_depth.setValue(30)  # 设置为最大值
+            else:
+                self.spinBox_max_depth.setValue(best_params['max_depth'])
+                
+            self.spinBox_random_state.setValue(best_params['random_state'])
+            self.comboBox_scale_features.setCurrentText("True" if best_params['scale_features'] else "False")
+            
+            # 显示最优参数信息
+            QMessageBox.information(self, "随机搜索完成", 
+                                  f"最优参数组合（基于交叉验证）：\n"
+                                  f"最大深度: {best_params['max_depth'] if best_params['max_depth'] else '无限制'}\n"
+                                  f"随机种子: {best_params['random_state']}\n"
+                                  f"特征缩放: {'是' if best_params['scale_features'] else '否'}\n"
+                                  f"平均MSE: {best_params['score']:.6f}\n\n"
+                                  f"搜索配置：\n"
+                                  f"迭代次数: {n_iter}\n"
+                                  f"交叉验证折数: {cv_folds}")
+            
+        except Exception as e:
+            QMessageBox.warning(self, "随机搜索失败", f"随机搜索过程中出现错误：{str(e)}")
+
     def save_params(self):
         """保存当前参数到JSON文件"""
         # 收集所有需要记忆的参数

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\新项目\ui\Other.ui'
+# Form implementation generated from reading ui file 'c:\Users\zs\Desktop\beifen\新项目\ui\Other.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -14,11 +14,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Other(object):
     def setupUi(self, Other):
         Other.setObjectName("Other")
-        Other.resize(681, 437)
+        Other.resize(756, 443)
         self.centralwidget = QtWidgets.QWidget(Other)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(60, 30, 531, 352))
+        self.layoutWidget.setGeometry(QtCore.QRect(60, 30, 651, 352))
         self.layoutWidget.setObjectName("layoutWidget")
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.layoutWidget)
         self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
@@ -236,7 +236,7 @@ class Ui_Other(object):
         self.verticalLayout_6.addLayout(self.horizontalLayout)
         Other.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(Other)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 681, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 756, 23))
         self.menubar.setObjectName("menubar")
         Other.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(Other)

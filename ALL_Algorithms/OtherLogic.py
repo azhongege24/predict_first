@@ -273,7 +273,7 @@ class OtherParameterModule(QMainWindow, Ui_Other):
                 aligned_values.append(avg_value)
             
             # 添加对齐后的列到结果数据框
-            column_name = f"other_param_{i+1}_{os.path.splitext(file_name)[0]}"
+            column_name = f"input_param_{i+1}_{os.path.splitext(file_name)[0]}"
             aligned_df[column_name] = aligned_values
         
         return aligned_df
@@ -287,7 +287,7 @@ class OtherParameterModule(QMainWindow, Ui_Other):
         file_filter = "CSV文件 (*.csv);;Excel文件 (*.xlsx);;所有文件 (*.*)"
         default_path = "./data/allagin_data" if os.path.exists("./data/allagin_data") else "./"
         # 构建完整的默认文件路径
-        default_file_path = os.path.join(default_path, "other_parameters_dataset.csv")
+        default_file_path = os.path.join(default_path, "input_parameters_dataset.csv")
         file_path, _ = QFileDialog.getSaveFileName(
             self, "保存其他参数整合数据", default_file_path, file_filter)
         
