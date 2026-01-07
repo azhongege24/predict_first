@@ -181,6 +181,27 @@ class Ui_VA_para(object):
 "}")
         self.pushButton_save_image.setObjectName("pushButton_save_image")
         self.verticalLayout_3.addWidget(self.pushButton_save_image)
+        self.pushButton_check_file_result = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButton_check_file_result.setStyleSheet("QPushButton {\n"
+"    border: 1px solid rgb(70, 130, 180);   /* 增强为科研蓝边框，参考Nature期刊图表色 */\n"
+"    border-radius: 8px;\n"
+"    padding: 4px 8px;\n"
+"    background-color: rgb(255, 255, 255);  /* 纯白背景提升对比度 */\n"
+"    color: rgb(30, 80, 120);               /* 深海军蓝文字，对比度达8:1 */\n"
+"    font: bold 16pt \"Times New Roman\";     \n"
+"    /* 强化阴影效果 */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    border-color: rgb(0, 100, 180);        /* 悬停时使用更高饱和的科研蓝 */\n"
+"    background-color: rgb(240, 248, 255);  /* 极浅蓝悬停反馈 */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: rgb(220, 240, 255);  /* 按压状态模拟墨水渗透效果 */\n"
+"}")
+        self.pushButton_check_file_result.setObjectName("pushButton_check_file_result")
+        self.verticalLayout_3.addWidget(self.pushButton_check_file_result)
         self.label_7 = QtWidgets.QLabel(self.layoutWidget)
         self.label_7.setMinimumSize(QtCore.QSize(88, 34))
         self.label_7.setMaximumSize(QtCore.QSize(16777215, 40))
@@ -397,6 +418,7 @@ class Ui_VA_para(object):
         self.pushButton_psd_analysis_multiple.setText(_translate("VA_para", "功率谱分析"))
         self.pushButton_save_multiple_data.setText(_translate("VA_para", "保存结果"))
         self.pushButton_save_image.setText(_translate("VA_para", "保存图片"))
+        self.pushButton_check_file_result.setText(_translate("VA_para", "查看保存结果"))
         self.label_7.setText(_translate("VA_para", "辅助设置区"))
         self.pushButton_help.setText(_translate("VA_para", "帮助"))
         self.pushButton_jump.setText(_translate("VA_para", "指定页数跳转"))

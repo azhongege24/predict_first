@@ -282,7 +282,7 @@ font: 16 px  &quot;Times New Roman&quot;;
 }</string>
     </property>
     <property name="text">
-     <string>v4.0 2025.12.25</string>
+     <string>v5.0 2026.1.5</string>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">

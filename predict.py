@@ -100,7 +100,7 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         
         # 连接按钮信号
         # self.pushButton_browe_data_file.clicked.connect(self.browse_data_file)
-        self.pushButton_browse_multiple_files.clicked.connect(self.browse_multiple_files)  # 新增：多文件选择按钮
+        self.pushButton_browse_multiple_files.clicked.connect(self.browse_multiple_files_with_clear)  # 新增：多文件选择按钮
         self.pushButton_psd_analysis_multiple.clicked.connect(self.perform_psd_analysis_multiple)  # 新增：多文件分析按钮
         self.pushButton_select.clicked.connect(self.select_output_directory)
         self.pushButton_preview_data_file.clicked.connect(self.preview_data)
@@ -113,10 +113,68 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         self.pushButton_top.clicked.connect(self.show_previous_page)
         self.pushButton_bottom.clicked.connect(self.show_next_page)
         self.pushButton_jump.clicked.connect(self.jump_to_page)
-
+        self.pushButton_check_file_result.clicked.connect(self.check_file_result)  # 新增：查看结果文件按钮
         # 启用滚轮事件
         self.graphicsView.wheelEvent = self.graphics_view_wheel_event        
-
+    def clear_interface(self):
+        """清空界面控件内容的工具函数"""
+        print("正在清空界面...")
+        
+        # 清空文本框
+        self.lineEdit.clear()
+        self.lineEdit_2.clear()
+        self.textEdit_file_info.clear()
+        # 清空图形显示 - 修复：清空matplotlib图形而不是QGraphicsView
+        self.figure.clear()
+        self.canvas.draw()
+          
+        self.current_page = 0
+        print("界面清空完成")
+    def check_file_result(self):
+        """查看结果保存文件地址 - 打开文件资源管理器"""
+        # 确定要打开的目录路径
+        result_dir = "data/data_va_analysis"
+        
+        # 检查目录是否存在
+        if not os.path.exists(result_dir):
+            # 如果目录不存在，尝试创建
+            try:
+                os.makedirs(result_dir, exist_ok=True)
+                QMessageBox.information(self, "提示", f"结果目录不存在，已创建: {result_dir}")
+            except Exception as e:
+                QMessageBox.warning(self, "错误", f"无法创建结果目录: {str(e)}")
+                return
+        
+        # 使用系统命令打开文件资源管理器
+        try:
+            # Windows系统使用explorer命令
+            if os.name == 'nt':  # Windows
+                # 使用绝对路径确保正确打开
+                abs_path = os.path.abspath(result_dir)
+                os.system(f'explorer "{abs_path}"')
+            else:  # Linux/Mac
+                # 对于非Windows系统，使用open命令（Mac）或xdg-open（Linux）
+                abs_path = os.path.abspath(result_dir)
+                if sys.platform == 'darwin':  # macOS
+                    os.system(f'open "{abs_path}"')
+                else:  # Linux
+                    os.system(f'xdg-open "{abs_path}"')
+            
+            print(f"已打开结果目录: {os.path.abspath(result_dir)}")
+            
+        except Exception as e:
+            QMessageBox.warning(self, "打开失败", f"无法打开文件资源管理器: {str(e)}")    
+    def browse_multiple_files_with_clear(self):
+        """按顺序执行：先清空界面，再浏览多个文件"""
+        print("开始多文件浏览流程：先清空界面，再选择文件")
+        
+        # 第一步：清空界面
+        self.clear_interface()
+        
+        # 第二步：浏览文件
+        self.browse_multiple_files()
+        
+        print("多文件浏览流程完成")
     def AL_VA_method_para(self):#这里可以看出他是va_metod_para类窗口的parent
       
         self.ui_pop = POP_VA_method_para(self)
@@ -676,7 +734,7 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
                     ax = self.figure.add_subplot(num_to_show, 1, i+1)
                     ax.plot(result['frequency'], result['power_spectrum'], 'b-', linewidth=1.5)
                     ax.set_xlabel('频率 (Hz)')
-                    ax.set_ylabel('功率谱密度')
+                    ax.set_ylabel('功率谱密度 (g$^2$/Hz)')
                     
                     # 根据是否为多文件合并结果来设置标题
                     if 'source_file' in result:
@@ -798,7 +856,7 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
                                 ax = temp_fig.add_subplot(num_to_show, 1, i+1)
                                 ax.plot(result['frequency'], result['power_spectrum'], 'b-', linewidth=1.5)
                                 ax.set_xlabel('频率 (Hz)')
-                                ax.set_ylabel('功率谱密度')
+                                ax.set_ylabel('功率谱密度 (g$^2$/Hz)')
                                 ax.set_title(f"时间段 {result_idx+1}/{num_segments}: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
                                 ax.grid(True, alpha=0.3)
                                 ax.set_yscale('log')
