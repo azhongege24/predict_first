@@ -858,7 +858,17 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
                                 ax.plot(result['frequency'], result['power_spectrum'], 'b-', linewidth=1.5)
                                 ax.set_xlabel('频率 (Hz)')
                                 ax.set_ylabel('功率谱密度 (g$^2$/Hz)')
-                                ax.set_title(f"时间段 {result_idx+1}/{num_segments}: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
+                                if 'source_file' in result:
+                                    # 多文件合并结果，显示文件来源信息
+                                    file_name = result['source_file']
+                                    channel = result['source_channel']
+                                    direction = result['source_direction']
+                                    file_index = result['file_index'] + 1
+                                    segment_index = result['segment_index'] + 1      
+                                    ax.set_title(f"{channel} {direction} 时间段 {segment_index} (总第{result_idx+1}/{num_segments}段): {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")                              
+                                # ax.set_title(f"时间段 {result_idx+1}/{num_segments}: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
+                                else:
+                                    ax.set_title(f"时间段 {result_idx+1}/{num_segments}: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")    
                                 ax.grid(True, alpha=0.3)
                                 ax.set_yscale('log')
                                 ax.set_xscale('log')  # 新增：设置X轴为对数坐
