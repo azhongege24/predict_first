@@ -745,7 +745,8 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
                         file_index = result['file_index'] + 1
                         segment_index = result['segment_index'] + 1
                         
-                        ax.set_title(f"文件{file_index}: {file_name} - {channel} {direction} 时间段 {segment_index} (总第{result_idx+1}/{num_segments}段): {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
+                        # ax.set_title(f"文件{file_index}: {file_name} - {channel} {direction} 时间段 {segment_index} (总第{result_idx+1}/{num_segments}段): {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
+                        ax.set_title(f"{channel} {direction} 时间段 {segment_index} (总第{result_idx+1}/{num_segments}段): {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
                     else:
                         # 单文件结果
                         ax.set_title(f"时间段 {result_idx+1}/{num_segments}: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
