@@ -698,7 +698,7 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
             QMessageBox.warning(self, "分析失败", f"功率谱分析失败: {str(e)}")
     
     def display_analysis_results(self):
-        """显示分析结果 - 分页显示"""
+        """显示分析结果 - 分页显示，每个页面显示一个分段的频域图和时域图"""
         if not self.analysis_results:
             return
         
@@ -706,8 +706,11 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
             results = self.analysis_results['results']
             num_segments = len(results)
             
-            # 计算总页数
-            self.total_pages = (num_segments + self.results_per_page - 1) // self.results_per_page
+            # 修改：每个页面只显示一个分段（包含频域图和时域图）
+            self.results_per_page = 1
+            
+            # 计算总页数（每个分段一页）
+            self.total_pages = num_segments
             
             # 确保当前页在有效范围内
             if self.current_page >= self.total_pages:
@@ -718,61 +721,84 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
             # 清空当前图形
             self.figure.clear()
             
-            # 计算当前页显示的分段范围
-            start_idx = self.current_page * self.results_per_page
-            end_idx = min(start_idx + self.results_per_page, num_segments)
+            # 计算当前页显示的分段索引
+            result_idx = self.current_page
             
-            # 为当前页的分段创建子图
-            num_to_show = end_idx - start_idx
-            
-            if num_to_show > 0:
-                # 垂直排列显示当前页的分段
-                for i in range(num_to_show):
-                    result_idx = start_idx + i
-                    result = results[result_idx]
+            if result_idx < num_segments:
+                result = results[result_idx]
+                
+                # 创建上下两个子图：上面频域图，下面时域图
+                ax1 = self.figure.add_subplot(2, 1, 1)  # 频域图
+                ax2 = self.figure.add_subplot(2, 1, 2)  # 时域图
+                
+                # 绘制频域图（功率谱）
+                ax1.plot(result['frequency'], result['power_spectrum'], 'b-', linewidth=1.5)
+                ax1.set_xlabel('频率 (Hz)')
+                ax1.set_ylabel('功率谱密度 (g$^2$/Hz)')
+                ax1.grid(True, alpha=0.3)
+                ax1.set_yscale('log')
+                ax1.set_xscale('log')
+                self.set_tick_font(ax1)
+                
+                # 绘制时域图
+                # 获取对应时间段的时域数据
+                time_range = result['time_range']
+                if hasattr(self, 'current_time_data') and hasattr(self, 'current_signal_data'):
+                    # 从当前数据中提取对应时间段的时域数据
+                    time_mask = (self.current_time_data >= time_range[0]) & (self.current_time_data <= time_range[1])
+                    seg_time = self.current_time_data[time_mask]
+                    seg_signal = self.current_signal_data[time_mask]
                     
-                    ax = self.figure.add_subplot(num_to_show, 1, i+1)
-                    ax.plot(result['frequency'], result['power_spectrum'], 'b-', linewidth=1.5)
-                    ax.set_xlabel('频率 (Hz)')
-                    ax.set_ylabel('功率谱密度 (g$^2$/Hz)')
-                    
-                    # 根据是否为多文件合并结果来设置标题
-                    if 'source_file' in result:
-                        # 多文件合并结果，显示文件来源信息
-                        file_name = result['source_file']
-                        channel = result['source_channel']
-                        direction = result['source_direction']
-                        file_index = result['file_index'] + 1
-                        segment_index = result['segment_index'] + 1
-                        
-                        # ax.set_title(f"文件{file_index}: {file_name} - {channel} {direction} 时间段 {segment_index} (总第{result_idx+1}/{num_segments}段): {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
-                        ax.set_title(f"{channel} {direction} 时间段 {segment_index} (总第{result_idx+1}/{num_segments}段): {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
+                    if len(seg_time) > 0:
+                        ax2.plot(seg_time, seg_signal, 'r-', linewidth=1)
+                        ax2.set_xlabel('时间 (秒)')
+                        ax2.set_ylabel('加速度 (g)')
+                        ax2.grid(True, alpha=0.3)
+                        self.set_tick_font(ax2)
                     else:
-                        # 单文件结果
-                        ax.set_title(f"时间段 {result_idx+1}/{num_segments}: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
+                        ax2.text(0.5, 0.5, '时域数据不可用', 
+                                horizontalalignment='center', verticalalignment='center',
+                                transform=ax2.transAxes, fontsize=12)
+                        ax2.axis('off')
+                else:
+                    ax2.text(0.5, 0.5, '时域数据不可用', 
+                            horizontalalignment='center', verticalalignment='center',
+                            transform=ax2.transAxes, fontsize=12)
+                    ax2.axis('off')
+                
+                # 设置标题
+                if 'source_file' in result:
+                    # 多文件合并结果，显示文件来源信息
+                    file_name = result['source_file']
+                    channel = result['source_channel']
+                    direction = result['source_direction']
+                    file_index = result['file_index'] + 1
+                    segment_index = result['segment_index'] + 1
                     
-                    ax.grid(True, alpha=0.3)
-                    ax.set_yscale('log')
-                    ax.set_xscale('log')  # 新增：设置X轴为对数坐
-                    self.set_tick_font(ax)
+                    ax1.set_title(f"{channel} {direction} 时间段 {segment_index} (总第{result_idx+1}/{num_segments}段): {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
+                    ax2.set_title(f"时域图 - {channel} {direction} 时间段 {segment_index}")
+                else:
+                    # 单文件结果
+                    ax1.set_title(f"时间段 {result_idx+1}/{num_segments}: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
+                    ax2.set_title(f"时域图 - 时间段 {result_idx+1}/{num_segments}")
                 
-                # 调整布局，避免tight_layout警告
-                self.figure.subplots_adjust(left=0.1, right=0.95, bottom=0.1, top=0.9, 
-                                          hspace=0.5, wspace=0.3)
+                # 调整布局，使两个子图有更好的间距
+                self.figure.subplots_adjust(left=0.1, right=0.95, bottom=0.08, top=0.92, 
+                                          hspace=0.3, wspace=0.3)
                 
-                # 根据是否为多文件合并结果来设置总标题
+                # 设置总标题
                 if 'total_files' in self.analysis_results:
                     # 多文件合并结果
                     total_files = self.analysis_results['total_files']
                     total_segments = self.analysis_results['total_segments']
                     self.figure.suptitle(
-                        f"多文件功率谱分析结果 - 共{total_files}个文件 {total_segments}个分段 - 第 {self.current_page + 1}/{self.total_pages} 页 (显示 {start_idx+1}-{end_idx} 段)",
+                        f"多文件功率谱分析结果 - 共{total_files}个文件 {total_segments}个分段 - 第 {self.current_page + 1}/{self.total_pages} 页 (显示第 {result_idx+1} 段)",
                         fontsize=12
                     )
                 else:
                     # 单文件结果
                     self.figure.suptitle(
-                        f"功率谱分析结果 - {self.analysis_results['channel']} {self.analysis_results['direction']} 第 {self.current_page + 1}/{self.total_pages} 页 (显示 {start_idx+1}-{end_idx} 段，共 {num_segments} 段)",
+                        f"功率谱分析结果 - {self.analysis_results['channel']} {self.analysis_results['direction']} 第 {self.current_page + 1}/{self.total_pages} 页 (显示第 {result_idx+1} 段，共 {num_segments} 段)",
                         fontsize=12
                     )
             else:
@@ -793,7 +819,7 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         except Exception as e:
             QMessageBox.warning(self, "显示失败", f"结果显示失败: {str(e)}")
     def save_analysis_images(self):
-        """保存分析结果图片"""
+        """保存分析结果图片 - 修改为支持频域图和时域图布局"""
         if not self.analysis_results:
             QMessageBox.warning(self, "警告", "请先进行功率谱分析！")
             return
@@ -815,12 +841,11 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
             
             # 保存当前显示的页面图片
             if self.current_page >= 0 and self.current_page < self.total_pages:
-                # 计算当前页显示的分段范围
-                start_idx = self.current_page * self.results_per_page
-                end_idx = min(start_idx + self.results_per_page, num_segments)
+                # 计算当前页显示的分段索引
+                result_idx = self.current_page
                 
                 # 生成文件名
-                filename = f"{channel}_{direction}_page_{self.current_page + 1}_of_{self.total_pages}_segments_{start_idx + 1}_to_{end_idx}.png"
+                filename = f"{channel}_{direction}_page_{self.current_page + 1}_of_{self.total_pages}_segment_{result_idx + 1}.png"
                 file_path = os.path.join(save_dir, filename)
                 
                 # 保存当前显示的图片
@@ -834,54 +859,74 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
                 if reply == QMessageBox.Yes:
                     # 保存所有页面图片
                     for page in range(self.total_pages):
-                        # 计算当前页显示的分段范围
-                        start_idx = page * self.results_per_page
-                        end_idx = min(start_idx + self.results_per_page, num_segments)
+                        # 计算当前页显示的分段索引
+                        result_idx = page
+                        result = results[result_idx]
                         
                         # 生成文件名
-                        filename = f"{channel}_{direction}_page_{page + 1}_of_{self.total_pages}_segments_{start_idx + 1}_to_{end_idx}.png"
+                        filename = f"{channel}_{direction}_page_{page + 1}_of_{self.total_pages}_segment_{result_idx + 1}.png"
                         file_path = os.path.join(save_dir, filename)
                         
                         # 创建临时图形来保存该页面
                         temp_fig = plt.figure(figsize=(10, 8))
                         
-                        # 计算当前页显示的分段数量
-                        num_to_show = end_idx - start_idx
+                        # 创建上下两个子图
+                        ax1 = temp_fig.add_subplot(2, 1, 1)  # 频域图
+                        ax2 = temp_fig.add_subplot(2, 1, 2)  # 时域图
                         
-                        if num_to_show > 0:
-                            # 垂直排列显示当前页的分段
-                            for i in range(num_to_show):
-                                result_idx = start_idx + i
-                                result = results[result_idx]
-                                
-                                ax = temp_fig.add_subplot(num_to_show, 1, i+1)
-                                ax.plot(result['frequency'], result['power_spectrum'], 'b-', linewidth=1.5)
-                                ax.set_xlabel('频率 (Hz)')
-                                ax.set_ylabel('功率谱密度 (g$^2$/Hz)')
-                                if 'source_file' in result:
-                                    # 多文件合并结果，显示文件来源信息
-                                    file_name = result['source_file']
-                                    channel = result['source_channel']
-                                    direction = result['source_direction']
-                                    file_index = result['file_index'] + 1
-                                    segment_index = result['segment_index'] + 1      
-                                    ax.set_title(f"{channel} {direction} 时间段 {segment_index} (总第{result_idx+1}/{num_segments}段): {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")                              
-                                # ax.set_title(f"时间段 {result_idx+1}/{num_segments}: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
-                                else:
-                                    ax.set_title(f"时间段 {result_idx+1}/{num_segments}: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")    
-                                ax.grid(True, alpha=0.3)
-                                ax.set_yscale('log')
-                                ax.set_xscale('log')  # 新增：设置X轴为对数坐
-                                self.set_tick_font(ax)
-                            # 调整布局
-                            temp_fig.subplots_adjust(left=0.1, right=0.95, bottom=0.1, top=0.9, 
-                                                   hspace=0.5, wspace=0.3)
+                        # 绘制频域图
+                        ax1.plot(result['frequency'], result['power_spectrum'], 'b-', linewidth=1.5)
+                        ax1.set_xlabel('频率 (Hz)')
+                        ax1.set_ylabel('功率谱密度 (g$^2$/Hz)')
+                        ax1.grid(True, alpha=0.3)
+                        ax1.set_yscale('log')
+                        ax1.set_xscale('log')
+                        self.set_tick_font(ax1)
+                        
+                        # 绘制时域图
+                        time_range = result['time_range']
+                        if hasattr(self, 'current_time_data') and hasattr(self, 'current_signal_data'):
+                            time_mask = (self.current_time_data >= time_range[0]) & (self.current_time_data <= time_range[1])
+                            seg_time = self.current_time_data[time_mask]
+                            seg_signal = self.current_signal_data[time_mask]
                             
-                            # 添加总标题和页码信息
-                            temp_fig.suptitle(
-                                f"功率谱分析结果 - {channel} {direction} 第 {page + 1}/{self.total_pages} 页 (显示 {start_idx+1}-{end_idx} 段，共 {num_segments} 段)",
-                                fontsize=12
-                            )
+                            if len(seg_time) > 0:
+                                ax2.plot(seg_time, seg_signal, 'r-', linewidth=1)
+                                ax2.set_xlabel('时间 (秒)')
+                                ax2.set_ylabel('加速度 (g)')
+                                ax2.grid(True, alpha=0.3)
+                                self.set_tick_font(ax2)
+                            else:
+                                ax2.text(0.5, 0.5, '时域数据不可用', 
+                                        horizontalalignment='center', verticalalignment='center',
+                                        transform=ax2.transAxes, fontsize=12)
+                                ax2.axis('off')
+                        else:
+                            ax2.text(0.5, 0.5, '时域数据不可用', 
+                                    horizontalalignment='center', verticalalignment='center',
+                                    transform=ax2.transAxes, fontsize=12)
+                            ax2.axis('off')
+                        
+                        # 设置标题
+                        if 'source_file' in result:
+                            channel = result['source_channel']
+                            direction = result['source_direction']
+                            segment_index = result['segment_index'] + 1
+                            ax1.set_title(f"{channel} {direction} 时间段 {segment_index} (总第{result_idx+1}/{num_segments}段): {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
+                            ax2.set_title(f"时域图 - {channel} {direction} 时间段 {segment_index}")
+                        else:
+                            ax1.set_title(f"时间段 {result_idx+1}/{num_segments}: {result['time_range'][0]:.1f}-{result['time_range'][1]:.1f}秒")
+                            ax2.set_title(f"时域图 - 时间段 {result_idx+1}/{num_segments}")
+                        
+                        # 调整布局
+                        temp_fig.subplots_adjust(left=0.1, right=0.95, bottom=0.08, top=0.92, 
+                                               hspace=0.3, wspace=0.3)
+                        
+                        # 添加总标题
+                        temp_fig.suptitle(
+                            f"功率谱分析结果 - {channel} {direction} 第 {page + 1}/{self.total_pages} 页 (显示第 {result_idx+1} 段，共 {num_segments} 段)",
+                            fontsize=12
+                        )
                         
                         # 保存图片
                         temp_fig.savefig(file_path, dpi=300, bbox_inches='tight')
