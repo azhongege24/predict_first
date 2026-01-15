@@ -345,10 +345,24 @@ class PowerSpectrumAnalyzer:
                 number_psd=number_psd
             )
             
+            # 使用面积积分方法计算RMS值
+            # RMS = sqrt(∫x²(t)dt / T)
+            signal_squared = seg_signal**2
+            time_interval = seg_time[-1] - seg_time[0]
+            if time_interval > 0:
+                # 使用梯形积分计算信号平方的面积
+                integral_value = np.trapz(signal_squared, seg_time)
+                rms_value = np.sqrt(integral_value / time_interval)
+            else:
+                # 如果时间间隔为0，使用统计方法作为备选
+                rms_value = np.sqrt(np.mean(signal_squared))
             results.append({
                 'time_range': (seg_start, seg_end),
                 'frequency': f,
-                'power_spectrum': Pxx
+                'power_spectrum': Pxx,
+                'time_data':seg_time,
+                'signal_data':seg_signal,
+                'rms_value':rms_value
             })
             
         return results
