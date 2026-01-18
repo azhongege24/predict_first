@@ -1584,7 +1584,8 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
                 for col in p_cols:
                     # 提取数字部分，如P1→1
                     num = col[1:]
-                    df.rename(columns={col: f"P{num}_output{num}"}, inplace=True)
+                    # df.rename(columns={col: f"P{num}_output{num}"}, inplace=True)
+                    df.rename(columns={col: f"P{num}_output"}, inplace=True)
                 
                 output_dfs.append(df)
             
