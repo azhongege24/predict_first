@@ -1205,9 +1205,40 @@ class POP_VA_method_para(QMainWindow, Ui_VA_method_para, Ui_MainWindow):
         # 初始状态设置
         self.load_params()  # 加载历史参数
         
+        # 添加计算每段点数的信号连接
+        self.comboBox_segment_mode.currentTextChanged.connect(self.calculate_points_per_segment)
+        self.doubleSpinBox_segment_duration.valueChanged.connect(self.calculate_points_per_segment)
+        self.spinBox_frequence.valueChanged.connect(self.calculate_points_per_segment)
+        
         # 初始状态设置
         self.on_segment_mode_changed(self.comboBox_segment_mode.currentText())
+        # 初始计算每段点数
+        self.calculate_points_per_segment()
         
+    def calculate_points_per_segment(self):
+        """计算时间分段模式下的每段点数"""
+        # 获取当前分段模式
+        segment_mode = self.comboBox_segment_mode.currentText()
+        
+        # 只有在时间分段模式下才计算
+        if segment_mode == "时间分段":
+            # 获取每段持续时间和采样频率
+            segment_duration = self.doubleSpinBox_segment_duration.value()
+            sampling_frequency = self.spinBox_frequence.value()
+            
+            # 计算每段点数：点数 = 持续时间 × 采样频率
+            points_per_segment = int(segment_duration * sampling_frequency)
+            
+            # 确保点数至少为1
+            if points_per_segment < 1:
+                points_per_segment = 1
+            
+            # 设置到spinBox_amounts_timepre控件
+            self.spinBox_amounts_timepre.setValue(points_per_segment)
+        else:
+            # 在点数分段模式下，保持当前值不变
+            pass
+
     def validate_segment_duration(self):
         """验证时间间隔不超过开始时间和结束时间的差值"""
         if self.comboBox_segment_mode.currentText() == "时间分段":
