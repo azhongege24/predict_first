@@ -501,12 +501,12 @@ QSpinBox::down-button:pressed {
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>140</x>
       <y>310</y>
-      <width>271</width>
+      <width>294</width>
       <height>42</height>
      </rect>
     </property>
@@ -543,37 +543,6 @@ QPushButton:pressed {
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton{
-border:1px solid red;   /*边框的粗细，颜色*/
-border-radius:15px;    /*设置圆角半径 */
-padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
-background-color: rgb(149, 236, 165);	/*背景颜色*/
-color:rgb(0, 0, 0);		/*字体颜色*/
-	font: 18pt &quot;楷体&quot;;
-
-font:bold;
-}
-QPushButton:hover {
-    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */
-}
-QPushButton:pressed {
-    background-color:rgb(99, 181, 255);     /* 点击时背景色 */
-}</string>
-       </property>
-       <property name="text">
-        <string>取消</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="pushButton_save_params">
        <property name="minimumSize">
         <size>
@@ -583,24 +552,55 @@ QPushButton:pressed {
        </property>
        <property name="styleSheet">
         <string notr="true">QPushButton{
-border:1px solid red;   /*边框的粗细，颜色*/
-border-radius:15px;    /*设置圆角半径 */
-padding:2px 4px;  /*QFrame边框与内部其它部件的距离*/
-background-color: rgb(149, 236, 165);	/*背景颜色*/
-color:rgb(0, 0, 0);		/*字体颜色*/
-	font: 18pt &quot;楷体&quot;;
+    border:1px solid rgb(107, 224, 210);   /* 边框：浅薄荷绿（呼应背景） */
+    border-radius:15px;    /* 圆角半径（不变） */
+    padding:2px 4px;  /* 内边距（不变） */
+    background-color: rgb(173, 240, 232);	/* 常态背景：淡薄荷绿 */
+    color:rgb(34, 51, 59);		/* 字体颜色：深灰色（可读性强，不突兀） */
+    font: bold 18pt &quot;楷体&quot;;  /* 字体格式合并（不变） */
+}
 
-font:bold;
-}
 QPushButton:hover {
-    background-color: rgb(177, 244, 155);    /* 悬停时背景色 */
+    background-color: rgb(196, 246, 240);    /* 悬停背景：更浅的薄荷绿（提亮反馈） */
 }
+
 QPushButton:pressed {
-    background-color:rgb(99, 181, 255);     /* 点击时背景色 */
+    background-color: rgb(82, 206, 192);     /* 点击背景：深薄荷绿（按压厚重感） */
 }</string>
        </property>
        <property name="text">
         <string>保存参数</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_random_search">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+    border:1px solid rgb(168, 120, 233);   /* 边框：浅紫色 */
+    border-radius:15px;    /* 圆角半径（不变） */
+    padding:2px 4px;  /* 内边距（不变） */
+    background-color: rgb(232, 218, 255);	/* 常态背景：淡紫色 */
+    color:rgb(51, 34, 85);		/* 字体颜色：深紫色（更搭色系，可读性强） */
+    font: bold 18pt &quot;楷体&quot;;  /* 字体合并优化（原格式不变） */
+}
+
+QPushButton:hover {
+    background-color: rgb(240, 228, 255);    /* 悬停背景：更浅的紫色（提亮效果） */
+}
+
+QPushButton:pressed {
+    background-color: rgb(194, 162, 245);     /* 点击背景：中等紫色（按压反馈明显） */
+}</string>
+       </property>
+       <property name="text">
+        <string>参数寻优</string>
        </property>
       </widget>
      </item>
@@ -621,22 +621,6 @@ QPushButton:pressed {
  </widget>
  <resources/>
  <connections>
-  <connection>
-   <sender>pushButton_2</sender>
-   <signal>clicked()</signal>
-   <receiver>SVM_para</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>310</x>
-     <y>277</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>462</x>
-     <y>343</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>pushButton</sender>
    <signal>clicked()</signal>

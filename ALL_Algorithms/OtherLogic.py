@@ -205,12 +205,12 @@ class OtherParameterModule(QMainWindow, Ui_Other):
         
         # 添加产品信息作为特征列
         if self.product_name:
-            aligned_df['product_name'] = self.product_name
+            aligned_df['input_product_name'] = self.product_name
         else:
             aligned_df['product_name'] = "未命名产品"
             
         if self.product_code:
-            aligned_df['product_code'] = self.product_code
+            aligned_df['input_product_code'] = self.product_code
         else:
             aligned_df['product_code'] = "未指定代号"
             

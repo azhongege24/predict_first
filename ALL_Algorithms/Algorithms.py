@@ -233,12 +233,14 @@ def multi_task_regression_predictor(
 
 
 
-def ask_and_save_model(parent, model, default_name="model.pkl"):
+def ask_and_save_model(parent, model, default_name="model.pkl",input_columns=None, output_columns=None):
     """
     训练后询问是否保存模型，并保存到用户指定路径
     :param parent: 父窗口self
     :param model: 训练好的模型对象
     :param default_name: 默认保存文件名
+    :param input_columns: 输入特征列名列表（可选）
+    :param output_columns: 输出目标列名列表（可选）
     """
     reply = QMessageBox.question(
         parent,
@@ -264,13 +266,22 @@ def ask_and_save_model(parent, model, default_name="model.pkl"):
                     'output_dim': model.output_dim,
                     'num_experts': model.num_experts,
                     'expert_hidden': model.expert_hidden,
-                    'loss_history': model.loss_history
+                    'loss_history': model.loss_history,
+                    'input_columns': input_columns,
+                    'output_columns': output_columns
                 },file_path.replace('.pkl','.pt'))
                 if hasattr(parent, "lineEdit_state"):
                     parent.lineEdit_state.setText("模型已保存")
                 
             else: 
-                joblib.dump(model, file_path)
+                # 对于scikit-learn模型，创建一个包含模型和元数据的字典
+                model_data = {
+                    'model': model,
+                    'input_columns': input_columns,  # 新增：保存输入特征列名
+                    'output_columns': output_columns,  # 新增：保存输出特征列名
+                    'model_type': model.__class__.__name__  # 新增：保存模型类型
+                }
+                joblib.dump(model_data, file_path)
                 if hasattr(parent, "lineEdit_state"):
                     parent.lineEdit_state.setText("模型已保存 " )
 
@@ -289,22 +300,22 @@ def load_model(model_path, model_type=None):
         if model_type in ['DT', 'RF', 'SVM', 'MLP', 'ET'] or model_type is None:
             try:
                 # 尝试用joblib加载（scikit-learn模型常用方式）
-                model = joblib.load(model_path)
+                loaded_data = joblib.load(model_path)
                 
-                # 验证模型类型是否匹配
-                if model_type == 'DT' and not isinstance(model, DecisionTreeRegressor):
-                    raise ValueError(f"模型类型不匹配，预期DecisionTreeRegressor，实际是{type(model)}")
-                elif model_type == 'RF' and not isinstance(model, RandomForestRegressor):
-                    raise ValueError(f"模型类型不匹配，预期RandomForestRegressor，实际是{type(model)}")
-                elif model_type == 'SVM' and not isinstance(model, MultiOutputRegressor):
-                    raise ValueError(f"模型类型不匹配，预期MultiOutputRegressor(SVR)，实际是{type(model)}")
-                elif model_type == 'MLP' and not isinstance(model, MLPRegressor):
-                    raise ValueError(f"模型类型不匹配，预期MLPRegressor，实际是{type(model)}")
-                elif model_type == 'ET' and not isinstance(model, ExtraTreesRegressor):
-                    raise ValueError(f"模型类型不匹配，预期ExtraTreesRegressor，实际是{type(model)}")
-                
-                print(f"成功加载{model_type if model_type else 'scikit-learn'}模型")
-                return model
+                # 检查是否是新的保存格式（包含元数据）
+                if isinstance(loaded_data, dict) and 'model' in loaded_data:
+                    model = loaded_data['model']
+                    input_columns = loaded_data.get('input_columns')
+                    output_columns = loaded_data.get('output_columns')
+                    print(f"成功加载{model_type if model_type else 'scikit-learn'}模型")
+                    print(f"输入特征列: {input_columns}")
+                    print(f"输出特征列: {output_columns}")
+                    return model, input_columns, output_columns
+                else:
+                    # 旧格式，直接返回模型
+                    model = loaded_data
+                    print(f"成功加载{model_type if model_type else 'scikit-learn'}模型（旧格式）")
+                    return model, None, None
             except:
                 # 如果joblib加载失败，尝试用torch加载（可能是MMoE模型）
                 pass
@@ -329,9 +340,13 @@ def load_model(model_path, model_type=None):
                 model.likelihood.load_state_dict(checkpoint['likelihood_state_dict'])
                 model.scaler = checkpoint.get('scaler')
                 model.loss_history = checkpoint.get('loss_history', [])
+                input_columns = checkpoint.get('input_columns')
+                output_columns = checkpoint.get('output_columns') 
                 print("成功加载GP模型")
-                return model
-            
+                print(f"输入特征列: {input_columns}")
+                print(f"输出特征列: {output_columns}")
+                return model, input_columns, output_columns
+
             # 加载MMoE模型
             elif model_type == 'MMoE':
                 model = MMoERegressor(

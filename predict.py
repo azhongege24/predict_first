@@ -51,6 +51,9 @@ from ALL_Algorithms.VA_ANALYSIS.vibration_analyzer import VibrationAnalysisContr
 from ALL_Algorithms.VA_ANALYSIS.vibration_data_loader import VibrationDataLoader
 from ALL_Algorithms.VA_ANALYSIS.power_spectrum_analyzer import PowerSpectrumAnalyzer
 from ALL_Algorithms.VA_method_para import Ui_VA_method_para
+from ALL_Algorithms.Scan import scan_model_features, check_feature_compatibility
+from ALL_Algorithms.Random_search import random_search_random_forest,random_search_decision_tree,random_search_svm,random_search_mlp,random_search_mmoe # 新增：导入随机森林随机搜索函数
+from ALL_Algorithms.Random_search import random_search_extra_trees ,random_search_linear_regression ,random_search_group_lasso,random_search_mtw,random_search_remtw,random_search_gaussian_process
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
@@ -1416,22 +1419,101 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         self.selected_model_path = None
         self.predict_data = None
         self.lastSelectedPath = ""
+        # 初始化特征列信息
+        self.loaded_model = None
+        self.loaded_input_columns = None
+        self.loaded_output_columns = None
+        self.predict_input_columns = None
+        self.predict_output_columns = None
+
+        # 初始化状态显示
+        self.lineEdit_state_yes_or_no.setText("等待加载模型")
+        self.lineEdit_predict_data_info_yes_or_no.setText("否")
+        self.plainTextEdit_model_features_info.setPlainText("请先加载预训练模型")
+        
+
     def Confirm(self):
         global loaded_model_path
         self.parent_window.clear_interface()
         if self.parent_window:
             self.parent_window.lineEdit_Algorithm_name.setText("已加载预训练模型与预测数据")
-        loaded_model_path = self.selected_model_path  # 这里只存路径
+        # 检查是否已加载模型
+        if self.loaded_model is None:
+            QMessageBox.warning(self, "警告", "请先加载预训练模型")
+            return
+            
+        # 检查是否已加载预测数据
+        if self.predict_data is None:
+            QMessageBox.warning(self, "警告", "请先加载预测数据")
+            return
+            
+        # 将加载的模型和特征列信息传递给父窗口
+        self.parent_window.loaded_model = self.loaded_model
+        self.parent_window.loaded_input_cols = self.loaded_input_columns
+        self.parent_window.loaded_output_cols = self.loaded_output_columns
+        self.parent_window.selected_model_path = self.selected_model_path
         
-        print("selected_model_path:", loaded_model_path)
+        # 显示加载的模型信息
+        print(f"已加载模型路径: {self.selected_model_path}")
+        print(f"输入特征列: {self.loaded_input_columns}")
+        print(f"输出特征列: {self.loaded_output_columns}")
+        
+        # 更新界面显示
+        if self.loaded_input_columns:
+            self.parent_window.listWidget_inputfeature.clear()
+            self.parent_window.add_listitem(self.loaded_input_columns, self.parent_window.listWidget_inputfeature)
+            
+        if self.loaded_output_columns:
+            self.parent_window.listWidget_outputfeature.clear()
+            self.parent_window.add_listitem(self.loaded_output_columns, self.parent_window.listWidget_outputfeature)
+            
+        self.parent_window.lineEdit_state.setText("预训练模型加载成功，可进行预测")
 
     def load_pretrained_model(self):
-        # 只选择路径，不加载模型
+        # 调用Algorithms.py中的load_model函数来实际加载模型
+        from ALL_Algorithms.Algorithms import load_model
+        
+        # 先选择模型文件路径
         path = select_pretrained_model_path(self)
+        if not path:
+            return
+            
         self.selected_model_path = path
         print("Selected model path:", self.selected_model_path)
-        if self.parent_window is not None:
-            self.parent_window.selected_model_path = self.selected_model_path
+        
+        try:
+            # 调用load_model函数加载模型
+            result = load_model(path)
+            
+            # 处理返回结果
+            if isinstance(result, tuple) and len(result) == 3:
+                # 新格式：返回模型、输入特征列、输出特征列
+                self.loaded_model, self.loaded_input_columns, self.loaded_output_columns = result
+            else:
+                # 旧格式：只返回模型
+                self.loaded_model = result
+                self.loaded_input_columns = None
+                self.loaded_output_columns = None
+                
+            if self.loaded_model is None:
+                QMessageBox.warning(self, "加载失败", "无法加载模型文件")
+                return
+                
+            # 更新界面显示
+            self.lineEdit_pretrained_model_path.setText(f"已加载: {os.path.basename(path)}")
+            QMessageBox.information(self, "成功", "模型加载成功")
+            # 更新模型特征信息显示
+            self.update_model_features_display()
+
+            # 将加载的模型路径传递给父窗口
+            if self.parent_window is not None:
+                self.parent_window.selected_model_path = self.selected_model_path
+                self.parent_window.loaded_model = self.loaded_model
+                self.parent_window.loaded_input_cols = self.loaded_input_columns
+                self.parent_window.loaded_output_cols = self.loaded_output_columns
+                
+        except Exception as e:
+            QMessageBox.warning(self, "加载失败", f"加载模型时出错: {str(e)}")
             
     def load_predict_data(self):
         file_filter = "Data Files (*.csv *.xls *.xlsx *.mat);;Excel Files (*.xls *.xlsx);;MATLAB Files (*.mat);;CSV Files (*.csv);;All Files(*.*)"
@@ -1496,8 +1578,68 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
             print("新数据 shape:", self.predict_data.shape)
             print("输入特征列:", self.predict_input_columns)
             print("真实值列:", self.predict_output_columns)
+            # 更新预测数据匹配状态
+            self.update_predict_data_match_status()
+
         except Exception as e:
             QMessageBox.warning(self, "加载失败", str(e))
+
+    def update_model_features_display(self):
+        """更新模型特征信息显示"""
+        try:
+            from ALL_Algorithms.Scan import scan_model_features
+            
+            # 扫描模型特征信息
+            scan_result = scan_model_features(
+                self.loaded_input_columns, 
+                self.loaded_output_columns,
+                self.predict_input_columns if self.predict_data else None,
+                self.predict_output_columns if self.predict_data else None
+            )
+            
+            # 更新模型特征信息显示
+            self.plainTextEdit_model_features_info.setPlainText(scan_result['model_features_info'])
+            
+            # 更新状态显示
+            self.lineEdit_state_yes_or_no.setText("模型加载完成，下一步请加载预测数据")
+            
+            # 如果有预测数据，更新匹配状态
+            if self.predict_data:
+                self.update_predict_data_match_status()
+                
+        except Exception as e:
+            print(f"更新模型特征显示时出错: {str(e)}")
+            self.plainTextEdit_model_features_info.setPlainText(f"显示模型特征信息时出错: {str(e)}")
+    
+    def update_predict_data_match_status(self):
+        """更新预测数据匹配状态"""
+        try:
+            from ALL_Algorithms.Scan import scan_model_features
+            
+            if self.loaded_input_columns and self.predict_input_columns:
+                # 扫描特征匹配情况
+                scan_result = scan_model_features(
+                    self.loaded_input_columns, 
+                    self.loaded_output_columns,
+                    self.predict_input_columns,
+                    self.predict_output_columns
+                )
+                
+                # 更新预测数据匹配状态
+                self.lineEdit_predict_data_info_yes_or_no.setText(scan_result['predict_data_match'])
+                self.lineEdit_state_yes_or_no.setText(scan_result['state_info'])
+            else:
+                if not self.loaded_input_columns:
+                    self.lineEdit_predict_data_info_yes_or_no.setText("否")
+                    self.lineEdit_state_yes_or_no.setText("模型未包含特征列信息")
+                elif not self.predict_input_columns:
+                    self.lineEdit_predict_data_info_yes_or_no.setText("否")
+                    self.lineEdit_state_yes_or_no.setText("预测数据未加载")
+                    
+        except Exception as e:
+            print(f"更新预测数据匹配状态时出错: {str(e)}")
+            self.lineEdit_predict_data_info_yes_or_no.setText("否")
+            self.lineEdit_state_yes_or_no.setText(f"状态检查出错: {str(e)}")
 
 
 class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
@@ -1521,6 +1663,43 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
         # 初始化列表控件
         self.listWidget_input_files.clear()
         self.listWidget_output_files.clear()
+
+    def convert_categorical_to_numeric(self, df):
+        """将英文类别转换为数字，便于机器学习训练
+        
+        参数:
+            df: pandas DataFrame - 需要转换的数据框
+            
+        返回:
+            pandas DataFrame - 转换后的数据框
+        """
+        # 创建数据框的副本，避免修改原始数据
+        df_converted = df.copy()
+        
+        # 遍历每一列
+        for col in df_converted.columns:
+            # 检查列是否为对象类型（通常包含字符串）
+            if df_converted[col].dtype == 'object':
+                # 检查列中是否包含英文字母（A-Z）
+                unique_values = df_converted[col].dropna().unique()
+                has_alpha = any(str(val).isalpha() and str(val).isupper() and len(str(val)) == 1 for val in unique_values)
+                
+                if has_alpha:
+                    # 获取唯一的类别值并排序
+                    categories = sorted([str(val) for val in unique_values if str(val).isalpha() and str(val).isupper() and len(str(val)) == 1])
+                    
+                    # 创建类别到数字的映射字典
+                    category_to_num = {cat: i+1 for i, cat in enumerate(categories)}
+                    
+                    # 应用映射转换
+                    df_converted[col] = df_converted[col].map(lambda x: category_to_num.get(str(x), x) if pd.notna(x) else x)
+                    
+                    # 打印转换信息
+                    print(f"列 '{col}' 中的类别已转换为数字:")
+                    for cat, num in category_to_num.items():
+                        print(f"  {cat} -> {num}")
+        
+        return df_converted  
 
     def add_input_features(self):
         """添加输入特征文件（支持多选）"""
@@ -1590,11 +1769,7 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
             for file_path in self.input_files:
                 # 支持多种分隔符（空格、制表符、逗号）
                 df = pd.read_csv(file_path, sep="\s+|\t|,", engine='python')
-                # 确保包含必要的时间列
-                required_cols = ['start_time', 'end_time']
-                if not all(col in df.columns for col in required_cols):
-                    QMessageBox.warning(self, "格式错误", f"输入文件 {os.path.basename(file_path)} 缺少必要的时间列")
-                    return None
+
                 input_dfs.append(df)
             
             # 合并所有输入文件
@@ -1604,18 +1779,13 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
             output_dfs = []
             for file_path in self.output_files:
                 df = pd.read_csv(file_path, sep="\s+|\t|,", engine='python')
-                # 确保包含必要的时间列
-                required_cols = ['start_time', 'end_time']
-                if not all(col in df.columns for col in required_cols):
-                    QMessageBox.warning(self, "格式错误", f"输出文件 {os.path.basename(file_path)} 缺少必要的时间列")
-                    return None
                 
                 # 重命名P1-P160列，添加output后缀
                 p_cols = [col for col in df.columns if col.startswith('P')]
                 for col in p_cols:
                     # 提取数字部分，如P1→1
                     num = col[1:]
-                    # df.rename(columns={col: f"P{num}_output{num}"}, inplace=True)
+                    
                     df.rename(columns={col: f"P{num}_output"}, inplace=True)
                 
                 output_dfs.append(df)
@@ -1628,48 +1798,34 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
             input_combined['time_center'] = (input_combined['start_time'] + input_combined['end_time']) / 2
             output_combined['time_center'] = (output_combined['start_time'] + output_combined['end_time']) / 2
             
-            # 使用最近邻匹配，容忍0.1秒的时间差
-            from scipy.spatial import cKDTree
-            
-            # 创建时间中心点的KD树
-            input_centers = input_combined[['time_center']].values
-            output_centers = output_combined[['time_center']].values
-            
-            # 构建KD树进行最近邻匹配
-            tree = cKDTree(output_centers)
-            distances, indices = tree.query(input_centers, k=1, distance_upper_bound=0.1)  # 容忍0.1秒的时间差
-            
-            # 创建匹配结果
-            matched_indices = []
-            for i, (dist, idx) in enumerate(zip(distances, indices)):
-                if dist < 0.1:  # 只保留时间差小于0.1秒的匹配
-                    matched_indices.append((i, idx))
-            
-            if not matched_indices:
-                QMessageBox.warning(self, "合并警告", "未找到时间匹配的记录，请检查文件时间范围是否一致")
+            # 检查行数是否一致
+            if len(input_combined) != len(output_combined):
+                QMessageBox.warning(self, "合并警告", f"输入文件行数({len(input_combined)})与输出文件行数({len(output_combined)})不一致！")
                 return None
             
-            # 构建合并结果
-            merged_rows = []
-            for input_idx, output_idx in matched_indices:
-                input_row = input_combined.iloc[input_idx].copy()
-                output_row = output_combined.iloc[output_idx].copy()
-                
-                # 合并行，保留输入特征和输出特征
-                merged_row = pd.concat([input_row, output_row.drop(['start_time', 'end_time', 'time_center'])], axis=0)
-                merged_rows.append(merged_row)
+            # 简单的行对齐合并
+            # 保留输出文件中的source_file、source_channel、source_direction列
+            cols_to_keep = ['source_file', 'source_channel', 'source_direction']
             
-            merged_df = pd.DataFrame(merged_rows)
+            # 删除输出文件中与输入文件重复的列（除了需要保留的列）
+            output_cols_to_drop = []
+            for col in output_combined.columns:
+                if col in input_combined.columns and col not in cols_to_keep:
+                    output_cols_to_drop.append(col)            
             
-            # 移除不需要的列（如segment_id）
-            cols_to_drop = ['segment_id']
-            merged_df = merged_df.drop(columns=[col for col in cols_to_drop if col in merged_df.columns])
+            # 创建输出文件的副本，删除重复列
+            output_filtered = output_combined.drop(columns=output_cols_to_drop)
+            
+            # 横向合并输入和输出数据
+            merged_df = pd.concat([input_combined, output_filtered], axis=1)
             
             # 检查合并结果
             if merged_df.empty:
-                QMessageBox.warning(self, "合并警告", "未找到时间匹配的记录，请检查文件时间范围是否一致")
+                QMessageBox.warning(self, "合并警告", "合并结果为空！")
                 return None
-                
+            # 将英文类别转换为数字，便于机器学习训练
+            merged_df = self.convert_categorical_to_numeric(merged_df)
+
             return merged_df
 
         except Exception as e:
@@ -1826,102 +1982,10 @@ class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):
             # 根据索引选择训练数据
             data_train = data_filter.iloc[N_start_train:N_end_train]
             
-            # 检查是否启用shuffle
-            # if self.parent_window.checkBox_shuffle.isChecked():
-            #     data_train = data_train.sample(frac=1, random_state=42).reset_index(drop=True)
-            
-            # 参数搜索空间
-            param_distributions = {
-                'max_depth': list(range(1, 31)) + [None],  # 包含1-30所有整数和无限制
-                'random_state': list(range(1, 101)),       # 包含1-100
-                'scale_features': [True, False]
-            }
-            
-            # 随机搜索设置
-            n_iter = 20  # 随机搜索迭代次数
-            cv_folds = 5  # 交叉验证折数
-            
-            # 导入必要的库
-            from sklearn.model_selection import cross_val_score
-            from sklearn.tree import DecisionTreeRegressor
-            from sklearn.preprocessing import StandardScaler
-            from sklearn.metrics import mean_squared_error, make_scorer
-            import numpy as np
-            import random
-            
-            # 准备数据
-            X = data_train[input_columns].values
-            y = data_train[output_columns].values
-            
-            # 如果多输出，取第一个输出进行评估
-            if y.ndim > 1 and y.shape[1] > 1:
-                y = y[:, 0]  # 取第一个输出进行参数调优
-            
-            best_score = float('inf')  # 最小化MSE
-            best_params = None
-            
-            # 进度对话框
-            progress_dialog = QProgressDialog("正在进行随机搜索...", "取消", 0, n_iter, self)
-            progress_dialog.setWindowTitle("随机搜索进行中")
-            progress_dialog.setWindowModality(Qt.WindowModal)
-            progress_dialog.setMinimumDuration(0)  # 立即显示
-            progress_dialog.show()
-            
-            # 执行随机搜索
-            # 执行随机搜索
-            for i in range(n_iter):
-                # 检查是否取消了操作
-                if progress_dialog.wasCanceled():
-                    break
-                
-                # 更新进度
-                progress_dialog.setValue(i)
-                progress_dialog.setLabelText(f"正在进行随机搜索 ({i+1}/{n_iter})...")
-                QApplication.processEvents()  # 处理UI事件
-                
-                # 随机选择参数
-                max_depth = random.choice(param_distributions['max_depth'])
-                random_state = random.choice(param_distributions['random_state'])
-                scale_features = random.choice(param_distributions['scale_features'])
-                
-                try:
-                    # 数据预处理
-                    X_processed = X.copy()
-                    if scale_features:
-                        scaler = StandardScaler()
-                        X_processed = scaler.fit_transform(X_processed)
-                    
-                    # 创建模型
-                    model = DecisionTreeRegressor(
-                        max_depth=max_depth,
-                        random_state=random_state
-                    )
-                    
-                    # 交叉验证评估
-                    mse_scorer = make_scorer(mean_squared_error, greater_is_better=False)
-                    scores = cross_val_score(model, X_processed, y, 
-                                           cv=cv_folds, scoring=mse_scorer)
-                    avg_score = -np.mean(scores)  # 转换为正数
-                    
-                    # 更新最佳参数
-                    if avg_score < best_score:
-                        best_score = avg_score
-                        best_params = {
-                            'max_depth': max_depth,
-                            'random_state': random_state,
-                            'scale_features': scale_features,
-                            'score': avg_score
-                        }
-                        
-                except Exception as e:
-                    print(f"参数组合评估失败: max_depth={max_depth}, random_state={random_state}, error={e}")
-                    continue
-            
-            # 关闭进度对话框
-            progress_dialog.close()
+            # 调用工具函数进行随机搜索
+            best_params = random_search_decision_tree(self, data_train, input_columns, output_columns)
             
             if best_params is None:
-                QMessageBox.warning(self, "搜索失败", "所有参数组合评估都失败了！")
                 return
             
             # 更新界面控件
@@ -1939,10 +2003,7 @@ class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):
                                   f"最大深度: {best_params['max_depth'] if best_params['max_depth'] else '无限制'}\n"
                                   f"随机种子: {best_params['random_state']}\n"
                                   f"特征缩放: {'是' if best_params['scale_features'] else '否'}\n"
-                                  f"平均MSE: {best_params['score']:.6f}\n\n"
-                                  f"搜索配置：\n"
-                                  f"迭代次数: {n_iter}\n"
-                                  f"交叉验证折数: {cv_folds}")
+                                  f"平均MSE: {best_params['score']:.6f}")
             
         except Exception as e:
             QMessageBox.warning(self, "随机搜索失败", f"随机搜索过程中出现错误：{str(e)}")
@@ -2003,6 +2064,10 @@ class POP_DT_para(QMainWindow, Ui_DT_para, Ui_MainWindow):
         print("max_depth:", max_depth) 
         print("random_state:", random_state)
         print("scale_features:", scale_features)   
+
+
+
+        
 class POP_RF_para(QMainWindow, Ui_RF_para, Ui_MainWindow):
     def __init__(self,parent=None):
         super(POP_RF_para, self).__init__()
@@ -2012,9 +2077,83 @@ class POP_RF_para(QMainWindow, Ui_RF_para, Ui_MainWindow):
         self.config_dir = os.path.join(os.getcwd(), "config")
         self.config_path = os.path.join(self.config_dir, "rf_params.json")
         self.pushButton_save_params.clicked.connect(self.save_params)
-
+        # 添加随机搜索按钮连接
+        if hasattr(self, 'pushButton_random_search'):
+            self.pushButton_random_search.clicked.connect(self.random_search)
         # 初始状态设置 - 加载历史参数
         self.load_params()     
+
+    def random_search(self):
+        """随机搜索最优参数 - 通过交叉验证评估性能"""
+        try:
+            # 检查是否有可用的数据
+            if not hasattr(self.parent_window, 'data') or self.parent_window.data is None:
+                QMessageBox.warning(self, "数据缺失", "请先加载数据！")
+                return
+            
+            # 获取输入和输出特征
+            input_columns, flag1 = self.parent_window.get_input()
+            output_columns, flag2 = self.parent_window.get_output()
+            
+            if not input_columns or not output_columns:
+                QMessageBox.warning(self, "特征缺失", "请选择输入和输出特征！")
+                return
+
+            # 获取数据
+            data = self.parent_window.data
+            
+            # 获取训练数据索引范围
+            N_start_train = int(self.parent_window.spinBox_train_start.text())
+            N_end_train = int(self.parent_window.spinBox_train_end.text())
+            
+            # 提取输入和输出数据
+            data_X = data[input_columns]
+            data_y = data[output_columns]
+            
+            # 检查是否有时间列
+            time_columns = [col for col in data.columns if 'time' in col.lower()]
+            time_columns_present = [col for col in time_columns if col in data.columns]
+            
+            if time_columns_present:
+                # 如果有时间列，合并时间列
+                data_time = data[time_columns_present]
+                data_filter = pd.concat([data_X, data_y, data_time], axis=1)
+            else:
+                # 如果没有时间列，使用原来的合并方式
+                data_filter = pd.concat([data_X, data_y], axis=1)
+            
+            # 根据索引选择训练数据
+            data_train = data_filter.iloc[N_start_train:N_end_train]
+            
+            # 调用随机搜索函数
+            best_params = random_search_random_forest(self, data_train, input_columns, output_columns)
+            
+            if best_params is not None:
+                # 更新界面控件
+                self.spinBox_n_estimators.setValue(best_params['n_estimators'])
+                
+                if best_params['max_depth'] is None:
+                    self.spinBox_max_depth.setValue(30)  # 设置为最大值
+                else:
+                    self.spinBox_max_depth.setValue(best_params['max_depth'])
+                    
+                self.spinBox_random_state.setValue(best_params['random_state'])
+                self.comboBox_scale_features.setCurrentText("True" if best_params['scale_features'] else "False")
+                
+                # 显示最优参数信息
+                QMessageBox.information(self, "随机搜索完成", 
+                                      f"最优参数组合（基于交叉验证）：\n"
+                                      f"树的数量: {best_params['n_estimators']}\n"
+                                      f"最大深度: {best_params['max_depth'] if best_params['max_depth'] else '无限制'}\n"
+                                      f"随机种子: {best_params['random_state']}\n"
+                                      f"特征缩放: {'是' if best_params['scale_features'] else '否'}\n"
+                                      f"平均MSE: {best_params['score']:.6f}\n\n"
+                                      f"搜索配置：\n"
+                                      f"迭代次数: 20\n"
+                                      f"交叉验证折数: 5")
+            
+        except Exception as e:
+            QMessageBox.warning(self, "随机搜索失败", f"随机搜索过程中出现错误：{str(e)}")
 
     def save_params(self):
         """保存当前参数到JSON文件"""
@@ -2078,6 +2217,7 @@ class POP_RF_para(QMainWindow, Ui_RF_para, Ui_MainWindow):
         print("random_state:", random_state)
         print("scale_features:", scale_features)
 
+
 class POP_SVM_para(QMainWindow, Ui_SVM_para, Ui_MainWindow):
     def __init__(self,parent=None):
         super(POP_SVM_para, self).__init__()
@@ -2090,7 +2230,10 @@ class POP_SVM_para(QMainWindow, Ui_SVM_para, Ui_MainWindow):
         
         # 连接保存参数按钮
         self.pushButton_save_params.clicked.connect(self.save_params)
-        
+        # 添加随机搜索按钮连接
+        if hasattr(self, 'pushButton_random_search'):
+            self.pushButton_random_search.clicked.connect(self.random_search)    
+
         # 初始化时加载历史参数
         self.load_params()
     def save_params(self):
@@ -2137,6 +2280,74 @@ class POP_SVM_para(QMainWindow, Ui_SVM_para, Ui_MainWindow):
         except Exception as e:
             QMessageBox.warning(self, "加载失败", f"历史参数加载失败：{str(e)}")
 
+    def random_search(self):
+        """随机搜索最优参数 - 通过交叉验证评估性能"""
+        try:
+            # 检查是否有可用的数据
+            if not hasattr(self.parent_window, 'data') or self.parent_window.data is None:
+                QMessageBox.warning(self, "数据缺失", "请先加载数据！")
+                return
+            
+            # 获取输入和输出特征
+            input_columns, flag1 = self.parent_window.get_input()
+            output_columns, flag2 = self.parent_window.get_output()
+            
+            if not input_columns or not output_columns:
+                QMessageBox.warning(self, "特征缺失", "请选择输入和输出特征！")
+                return
+            # 获取数据
+            data = self.parent_window.data
+            
+            # 获取训练数据索引范围
+            N_start_train = int(self.parent_window.spinBox_train_start.text())
+            N_end_train = int(self.parent_window.spinBox_train_end.text())
+            
+            # 提取输入和输出数据
+            data_X = data[input_columns]
+            data_y = data[output_columns]
+            
+            # 检查是否有时间列
+            time_columns = [col for col in data.columns if 'time' in col.lower()]
+            time_columns_present = [col for col in time_columns if col in data.columns]
+            
+            if time_columns_present:
+                # 如果有时间列，合并时间列
+                data_time = data[time_columns_present]
+                data_filter = pd.concat([data_X, data_y, data_time], axis=1)
+            else:
+                # 如果没有时间列，使用原来的合并方式
+                data_filter = pd.concat([data_X, data_y], axis=1)
+            
+            # 根据索引选择训练数据
+            data_train = data_filter.iloc[N_start_train:N_end_train]
+            
+            # 调用随机搜索函数
+            best_params = random_search_svm(self, data_train, input_columns, output_columns)
+            
+            if best_params is not None:
+                # 更新界面控件
+                self.comboBox_kernel.setCurrentText(best_params['kernel'])
+                self.spinBox_C.setValue(best_params['C'])
+                self.doubleSpinBox_epsilon.setValue(best_params['epsilon'])
+                # self.spinBox_random_state.setValue(best_params['random_state'])
+                self.comboBox_scale_features.setCurrentText("True" if best_params['scale_features'] else "False")
+                
+                # 显示最优参数信息
+                QMessageBox.information(self, "随机搜索完成", 
+                                      f"最优参数组合（基于交叉验证）：\n"
+                                      f"核函数: {best_params['kernel']}\n"
+                                      f"正则化参数C: {best_params['C']}\n"
+                                      f"epsilon参数: {best_params['epsilon']}\n"
+                                    #   f"随机种子: {best_params['random_state']}\n"
+                                      f"特征缩放: {'是' if best_params['scale_features'] else '否'}\n"
+                                      f"平均MSE: {best_params['score']:.6f}\n\n"
+                                      f"搜索配置：\n"
+                                      f"迭代次数: 20\n"
+                                      f"交叉验证折数: 5")
+            
+        except Exception as e:
+            QMessageBox.warning(self, "随机搜索失败", f"随机搜索过程中出现错误：{str(e)}")
+
     def Confirm(self):
         # 读取输入参数
         global kernel, C, epsilon,n_jobs,method,random_state,scale_features
@@ -2169,9 +2380,94 @@ class POP_MLP_para(QMainWindow, Ui_MLP_para, Ui_MainWindow):
         
         # 连接保存参数按钮
         self.pushButton_save_params.clicked.connect(self.save_params)
+        self.pushButton_random_search.clicked.connect(self.perform_random_search)
 
         # 初始化时加载历史参数
         self.load_params()
+
+    def perform_random_search(self):
+        """执行 MLP 随机搜索"""
+        
+        try:
+            # 检查是否有可用的数据
+            if not hasattr(self.parent_window, 'data') or self.parent_window.data is None:
+                QMessageBox.warning(self, "数据缺失", "请先加载数据！")
+                return
+            # 获取输入和输出特征
+            input_columns, flag1 = self.parent_window.get_input()
+            output_columns, flag2 = self.parent_window.get_output()
+            
+            if not input_columns or not output_columns:
+                QMessageBox.warning(self, "特征缺失", "请选择输入和输出特征！")
+                return
+            
+            # 获取数据
+            data = self.parent_window.data
+            
+            # 获取训练数据索引范围
+            N_start_train = int(self.parent_window.spinBox_train_start.text())
+            N_end_train = int(self.parent_window.spinBox_train_end.text())
+            
+            # 提取输入和输出数据
+            data_X = data[input_columns]
+            data_y = data[output_columns]
+            
+            # 检查是否有时间列
+            time_columns = [col for col in data.columns if 'time' in col.lower()]
+            time_columns_present = [col for col in time_columns if col in data.columns]
+            
+            if time_columns_present:
+                # 如果有时间列，合并时间列
+                data_time = data[time_columns_present]
+                data_filter = pd.concat([data_X, data_y, data_time], axis=1)
+            else:
+                # 如果没有时间列，使用原来的合并方式
+                data_filter = pd.concat([data_X, data_y], axis=1)
+            
+            # 根据索引选择训练数据
+            data_train = data_filter.iloc[N_start_train:N_end_train]
+            
+            # 调用随机搜索函数
+            best_params = random_search_mlp(self, data_train, input_columns, output_columns)
+
+
+
+            if best_params:
+                # 将最佳参数应用到界面控件
+                # 转换隐藏层结构为字符串格式
+                hidden_layers_str = ','.join(map(str, best_params['hidden_layer_sizes']))
+                self.lineEdit_hidden_layer_sizes.setText(hidden_layers_str)
+                self.spinBox_max_iter.setValue(best_params['max_iter'])
+                self.doubleSpinBox_mlp_alpha.setValue(best_params['alpha'])
+                self.spinBox_random_state.setValue(best_params['random_state'])
+                
+            if best_params is not None:
+                # 更新界面控件
+                # 转换隐藏层结构为字符串格式
+                hidden_layers_str = ','.join(map(str, best_params['hidden_layer_sizes']))
+                self.lineEdit_hidden_layer_sizes.setText(hidden_layers_str)
+                self.spinBox_max_iter.setValue(best_params['max_iter'])
+                self.doubleSpinBox_mlp_alpha.setValue(best_params['alpha'])
+                self.spinBox_random_state.setValue(best_params['random_state'])
+                self.comboBox_scale_features.setCurrentText("True" if best_params['scale_features'] else "False")
+                # 显示最优参数信息
+                QMessageBox.information(self, "随机搜索完成", 
+                                      f"最优参数组合（基于交叉验证）：\n"
+                                      f"隐藏层结构: {best_params['hidden_layer_sizes']}\n"
+                                      f"最大迭代次数: {best_params['max_iter']}\n"
+                                      f"正则化参数alpha: {best_params['alpha']}\n"
+                                      f"随机种子: {best_params['random_state']}\n"
+                                      f"特征缩放: {'是' if best_params['scale_features'] else '否'}\n"
+                                      f"平均MSE: {best_params['score']:.6f}\n\n"
+                                      f"搜索配置：\n"
+                                      f"迭代次数: 15\n"
+                                      f"交叉验证折数: 3")
+                
+                # 自动保存最佳参数
+                self.save_params()
+                
+        except Exception as e:
+            QMessageBox.warning(self, "随机搜索失败", f"随机搜索过程中出现错误：{str(e)}")  
 
     def save_params(self):
         """保存当前参数到JSON文件"""
@@ -2245,9 +2541,80 @@ class POP_ET_para(QMainWindow, Ui_ET_para, Ui_MainWindow):
         
         # 连接保存参数按钮
         self.pushButton_save_params.clicked.connect(self.save_params)
-
+        self.pushButton_random_search.clicked.connect(self.perform_random_search)  # 连接随机搜索按钮
+        
         # 初始化时加载历史参数
         self.load_params()
+
+    def perform_random_search(self):
+        """随机搜索最优参数 - 通过交叉验证评估性能"""
+        try:
+            # 检查是否有可用的数据
+            if not hasattr(self.parent_window, 'data') or self.parent_window.data is None:
+                QMessageBox.warning(self, "数据缺失", "请先加载数据！")
+                return
+            
+            # 获取输入和输出特征
+            input_columns, flag1 = self.parent_window.get_input()
+            output_columns, flag2 = self.parent_window.get_output()
+            
+            if not input_columns or not output_columns:
+                QMessageBox.warning(self, "特征缺失", "请选择输入和输出特征！")
+                return
+            
+            # 获取数据
+            data = self.parent_window.data
+            
+            # 获取训练数据索引范围
+            N_start_train = int(self.parent_window.spinBox_train_start.text())
+            N_end_train = int(self.parent_window.spinBox_train_end.text())
+            
+            # 提取输入和输出数据
+            data_X = data[input_columns]
+            data_y = data[output_columns]
+            
+            # 检查是否有时间列
+            time_columns = [col for col in data.columns if 'time' in col.lower()]
+            time_columns_present = [col for col in time_columns if col in data.columns]
+            
+            if time_columns_present:
+                # 如果有时间列，合并时间列
+                data_time = data[time_columns_present]
+                data_filter = pd.concat([data_X, data_y, data_time], axis=1)
+            else:
+                # 如果没有时间列，使用原来的合并方式
+                data_filter = pd.concat([data_X, data_y], axis=1)
+            
+            # 根据索引选择训练数据
+            data_train = data_filter.iloc[N_start_train:N_end_train]
+            
+            # 调用随机搜索函数
+            best_params = random_search_extra_trees(self, data_train, input_columns, output_columns)
+            
+            if best_params is not None:
+                # 更新界面控件
+                self.spinBox_n_estimators.setValue(best_params['n_estimators'])
+                self.spinBox_max_depth.setValue(best_params['max_depth'] if best_params['max_depth'] is not None else 0)
+                self.spinBox_random_state.setValue(best_params['random_state'])
+                self.comboBox_scale_features.setCurrentText("True" if best_params['scale_features'] else "False")
+                
+                # 显示最优参数信息
+                QMessageBox.information(self, "随机搜索完成", 
+                                      f"最优参数组合（基于交叉验证）：\n"
+                                      f"树的数量: {best_params['n_estimators']}\n"
+                                      f"最大深度: {best_params['max_depth'] if best_params['max_depth'] is not None else '无限制'}\n"
+                                      f"随机种子: {best_params['random_state']}\n"
+                                      f"特征缩放: {'是' if best_params['scale_features'] else '否'}\n"
+                                      f"平均MSE: {best_params['score']:.6f}\n\n"
+                                      f"搜索配置：\n"
+                                      f"迭代次数: 20\n"
+                                      f"交叉验证折数: 5")
+                
+                # 自动保存最佳参数
+                self.save_params()
+            
+        except Exception as e:
+            QMessageBox.warning(self, "随机搜索失败", f"随机搜索过程中出现错误：{str(e)}")   
 
     def save_params(self):
         """保存当前参数到JSON文件"""
@@ -2319,9 +2686,79 @@ class POP_GL_para(QMainWindow, Ui_GL_para, Ui_MainWindow):
         self.config_path = os.path.join(self.config_dir, "gl_params.json")
         # 连接保存参数按钮
         self.pushButton_save_params.clicked.connect(self.save_params)
+        self.pushButton_random_search.clicked.connect(self.perform_random_search)
         # 初始化时加载历史参数
         self.load_params()
-
+    def perform_random_search(self):
+        """随机搜索最优参数 - 通过交叉验证评估性能"""
+        try:
+            # 检查是否有可用的数据
+            if not hasattr(self.parent_window, 'data') or self.parent_window.data is None:
+                QMessageBox.warning(self, "数据缺失", "请先加载数据！")
+                return
+            
+            # 获取输入和输出特征
+            input_columns, flag1 = self.parent_window.get_input()
+            output_columns, flag2 = self.parent_window.get_output()
+            
+            if not input_columns or not output_columns:
+                QMessageBox.warning(self, "特征缺失", "请选择输入和输出特征！")
+                return
+            
+            # 获取数据
+            data = self.parent_window.data
+            
+            # 获取训练数据索引范围
+            N_start_train = int(self.parent_window.spinBox_train_start.text())
+            N_end_train = int(self.parent_window.spinBox_train_end.text())
+            
+            # 提取输入和输出数据
+            data_X = data[input_columns]
+            data_y = data[output_columns]
+            
+            # 检查是否有时间列
+            time_columns = [col for col in data.columns if 'time' in col.lower()]
+            time_columns_present = [col for col in time_columns if col in data.columns]
+            
+            if time_columns_present:
+                # 如果有时间列，合并时间列
+                data_time = data[time_columns_present]
+                data_filter = pd.concat([data_X, data_y, data_time], axis=1)
+            else:
+                # 如果没有时间列，使用原来的合并方式
+                data_filter = pd.concat([data_X, data_y], axis=1)
+            
+            # 根据索引选择训练数据
+            data_train = data_filter.iloc[N_start_train:N_end_train]
+            
+            # 调用随机搜索函数
+            best_params = random_search_group_lasso(self, data_train, input_columns, output_columns)
+            
+            if best_params is not None:
+                # 更新界面控件
+                self.doubleSpinBox_alpha.setValue(best_params['alpha'])
+                self.spinBox_max_iter.setValue(best_params['max_iter'])
+                self.doubleSpinBox_tol.setValue(best_params['tol'])
+                self.spinBox_random_state.setValue(best_params['random_state'])
+                
+                # 显示最优参数信息
+                QMessageBox.information(self, "随机搜索完成", 
+                                      f"最优参数组合（基于交叉验证）：\n"
+                                      f"正则化参数alpha: {best_params['alpha']}\n"
+                                      f"最大迭代次数: {best_params['max_iter']}\n"
+                                      f"收敛容差: {best_params['tol']}\n"
+                                      f"随机种子: {best_params['random_state']}\n"
+                                      f"特征缩放: {'是' if best_params['scale_features'] else '否'}\n"
+                                      f"平均MSE: {best_params['score']:.6f}\n\n"
+                                      f"搜索配置：\n"
+                                      f"迭代次数: 15\n"
+                                      f"交叉验证折数: 3")
+                
+                # 自动保存最佳参数
+                self.save_params()
+            
+        except Exception as e:
+            QMessageBox.warning(self, "随机搜索失败", f"随机搜索过程中出现错误：{str(e)}")
 
 
     def save_params(self):
@@ -2392,7 +2829,84 @@ class POP_MTW_para(QMainWindow, Ui_MTW_para, Ui_MainWindow):#mtw算法改
         
         # 连接保存参数按钮
         self.pushButton_save_params.clicked.connect(self.save_params)
+
+        self.pushButton_random_search.clicked.connect(self.random_search_parameters)
         self.load_params()
+
+    def random_search_parameters(self):
+        """
+        执行MTW参数的随机搜索
+        """
+        try:
+            # 检查是否有训练数据
+            if not hasattr(self.parent_window, 'data') or self.parent_window.data is None:
+                QMessageBox.warning(self, "数据缺失", "请先加载数据！")
+                return
+                
+            # 获取输入输出列
+            input_columns, flag1 = self.parent_window.get_input()
+            output_columns, flag2 = self.parent_window.get_output()
+            
+            if not input_columns or not output_columns:
+                QMessageBox.warning(self, "列选择缺失", "请先选择输入和输出列！")
+                return
+            
+            # 执行随机搜索
+            # 获取数据
+            data = self.parent_window.data
+            
+            # 获取训练数据索引范围
+            N_start_train = int(self.parent_window.spinBox_train_start.text())
+            N_end_train = int(self.parent_window.spinBox_train_end.text())
+            
+            # 提取输入和输出数据
+            data_X = data[input_columns]
+            data_y = data[output_columns]
+            
+            # 检查是否有时间列
+            time_columns = [col for col in data.columns if 'time' in col.lower()]
+            time_columns_present = [col for col in time_columns if col in data.columns]
+            
+            if time_columns_present:
+                # 如果有时间列，合并时间列
+                data_time = data[time_columns_present]
+                data_filter = pd.concat([data_X, data_y, data_time], axis=1)
+            else:
+                # 如果没有时间列，使用原来的合并方式
+                data_filter = pd.concat([data_X, data_y], axis=1)
+            
+            # 根据索引选择训练数据
+            data_train = data_filter.iloc[N_start_train:N_end_train]
+            
+            # 调用随机搜索函数
+            best_params = random_search_mtw(self, data_train, input_columns, output_columns)
+            
+            if best_params is not None:
+                # 更新界面控件
+                self.doubleSpinBox_alpha.setValue(best_params['alpha'])
+                self.doubleSpinBox_beta.setValue(best_params['beta'])
+                self.spinBox_max_iter.setValue(best_params['max_iter'])
+                self.doubleSpinBox_tol.setValue(best_params['tol'])
+                self.spinBox_random_state.setValue(best_params['random_state'])
+                
+                # 显示最优参数信息
+                QMessageBox.information(self, "随机搜索完成",
+                                      f"最优参数组合（基于交叉验证）：\n"
+                                      f"正则化参数alpha: {best_params['alpha']}\n"
+                                      f"正则化参数beta: {best_params['beta']}\n"
+                                      f"最大迭代次数: {best_params['max_iter']}\n"
+                                      f"收敛容差: {best_params['tol']}\n"
+                                      f"随机种子: {best_params['random_state']}\n"
+                                      f"GPU加速: {'是' if best_params['gpu'] else '否'}\n"
+                                      f"平均MSE: {best_params['score']:.6f}\n\n"
+                                      f"搜索配置：\n"
+                                      f"迭代次数: 15\n"
+                                      f"交叉验证折数: 3")
+                
+                # 自动保存最佳参数
+                self.save_params()
+        except Exception as e:
+            QMessageBox.warning(self, "随机搜索错误", f"参数随机搜索过程中出现错误：{str(e)}")
 
     def save_params(self):
         """保存当前参数到JSON文件"""
@@ -2467,7 +2981,83 @@ class POP_REMTW_para(QMainWindow, Ui_REMTW_para, Ui_MainWindow):#remtw算法改
         
         # 连接保存参数按钮
         self.pushButton_save_params.clicked.connect(self.save_params)
+        # 连接随机搜索按钮
+        self.pushButton_random_search.clicked.connect(self.random_search_parameters)
         self.load_params()
+
+    def random_search_parameters(self):
+        """
+        随机搜索最优参数 - 通过交叉验证评估性能
+        """
+        try:
+            # 检查是否有可用的数据
+            if not hasattr(self.parent_window, 'data') or self.parent_window.data is None:
+                QMessageBox.warning(self, "数据缺失", "请先加载数据！")
+                return
+            
+            # 获取输入和输出特征
+            input_columns, flag1 = self.parent_window.get_input()
+            output_columns, flag2 = self.parent_window.get_output()
+            
+            if not input_columns or not output_columns:
+                QMessageBox.warning(self, "特征缺失", "请选择输入和输出特征！")
+                return
+            
+            # 获取数据
+            data = self.parent_window.data
+            
+            # 获取训练数据索引范围
+            N_start_train = int(self.parent_window.spinBox_train_start.text())
+            N_end_train = int(self.parent_window.spinBox_train_end.text())
+            
+            # 提取输入和输出数据
+            data_X = data[input_columns]
+            data_y = data[output_columns]
+            
+            # 检查是否有时间列
+            time_columns = [col for col in data.columns if 'time' in col.lower()]
+            time_columns_present = [col for col in time_columns if col in data.columns]
+            
+            if time_columns_present:
+                # 如果有时间列，合并时间列
+                data_time = data[time_columns_present]
+                data_filter = pd.concat([data_X, data_y, data_time], axis=1)
+            else:
+                # 如果没有时间列，使用原来的合并方式
+                data_filter = pd.concat([data_X, data_y], axis=1)
+            
+            # 根据索引选择训练数据
+            data_train = data_filter.iloc[N_start_train:N_end_train]
+            
+            # 调用随机搜索函数
+            best_params = random_search_remtw(self, data_train, input_columns, output_columns)
+            
+            if best_params is not None:
+                # 更新界面控件
+                self.doubleSpinBox_alpha.setValue(best_params['alpha'])
+                self.doubleSpinBox_beta.setValue(best_params['beta'])
+                self.spinBox_max_iter.setValue(best_params['max_iter'])
+                self.doubleSpinBox_tol.setValue(best_params['tol'])
+                self.spinBox_random_state.setValue(best_params['random_state'])
+                
+                # 显示最优参数信息
+                QMessageBox.information(self, "随机搜索完成",
+                                      f"最优参数组合（基于交叉验证）：\n"
+                                      f"正则化参数alpha: {best_params['alpha']}\n"
+                                      f"正则化参数beta: {best_params['beta']}\n"
+                                      f"最大迭代次数: {best_params['max_iter']}\n"
+                                      f"收敛容差: {best_params['tol']}\n"
+                                      f"随机种子: {best_params['random_state']}\n"
+                                      f"GPU加速: {'是' if best_params['gpu'] else '否'}\n"
+                                      f"平均MSE: {best_params['score']:.6f}\n\n"
+                                      f"搜索配置：\n"
+                                      f"迭代次数: 15\n"
+                                      f"交叉验证折数: 3")
+                
+                # 自动保存最佳参数
+                self.save_params()
+        except Exception as e:
+            QMessageBox.warning(self, "随机搜索错误", f"参数随机搜索过程中出现错误：{str(e)}")
 
     def save_params(self):
         """保存当前参数到JSON文件"""
@@ -2543,6 +3133,93 @@ class POP_MMoE_para(QMainWindow, Ui_MMoE_para, Ui_MainWindow):
         
         # 连接保存参数按钮
         self.pushButton_save_params.clicked.connect(self.save_params)
+        self.pushButton_random_search.clicked.connect(self.random_search_parameters)
+        self.load_params()
+
+    def random_search_parameters(self):
+        """
+        随机搜索最优参数 - 通过交叉验证评估性能
+        """
+        try:
+            # 检查是否有可用的数据
+            if not hasattr(self.parent_window, 'data') or self.parent_window.data is None:
+                QMessageBox.warning(self, "数据缺失", "请先加载数据！")
+                return
+            
+            # 获取输入和输出特征
+            input_columns, flag1 = self.parent_window.get_input()
+            output_columns, flag2 = self.parent_window.get_output()
+            
+            if not input_columns or not output_columns:
+                QMessageBox.warning(self, "特征缺失", "请选择输入和输出特征！")
+                return
+            
+            # 获取数据
+            data = self.parent_window.data
+            
+            # 获取训练数据索引范围
+            N_start_train = int(self.parent_window.spinBox_train_start.text())
+            N_end_train = int(self.parent_window.spinBox_train_end.text())
+            
+            # 提取输入和输出数据
+            data_X = data[input_columns]
+            data_y = data[output_columns]
+            
+            # 检查是否有时间列
+            time_columns = [col for col in data.columns if 'time' in col.lower()]
+            time_columns_present = [col for col in time_columns if col in data.columns]
+            
+            if time_columns_present:
+                # 如果有时间列，合并时间列
+                data_time = data[time_columns_present]
+                data_filter = pd.concat([data_X, data_y, data_time], axis=1)
+            else:
+                # 如果没有时间列，使用原来的合并方式
+                data_filter = pd.concat([data_X, data_y], axis=1)
+            
+            # 根据索引选择训练数据
+            data_train = data_filter.iloc[N_start_train:N_end_train]
+            
+            # 调用随机搜索函数
+            best_params = random_search_mmoe(self, data_train, input_columns, output_columns)
+            
+            if best_params is not None:
+                # 更新界面控件
+                self.spinBox_mmoe_num_experts.setValue(best_params['mmoe_num_experts'])
+                self.spinBox_mmoe_expert_hidden.setValue(best_params['mmoe_expert_hidden'])
+                self.doubleSpinBox_mmoe_learning_rate.setValue(best_params['mmoe_learning_rate'])
+                self.doubleSpinBox_mmoe_dropout_rate.setValue(best_params['mmoe_dropout_rate'])
+                self.spinBox_mmoe_epochs.setValue(best_params['mmoe_epochs'])
+                self.spinBox_mmoe_batch_size.setValue(best_params['mmoe_batch_size'])
+                self.doubleSpinBox_mmoe_lambda_balance.setValue(best_params['mmoe_lambda_balance'])
+                
+                # 更新特征标准化下拉框
+                scale_features_index = 0 if best_params['mmoe_scale_features'] else 1
+                self.comboBox_mmoe_scale_features.setCurrentIndex(scale_features_index)
+                
+                # 显示最优参数信息
+                QMessageBox.information(self, "随机搜索完成",
+                                      f"最优参数组合（基于交叉验证）：\n"
+                                      f"专家数量: {best_params['mmoe_num_experts']}\n"
+                                      f"专家网络隐藏层大小: {best_params['mmoe_expert_hidden']}\n"
+                                      f"学习率: {best_params['mmoe_learning_rate']}\n"
+                                      f"Dropout率: {best_params['mmoe_dropout_rate']}\n"
+                                      f"训练轮数: {best_params['mmoe_epochs']}\n"
+                                      f"批处理大小: {best_params['mmoe_batch_size']}\n"
+                                      f"平衡系数: {best_params['mmoe_lambda_balance']}\n"
+                                      f"特征标准化: {'是' if best_params['mmoe_scale_features'] else '否'}\n"
+                                      f"平均MSE: {best_params['score']:.6f}\n\n"
+                                      f"搜索配置：\n"
+                                      f"迭代次数: 6\n"
+                                      f"交叉验证折数: 2\n"
+                                      f"数据采样: 是（如数据量>1000）")
+                
+                # 自动保存最佳参数
+                self.save_params()
+        except Exception as e:
+            QMessageBox.warning(self, "随机搜索错误", f"参数随机搜索过程中出现错误：{str(e)}")
+
+
     def save_params(self):
         """保存参数到JSON文件"""
         try:
@@ -2643,9 +3320,80 @@ class POP_GP_para(QMainWindow, Ui_GP_para, Ui_MainWindow):
         
         # 连接保存参数按钮
         self.pushButton_save_params.clicked.connect(self.save_params)
+        self.pushButton_random_search.clicked.connect(self.random_search_parameters)
         
         # 加载保存的参数
         self.load_params()
+
+    def random_search_parameters(self):
+        """
+        随机搜索最优参数 - 通过交叉验证评估性能
+        """
+        try:
+            # 检查是否有可用的数据
+            if not hasattr(self.parent_window, 'data') or self.parent_window.data is None:
+                QMessageBox.warning(self, "数据缺失", "请先加载数据！")
+                return
+            
+            # 获取输入和输出特征
+            input_columns, flag1 = self.parent_window.get_input()
+            output_columns, flag2 = self.parent_window.get_output()
+            
+            if not input_columns or not output_columns:
+                QMessageBox.warning(self, "特征缺失", "请选择输入和输出特征！")
+                return
+            
+            # 获取数据
+            data = self.parent_window.data
+            
+            # 获取训练数据索引范围
+            N_start_train = int(self.parent_window.spinBox_train_start.text())
+            N_end_train = int(self.parent_window.spinBox_train_end.text())
+            
+            # 提取输入和输出数据
+            data_X = data[input_columns]
+            data_y = data[output_columns]
+            
+            # 检查是否有时间列
+            time_columns = [col for col in data.columns if 'time' in col.lower()]
+            time_columns_present = [col for col in time_columns if col in data.columns]
+            
+            if time_columns_present:
+                # 如果有时间列，合并时间列
+                data_time = data[time_columns_present]
+                data_filter = pd.concat([data_X, data_y, data_time], axis=1)
+            else:
+                # 如果没有时间列，使用原来的合并方式
+                data_filter = pd.concat([data_X, data_y], axis=1)
+            
+            # 根据索引选择训练数据
+            data_train = data_filter.iloc[N_start_train:N_end_train]
+            
+            # 调用随机搜索函数
+            best_params = random_search_gaussian_process(self, data_train, input_columns, output_columns)
+            
+            if best_params is not None:
+                # 更新界面控件
+                self.doubleSpinBox_learning_rate.setValue(best_params['learning_rate'])
+                self.spinBox_training_iterations.setValue(best_params['training_iterations'])
+                
+                # 显示最优参数信息
+                QMessageBox.information(self, "随机搜索完成",
+                                      f"最优参数组合（基于交叉验证）：\n"
+                                      f"学习率: {best_params['learning_rate']}\n"
+                                      f"训练迭代次数: {best_params['training_iterations']}\n"
+                                      f"设备: {best_params['device']}\n"
+                                      f"平均MSE: {best_params['score']:.6f}\n\n"
+                                      f"搜索配置：\n"
+                                      f"迭代次数: 8\n"
+                                      f"交叉验证折数: 2\n"
+                                      f"数据采样: 是（如数据量>500）")
+                
+                # 自动保存最佳参数
+                self.save_params()
+        except Exception as e:
+            QMessageBox.warning(self, "随机搜索错误", f"参数随机搜索过程中出现错误：{str(e)}")
+
     def save_params(self):
         """保存参数到JSON文件"""
         try:
@@ -2700,9 +3448,76 @@ class POP_LR_para(QMainWindow, Ui_LR_para, Ui_MainWindow):
         
         # 连接保存参数按钮
         self.pushButton_save_params.clicked.connect(self.save_params)
+        self.pushButton_random_search.clicked.connect(self.perform_random_search)  # 连接随机搜索按钮
         
         # 加载保存的参数
         self.load_params()
+
+    def perform_random_search(self):
+        """随机搜索最优参数 - 通过交叉验证评估性能"""
+        try:
+            # 检查是否有可用的数据
+            if not hasattr(self.parent_window, 'data') or self.parent_window.data is None:
+                QMessageBox.warning(self, "数据缺失", "请先加载数据！")
+                return
+            
+            # 获取输入和输出特征
+            input_columns, flag1 = self.parent_window.get_input()
+            output_columns, flag2 = self.parent_window.get_output()
+            
+            if not input_columns or not output_columns:
+                QMessageBox.warning(self, "特征缺失", "请选择输入和输出特征！")
+                return
+            
+            # 获取数据
+            data = self.parent_window.data
+            
+            # 获取训练数据索引范围
+            N_start_train = int(self.parent_window.spinBox_train_start.text())
+            N_end_train = int(self.parent_window.spinBox_train_end.text())
+            
+            # 提取输入和输出数据
+            data_X = data[input_columns]
+            data_y = data[output_columns]
+            
+            # 检查是否有时间列
+            time_columns = [col for col in data.columns if 'time' in col.lower()]
+            time_columns_present = [col for col in time_columns if col in data.columns]
+            
+            if time_columns_present:
+                # 如果有时间列，合并时间列
+                data_time = data[time_columns_present]
+                data_filter = pd.concat([data_X, data_y, data_time], axis=1)
+            else:
+                # 如果没有时间列，使用原来的合并方式
+                data_filter = pd.concat([data_X, data_y], axis=1)
+            
+            # 根据索引选择训练数据
+            data_train = data_filter.iloc[N_start_train:N_end_train]
+            
+            # 调用随机搜索函数
+            best_params = random_search_linear_regression(self, data_train, input_columns, output_columns)
+            
+            if best_params is not None:
+                # 更新界面控件
+                self.comboBox_fit_intercept.setCurrentText("True" if best_params['fit_intercept'] else "False")
+                self.comboBox_scale_features.setCurrentText("True" if best_params['scale_features'] else "False")
+                
+                # 显示最优参数信息
+                QMessageBox.information(self, "随机搜索完成", 
+                                      f"最优参数组合（基于交叉验证）：\n"
+                                      f"拟合截距: {'是' if best_params['fit_intercept'] else '否'}\n"
+                                      f"特征缩放: {'是' if best_params['scale_features'] else '否'}\n"
+                                      f"平均MSE: {best_params['score']:.6f}\n\n"
+                                      f"搜索配置：\n"
+                                      f"迭代次数: 20\n"
+                                      f"交叉验证折数: 5")
+                
+                # 自动保存最佳参数
+                self.save_params()
+            
+        except Exception as e:
+            QMessageBox.warning(self, "随机搜索失败", f"随机搜索过程中出现错误：{str(e)}")   
 
     def save_params(self):
         """保存参数到JSON文件"""
@@ -2843,7 +3658,24 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
 
     def ask_and_save_model(self,model, method):
-         ask_and_save_model(self, model, f"{method}_model.pkl")
+        # 获取当前选中的输入特征和输出特征列名
+        input_columns = []
+        output_columns = []
+        
+        # 从listWidget_inputfeature获取选中的输入特征
+        for i in range(self.listWidget_inputfeature.count()):
+            item = self.listWidget_inputfeature.item(i)
+            if item.checkState() == Qt.Checked:
+                input_columns.append(item.text())
+        
+        # 从listWidget_outputfeature获取选中的输出特征
+        for i in range(self.listWidget_outputfeature.count()):
+            item = self.listWidget_outputfeature.item(i)
+            if item.checkState() == Qt.Checked:
+                output_columns.append(item.text())
+        
+        # 调用保存函数，传递特征列名信息
+        ask_and_save_model(self, model, f"{method}_model.pkl", input_columns, output_columns)
          
          
     #进度条相关函数   
@@ -3207,60 +4039,66 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
     
     # 在主窗口类（如Ui_MainWindow的子类）中添加
     def predict_with_loaded_model(self):
-        if not hasattr(self, 'selected_model_path') or not self.selected_model_path:
-            QMessageBox.warning(self, "警告", "请先选择预训练模型")
+        # 检查是否已加载模型
+        if not hasattr(self, 'loaded_model') or self.loaded_model is None:
+            QMessageBox.warning(self, "警告", "请先加载预训练模型")
             return
+            
         if not hasattr(self, 'predict_data') or self.predict_data is None:
             QMessageBox.warning(self, "警告", "请先加载预测数据")
             return
-        if not hasattr(self, 'predict_input_cols') or not hasattr(self, 'predict_output_cols'):
-            QMessageBox.warning(self, "警告", "数据中未找到有效的输入/输出列")
-            return
+            
+        # 使用已加载的模型进行预测
+        model = self.loaded_model
+        input_columns = self.loaded_input_cols if hasattr(self, 'loaded_input_cols') else None
+        output_columns = self.loaded_output_cols if hasattr(self, 'loaded_output_cols') else None
+        
+        # 如果模型没有提供特征列信息，使用预测数据的特征列
+        if input_columns is None:
+            if not hasattr(self, 'predict_input_cols') or not self.predict_input_cols:
+                QMessageBox.warning(self, "警告", "数据中未找到有效的输入列")
+                return
+            input_columns = self.predict_input_cols
+            
+        if output_columns is None:
+            if not hasattr(self, 'predict_output_cols') or not self.predict_output_cols:
+                QMessageBox.warning(self, "警告", "数据中未找到有效的输出列")
+                return
+            output_columns = self.predict_output_cols
         
         try:
-            # 1. 加载模型并判断类型
-            from ALL_Algorithms.Algorithms import load_model
-            from mutar import GroupLasso, ReMTW, MTW  # 导入特殊模型类用于类型判断
-            model = load_model(self.selected_model_path)
-            if model is None:
-                raise ValueError("模型加载失败")
             self.start_time = time.time()
 
-            # 2. 准备输入特征和真实值
+            # 准备输入特征和真实值
             predict_data = self.predict_data
-            self.predict_input_columns, flag1 = self.get_input()
-            self.predict_output_columns, flag2 = self.get_output()
-            self.predict_output_cols = self.predict_output_columns
-            X_2d = predict_data[self.predict_input_columns].values  # 基础2D输入 (样本×特征)
-            y_test = predict_data[self.predict_output_columns].values  # 真实值 (样本×任务)
-            n_tasks = len(self.predict_output_columns)  # 任务数量
+            X_2d = predict_data[input_columns].values  # 基础2D输入 (样本×特征)
+            y_test = predict_data[output_columns].values  # 真实值 (样本×任务)
+            n_tasks = len(output_columns)  # 任务数量
 
             if scale_features:
                 print("启用特征缩放：对输入特征进行标准化处理")
                 scaler_X = StandardScaler()
                 X_2d = scaler_X.fit_transform(X_2d)
 
-
-
-            # 3. 根据模型类型处理输入格式并预测
+            # 根据模型类型处理输入格式并预测
             model_type = None
             y_pred = None
 
             # 处理Group Lasso模型 (需要3D输入)
-            if isinstance(model, GroupLasso):
+            if hasattr(model, '__class__') and 'GroupLasso' in str(model.__class__):
                 model_type = "GroupLasso"
                 # 转换为3D格式 (任务×样本×特征)
                 X_3d = np.repeat(X_2d[None, :, :], n_tasks, axis=0)
                 y_pred = model.predict(X_3d).T  # 预测后转置为 (样本×任务)
 
             # 处理ReMTW模型 (需要3D输入)
-            elif isinstance(model, ReMTW):
+            elif hasattr(model, '__class__') and 'ReMTW' in str(model.__class__):
                 model_type = "ReMTW"
                 X_3d = np.repeat(X_2d[None, :, :], n_tasks, axis=0)
                 y_pred = model.predict(X_3d).T
 
             # 处理MTW模型 (需要3D输入)
-            elif isinstance(model, MTW):
+            elif hasattr(model, '__class__') and 'MTW' in str(model.__class__):
                 model_type = "MTW"
                 X_3d = np.repeat(X_2d[None, :, :], n_tasks, axis=0)
                 y_pred = model.predict(X_3d).T
@@ -3273,184 +4111,59 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 else:
                     raise ValueError("加载的模型不支持predict方法")
 
-            # 确保预测结果维度正确
-            if y_test.ndim == 1:
-                y_test = y_test.reshape(-1, 1)
-                y_pred = y_pred.reshape(-1, 1)
-            n_tasks = y_test.shape[1]  # 重新确认任务数
-
-            # 4. 计算评估指标 (与原逻辑一致，确保兼容所有模型)
-            from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
-            mse_list = []
-            r2_list = []
-            rmse_list = []
-            mae_list = []
+            print(f"使用{model_type}模型进行预测")
+            print(f"预测结果形状: {y_pred.shape}")
             
-            for i in range(n_tasks):
-                y_test_task = y_test[:, i] if n_tasks > 1 else y_test.ravel()
-                y_pred_task = y_pred[:, i] if n_tasks > 1 else y_pred.ravel()
+            # 调用评估和可视化函数
+            if len(output_columns) > 1:
+                # 多输出评估
+                from ALL_Algorithms.Algorithms import Multi_output_plot_and_evaluate
+                # 计算评估指标
+                from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+                MSE_list = []
+                RMSE_list = []
+                MAE_list = []
+                R2_list = []
                 
-                mse_list.append(mean_squared_error(y_test_task, y_pred_task))
-                r2_list.append(r2_score(y_test_task, y_pred_task))
-                rmse_list.append(np.sqrt(mse_list[-1]))
-                mae_list.append(mean_absolute_error(y_test_task, y_pred_task))
-            
-            overall_mse = mean_squared_error(y_test, y_pred, multioutput='uniform_average')
-            overall_r2 = r2_score(y_test, y_pred, multioutput='uniform_average')
-            overall_rmse = np.sqrt(overall_mse)
-            overall_mae = mean_absolute_error(y_test, y_pred, multioutput='uniform_average')
-            
-            metrics = {
-                'MSE': overall_mse, 'MSE_list': mse_list,
-                'R2': overall_r2, 'R2_list': r2_list,
-                'RMSE': overall_rmse, 'RMSE_list': rmse_list,
-                'MAE': overall_mae, 'MAE_list': mae_list
-            }
-
-            # 计算分贝偏差指标
-            epsilon = 1e-8
-            y_test_pos = y_test + epsilon
-            y_pred_pos = y_pred + epsilon
-            db_diff = 20 * np.log10(y_pred_pos / y_test_pos)
-
-            db_within_3_ratio_list = []
-            for i in range(n_tasks):
-                within_3 = np.abs(db_diff[:, i]) <= 3 if n_tasks > 1 else np.abs(db_diff) <= 3
-                db_within_3_ratio_list.append(np.mean(within_3))
-            db_within_3_ratio = np.mean(db_within_3_ratio_list)
-
-            total_db_deviation = np.sum(np.abs(db_diff))
-            total_db_deviation_per_feature = [
-                np.sum(np.abs(db_diff[:, i])) if n_tasks > 1 else np.sum(np.abs(db_diff))
-                for i in range(n_tasks)
-            ]
-
-            metrics.update({
-                'db_within_3_ratio': db_within_3_ratio,
-                'db_within_3_ratio_list': db_within_3_ratio_list,
-                'total_db_deviation': total_db_deviation,
-                'total_db_deviation_per_feature': total_db_deviation_per_feature
-            })
-
-            # 5. 可视化结果 (根据模型类型选择对应函数)
-            method_name = model_type  # 使用模型类型作为方法名
-            data_test_index = predict_data.index  # 测试集索引
-
-            # Group Lasso可视化
-            if model_type == "GroupLasso":
+                for i in range(len(output_columns)):
+                    mse = mean_squared_error(y_test[:, i], y_pred[:, i])
+                    rmse = np.sqrt(mse)
+                    mae = mean_absolute_error(y_test[:, i], y_pred[:, i])
+                    r2 = r2_score(y_test[:, i], y_pred[:, i])
+                    
+                    MSE_list.append(mse)
+                    RMSE_list.append(rmse)
+                    MAE_list.append(mae)
+                    R2_list.append(r2)
                 
-                group_lasso_plot_and_evaluate(
-                    self,
-                    coef_shared=model.coef_shared_,
-                    coef_specific=model.coef_specific_,
-                    method=method_name,
-                    input_columns=self.predict_input_columns,
-                    output_columns=self.predict_output_columns,
-                    MSE=metrics['MSE'],
-                    MSE_list=metrics['MSE_list'],
-                    RMSE=metrics['RMSE'],
-                    RMSE_list=metrics['RMSE_list'],
-                    MAE=metrics['MAE'],
-                    MAE_list=metrics['MAE_list'],
-                    R2=metrics['R2'],
-                    R2_list=metrics['R2_list'],
-                    db_within_3_ratio_list=metrics['db_within_3_ratio_list'],
-                    total_db_deviation_per_feature=metrics['total_db_deviation_per_feature'],
-                    y_test=y_test,
-                    y_pred=y_pred,
-                    data_test_index=data_test_index
+                self.data_save = Multi_output_plot_and_evaluate(
+                    self, y_test, y_pred, "LoadedModel", predict_data, 
+                    output_columns, 0, len(y_test),
+                    MSE_list=MSE_list, RMSE_list=RMSE_list, 
+                    MAE_list=MAE_list, R2_list=R2_list,
+                    db_within_3_ratio_list=[0.0]*len(output_columns),
+                    total_db_deviation_per_feature=[0.0]*len(output_columns)
                 )
-
-            # ReMTW可视化
-            elif model_type == "ReMTW":
-                
-                remtw_plot_and_evaluate(
-                    self,
-                    remtw_model=model,
-                    method=method_name,
-                    input_columns=self.predict_input_columns,
-                    output_columns=self.predict_output_columns,
-                    MSE=metrics['MSE'],
-                    MSE_list=metrics['MSE_list'],
-                    RMSE=metrics['RMSE'],
-                    RMSE_list=metrics['RMSE_list'],
-                    MAE=metrics['MAE'],
-                    MAE_list=metrics['MAE_list'],
-                    R2=metrics['R2'],
-                    R2_list=metrics['R2_list'],
-                    db_within_3_ratio_list=metrics['db_within_3_ratio_list'],
-                    total_db_deviation_per_feature=metrics['total_db_deviation_per_feature'],
-                    y_test=y_test,
-                    y_pred=y_pred,
-                    data_test_index=data_test_index
-                )
-
-            # MTW可视化
-            elif model_type == "MTW":
-                mtw_plot_and_evaluate(
-                    self,
-                    mtw_model=model,
-                    method=method_name,
-                    input_columns=self.predict_input_columns,
-                    output_columns=self.predict_output_columns,
-                    MSE=metrics['MSE'],
-                    MSE_list=metrics['MSE_list'],
-                    RMSE=metrics['RMSE'],
-                    RMSE_list=metrics['RMSE_list'],
-                    MAE=metrics['MAE'],
-                    MAE_list=metrics['MAE_list'],
-                    R2=metrics['R2'],
-                    R2_list=metrics['R2_list'],
-                    db_within_3_ratio_list=metrics['db_within_3_ratio_list'],
-                    total_db_deviation_per_feature=metrics['total_db_deviation_per_feature'],
-                    y_test=y_test,
-                    y_pred=y_pred,
-                    data_test_index=data_test_index
-                )
-
-            # 普通模型可视化
             else:
-                if y_test.ndim == 1 or y_test.shape[1] == 1:
-                    # 单输出可视化
-                    single_plot_and_evaluate(
-                        self,
-                        y_test=y_test.ravel(),
-                        y_pred=y_pred.ravel(),
-                        method=method_name,
-                        data_test=predict_data,
-                        output_columns=self.predict_output_cols,
-                        N_start_test=0,
-                        N_end_test=len(y_test),
-                        MSE=overall_mse,
-                        RMSE=overall_rmse,
-                        MAE=overall_mae,
-                        R2=overall_r2,
-                        db_within_3_ratio=metrics['db_within_3_ratio'],
-                        total_db_deviation=metrics['total_db_deviation']
-                    )
-                else:
-                    # 多输出可视化
-                    Multi_output_plot_and_evaluate(
-                        self,
-                        y_test=y_test,
-                        y_pred=y_pred,
-                        method=method_name,
-                        data_test=predict_data,
-                        output_columns=self.predict_output_cols,
-                        N_start_test=0,
-                        N_end_test=len(y_test),
-                        MSE_list=metrics['MSE_list'],
-                        RMSE_list=metrics['RMSE_list'],
-                        MAE_list=metrics['MAE_list'],
-                        R2_list=metrics['R2_list'],
-                        db_within_3_ratio_list=metrics['db_within_3_ratio_list'],
-                        total_db_deviation_per_feature=metrics['total_db_deviation_per_feature']
-                    )
-
+                # 单输出评估
+                from ALL_Algorithms.Algorithms import single_plot_and_evaluate
+                from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+                
+                mse = mean_squared_error(y_test, y_pred)
+                rmse = np.sqrt(mse)
+                mae = mean_absolute_error(y_test, y_pred)
+                r2 = r2_score(y_test, y_pred)
+                
+                self.data_save = single_plot_and_evaluate(
+                    self, y_test.flatten(), y_pred.flatten(), "LoadedModel", 
+                    predict_data, output_columns, 0, len(y_test),
+                    mse, rmse, mae, r2, 0.0, 0.0
+                )
+                
+            QMessageBox.information(self, "成功", "使用预训练模型预测完成")
+            
         except Exception as e:
-            QMessageBox.critical(self, "错误", f"预测过程出错: {str(e)}")
-            import traceback
-            traceback.print_exc()
+            QMessageBox.warning(self, "预测失败", f"预测过程中出错: {str(e)}")
                 
         
     def All_Methods_Begin(self):
