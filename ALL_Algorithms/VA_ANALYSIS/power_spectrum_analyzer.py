@@ -140,13 +140,10 @@ class PowerSpectrumAnalyzer:
                 start_idx = i * step
                 end_idx = start_idx + segment_length
                 
-                if start_idx >= len(filtered_time):
-                    break
-                    
-                # 处理最后一段可能不足的情况
+                # 检查结束索引是否超过了数据长度
+                # 如果超过，丢弃这最后一段不够长的数据
                 if end_idx > len(filtered_time):
-                    end_idx = len(filtered_time)
-                    start_idx = max(0, end_idx - segment_length)
+                    break
                     
                 segment_time = filtered_time[start_idx:end_idx]
                 segment_signal = filtered_signal[start_idx:end_idx]
@@ -186,10 +183,10 @@ class PowerSpectrumAnalyzer:
                 seg_start_time = start_time + i * segment_duration * (1 - overlap_ratio)
                 seg_end_time = seg_start_time + segment_duration
                 
-                # 确保不超过总时间范围
-                if seg_start_time >= end_time:
+                # 检查结束时间是否超过了数据的有效时间范围
+                # 如果超过，则丢弃这最后一段不够长的数据
+                if seg_end_time > end_time:
                     break
-                seg_end_time = min(seg_end_time, end_time)
                 
                 # 根据时间点筛选数据
                 seg_mask = (filtered_time >= seg_start_time) & (filtered_time <= seg_end_time)
@@ -225,13 +222,10 @@ class PowerSpectrumAnalyzer:
             start_idx = i * step
             end_idx = start_idx + segment_length
             
-            if start_idx >= len(filtered_time):
-                break
-                
-            # 处理最后一段可能不足的情况
+            # 检查剩余数据长度是否足够
             if end_idx > len(filtered_time):
-                end_idx = len(filtered_time)
-                start_idx = max(0, end_idx - segment_length)
+                # 丢弃最后一段长度不足的数据
+                break
                 
             segment_time = filtered_time[start_idx:end_idx]
             segment_signal = filtered_signal[start_idx:end_idx]

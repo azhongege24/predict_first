@@ -135,8 +135,10 @@ class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
         print("界面清空完成")
     def check_file_result(self):
         """查看结果保存文件地址 - 打开文件资源管理器"""
-        # 确定要打开的目录路径
-        result_dir = "data/data_va_analysis"
+        # 确定要打开的目录路径，优先使用用户选择的输出目录，如果没有则使用默认目录
+        result_dir = getattr(self, 'save_directory', "data/data_va_analysis")
+        if not result_dir:
+            result_dir = "data/data_va_analysis"
         
         # 检查目录是否存在
         if not os.path.exists(result_dir):
@@ -1794,30 +1796,44 @@ class POP_DatasetHandleWindow(QMainWindow, Ui_dataset_handle, Ui_MainWindow):
             output_combined = pd.concat(output_dfs, ignore_index=True)
             
             # 改进的时间匹配策略：使用时间窗口中心点进行匹配
-            # 计算每个时间窗口的中心点
-            input_combined['time_center'] = (input_combined['start_time'] + input_combined['end_time']) / 2
-            output_combined['time_center'] = (output_combined['start_time'] + output_combined['end_time']) / 2
-            
-            # 检查行数是否一致
-            if len(input_combined) != len(output_combined):
-                QMessageBox.warning(self, "合并警告", f"输入文件行数({len(input_combined)})与输出文件行数({len(output_combined)})不一致！")
-                return None
-            
-            # 简单的行对齐合并
-            # 保留输出文件中的source_file、source_channel、source_direction列
+            # 检查是否包含时间列
+            has_time_cols_in = 'start_time' in input_combined.columns and 'end_time' in input_combined.columns
+            has_time_cols_out = 'start_time' in output_combined.columns and 'end_time' in output_combined.columns
+
             cols_to_keep = ['source_file', 'source_channel', 'source_direction']
-            
-            # 删除输出文件中与输入文件重复的列（除了需要保留的列）
             output_cols_to_drop = []
             for col in output_combined.columns:
                 if col in input_combined.columns and col not in cols_to_keep:
-                    output_cols_to_drop.append(col)            
-            
-            # 创建输出文件的副本，删除重复列
-            output_filtered = output_combined.drop(columns=output_cols_to_drop)
-            
-            # 横向合并输入和输出数据
-            merged_df = pd.concat([input_combined, output_filtered], axis=1)
+                    output_cols_to_drop.append(col)
+
+            if has_time_cols_in and has_time_cols_out:
+                # 按照时间列进行合并
+                input_combined['time_center'] = (input_combined['start_time'] + input_combined['end_time']) / 2
+                output_combined['time_center'] = (output_combined['start_time'] + output_combined['end_time']) / 2
+                
+                # 确保 time_center 不被丢弃
+                if 'time_center' in output_cols_to_drop:
+                    output_cols_to_drop.remove('time_center')
+                    
+                output_filtered = output_combined.drop(columns=output_cols_to_drop)
+                
+                # 为了按时间对齐，先根据 time_center 排序
+                input_combined = input_combined.sort_values('time_center').reset_index(drop=True)
+                output_filtered = output_filtered.sort_values('time_center').reset_index(drop=True)
+                
+                # 使用 merge_asof 寻找最近的时间中心点合并
+                merged_df = pd.merge_asof(input_combined, output_filtered, on='time_center', direction='nearest')
+            else:
+                # 如果缺少时间列，则进行按行合并
+                # 检查行数是否一致
+                if len(input_combined) != len(output_combined):
+                    QMessageBox.warning(self, "合并警告", f"输入文件行数({len(input_combined)})与输出文件行数({len(output_combined)})不一致！无法按行对齐合并。")
+                    return None
+                
+                output_filtered = output_combined.drop(columns=output_cols_to_drop)
+                
+                # 横向合并输入和输出数据
+                merged_df = pd.concat([input_combined.reset_index(drop=True), output_filtered.reset_index(drop=True)], axis=1)
             
             # 检查合并结果
             if merged_df.empty:
