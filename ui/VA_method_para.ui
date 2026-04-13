@@ -512,6 +512,12 @@ QLabel:pressed {
                <bold>true</bold>
               </font>
              </property>
+             <property name="decimals">
+              <number>2</number>
+             </property>
+             <property name="maximum">
+              <double>999999.000000000000000</double>
+             </property>
              <property name="singleStep">
               <double>0.100000000000000</double>
              </property>
@@ -569,7 +575,7 @@ QLabel:pressed {
               </font>
              </property>
              <property name="maximum">
-              <double>999.899999999999977</double>
+              <double>999999.000000000000000</double>
              </property>
              <property name="singleStep">
               <double>0.100000000000000</double>
