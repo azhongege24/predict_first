@@ -4961,7 +4961,12 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         print("界面清空完成")
 
 
+import multiprocessing
+
 if __name__ == '__main__':
+    # 解决 PyInstaller 打包后多进程（joblib/sklearn等）导致无限启动主程序进而卡死闪退的问题
+    multiprocessing.freeze_support()
+    
     app = QApplication(sys.argv)  # 在 QApplication 方法中使用，创建应用程序对象
     myWin = MyMainWindow()  # 实例化 MyMainWindow 类，创建主窗口
     myWin.show()  # 在桌面显示控件 myWin
