@@ -1420,6 +1420,8 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         self.parent_window = parent
         self.selected_model_path = None
         self.predict_data = None
+        # 保存当前预测范围；用户确认时再更新为最终填写的行号。
+        self.predict_row_range = None
         self.lastSelectedPath = ""
         # 初始化特征列信息
         self.loaded_model = None
@@ -1448,7 +1450,14 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         if self.predict_data is None:
             QMessageBox.warning(self, "警告", "请先加载预测数据")
             return
-            
+
+        # 用户可能在导入后修改行号，确认时把最终范围交给主窗口。
+        self.predict_row_range = (
+            self.spinBox_predict_start.value(),
+            self.spinBox_predict_end.value(),
+        )
+        self.parent_window.predict_row_range = self.predict_row_range
+
         # 将加载的模型和特征列信息传递给父窗口
         self.parent_window.loaded_model = self.loaded_model
         self.parent_window.loaded_input_cols = self.loaded_input_columns
@@ -1521,12 +1530,15 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         file_filter = "Data Files (*.csv *.xls *.xlsx *.mat);;Excel Files (*.xls *.xlsx);;MATLAB Files (*.mat);;CSV Files (*.csv);;All Files(*.*)"
         initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
         file_path, _ = QFileDialog.getOpenFileName(self, "选择需要预测的新数据文件", initial_dir, file_filter)
-        self.lineEdit_file_predict_data.setText(file_path)
         if not file_path:
             return
+        if not os.path.isfile(file_path):
+            QMessageBox.warning(self, "加载失败", f"文件不存在：{file_path}")
+            return
+        # 先读入局部变量，确认成功后再替换当前预测文件。
         try:
             if file_path.endswith(('.xls', '.xlsx')):
-                self.predict_data = pd.read_excel(file_path)
+                loaded_data = pd.read_excel(file_path)
             elif file_path.endswith('.mat'):
                 mat_data = sio.loadmat(file_path)
                 all_keys = list(mat_data.keys())
@@ -1539,52 +1551,60 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
 
                 new_columns = columns[1:] + [columns[0]]
 
-                self.predict_data = df[new_columns]
+                loaded_data = df[new_columns]
 
             else:  # 默认处理CSV
-                self.predict_data = pd.read_csv(file_path,encoding='utf-8')
-            #公共数据处理流程   
-            print(f"self.predict_data: {self.predict_data}")
-            # 如果self.predict_data中存在nan，将其替换为-1
-            self.predict_data = self.predict_data.fillna(-1)
-            
-            # self.predict_data = self.predict_data.dropna()
-            self.predict_data = self.predict_data[self.spinBox_predict_start.value():self.spinBox_predict_end.value()]
-            self.predict_data.columns = self.predict_data.columns.astype(str)
-            self.predict_columns = self.predict_data.columns.tolist()#确保是字符串
-            self.predict_input_columns = [col for col in self.predict_columns if"input" in col.lower()]
-            self.predict_output_columns = [col for col in self.predict_columns if"output" in col.lower()]
-            
-            if not self.predict_input_columns:
-                print("数据中未找到以'input'命名的输入特征列")
-            if not self.predict_output_columns:
-                print("数据中未找到以'output'命名的输出特征列")
-            #显示数据信息
-            if self.parent_window:
-                self.parent_window.listWidget_inputfeature.clear()
-                self.parent_window.listWidget_outputfeature.clear()
-                self.parent_window.add_listitem(self.predict_input_columns, self.parent_window.listWidget_inputfeature)
-                self.parent_window.add_listitem(self.predict_output_columns, self.parent_window.listWidget_outputfeature)
-                
-                self.parent_window.predict_data = self.predict_data
-                self.parent_window.predict_input_cols = self.predict_input_columns  # 输入特征列
-                self.parent_window.predict_output_cols = self.predict_output_columns  # 真实值列
-                
-                self.shape = self.predict_data.shape
-                self.parent_window.lineEdit_dataset_nums.setText(f'({self.shape[0]} Samples * {self.shape[1]} Features)')
-                self.parent_window.lineEdit_state.setText("新数据加载成功（包含真实值，可进行评估）")
-                
-                self.spinBox_predict_end.setValue(self.shape[0]*0.9)
-                self.parent_window.data_load = 1
-            print(len(self.predict_output_columns))
-            print("新数据 shape:", self.predict_data.shape)
-            print("输入特征列:", self.predict_input_columns)
-            print("真实值列:", self.predict_output_columns)
-            # 更新预测数据匹配状态
-            self.update_predict_data_match_status()
+                loaded_data = pd.read_csv(file_path,encoding='utf-8')
+            # 保留完整数据；新文件导入后默认选择全部数据行。
+            loaded_data.columns = loaded_data.columns.astype(str)
+            predict_columns = loaded_data.columns.tolist()
+            row_count = len(loaded_data)
+            if row_count == 0:
+                raise ValueError("预测文件没有数据行")
+            predict_input_columns = [col for col in predict_columns if "input" in col.lower()]
+            predict_output_columns = [col for col in predict_columns if "output" in col.lower()]
 
+            if not predict_input_columns:
+                print("数据中未找到以'input'命名的输入特征列")
+            if not predict_output_columns:
+                print("数据中未找到以'output'命名的输出特征列")
         except Exception as e:
             QMessageBox.warning(self, "加载失败", str(e))
+            return
+
+        # 读取成功后，按新文件行数设置可填写范围及默认值。
+        self.lastSelectedPath = file_path
+        self.lineEdit_file_predict_data.setText(file_path)
+        self.predict_data = loaded_data
+        self.spinBox_predict_start.setRange(0, row_count - 1)
+        self.spinBox_predict_end.setRange(1, row_count)
+        self.spinBox_predict_start.setValue(0)
+        self.spinBox_predict_end.setValue(row_count)
+        self.predict_row_range = (0, row_count)
+        self.predict_columns = predict_columns
+        self.predict_input_columns = predict_input_columns
+        self.predict_output_columns = predict_output_columns
+        self.shape = loaded_data.shape
+
+        if self.parent_window:
+            self.parent_window.listWidget_inputfeature.clear()
+            self.parent_window.listWidget_outputfeature.clear()
+            self.parent_window.add_listitem(predict_input_columns, self.parent_window.listWidget_inputfeature)
+            self.parent_window.add_listitem(predict_output_columns, self.parent_window.listWidget_outputfeature)
+
+            self.parent_window.predict_data = loaded_data
+            self.parent_window.predict_row_range = self.predict_row_range
+            self.parent_window.predict_input_cols = predict_input_columns
+            self.parent_window.predict_output_cols = predict_output_columns
+
+            # 此时默认预测全部行，因此展示文件的完整行列数。
+            self.parent_window.lineEdit_dataset_nums.setText(
+                f'({row_count} Samples * {len(predict_columns)} Features)'
+            )
+            self.parent_window.lineEdit_state.setText("新数据加载成功")
+            self.parent_window.data_load = 1
+
+        self.update_predict_data_match_status()
 
     def update_model_features_display(self):
         """更新模型特征信息显示"""
@@ -3629,6 +3649,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.new_model = 0
         self.data_load = 0
         self.predict_data = None
+        # 与预测窗口共享上传时选定的行范围。
+        self.predict_row_range = None
         self.predict_input_cols = []
         self.predict_output_cols = []
         self.graphicscene = QGraphicsScene()
@@ -3923,29 +3945,25 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         file_filter = "Data Files (*.csv *.xls *.xlsx *.mat);;Excel Files (*.xls *.xlsx);;MATLAB Files (*.mat);;CSV Files (*.csv);;All Files(*.*)"
         # 使用上次路径作为初始目录，如果不存在则使用"data/"
         initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
-        self.fileName, _ = QFileDialog.getOpenFileName(
+        # 暂存所选路径，读取成功前不覆盖当前训练文件。
+        selected_path, _ = QFileDialog.getOpenFileName(
             self, "选取文件", initial_dir, file_filter
         )
 
-        if not self.fileName:  # 用户取消选择
-            return  # 直接返回，不改变lineEdit的内容
-
-        # 更新上次路径并显示到lineEdit
-        self.lastSelectedPath = self.fileName
-        self.lineEdit_dataset_file.setText(self.fileName)
-
-        print("选择的文件:", self.fileName)
-
-        if not os.path.isfile(self.fileName):
-            self.lineEdit_dataset_file.setText("File path doesn't exist")
+        if not selected_path:
             return
 
+        if not os.path.isfile(selected_path):
+            QMessageBox.warning(self, "加载失败", f"文件不存在：{selected_path}")
+            return
+
+        # 各格式先读入局部变量，避免失败时留下不完整的窗口状态。
         try:
             # 根据文件扩展名选择读取方式
-            if self.fileName.endswith(('.xls', '.xlsx')):
-                self.data = pd.read_excel(self.fileName)
-            elif self.fileName.endswith('.mat'):
-                mat_data = sio.loadmat(self.fileName)
+            if selected_path.endswith(('.xls', '.xlsx')):
+                loaded_data = pd.read_excel(selected_path)
+            elif selected_path.endswith('.mat'):
+                mat_data = sio.loadmat(selected_path)
                 all_keys = list(mat_data.keys())
                 feature_keys = all_keys[3:]
                 df = pd.DataFrame({
@@ -3955,26 +3973,25 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 columns = df.columns.tolist()
 
                 new_columns = columns[1:] + [columns[0]]
-                self.data = df[new_columns]
+                loaded_data = df[new_columns]
 
             else:  # 默认处理CSV
-                self.data = pd.read_csv(self.fileName, encoding='utf-8')
+                loaded_data = pd.read_csv(selected_path, encoding='utf-8')
 
-            # 公共数据处理流程
-            self.data = self.data.dropna()  # 删除缺失值
-            self.data.columns = self.data.columns.astype(str)  # 确保列名为字符串
-            self.columns = self.data.columns.tolist()  # 获取所有列名列表
+            # 保留含缺失值的原始行，供后续按所选列处理。
+            loaded_data.columns = loaded_data.columns.astype(str)
+            columns = loaded_data.columns.tolist()
             
             # 关键修改：检查并保留时间列信息
             time_columns = ['start_time', 'end_time']
-            self.time_columns_present = [col for col in time_columns if col in self.columns]            
+            time_columns_present = [col for col in time_columns if col in columns]
             
 
             # 关键修改：根据列名前缀区分输入和输出特征
             # 筛选出输入特征列（包含"input"前缀）
-            input_columns = [col for col in self.columns if "input" in col.lower()]
+            input_columns = [col for col in columns if "input" in col.lower()]
             # 筛选出输出特征列（包含"output"前缀）
-            output_columns = [col for col in self.columns if "output" in col.lower()]
+            output_columns = [col for col in columns if "output" in col.lower()]
             
             # 关键修改：从输入特征中排除时间列，避免重复
             input_columns = [col for col in input_columns if col not in time_columns]            
@@ -3986,24 +4003,30 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             if not output_columns:
                 print("警告：未找到以'output'命名的输出特征列")
 
-            # 显示数据信息
-            self.listWidget_inputfeature.clear()
-            self.listWidget_outputfeature.clear()
-            # 使用新的分类方式添加到列表控件
-            self.add_listitem(input_columns, self.listWidget_inputfeature)
-            self.add_listitem(output_columns, self.listWidget_outputfeature)
-            
-            self.shape = self.data.shape
-            self.lineEdit_dataset_nums.setText(f'({self.shape[0]} Samples * {self.shape[1]} Features)')
-
-            self.spinBox_train_end.setValue(self.shape[0] * 0.9)
-            self.spinBox_test_start.setValue(self.shape[0] * 0.9 + 1)
-            self.spinBox_test_end.setValue(self.shape[0])
-            self.data_load = 1
-
         except Exception as e:
-            self.lineEdit_dataset_nums.setText(f"Error: {str(e)}")
-            return   
+            QMessageBox.warning(self, "加载失败", str(e))
+            return
+
+        # 文件读入成功后，才更新当前数据、路径和界面。
+        self.fileName = selected_path
+        self.lastSelectedPath = selected_path
+        self.data = loaded_data
+        self.columns = columns
+        self.time_columns_present = time_columns_present
+        self.shape = loaded_data.shape
+        self.lineEdit_dataset_file.setText(selected_path)
+
+        self.listWidget_inputfeature.clear()
+        self.listWidget_outputfeature.clear()
+        self.add_listitem(input_columns, self.listWidget_inputfeature)
+        self.add_listitem(output_columns, self.listWidget_outputfeature)
+
+        self.lineEdit_dataset_nums.setText(f'({self.shape[0]} Samples * {self.shape[1]} Features)')
+
+        self.spinBox_train_end.setValue(self.shape[0] * 0.9)
+        self.spinBox_test_start.setValue(self.shape[0] * 0.9 + 1)
+        self.spinBox_test_end.setValue(self.shape[0])
+        self.data_load = 1
     
     def add_listitem(self, columns, list):
         """
@@ -4063,7 +4086,16 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         if not hasattr(self, 'predict_data') or self.predict_data is None:
             QMessageBox.warning(self, "警告", "请先加载预测数据")
             return
-            
+
+        # 在调用模型前拦截空范围或颠倒的范围。
+        predict_start, predict_end = self.predict_row_range or (0, len(self.predict_data))
+        if not (0 <= predict_start < predict_end <= len(self.predict_data)):
+            QMessageBox.warning(
+                self, "预测范围无效",
+                f"请设置有效范围：0 ≤ 起始行 < 结束行 ≤ {len(self.predict_data)}"
+            )
+            return
+
         # 使用已加载的模型进行预测
         model = self.loaded_model
         input_columns = self.loaded_input_cols if hasattr(self, 'loaded_input_cols') else None
@@ -4085,8 +4117,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         try:
             self.start_time = time.time()
 
-            # 准备输入特征和真实值
-            predict_data = self.predict_data
+            # 为本次预测截取选定的行，并沿用当前预测流程的 -1 缺失值填补规则。
+            predict_data = self.predict_data.iloc[predict_start:predict_end].fillna(-1)
             X_2d = predict_data[input_columns].values  # 基础2D输入 (样本×特征)
             y_test = predict_data[output_columns].values  # 真实值 (样本×任务)
             n_tasks = len(output_columns)  # 任务数量
