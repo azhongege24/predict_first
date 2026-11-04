@@ -388,6 +388,6 @@ class Ui_Load_model_para(object):
         self.label_5.setText(_translate("Load_model_para", ":"))
         self.label_train_feature_4.setText(_translate("Load_model_para", "状态提示"))
         self.label_6.setText(_translate("Load_model_para", ":"))
-        self.label_train_feature_3.setText(_translate("Load_model_para", "预测数据是否包含该输入输出特征列"))
+        self.label_train_feature_3.setText(_translate("Load_model_para", "预测数据是否包含模型输入列"))
         self.label_7.setText(_translate("Load_model_para", ":"))
         self.label_train_feature_2.setText(_translate("Load_model_para", "预训练模型的包含的输入输出特征信息列"))

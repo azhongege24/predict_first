@@ -39,7 +39,7 @@ def scan_model_features(model_input_columns, model_output_columns, predict_input
             missing_inputs = [col for col in model_input_columns if col not in predict_input_columns]
             if not missing_inputs:
                 result['predict_data_match'] = "是"
-                result['state_info'] = "预测数据包含所有模型特征列"
+                result['state_info'] = "预测数据包含模型所需的全部输入列（仅检查列名）"
             else:
                 result['predict_data_match'] = "否"
                 result['state_info'] = f"预测数据缺少输入特征列: {', '.join(missing_inputs)}"

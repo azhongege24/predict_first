@@ -1429,20 +1429,18 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         self.loaded_model = None
         self.loaded_input_columns = None
         self.loaded_output_columns = None
+        self.predict_columns = None
         self.predict_input_columns = None
         self.predict_output_columns = None
 
         # 初始化状态显示
         self.lineEdit_state_yes_or_no.setText("等待加载模型")
-        self.lineEdit_predict_data_info_yes_or_no.setText("否")
+        self.lineEdit_predict_data_info_yes_or_no.setText("未知")
         self.plainTextEdit_model_features_info.setPlainText("请先加载预训练模型")
         
 
     def Confirm(self):
         global loaded_model_path
-        self.parent_window.clear_interface()
-        if self.parent_window:
-            self.parent_window.lineEdit_Algorithm_name.setText("已加载预训练模型与预测数据")
         # 检查是否已加载模型
         if self.loaded_model is None:
             QMessageBox.warning(self, "警告", "请先加载预训练模型")
@@ -1453,18 +1451,38 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
             QMessageBox.warning(self, "警告", "请先加载预测数据")
             return
 
+        # 只有确认通过的模型和文件组合才能交给主窗口。
+        if self.loaded_input_columns:
+            _, missing_columns = check_feature_compatibility(
+                self.loaded_input_columns, self.predict_columns
+            )
+            if missing_columns:
+                QMessageBox.warning(
+                    self, "无法确认",
+                    "预测文件缺少模型所需输入列：" + "、".join(missing_columns)
+                )
+                self.update_predict_data_match_status()
+                return
+
         # 用户可能在导入后修改行号，确认时把最终范围交给主窗口。
         self.predict_row_range = (
             self.spinBox_predict_start.value(),
             self.spinBox_predict_end.value(),
         )
+        self.parent_window.clear_interface()
+        self.parent_window.lineEdit_Algorithm_name.setText("已加载预训练模型与预测数据")
         self.parent_window.predict_row_range = self.predict_row_range
 
-        # 将加载的模型和特征列信息传递给父窗口
+        # 模型、原始数据与列信息在此一次性更新，取消弹窗不会替换旧组合。
         self.parent_window.loaded_model = self.loaded_model
         self.parent_window.loaded_input_cols = self.loaded_input_columns
         self.parent_window.loaded_output_cols = self.loaded_output_columns
         self.parent_window.selected_model_path = self.selected_model_path
+        self.parent_window.predict_data = self.predict_data
+        self.parent_window.predict_column_info = self.predict_column_info
+        self.parent_window.predict_input_cols = self.predict_input_columns
+        self.parent_window.predict_output_cols = self.predict_output_columns
+        self.parent_window.data_load = 1
         
         # 显示加载的模型信息
         print(f"已加载模型路径: {self.selected_model_path}")
@@ -1472,15 +1490,21 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         print(f"输出特征列: {self.loaded_output_columns}")
         
         # 更新界面显示
+        self.parent_window.listWidget_inputfeature.clear()
+        self.parent_window.listWidget_outputfeature.clear()
         if self.loaded_input_columns:
-            self.parent_window.listWidget_inputfeature.clear()
             self.parent_window.add_listitem(self.loaded_input_columns, self.parent_window.listWidget_inputfeature)
             
         if self.loaded_output_columns:
-            self.parent_window.listWidget_outputfeature.clear()
             self.parent_window.add_listitem(self.loaded_output_columns, self.parent_window.listWidget_outputfeature)
             
-        self.parent_window.lineEdit_state.setText("预训练模型加载成功，可进行预测")
+        # 清理旧结果后恢复当前文件的行列数及列名检查结果。
+        row_count, column_count = self.predict_data.shape
+        self.parent_window.lineEdit_dataset_nums.setText(
+            f'({row_count} Samples * {column_count} Features)'
+        )
+        self.update_predict_data_match_status()
+        self.parent_window.lineEdit_state.setText(self.lineEdit_state_yes_or_no.text())
 
     def load_pretrained_model(self):
         # 调用Algorithms.py中的load_model函数来实际加载模型
@@ -1491,8 +1515,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         if not path:
             return
             
-        self.selected_model_path = path
-        print("Selected model path:", self.selected_model_path)
+        print("Selected model path:", path)
         
         try:
             # 调用load_model函数加载模型
@@ -1501,30 +1524,27 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
             # 处理返回结果
             if isinstance(result, tuple) and len(result) == 3:
                 # 新格式：返回模型、输入特征列、输出特征列
-                self.loaded_model, self.loaded_input_columns, self.loaded_output_columns = result
+                loaded_model, input_columns, output_columns = result
             else:
                 # 旧格式：只返回模型
-                self.loaded_model = result
-                self.loaded_input_columns = None
-                self.loaded_output_columns = None
+                loaded_model, input_columns, output_columns = result, None, None
                 
-            if self.loaded_model is None:
+            if loaded_model is None:
                 QMessageBox.warning(self, "加载失败", "无法加载模型文件")
                 return
-                
+
+            # 加载成功后再更新弹窗；确认之前不改主窗口的模型。
+            self.selected_model_path = path
+            self.loaded_model = loaded_model
+            self.loaded_input_columns = input_columns
+            self.loaded_output_columns = output_columns
+
             # 更新界面显示
             self.lineEdit_pretrained_model_path.setText(f"已加载: {os.path.basename(path)}")
             QMessageBox.information(self, "成功", "模型加载成功")
             # 更新模型特征信息显示
             self.update_model_features_display()
 
-            # 将加载的模型路径传递给父窗口
-            if self.parent_window is not None:
-                self.parent_window.selected_model_path = self.selected_model_path
-                self.parent_window.loaded_model = self.loaded_model
-                self.parent_window.loaded_input_cols = self.loaded_input_columns
-                self.parent_window.loaded_output_cols = self.loaded_output_columns
-                
         except Exception as e:
             QMessageBox.warning(self, "加载失败", f"加载模型时出错: {str(e)}")
             
@@ -1564,13 +1584,9 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
             if row_count == 0:
                 raise ValueError("预测文件没有数据行")
             predict_column_info = scan_dataframe_columns(loaded_data)
+            # 旧模型仍可能依赖命名推断；带列名模型的匹配改用全部原始列名。
             predict_input_columns = [col for col in predict_columns if "input" in col.lower()]
             predict_output_columns = [col for col in predict_columns if "output" in col.lower()]
-
-            if not predict_input_columns:
-                print("数据中未找到以'input'命名的输入特征列")
-            if not predict_output_columns:
-                print("数据中未找到以'output'命名的输出特征列")
         except Exception as e:
             QMessageBox.warning(self, "加载失败", str(e))
             return
@@ -1590,25 +1606,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         self.predict_output_columns = predict_output_columns
         self.shape = loaded_data.shape
 
-        if self.parent_window:
-            self.parent_window.listWidget_inputfeature.clear()
-            self.parent_window.listWidget_outputfeature.clear()
-            self.parent_window.add_listitem(predict_input_columns, self.parent_window.listWidget_inputfeature)
-            self.parent_window.add_listitem(predict_output_columns, self.parent_window.listWidget_outputfeature)
-
-            self.parent_window.predict_data = loaded_data
-            self.parent_window.predict_column_info = predict_column_info
-            self.parent_window.predict_row_range = self.predict_row_range
-            self.parent_window.predict_input_cols = predict_input_columns
-            self.parent_window.predict_output_cols = predict_output_columns
-
-            # 此时默认预测全部行，因此展示文件的完整行列数。
-            self.parent_window.lineEdit_dataset_nums.setText(
-                f'({row_count} Samples * {len(predict_columns)} Features)'
-            )
-            self.parent_window.lineEdit_state.setText("新数据加载成功")
-            self.parent_window.data_load = 1
-
+        # 文件先留在弹窗，点击“确认”且列名检查通过后再交给主窗口。
         self.update_predict_data_match_status()
 
     def update_model_features_display(self):
@@ -1620,8 +1618,8 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
             scan_result = scan_model_features(
                 self.loaded_input_columns, 
                 self.loaded_output_columns,
-                self.predict_input_columns if self.predict_data else None,
-                self.predict_output_columns if self.predict_data else None
+                self.predict_columns if self.predict_data is not None else None,
+                self.predict_output_columns if self.predict_data is not None else None
             )
             
             # 更新模型特征信息显示
@@ -1631,7 +1629,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
             self.lineEdit_state_yes_or_no.setText("模型加载完成，下一步请加载预测数据")
             
             # 如果有预测数据，更新匹配状态
-            if self.predict_data:
+            if self.predict_data is not None:
                 self.update_predict_data_match_status()
                 
         except Exception as e:
@@ -1641,31 +1639,32 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
     def update_predict_data_match_status(self):
         """更新预测数据匹配状态"""
         try:
-            from ALL_Algorithms.Scan import scan_model_features
-            
-            if self.loaded_input_columns and self.predict_input_columns:
-                # 扫描特征匹配情况
+            if self.predict_data is None:
+                match_text = "未知"
+                state_text = "请先导入预测数据"
+            elif self.loaded_model is None:
+                match_text = "未知"
+                state_text = "预测数据已加载，请加载模型"
+            elif not self.loaded_input_columns:
+                match_text = "未知"
+                state_text = "模型未记录输入列，暂不能自动核对"
+            else:
+                # 模型输入与文件全部原始列名比较，不要求真实输出列。
                 scan_result = scan_model_features(
                     self.loaded_input_columns, 
                     self.loaded_output_columns,
-                    self.predict_input_columns,
+                    self.predict_columns,
                     self.predict_output_columns
                 )
-                
-                # 更新预测数据匹配状态
-                self.lineEdit_predict_data_info_yes_or_no.setText(scan_result['predict_data_match'])
-                self.lineEdit_state_yes_or_no.setText(scan_result['state_info'])
-            else:
-                if not self.loaded_input_columns:
-                    self.lineEdit_predict_data_info_yes_or_no.setText("否")
-                    self.lineEdit_state_yes_or_no.setText("模型未包含特征列信息")
-                elif not self.predict_input_columns:
-                    self.lineEdit_predict_data_info_yes_or_no.setText("否")
-                    self.lineEdit_state_yes_or_no.setText("预测数据未加载")
-                    
+                match_text = scan_result['predict_data_match']
+                state_text = scan_result['state_info']
+
+            self.lineEdit_predict_data_info_yes_or_no.setText(match_text)
+            self.lineEdit_state_yes_or_no.setText(state_text)
+            self.lineEdit_state_yes_or_no.setToolTip(state_text)
         except Exception as e:
             print(f"更新预测数据匹配状态时出错: {str(e)}")
-            self.lineEdit_predict_data_info_yes_or_no.setText("否")
+            self.lineEdit_predict_data_info_yes_or_no.setText("未知")
             self.lineEdit_state_yes_or_no.setText(f"状态检查出错: {str(e)}")
 
 
@@ -4127,7 +4126,18 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 QMessageBox.warning(self, "警告", "数据中未找到有效的输入列")
                 return
             input_columns = self.predict_input_cols
-            
+
+        # 再核对一次列名，防止绕过弹窗确认或之后更换了预测数据。
+        _, missing_columns = check_feature_compatibility(
+            input_columns, self.predict_data.columns
+        )
+        if missing_columns:
+            QMessageBox.warning(
+                self, "无法预测",
+                "预测文件缺少模型所需输入列：" + "、".join(missing_columns)
+            )
+            return
+
         if output_columns is None:
             if not hasattr(self, 'predict_output_cols') or not self.predict_output_cols:
                 QMessageBox.warning(self, "警告", "数据中未找到有效的输出列")

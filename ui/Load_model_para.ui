@@ -505,7 +505,7 @@ font:bold 16px;		/*设置按钮文字和大小*/
 }</string>
        </property>
        <property name="text">
-        <string>预测数据是否包含该输入输出特征列</string>
+        <string>预测数据是否包含模型输入列</string>
        </property>
       </widget>
      </item>
