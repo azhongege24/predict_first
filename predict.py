@@ -6,7 +6,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationTool
 import numpy as np
 from ui2025 import Ui_MainWindow #我新创建的界面类
 import pandas as pd
-from data_column_scan import read_utf8_csv
+from data_column_scan import read_utf8_csv, scan_dataframe_columns
 from PyQt5.QtWidgets import QApplication, QMainWindow,QProgressDialog, QPushButton,QMessageBox, QFileDialog, QGraphicsScene, QGraphicsView, QWidget, QCheckBox, QListWidgetItem
 from PyQt5.QtCore import Qt ,QSettings,QTimer
 from PyQt5.QtGui import QPixmap
@@ -1421,6 +1421,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         self.parent_window = parent
         self.selected_model_path = None
         self.predict_data = None
+        self.predict_column_info = []
         # 保存当前预测范围；用户确认时再更新为最终填写的行号。
         self.predict_row_range = None
         self.lastSelectedPath = ""
@@ -1562,6 +1563,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
             row_count = len(loaded_data)
             if row_count == 0:
                 raise ValueError("预测文件没有数据行")
+            predict_column_info = scan_dataframe_columns(loaded_data)
             predict_input_columns = [col for col in predict_columns if "input" in col.lower()]
             predict_output_columns = [col for col in predict_columns if "output" in col.lower()]
 
@@ -1577,6 +1579,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         self.lastSelectedPath = file_path
         self.lineEdit_file_predict_data.setText(file_path)
         self.predict_data = loaded_data
+        self.predict_column_info = predict_column_info
         self.spinBox_predict_start.setRange(0, row_count - 1)
         self.spinBox_predict_end.setRange(1, row_count)
         self.spinBox_predict_start.setValue(0)
@@ -1594,6 +1597,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
             self.parent_window.add_listitem(predict_output_columns, self.parent_window.listWidget_outputfeature)
 
             self.parent_window.predict_data = loaded_data
+            self.parent_window.predict_column_info = predict_column_info
             self.parent_window.predict_row_range = self.predict_row_range
             self.parent_window.predict_input_cols = predict_input_columns
             self.parent_window.predict_output_cols = predict_output_columns
@@ -3649,7 +3653,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.fileName = ''
         self.new_model = 0
         self.data_load = 0
+        self.column_info = []
         self.predict_data = None
+        self.predict_column_info = []
         # 与预测窗口共享上传时选定的行范围。
         self.predict_row_range = None
         self.predict_input_cols = []
@@ -3982,6 +3988,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             # 保留含缺失值的原始行，供后续按所选列处理。
             loaded_data.columns = loaded_data.columns.astype(str)
             columns = loaded_data.columns.tolist()
+            column_info = scan_dataframe_columns(loaded_data)
             
             # 关键修改：检查并保留时间列信息
             time_columns = ['start_time', 'end_time']
@@ -4013,6 +4020,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.lastSelectedPath = selected_path
         self.data = loaded_data
         self.columns = columns
+        self.column_info = column_info
         self.time_columns_present = time_columns_present
         self.shape = loaded_data.shape
         self.lineEdit_dataset_file.setText(selected_path)

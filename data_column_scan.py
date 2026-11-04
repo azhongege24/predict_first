@@ -39,3 +39,34 @@ def read_utf8_csv(file_path):
         raise ValueError("CSV 文件只有表头，没有数据行")
 
     return data
+
+
+def scan_dataframe_columns(data):
+    """按原列序返回列名、内容类型和缺失数量，不修改原数据。"""
+    result = []
+
+    for name in data.columns:
+        column = data[name]
+
+        # 将 NaN、空字符串和只有空格的字符串计为缺失。
+        missing = column.isna() | column.map(
+            lambda value: isinstance(value, str) and not value.strip()
+        )
+        present = column[~missing]
+
+        if present.empty:
+            column_type = "无法识别"
+        else:
+            # 仅用临时转换结果判断类型，不改动原始列。
+            numeric = pd.to_numeric(
+                present.astype(str).str.strip(), errors="coerce"
+            )
+            column_type = "数值" if numeric.notna().all() else "字符串"
+
+        result.append({
+            "name": name,
+            "type": column_type,
+            "missing_count": int(missing.sum()),
+        })
+
+    return result
