@@ -8,7 +8,7 @@ from ui2025 import Ui_MainWindow #我新创建的界面类
 import pandas as pd
 from data_column_scan import read_utf8_csv, scan_dataframe_columns
 from PyQt5.QtWidgets import QApplication, QMainWindow,QProgressDialog, QPushButton,QMessageBox, QFileDialog, QGraphicsScene, QGraphicsView, QWidget, QCheckBox, QListWidgetItem
-from PyQt5.QtCore import Qt ,QSettings,QTimer
+from PyQt5.QtCore import Qt, QSettings, QTimer, QSize
 from PyQt5.QtGui import QPixmap
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -3703,23 +3703,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
 
     def ask_and_save_model(self,model, method):
-        # 获取当前选中的输入特征和输出特征列名
-        input_columns = []
-        output_columns = []
-        
-        # 从listWidget_inputfeature获取选中的输入特征
-        for i in range(self.listWidget_inputfeature.count()):
-            item = self.listWidget_inputfeature.item(i)
-            if item.checkState() == Qt.Checked:
-                input_columns.append(item.text())
-        
-        # 从listWidget_outputfeature获取选中的输出特征
-        for i in range(self.listWidget_outputfeature.count()):
-            item = self.listWidget_outputfeature.item(i)
-            if item.checkState() == Qt.Checked:
-                output_columns.append(item.text())
-        
-        # 调用保存函数，传递特征列名信息
+        # 保存模型时使用真实列名，不读取列表中的类型和缺失数文字。
+        input_columns, _ = self.get_input()
+        output_columns, _ = self.get_output()
         ask_and_save_model(self, model, f"{method}_model.pkl", input_columns, output_columns)
          
          
@@ -3995,17 +3981,15 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             time_columns_present = [col for col in time_columns if col in columns]
             
 
-            # 关键修改：根据列名前缀区分输入和输出特征
-            # 筛选出输入特征列（包含"input"前缀）
+            # 旧列名规则只用于初始勾选；列表仍会显示文件中的所有列。
             input_columns = [col for col in columns if "input" in col.lower()]
-            # 筛选出输出特征列（包含"output"前缀）
             output_columns = [col for col in columns if "output" in col.lower()]
             
             # 关键修改：从输入特征中排除时间列，避免重复
             input_columns = [col for col in input_columns if col not in time_columns]            
             
 
-            # 如果没有找到符合命名规则的列，给出警告
+            # 没有匹配旧命名规则时仍可在列表中手动选择。
             if not input_columns:
                 print("警告：未找到以'input'命名的输入特征列")
             if not output_columns:
@@ -4027,8 +4011,21 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
         self.listWidget_inputfeature.clear()
         self.listWidget_outputfeature.clear()
-        self.add_listitem(input_columns, self.listWidget_inputfeature)
-        self.add_listitem(output_columns, self.listWidget_outputfeature)
+        # 所有列均可查看；旧命名规则只决定首次勾选的角色。
+        # 同时匹配两种旧名称的列先不勾选，避免初始状态下重复选用。
+        ambiguous_names = set(input_columns) & set(output_columns)
+        self.add_listitem(
+            columns,
+            self.listWidget_inputfeature,
+            column_info=column_info,
+            checked_columns=set(input_columns) - ambiguous_names,
+        )
+        self.add_listitem(
+            columns,
+            self.listWidget_outputfeature,
+            column_info=column_info,
+            checked_columns=set(output_columns) - ambiguous_names,
+        )
 
         self.lineEdit_dataset_nums.setText(f'({self.shape[0]} Samples * {self.shape[1]} Features)')
 
@@ -4037,55 +4034,69 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.spinBox_test_end.setValue(self.shape[0])
         self.data_load = 1
     
-    def add_listitem(self, columns, list):
-        """
-        :param list: 要插入的选项文字数据列表 list[str] eg：['城市','小区','小区ID']
-        """
-        data_list = columns
-        print(data_list)
-        for i in data_list:
-            # box = QCheckBox(i)  # 实例化一
-            #
-            # # 个QCheckBox，吧文字传进去
-            # box.setChecked(True)
-            item = QListWidgetItem(i)  # 实例化一个Item，QListWidget，不能直接加入QCheckBox
-            item.setCheckState(Qt.Checked)
-            item.checkState()
-            list.addItem(item) 
-    
-    def change_CheckBox_input(self):
-        count = self.listWidget_inputfeature.count()
-        count_isChecked = 0
-        for index in range(count):
-            item = self.listWidget_inputfeature.item(index)
-            if item.checkState() == Qt.Checked:
-                count_isChecked += 1
-        if count_isChecked == count:
-            for index in range(count):
-                item = self.listWidget_inputfeature.item(index)
+    def add_listitem(self, columns, list_widget, column_info=None, checked_columns=None):
+        """显示列信息，并在列表项中单独保存原始列名。"""
+        info_by_name = {entry["name"]: entry for entry in (column_info or [])}
+        # 旧调用未传预选列时，保持原先默认全选的行为。
+        selected_names = set(columns if checked_columns is None else checked_columns)
+
+        if column_info is not None:
+            list_widget.setWordWrap(True)
+
+        for name in columns:
+            info = info_by_name.get(name)
+            if info is None:
+                # 未提供列信息的旧调用继续显示纯列名。
+                item = QListWidgetItem(name)
+                item.setToolTip(name)
+            else:
+                item = QListWidgetItem(
+                    f"{name}\n{info['type']} · 缺失 {info['missing_count']}"
+                )
+                item.setToolTip(
+                    f"列名：{name}\n类型：{info['type']}\n缺失：{info['missing_count']}"
+                )
+                # 高度随当前字体变化，给两行文字留出空间。
+                item.setSizeHint(
+                    QSize(0, list_widget.fontMetrics().lineSpacing() * 2 + 8)
+                )
+
+            # 界面文字还包含类型和缺失数，单独保存列名供训练与模型保存使用。
+            item.setData(Qt.UserRole, name)
+            item.setCheckState(Qt.Checked if name in selected_names else Qt.Unchecked)
+
+            if info is not None and info["type"] == "无法识别":
+                # 全空列可查看，但不能勾选。
                 item.setCheckState(Qt.Unchecked)
-        else:
-            for index in range(count):
-                item = self.listWidget_inputfeature.item(index)
-                item.setCheckState(Qt.Checked)
+                item.setFlags(item.flags() & ~Qt.ItemIsEnabled)
+                item.setToolTip(item.toolTip() + "\n没有有效值，不能选择")
+
+            list_widget.addItem(item)
+
+    def _toggle_selectable_items(self, list_widget):
+        """切换可勾选列的状态，跳过禁用项。"""
+        selectable = [
+            list_widget.item(index)
+            for index in range(list_widget.count())
+            if (list_widget.item(index).flags() & Qt.ItemIsEnabled)
+            and (list_widget.item(index).flags() & Qt.ItemIsUserCheckable)
+        ]
+        if not selectable:
+            return
+
+        # 已全选则取消，否则选中所有可用列。
+        all_checked = all(item.checkState() == Qt.Checked for item in selectable)
+        new_state = Qt.Unchecked if all_checked else Qt.Checked
+        for item in selectable:
+            item.setCheckState(new_state)
+
+    def change_CheckBox_input(self):
+        self._toggle_selectable_items(self.listWidget_inputfeature)
 
     def change_CheckBox_output(self):
-        count = self.listWidget_outputfeature.count()
-        count_isChecked = 0
-        for index in range(count):
-            item = self.listWidget_outputfeature.item(index)
-            if item.checkState() == Qt.Checked:
-                count_isChecked += 1
-        if count_isChecked == count:
-            for index in range(count):
-                item = self.listWidget_outputfeature.item(index)
-                item.setCheckState(Qt.Unchecked)
-        else:
-            for index in range(count):
-                item = self.listWidget_outputfeature.item(index)
-                item.setCheckState(Qt.Checked)
-    
-    # 在主窗口类（如Ui_MainWindow的子类）中添加
+        self._toggle_selectable_items(self.listWidget_outputfeature)
+
+    # 在主窗口类中使用已加载模型预测。
     def predict_with_loaded_model(self):
         # 检查是否已加载模型
         if not hasattr(self, 'loaded_model') or self.loaded_model is None:
@@ -4905,33 +4916,25 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.stop_progress_indicator()      
     
 
-    def get_input(self):#取得输入的特征
-        # 获取输入特征列表和标志位
-    
-        flag = 0
-        count = self.listWidget_inputfeature.count()  # 得到QListWidget的总个数
-        item_list = [self.listWidget_inputfeature.item(i)
-                    for i in range(count)]  # 得到QListWidget里面所有QListWidgetItem
-        chooses = []  # 存放被选择的数据
-        for it in item_list:  # type QCheckBox
-            if it.checkState():
-                flag = 1
-                chooses.append(it.text())
-        return chooses, flag
+    def _checked_column_names(self, list_widget):
+        """按列表顺序读取勾选项保存的原始列名。"""
+        names = []
+        for index in range(list_widget.count()):
+            item = list_widget.item(index)
+            if item.checkState() == Qt.Checked and item.flags() & Qt.ItemIsEnabled:
+                name = item.data(Qt.UserRole)
+                # 兼容尚未使用 UserRole 保存列名的旧列表项。
+                names.append(name if name is not None else item.text())
+        return names
 
-    def get_output(self):#取得输出的特征
-        # 获取输出特征列表和标志位
-        flag = 0
-        count = self.listWidget_outputfeature.count()  # 得到QListWidget的总个数
-        item_list = [self.listWidget_outputfeature.item(i)
-                    for i in range(count)]  # 得到QListWidget里面所有QListWidgetItem
-        chooses = []  # 存放被选择的数据
-        for it in item_list:
-            if it.checkState():
-                flag = 1
-                chooses.append(it.text())
-        return chooses, flag  
-    
+    def get_input(self):
+        chooses = self._checked_column_names(self.listWidget_inputfeature)
+        return chooses, int(bool(chooses))
+
+    def get_output(self):
+        chooses = self._checked_column_names(self.listWidget_outputfeature)
+        return chooses, int(bool(chooses))
+
     def change_percentage(self):
         box = self.checkBox_percentage#换成复选框
         if box.isChecked():
