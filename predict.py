@@ -6,6 +6,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationTool
 import numpy as np
 from ui2025 import Ui_MainWindow #我新创建的界面类
 import pandas as pd
+from data_column_scan import read_utf8_csv
 from PyQt5.QtWidgets import QApplication, QMainWindow,QProgressDialog, QPushButton,QMessageBox, QFileDialog, QGraphicsScene, QGraphicsView, QWidget, QCheckBox, QListWidgetItem
 from PyQt5.QtCore import Qt ,QSettings,QTimer
 from PyQt5.QtGui import QPixmap
@@ -1554,7 +1555,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
                 loaded_data = df[new_columns]
 
             else:  # 默认处理CSV
-                loaded_data = pd.read_csv(file_path,encoding='utf-8')
+                loaded_data = read_utf8_csv(file_path)
             # 保留完整数据；新文件导入后默认选择全部数据行。
             loaded_data.columns = loaded_data.columns.astype(str)
             predict_columns = loaded_data.columns.tolist()
@@ -3976,7 +3977,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 loaded_data = df[new_columns]
 
             else:  # 默认处理CSV
-                loaded_data = pd.read_csv(selected_path, encoding='utf-8')
+                loaded_data = read_utf8_csv(selected_path)
 
             # 保留含缺失值的原始行，供后续按所选列处理。
             loaded_data.columns = loaded_data.columns.astype(str)
