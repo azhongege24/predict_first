@@ -4050,7 +4050,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 item.setToolTip(name)
             else:
                 item = QListWidgetItem(
-                    f"{name}\n{info['type']} · 缺失 {info['missing_count']}"
+                    f"{name}\n{info['type']}"
                 )
                 item.setToolTip(
                     f"列名：{name}\n类型：{info['type']}\n缺失：{info['missing_count']}"
@@ -4060,7 +4060,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     QSize(0, list_widget.fontMetrics().lineSpacing() * 2 + 8)
                 )
 
-            # 界面文字还包含类型和缺失数，单独保存列名供训练与模型保存使用。
+            # 界面文字还包含类型，单独保存列名供训练与模型保存使用。
             item.setData(Qt.UserRole, name)
             item.setCheckState(Qt.Checked if name in selected_names else Qt.Unchecked)
 
