@@ -1505,6 +1505,8 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         )
         self.update_predict_data_match_status()
         self.parent_window.lineEdit_state.setText(self.lineEdit_state_yes_or_no.text())
+        # 仅在模型和预测文件确认成功后关闭窗口。
+        self.close()
 
     def load_pretrained_model(self):
         # 调用Algorithms.py中的load_model函数来实际加载模型

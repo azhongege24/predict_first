@@ -673,22 +673,6 @@ color:rgb(255, 0, 0);		/*字体颜色*/
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_2</sender>
-   <signal>clicked()</signal>
-   <receiver>Load_model_para</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>297</x>
-     <y>277</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>93</x>
-     <y>233</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>pushButton_load_model</sender>
    <signal>clicked()</signal>
    <receiver>Load_model_para</receiver>

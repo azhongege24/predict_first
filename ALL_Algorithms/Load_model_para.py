@@ -370,7 +370,6 @@ class Ui_Load_model_para(object):
         self.retranslateUi(Load_model_para)
         self.pushButton_2.clicked.connect(Load_model_para.Confirm) # type: ignore
         self.pushButton_3.clicked.connect(Load_model_para.close) # type: ignore
-        self.pushButton_2.clicked.connect(Load_model_para.close) # type: ignore
         self.pushButton_load_model.clicked.connect(Load_model_para.load_pretrained_model) # type: ignore
         self.pushButton.clicked.connect(Load_model_para.load_predict_data) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(Load_model_para)
