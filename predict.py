@@ -4268,6 +4268,16 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     return
     
 
+        # 先检查选列，避免后续行号处理掩盖选列错误。
+        input_columns, _ = self.get_input()
+        output_columns, _ = self.get_output()
+        selection_error = self.validate_training_columns(input_columns, output_columns)
+        if selection_error:
+            QMessageBox.warning(self, "无法开始训练", selection_error)
+            self.lineEdit_state.setText('')
+            self.stop_progress_indicator()  # 停止进度指示
+            return
+
         if self.checkBox_percentage.isChecked():
 
             total_rows = self.data.shape[0]
@@ -4302,13 +4312,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
         #数据统一处理
         data = self.data
-        input_columns, flag1 = self.get_input()
-        output_columns, flag2 = self.get_output()
-        if flag1 == 0 | flag2 == 0:
-            self.lineEdit_Algorithm_name.setText("Select at least 1 input and 1 output!")
-            self.lineEdit_state.setText('')
-            self.stop_progress_indicator()  # 停止进度指示
-            return
 
         # 更新进度到10%
         self.set_progress_value(10)
@@ -4946,6 +4949,37 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
     def get_output(self):
         chooses = self._checked_column_names(self.listWidget_outputfeature)
         return chooses, int(bool(chooses))
+
+    def validate_training_columns(self, input_columns, output_columns):
+        """检查普通回归训练所选列的角色和输出类型。"""
+        if not input_columns:
+            return "请至少选择一列输入特征"
+
+        if not output_columns:
+            return "请至少选择一列输出特征"
+
+        # 同一列不能同时作为输入和输出。
+        output_names = set(output_columns)
+        repeated = [name for name in input_columns if name in output_names]
+        if repeated:
+            return f"同一列不能同时作为输入和输出：{', '.join(repeated)}"
+
+        # 使用上传时记录的类型，不从列表显示文字中提取列名或类型。
+        types_by_name = {
+            entry["name"]: entry["type"] for entry in self.column_info
+        }
+        unsupported = [
+            f"{name}（{types_by_name.get(name, '未知类型')}）"
+            for name in output_columns
+            if types_by_name.get(name) != "数值"
+        ]
+        if unsupported:
+            return (
+                "当前回归训练只能选择数值列作为输出，请调整："
+                + "、".join(unsupported)
+            )
+
+        return None
 
     def change_percentage(self):
         box = self.checkBox_percentage#换成复选框
