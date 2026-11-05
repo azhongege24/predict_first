@@ -7,6 +7,7 @@ import numpy as np
 from ui2025 import Ui_MainWindow #我新创建的界面类
 import pandas as pd
 from data_column_scan import read_utf8_csv, scan_dataframe_columns
+from training_preprocess import prepare_numeric_regression_data
 from PyQt5.QtWidgets import QApplication, QMainWindow,QProgressDialog, QPushButton,QMessageBox, QFileDialog, QGraphicsScene, QGraphicsView, QWidget, QCheckBox, QListWidgetItem
 from PyQt5.QtCore import Qt, QSettings, QTimer, QSize
 from PyQt5.QtGui import QPixmap
@@ -3667,6 +3668,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.psd_results = None
         self.selected_model_path = None
         self.trained_model = None  # 用于存储训练好的模型
+        self.last_numeric_preprocessing = None  # 最近一次成功训练的数值处理规则
 
         self.current_page = 0
         self.figures = []  # 存储所有图表的列表
@@ -4004,6 +4006,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.fileName = selected_path
         self.lastSelectedPath = selected_path
         self.data = loaded_data
+        # 新文件尚未训练，不能沿用上一份数据的填补规则。
+        self.last_numeric_preprocessing = None
         self.columns = columns
         self.column_info = column_info
         self.time_columns_present = time_columns_present
@@ -4321,22 +4325,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             self.lineEdit_state.setText('')
             return
 
-        # 所有启动前检查均通过后才显示训练进度。
-        self.start_progress_indicator(100)
-        print('ok now')
-
-
-        self.N_train = N_end_train - N_start_train
-        self.N_test = N_end_test - N_start_test
+        # 计时包含取列、切分和预处理；验证完成后才启动进度条。
         self.start_time = time.time()
-      
-        self.lineEdit_DEVICE.clear()
-
-        #数据统一处理
         data = self.data
-
-        # 更新进度到10%
-        self.set_progress_value(10)
 
 
         data_X = data[input_columns]   # 选择输入特征
@@ -4355,10 +4346,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             data_filter = pd.concat([data_X, data_y], axis=1)
             print("警告：数据缺少时间列，预测结果将不包含时间中心点")
         
-        # 更新进度到20%
-        self.set_progress_value(20)
-        
-                
         # 正确的shuffle逻辑：先打乱，再划分---shuffle
         if hasattr(self, 'shuffle_yes_or_no') and self.shuffle_yes_or_no.isChecked():
             # 如果启用shuffle，先打乱整个数据集
@@ -4381,11 +4368,31 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 N_start_test = N_end_train
                 N_end_test = N_start_test + (N_end_test - N_start_test)  # 保持验证集大小不变
 
-        # 更新进度到30%
+        # 按位置切分，并复制表，避免处理结果改写上传后的原始数据。
+        data_train = data_filter.iloc[N_start_train:N_end_train].copy()
+        data_test = data_filter.iloc[N_start_test:N_end_test].copy()
+
+        try:
+            # 先删训练输出缺失行，再从剩余训练行学习输入中位数。
+            data_train, data_test, input_medians, removed_output_rows = (
+                prepare_numeric_regression_data(
+                    data_train, data_test, input_columns, output_columns
+                )
+            )
+        except ValueError as exc:
+            # 数据不能用于回归时，不显示进度，也不调用任何算法。
+            QMessageBox.warning(self, "无法开始训练", str(exc))
+            self.lineEdit_state.setText('')
+            return
+
+        # 输出缺失行被删除后，实际训练样本数可能小于行号范围长度。
+        self.N_train = len(data_train)
+        self.N_test = len(data_test)
+        self.start_progress_indicator(100)
+        self.lineEdit_DEVICE.clear()
+        self.set_progress_value(10)
+        self.set_progress_value(20)
         self.set_progress_value(30)
- 
-        data_train = data_filter[N_start_train : N_end_train]
-        data_test = data_filter[N_start_test : N_end_test]   
         print('check')
 
         # 关键修改：确保测试集数据包含时间列信息
@@ -4950,6 +4957,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 )
             
             
+        # 完整训练成功后，才把本次填补规则与训练结果对应起来。
+        self.last_numeric_preprocessing = {
+            "input_columns": input_columns.copy(),
+            "output_columns": output_columns.copy(),
+            "input_medians": input_medians.copy(),
+            "removed_output_rows": removed_output_rows,
+        }
         self.set_progress_value(100)
         self.stop_progress_indicator()      
     
