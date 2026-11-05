@@ -4249,23 +4249,23 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
     def All_Methods_Begin(self):
         global method
 
-        self.start_progress_indicator(100)
-                # 定义MMoE专用的进度回调函数
+        # 先准备MMoE的进度回调，训练条件检查通过后再启动进度条。
         def mmoe_progress_callback(progress, message):
             # 将MMoE内部进度映射到整体进度 (40%-90%)
             mapped_progress = 40 + (progress * 0.5)  # 40%到90%的范围
             self.set_progress_value(int(mapped_progress))
         
+        # 未上传训练数据时直接提示，不进入训练流程。
         if self.data_load == 0:
-            self.lineEdit_Algorithm_name.setText("请在右侧选择所需算法")
+            self.lineEdit_Algorithm_name.setText("请先上传训练数据")
             self.lineEdit_state.setText('')
             return
 
+        # 未选择算法时直接提示，进度条尚未启动。
         if method == 'NONE':
-                    self.lineEdit_Algorithm_name.setText("Please select an Algorithm!!!")
-                    self.lineEdit_state.setText('')
-                    self.stop_progress_indicator()  # 停止进度指示
-                    return
+            self.lineEdit_Algorithm_name.setText("请先选择算法")
+            self.lineEdit_state.setText('')
+            return
     
 
         # 先检查选列，避免后续行号处理掩盖选列错误。
@@ -4273,34 +4273,56 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         output_columns, _ = self.get_output()
         selection_error = self.validate_training_columns(input_columns, output_columns)
         if selection_error:
+            # 选列不合法时保留勾选，供用户修改后再次确认。
             QMessageBox.warning(self, "无法开始训练", selection_error)
             self.lineEdit_state.setText('')
-            self.stop_progress_indicator()  # 停止进度指示
+            return
+
+        # 字符串输入尚无编码规则，暂时阻止其进入数值回归算法。
+        types_by_name = {
+            entry["name"]: entry["type"] for entry in self.column_info
+        }
+        string_inputs = [
+            name for name in input_columns
+            if types_by_name.get(name) == "字符串"
+        ]
+        if string_inputs:
+            QMessageBox.warning(
+                self,
+                "无法开始训练",
+                "当前暂不支持字符串输入训练，请改选数值列："
+                + "、".join(string_inputs),
+            )
+            self.lineEdit_state.setText('')
             return
 
         if self.checkBox_percentage.isChecked():
 
+            # 使用控件数值换算百分比，避免起始值0显示为空时解析失败。
             total_rows = self.data.shape[0]
-            N_start_train = round(total_rows * int(self.spinBox_train_start.text()) / 100)
-            N_end_train = round(total_rows * int(self.spinBox_train_end.text()) / 100)
-            N_start_test = round(total_rows * int(self.spinBox_test_start.text()) / 100)
-            N_end_test = round(total_rows * int(self.spinBox_test_end.text()) / 100)
+            N_start_train = round(total_rows * self.spinBox_train_start.value() / 100)
+            N_end_train = round(total_rows * self.spinBox_train_end.value() / 100)
+            N_start_test = round(total_rows * self.spinBox_test_start.value() / 100)
+            N_end_test = round(total_rows * self.spinBox_test_end.value() / 100)
 
             
         else:
-            N_start_train = int(self.spinBox_train_start.text())
-            N_end_train = int(self.spinBox_train_end.text())
-            N_start_test = int(self.spinBox_test_start.text())
-            N_end_test = int(self.spinBox_test_end.text())
+            # 普通行号直接读取控件数值，保留默认起始行0。
+            N_start_train = self.spinBox_train_start.value()
+            N_end_train = self.spinBox_train_end.value()
+            N_start_test = self.spinBox_test_start.value()
+            N_end_test = self.spinBox_test_end.value()
         if (N_start_train < N_end_train) & (N_end_train <= self.shape[0])\
             & (N_start_test < N_end_test) & (N_end_test <= self.shape[0]):
             pass
         else:
-            self.lineEdit_Algorithm_name.setText("Data index is illegal or beyond range!!!")
+            # 行范围不合法时提示用户调整，不启动进度条。
+            self.lineEdit_Algorithm_name.setText("训练或测试行号无效，请检查起始行和结束行")
             self.lineEdit_state.setText('')
-            self.stop_progress_indicator()  # 停止进度指示
             return
 
+        # 所有启动前检查均通过后才显示训练进度。
+        self.start_progress_indicator(100)
         print('ok now')
 
 
@@ -4348,7 +4370,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             if self.checkBox_percentage.isChecked():
                 # 百分比模式：使用百分比计算新的索引范围
                 N_start_train = 0
-                N_end_train = round(len(data_filter) * int(self.spinBox_train_end.text()) / 100)
+                # 打乱后仍从控件数值读取训练比例，不依赖显示文字。
+                N_end_train = round(len(data_filter) * self.spinBox_train_end.value() / 100)
                 N_start_test = N_end_train
                 N_end_test = len(data_filter)
             else:
@@ -4989,10 +5012,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             self.spinBox_test_start.setSingleStep(1)
             self.spinBox_test_end.setSingleStep(1)
             if self.data_load == 1:
-                N_start_train = int(self.spinBox_train_start.text())
-                N_end_train = int(self.spinBox_train_end.text())
-                N_start_test = int(self.spinBox_test_start.text())
-                N_end_test = int(self.spinBox_test_end.text())
+                # 读取当前行号数值，包含显示为空的最小值0。
+                N_start_train = self.spinBox_train_start.value()
+                N_end_train = self.spinBox_train_end.value()
+                N_start_test = self.spinBox_test_start.value()
+                N_end_test = self.spinBox_test_end.value()
 
                 N_start_train_p = round(N_start_train/self.shape[0]*100)
                 N_end_train_p = round(N_end_train/self.shape[0]*100)
@@ -5010,10 +5034,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             self.spinBox_test_start.setSingleStep(1000)
             self.spinBox_test_end.setSingleStep(1000)
             if self.data_load == 1:
-                N_start_train_p = int(self.spinBox_train_start.text())
-                N_end_train_p = int(self.spinBox_train_end.text())
-                N_start_test_p = int(self.spinBox_test_start.text())
-                N_end_test_p = int(self.spinBox_test_end.text())
+                # 读取当前百分比数值，避免0被当成空字符串。
+                N_start_train_p = self.spinBox_train_start.value()
+                N_end_train_p = self.spinBox_train_end.value()
+                N_start_test_p = self.spinBox_test_start.value()
+                N_end_test_p = self.spinBox_test_end.value()
 
                 N_start_train = round(self.shape[0]*N_start_train_p/100)
                 N_end_train = round(self.shape[0]*N_end_train_p/100)
