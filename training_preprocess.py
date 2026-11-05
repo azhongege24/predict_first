@@ -38,15 +38,7 @@ def prepare_numeric_regression_data(
             + "、".join(output_columns)
         )
 
-    # 现有验模指标需要真实输出；部分真实值的评价在后续步骤接通。
-    missing_test_outputs = [
-        name for name in output_columns if test[name].isna().any()
-    ]
-    if missing_test_outputs:
-        raise ValueError(
-            "测试集输出列含缺失值，当前无法计算指标："
-            + "、".join(missing_test_outputs)
-        )
+    # 测试输出的缺失值保留，预测所有行后只评价有真实值的行。
 
     input_medians = {}
     for name in input_columns:

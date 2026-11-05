@@ -4394,6 +4394,17 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 f"剩余 {len(data_train)} 行用于训练。",
             )
 
+        valid_test_counts = data_test[output_columns].notna().sum()
+        if (valid_test_counts < len(data_test)).any():
+            details = "、".join(
+                f"{name} {int(valid_test_counts[name])}/{len(data_test)} 行"
+                for name in output_columns
+            )
+            QMessageBox.information(
+                self, "测试集真实值不完整",
+                f"将预测全部 {len(data_test)} 行；指标只使用有真实值的行：{details}。",
+            )
+
         # 输出缺失行被删除后，实际训练样本数可能小于行号范围长度。
         self.N_train = len(data_train)
         self.N_test = len(data_test)

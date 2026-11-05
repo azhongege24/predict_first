@@ -18,6 +18,7 @@ from matplotlib import pyplot as plt
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import ExtraTreesRegressor, RandomForestRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error
+from regression_evaluation import evaluate_regression, display_metric
 from sklearn.svm import SVR
 from sklearn.linear_model import LinearRegression, Ridge, Lasso
 from tqdm import tqdm
@@ -150,85 +151,9 @@ def multi_task_regression_predictor(
     if y_test.ndim == 1:
         y_test = y_test.reshape(-1, 1)
         y_pred = y_pred.reshape(-1, 1)
-     # 关键修改：计算每个输出的独立指标
-    n_tasks = y_test.shape[1] if y_test.ndim > 1 else 1
-    if n_tasks == 1:
-        # 单任务情况 - 直接计算指标
-        mse = mean_squared_error(y_test, y_pred)
-        r2 = r2_score(y_test, y_pred)
-        rmse = np.sqrt(mse)
-        mae = mean_absolute_error(y_test, y_pred)
-        
-        # 将指标放入列表以保持格式一致
-        mse_list = [mse]
-        r2_list = [r2]
-        rmse_list = [rmse]
-        mae_list = [mae]
-    else:
-        # 多任务情况 - 为每个任务单独计算指标
-        mse_list = [mean_squared_error(y_test[:, i], y_pred[:, i]) for i in range(n_tasks)]
-        r2_list = [r2_score(y_test[:, i], y_pred[:, i]) for i in range(n_tasks)]
-        rmse_list = [np.sqrt(mse) for mse in mse_list]
-        mae_list = [mean_absolute_error(y_test[:, i], y_pred[:, i]) for i in range(n_tasks)]
+    # 预测全部测试行；指标只使用各输出有真实值的行。
+    metrics = evaluate_regression(y_test, y_pred)
 
-    
-    # 整体指标（平均值）
-    metrics = {
-        'MSE': np.mean(mse_list),
-        'MSE_list': mse_list,
-        'R2': np.mean(r2_list),
-        'R2_list': r2_list,
-        'RMSE': np.mean(rmse_list),
-        'RMSE_list': rmse_list,
-        'MAE': np.mean(mae_list),
-        'MAE_list': mae_list
-    }
-    # 新增：计算分贝偏差指标
-    # 替换原有分贝偏差计算部分
-    # 对于大数值，使用相对较小的epsilon，避免引入显著偏差
-    epsilon = np.maximum(np.abs(y_test) * 1e-12, 1e-8)  # 动态调整epsilon
-
-    # 确保y_test和y_pred形状统一为2D数组
-    if y_test.ndim == 1:
-        y_test = y_test.reshape(-1, 1)
-    if y_pred.ndim == 1:
-        y_pred = y_pred.reshape(-1, 1)
-
-    # 确保非负性（针对log10计算）
-    y_test_pos = np.abs(y_test) + epsilon
-    y_pred_pos = np.abs(y_pred) + epsilon
-
-    # 计算分贝偏差 (10*log10(预测值/真实值))
-    ratio = y_pred_pos / y_test_pos
-
-    # 对于极端大的比率差异，先计算分贝再限制范围，而不是先限制比率
-    db_diff = 10 * np.log10(ratio)
-    db_diff_clipped = np.clip(db_diff, -30, 30)  # 限制在±30dB范围内
-
-    # 重新计算分贝指标
-    db_within_3_ratio_list = []
-    for j in range(n_tasks):
-        # 单输出时j=0，直接取第0列
-        # 使用原始的db_diff而非裁剪后的db_diff_clipped来计算这个指标
-        # 因为我们想知道真实落在±3dB范围内的比例，而不是裁剪后的
-        within_range = np.abs(db_diff[:, j]) <= 3
-        ratio = np.mean(within_range)
-        db_within_3_ratio_list.append(ratio)
-
-    # 单输出时直接取唯一元素，避免不必要的mean计算
-    db_within_3_ratio = db_within_3_ratio_list[0] if n_tasks == 1 else np.mean(db_within_3_ratio_list)
-
-    # 对于总偏差，使用裁剪后的值以避免极端值主导结果
-    total_db_deviation = np.sum(np.abs(db_diff_clipped))
-    total_db_deviation_per_feature = [np.sum(np.abs(db_diff_clipped[:, j])) for j in range(n_tasks)]
-        # 更新metrics字典
-    metrics.update({
-        'db_within_3_ratio': db_within_3_ratio,  # 整体±3dB内比例
-        'db_within_3_ratio_list': db_within_3_ratio_list,  # 各特征±3dB内比例
-        'total_db_deviation': total_db_deviation,  # 总分贝偏差和
-        'total_db_deviation_per_feature': total_db_deviation_per_feature  # 各特征分贝偏差和
-    })
-    
     return model, scaler, y_test, y_pred, metrics
 
 
@@ -399,22 +324,18 @@ def single_plot_and_evaluate(self, y_test, y_pred, method, data_test,
     ax = self.figure.add_subplot(111)
 
     # 绘制真实值与预测值散点图
-    print(f"np.unique(y_test): {np.unique(y_test)}")
-    flag = (len(np.unique(y_test)) > 1) # 检查当前输出变量是否有多个唯一值 flag=1有真实值 flag=0无真实值
-    if flag:
-        scatter1 = ax.scatter(np.arange(len(y_test)), y_test, c='b', marker='o', s=10, label='True', alpha=0.8)
-        scatter2 = ax.scatter(np.arange(len(y_test)), y_pred, c='r', marker='X', s=20, label='pred_' + method, alpha=0.6)
+    actual = np.asarray(y_test, dtype=float).reshape(-1)
+    predicted = np.asarray(y_pred, dtype=float).reshape(-1)
+    valid = np.isfinite(actual)
+    positions = np.arange(len(actual))
+    # 预测画全部行，真实值和误差连线只画有效行。
+    ax.scatter(positions, predicted, c='r', marker='X', s=20, label='pred_' + method, alpha=0.6)
+    if valid.any():
+        ax.scatter(positions[valid], actual[valid], c='b', marker='o', s=10, label='True', alpha=0.8)
+        for row in positions[valid]:
+            ax.plot([row, row], [actual[row], predicted[row]], color='#2F5597',
+                    linestyle='-', linewidth=2.5, alpha=0.5, zorder=0)
 
-        # 绘制垂直连接线段
-        for i in range(len(y_test)):
-            ax.plot([i, i], [y_test[i], y_pred[i]],
-                    color='#2F5597', linestyle='-', linewidth=2.5, alpha=0.5, solid_capstyle='round', zorder=0)
-    else:
-        scatter2 = ax.scatter(np.arange(len(y_test)), y_pred, c='r', marker='X', s=20, label='pred_' + method, alpha=0.6)
-
-
-    
-    
     # 优化显示设置
     plt.grid(linestyle='--', alpha=0.5)
     plt.legend(fontsize=10, loc='upper left')
@@ -432,23 +353,15 @@ def single_plot_and_evaluate(self, y_test, y_pred, method, data_test,
     self.graphicsView.setDragMode(QGraphicsView.ScrollHandDrag)
     self.graphicsView.show()
 
-    # 更新界面控件
-    if flag:
-        self.lineEdit_state.setText('Finish!')
-        self.lineEdit_MSE.setText(str(round(MSE, 5)))
-        self.lineEdit_RMSE.setText(str(round(RMSE, 5)))  # 假设新增了RMSE控件
-        self.lineEdit_MAE.setText(str(round(MAE, 5)))    # 假设新增了MAE控件
-        self.lineEdit_R2.setText(str(round(R2, 5)))
-        self.lineEdit_db_within_3_ratio.setText(f"{db_within_3_ratio*100:.2f}%")  # 新增±3dB内比例控件
-        
-    else:
-        self.lineEdit_state.setText('Finish!')
-        self.lineEdit_MSE.setText("None")
-        self.lineEdit_RMSE.setText("None")  # 假设新增了RMSE控件
-        self.lineEdit_MAE.setText("None")    # 假设新增了MAE控件
-        self.lineEdit_R2.setText("None")
-        self.lineEdit_db_within_3_ratio.setText("None")  # 新增±3dB内比例控件
-       
+    self.lineEdit_state.setText(f'Finish! 有效真实值 {valid.sum()}/{len(actual)}')
+    self.lineEdit_MSE.setText(display_metric(MSE))
+    self.lineEdit_RMSE.setText(display_metric(RMSE))
+    self.lineEdit_MAE.setText(display_metric(MAE))
+    self.lineEdit_R2.setText('样本不足' if valid.sum() == 1 else display_metric(R2))
+    self.lineEdit_db_within_3_ratio.setText(
+        f'{db_within_3_ratio*100:.2f}%' if np.isfinite(db_within_3_ratio)
+        else '无有效真实值'
+    )
 
     # 关键修改：保存预测结果到 DataFrame，添加时间中心点列
     # 检查测试集数据是否包含时间列
@@ -521,12 +434,15 @@ def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test,
     # 清空之前的图像（保留则注释此行）
     self.figures = []
     
-    # 计算整体指标（用于界面显示）
-    overall_mse = np.mean(MSE_list)
-    overall_rmse = np.mean(RMSE_list) if RMSE_list else np.sqrt(overall_mse)
-    overall_mae = np.mean(MAE_list) if MAE_list else np.mean(np.abs(y_test - y_pred))
-    overall_r2 = np.mean(R2_list)
-    
+    def available_mean(values):
+        finite = [value for value in values if np.isfinite(value)]
+        return float(np.mean(finite)) if finite else float('nan')
+
+    overall_mse = available_mean(MSE_list)
+    overall_rmse = available_mean(RMSE_list)
+    overall_mae = available_mean(MAE_list)
+    overall_r2 = available_mean(R2_list)
+
     # 为每个输出变量创建并保存可视化图像
     for i, col in enumerate(output_columns):
         # 当前输出的独立指标
@@ -541,30 +457,26 @@ def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test,
         ax = fig.add_subplot(111)
         
         # 绘制真实值与预测值散点图
-        flag = (len(np.unique(y_test)) > 1) # 检查当前输出变量是否有多个唯一值
-        if flag:
-        # 绘制真实值与预测值散点图
-            ax.scatter(np.arange(len(y_test[:, i])), y_test[:, i], 
-                    c='b', marker='o', s=10, label='真实值', alpha=0.8)
-            ax.scatter(np.arange(len(y_test[:, i])), y_pred[:, i], 
-                    c='r', marker='X', s=20, label=f'预测值_{method}', alpha=0.8)
-            
-            # 绘制垂直连接线段（向量方式更高效）
-            x = np.arange(len(y_test[:, i]))
-            ax.plot([x, x], [y_test[:, i], y_pred[:, i]],
-                    color='#2F5597', linestyle='-', linewidth=1.5, alpha=0.6, zorder=0)
-        else:
-            ax.scatter(np.arange(len(y_test[:, i])), y_pred[:, i], 
-                    c='r', marker='X', s=20, label=f'预测值_{method}', alpha=0.8)  
-        
-        # 设置子图标题和标签（显示当前输出的独立指标）
+        actual = np.asarray(y_test[:, i], dtype=float)
+        predicted = np.asarray(y_pred[:, i], dtype=float)
+        valid = np.isfinite(actual)
+        positions = np.arange(len(actual))
+        # 各输出的预测画全部行；真实值及连线只画有效行。
+        ax.scatter(positions, predicted, c='r', marker='X', s=20,
+                   label=f'预测值_{method}', alpha=0.8)
+        if valid.any():
+            ax.scatter(positions[valid], actual[valid], c='b', marker='o',
+                       s=10, label='真实值', alpha=0.8)
+            for row in positions[valid]:
+                ax.plot([row, row], [actual[row], predicted[row]],
+                        color='#2F5597', linestyle='-', linewidth=1.5, alpha=0.6)
+        ratio_text = f'{current_db_within_3_ratio:.2%}' if np.isfinite(current_db_within_3_ratio) else '无有效真实值'
+        r2_text = '样本不足' if valid.sum() == 1 else display_metric(current_r2, 4)
         ax.set_title(
-            f'输出变量: {col}\n'
-            f'MSE: {current_mse:.4f}, RMSE: {current_rmse:.4f}\n'
-            f'MAE: {current_mae:.4f}, R^2: {current_r2:.4f}\n'
-            f'±3dB比例: {current_db_within_3_ratio:.2%}\n'
-           ,
-            fontsize=10
+            f'输出变量: {col}，有效真实值: {valid.sum()}/{len(actual)}\n'
+            f'MSE: {display_metric(current_mse, 4)}, RMSE: {display_metric(current_rmse, 4)}\n'
+            f'MAE: {display_metric(current_mae, 4)}, R²: {r2_text}\n'
+            f'±3dB比例: {ratio_text}', fontsize=10
         )
         ax.set_xlabel('样本索引', fontsize=10)
         ax.set_ylabel('数值', fontsize=10)
@@ -587,24 +499,16 @@ def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test,
     self.current_page = 0
     self.update_graphics_view()
     
-    # 更新界面控件（显示整体平均指标）
-    if flag:
-        self.lineEdit_state.setText('Finish!')
-        self.lineEdit_MSE.setText(f"{overall_mse:.5f}")
-        self.lineEdit_RMSE.setText(f"{overall_rmse:.5f}")
-        self.lineEdit_MAE.setText(f"{overall_mae:.5f}")
-        self.lineEdit_R2.setText(f"{overall_r2:.5f}")
-        self.lineEdit_db_within_3_ratio.setText(f"{np.mean(db_within_3_ratio_list)*100:.2f}%")
-        
-    else:
-        self.lineEdit_state.setText('Finish!')
-        self.lineEdit_MSE.setText("None")
-        self.lineEdit_RMSE.setText("None")
-        self.lineEdit_MAE.setText("None")
-        self.lineEdit_R2.setText("None")
-        self.lineEdit_db_within_3_ratio.setText("None")
-        
-    
+    self.lineEdit_state.setText('Finish!')
+    self.lineEdit_MSE.setText(display_metric(overall_mse))
+    self.lineEdit_RMSE.setText(display_metric(overall_rmse))
+    self.lineEdit_MAE.setText(display_metric(overall_mae))
+    self.lineEdit_R2.setText(display_metric(overall_r2))
+    ratio = available_mean(db_within_3_ratio_list)
+    self.lineEdit_db_within_3_ratio.setText(
+        f'{ratio*100:.2f}%' if np.isfinite(ratio) else '无有效真实值'
+    )
+
     # 关键修改：保存预测结果到 DataFrame（包含真实值便于对比），添加时间中心点列
     # 检查测试集数据是否包含时间列
     time_columns = ['start_time', 'end_time']

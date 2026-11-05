@@ -2,6 +2,7 @@ import os
 import time
 import pandas as pd
 import numpy as np
+from regression_evaluation import evaluate_regression, display_metric
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import mean_squared_error, r2_score
@@ -37,47 +38,8 @@ def REMTW_Lasso(data_train,
     model.fit(X_train_3d, y_train_3d)  # 训练模型
     y_pred = model.predict(X_test_3d).T  # 转置回 (n_samples, n_tasks)
 
-    # 计算每个输出的指标（用于单独可视化）
-    mse_list = [mean_squared_error(y_test[:, i], y_pred[:, i]) for i in range(n_tasks)]
-    r2_list = [r2_score(y_test[:, i], y_pred[:, i]) for i in range(n_tasks)]
-    rmse_list = [np.sqrt(mse) for mse in mse_list]
-    mae_list = [np.mean(np.abs(y_test[:, i] - y_pred[:, i])) for i in range(n_tasks)]
-
-    # 整体指标（平均）
-    metrics = {
-        'MSE': np.mean(mse_list),
-        'MSE_list': mse_list,
-        'R2': np.mean(r2_list),
-        'R2_list': r2_list,
-        'RMSE': np.mean(rmse_list),
-        'RMSE_list': rmse_list,
-        'MAE': np.mean(mae_list),
-        'MAE_list': mae_list
-    }
-     # 新增：计算分贝偏差指标
-    epsilon = 1e-8  # 避免零值导致的计算错误
-    y_test_pos = y_test + epsilon  # 确保非负
-    y_pred_pos = y_pred + epsilon
-    # 计算每个样本的分贝偏差 (20*log10(预测值/真实值))
-    db_diff = 20 * np.log10(y_pred_pos / y_test_pos)
-    # 指标1：每个输出特征中偏差在±3dB内的样本比例（再求平均）
-    db_within_3_ratio_list = []
-    for j in range(n_tasks):
-        # 计算当前特征中偏差在±3dB内的样本占比
-        within_range = np.abs(db_diff[:, j]) <= 3
-        ratio = np.mean(within_range)  # 比例
-        db_within_3_ratio_list.append(ratio)
-    db_within_3_ratio = np.mean(db_within_3_ratio_list)  # 整体平均比例
-    # 指标2：所有特征的偏差分贝数绝对值之和
-    # total_db_deviation = np.sum(np.abs(db_diff))
-    total_db_deviation_per_feature = [np.sum(np.abs(db_diff[:, j])) for j in range(n_tasks)]
-    # 更新metrics字典
-    metrics.update({
-        'db_within_3_ratio': db_within_3_ratio,  # 整体±3dB内比例
-        'db_within_3_ratio_list': db_within_3_ratio_list,  # 各特征±3dB内比例
-        # 'total_db_deviation': total_db_deviation,  # 总分贝偏差和
-        'total_db_deviation_per_feature': total_db_deviation_per_feature  # 各特征分贝偏差和
-    })
+    # 每个输出只使用有真实值的测试行计算指标。
+    metrics = evaluate_regression(y_test, y_pred, db_factor=20)
     return model, X_test, y_test, y_pred, metrics, data_test.index  # 新增返回测试集索引
 
 
@@ -157,30 +119,26 @@ def remtw_plot_and_evaluate(self, remtw_model, method, input_columns, output_col
         fig = plt.figure(figsize=(7, 4), dpi=120)
         ax = fig.add_subplot(111)
 
-        flag = (len(np.unique(y_test)) > 1)
-        if flag:
-        # 绘制真实值与预测值
-            ax.scatter(np.arange(len(y_test[:, i])), y_test[:, i],
-                    c='b', marker='o', s=10, label='真实值', alpha=0.8)
-            ax.scatter(np.arange(len(y_test[:, i])), y_pred[:, i],
-                    c='r', marker='X', s=20, label=f'预测值_{method}', alpha=0.8)
-
-            # 绘制连接线段（显示偏差）
-            x = np.arange(len(y_test[:, i]))
-            ax.plot([x, x], [y_test[:, i], y_pred[:, i]],
-                    color='#2F5597', linestyle='-', linewidth=1.5, alpha=0.6, zorder=0)
-        else:
-            ax.scatter(np.arange(len(y_test[:, i])), y_pred[:, i],
-                c='r', marker='X', s=20, label=f'预测值_{method}', alpha=0.8)  
-
-        # 图表标题和标签
+        actual = np.asarray(y_test[:, i], dtype=float)
+        predicted = np.asarray(y_pred[:, i], dtype=float)
+        valid = np.isfinite(actual)
+        positions = np.arange(len(actual))
+        # 预测画全部行，真实值和误差连线只画有效行。
+        ax.scatter(positions, predicted, c='r', marker='X', s=20,
+                   label=f'预测值_{method}', alpha=0.8)
+        if valid.any():
+            ax.scatter(positions[valid], actual[valid], c='b', marker='o',
+                       s=10, label='真实值', alpha=0.8)
+            for row in positions[valid]:
+                ax.plot([row, row], [actual[row], predicted[row]],
+                        color='#2F5597', linestyle='-', linewidth=1.5, alpha=0.6)
+        ratio_text = f'{current_db_within_3_ratio:.2%}' if np.isfinite(current_db_within_3_ratio) else '无有效真实值'
+        r2_text = '样本不足' if valid.sum() == 1 else display_metric(current_r2, 4)
         ax.set_title(
-            f'输出变量: {col}\n'
-            f'MSE: {current_mse:.4f}, RMSE: {current_rmse:.4f}\n'
-            f'MAE: {current_mae:.4f}, R^2: {current_r2:.4f}\n'
-            f'±3dB比例: {current_db_within_3_ratio:.2%}\n',
-            # f'总分贝偏差: {current_total_db_deviation_per_feature:.2f} dB',
-            fontsize=10
+            f'输出变量: {col}，有效真实值: {valid.sum()}/{len(actual)}\n'
+            f'MSE: {display_metric(current_mse, 4)}, RMSE: {display_metric(current_rmse, 4)}\n'
+            f'MAE: {display_metric(current_mae, 4)}, R²: {r2_text}\n'
+            f'±3dB比例: {ratio_text}', fontsize=10
         )
         ax.set_xlabel('样本索引', fontsize=10)
         ax.set_ylabel('数值', fontsize=10)
@@ -200,31 +158,15 @@ def remtw_plot_and_evaluate(self, remtw_model, method, input_columns, output_col
     # 初始化分页显示（所有图像：热力图+柱状图+对比图）
     self.current_page = 0
     self.update_graphics_view()
-    # 更新界面控件（显示整体指标）
-    if flag:
-        # 更新界面控件（显示整体指标）
-        overall_mse = np.mean(MSE) if isinstance(MSE, (list, np.ndarray)) else MSE
-        overall_rmse = np.mean(RMSE) if isinstance(RMSE, (list, np.ndarray)) else RMSE
-        overall_mae = np.mean(MAE) if isinstance(MAE, (list, np.ndarray)) else MAE
-        overall_r2 = np.mean(R2) if isinstance(R2, (list, np.ndarray)) else R2
-
-
-
-        # 更新界面控件（显示整体指标）
-        self.lineEdit_state.setText('Finish!')
-        self.lineEdit_MSE.setText(f"{overall_mse:.5f}")
-        self.lineEdit_RMSE.setText(f"{overall_rmse:.5f}")
-        self.lineEdit_MAE.setText(f"{overall_mae:.5f}")
-        self.lineEdit_R2.setText(f"{overall_r2:.5f}")
-        self.lineEdit_db_within_3_ratio.setText(f"{np.mean(db_within_3_ratio_list)*100:.2f}%")
-    else:
-        self.lineEdit_state.setText('Finish!')
-        self.lineEdit_MSE.setText("None")
-        self.lineEdit_RMSE.setText("None")  
-        self.lineEdit_MAE.setText("None")    
-        self.lineEdit_R2.setText("None")
-        self.lineEdit_db_within_3_ratio.setText("None")  
-        
+    self.lineEdit_state.setText('Finish!')
+    self.lineEdit_MSE.setText(display_metric(MSE))
+    self.lineEdit_RMSE.setText(display_metric(RMSE))
+    self.lineEdit_MAE.setText(display_metric(MAE))
+    self.lineEdit_R2.setText(display_metric(R2))
+    finite_ratios = [value for value in db_within_3_ratio_list if np.isfinite(value)]
+    self.lineEdit_db_within_3_ratio.setText(
+        f'{np.mean(finite_ratios)*100:.2f}%' if finite_ratios else '无有效真实值'
+    )
     self.lineEdit_Algorithm_name.setText(f"当前算法: {method}")
 
     # 新增：保存预测结果到data_save属性
