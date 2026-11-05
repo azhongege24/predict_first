@@ -33,7 +33,10 @@ def prepare_numeric_regression_data(
     removed_output_rows = int(missing_output.sum())
     train = train.loc[~missing_output].copy()
     if train.empty:
-        raise ValueError("所选输出的有效训练行数为 0，请调整数据或行范围")
+        raise ValueError(
+            "训练范围内没有同时具备所选输出值的行，无法训练："
+            + "、".join(output_columns)
+        )
 
     # 现有验模指标需要真实输出；部分真实值的评价在后续步骤接通。
     missing_test_outputs = [

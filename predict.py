@@ -4385,6 +4385,15 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             self.lineEdit_state.setText('')
             return
 
+        # 仅在确实排除了训练行时，告知用户剩余样本数。
+        if removed_output_rows:
+            QMessageBox.information(
+                self,
+                "训练数据已调整",
+                f"所选输出缺失，已排除 {removed_output_rows} 行训练数据；"
+                f"剩余 {len(data_train)} 行用于训练。",
+            )
+
         # 输出缺失行被删除后，实际训练样本数可能小于行号范围长度。
         self.N_train = len(data_train)
         self.N_test = len(data_test)
