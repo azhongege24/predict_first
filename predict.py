@@ -1433,6 +1433,8 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         self.loaded_model = None
         self.loaded_input_columns = None
         self.loaded_output_columns = None
+        # 新模型的处理规则先留在弹窗，确认成功后再交给主窗口。
+        self.loaded_model_metadata = None
         self.predict_columns = None
         self.predict_input_columns = None
         self.predict_output_columns = None
@@ -1481,6 +1483,8 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         self.parent_window.loaded_model = self.loaded_model
         self.parent_window.loaded_input_cols = self.loaded_input_columns
         self.parent_window.loaded_output_cols = self.loaded_output_columns
+        # 规则与当前确认的模型一同更新，避免错用另一模型的预处理方式。
+        self.parent_window.loaded_model_metadata = self.loaded_model_metadata
         self.parent_window.selected_model_path = self.selected_model_path
         self.parent_window.predict_data = self.predict_data
         self.parent_window.predict_column_info = self.predict_column_info
@@ -1524,26 +1528,21 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         print("Selected model path:", path)
         
         try:
-            # 调用load_model函数加载模型
-            result = load_model(path)
-            
-            # 处理返回结果
-            if isinstance(result, tuple) and len(result) == 3:
-                # 新格式：返回模型、输入特征列、输出特征列
-                loaded_model, input_columns, output_columns = result
-            else:
-                # 旧格式：只返回模型
-                loaded_model, input_columns, output_columns = result, None, None
-                
-            if loaded_model is None:
+            # 一次读取模型、原始列名及其随文件保存的处理规则。
+            result = load_model(path, include_metadata=True)
+            if result is None:
                 QMessageBox.warning(self, "加载失败", "无法加载模型文件")
                 return
+
+            # 完整信息模式对新旧模型统一返回四项；旧模型的规则为 None。
+            loaded_model, input_columns, output_columns, metadata = result
 
             # 加载成功后再更新弹窗；确认之前不改主窗口的模型。
             self.selected_model_path = path
             self.loaded_model = loaded_model
             self.loaded_input_columns = input_columns
             self.loaded_output_columns = output_columns
+            self.loaded_model_metadata = metadata
 
             # 更新界面显示
             self.lineEdit_pretrained_model_path.setText(f"已加载: {os.path.basename(path)}")
@@ -3671,6 +3670,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.psd_results = None
         self.selected_model_path = None
         self.trained_model = None  # 用于存储训练好的模型
+        # 只保存已在预测弹窗确认的模型规则，旧模型对应 None。
+        self.loaded_model_metadata = None
         self.last_numeric_preprocessing = None  # 最近一次成功训练的数值处理规则
         # 将 DT 模型和训练时实际使用的列及处理规则放在同一份记录中。
         self.dt_training_snapshot = None

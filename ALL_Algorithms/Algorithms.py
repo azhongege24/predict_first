@@ -229,14 +229,15 @@ def ask_and_save_model(
                     parent.lineEdit_state.setText("模型已保存 " )
 
 #新增加载模型代码功能
-def load_model(model_path, model_type=None):
+def load_model(model_path, model_type=None, include_metadata=False):
     """
     通用模型加载函数，支持多种模型类型
     
     :param model_path: 模型文件路径
     :param model_type: 模型类型 ('DT', 'RF', 'SVM', 'MLP', 'ET', 'MMoE')，
                       如果为None则尝试自动识别
-    :return: 加载的模型对象
+    :param include_metadata: 是否同时返回新模型保存的预测规则
+    :return: 默认保持原有返回结构；请求规则时返回模型、列名和规则四项
     """
     try:
         # 对于scikit-learn的模型，通常用joblib保存
@@ -250,14 +251,31 @@ def load_model(model_path, model_type=None):
                     model = loaded_data['model']
                     input_columns = loaded_data.get('input_columns')
                     output_columns = loaded_data.get('output_columns')
+                    # 只有带格式版本的模型才提供新规则；旧模型的规则保持为 None。
+                    metadata = None
+                    if 'format_version' in loaded_data:
+                        # 将预测需要的字段与模型本体分开交给调用方。
+                        metadata = {
+                            'format_version': loaded_data.get('format_version'),
+                            'task_type': loaded_data.get('task_type'),
+                            'model_input_columns': loaded_data.get('model_input_columns'),
+                            'preprocessing_rules': loaded_data.get('preprocessing_rules'),
+                            'scaler': loaded_data.get('scaler'),
+                        }
                     print(f"成功加载{model_type if model_type else 'scikit-learn'}模型")
                     print(f"输入特征列: {input_columns}")
                     print(f"输出特征列: {output_columns}")
+                    # 默认仍返回三项，不改变现有调用方的拆包方式。
+                    if include_metadata:
+                        return model, input_columns, output_columns, metadata
                     return model, input_columns, output_columns
                 else:
                     # 旧格式，直接返回模型
                     model = loaded_data
                     print(f"成功加载{model_type if model_type else 'scikit-learn'}模型（旧格式）")
+                    # 旧模型没有保存列名和处理规则，但完整信息模式仍返回四项。
+                    if include_metadata:
+                        return model, None, None, None
                     return model, None, None
             except:
                 # 如果joblib加载失败，尝试用torch加载（可能是MMoE模型）
@@ -288,6 +306,9 @@ def load_model(model_path, model_type=None):
                 print("成功加载GP模型")
                 print(f"输入特征列: {input_columns}")
                 print(f"输出特征列: {output_columns}")
+                # GP 暂无新版预测规则；默认返回值维持原样。
+                if include_metadata:
+                    return model, input_columns, output_columns, None
                 return model, input_columns, output_columns
 
             # 加载MMoE模型
@@ -302,6 +323,9 @@ def load_model(model_path, model_type=None):
                 model.scaler = checkpoint.get('scaler')
                 model.loss_history = checkpoint.get('loss_history', [])
                 print("成功加载MMoE模型")
+                # MMoE 原先只返回模型；请求完整信息时补齐空列名和规则。
+                if include_metadata:
+                    return model, None, None, None
                 return model
         
         raise ValueError(f"不支持的模型类型: {model_type}")
