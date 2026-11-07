@@ -289,7 +289,8 @@ def prepare_prediction_features(data, metadata):
             index=data.index,
         )
 
-        # 编码器即使允许忽略新类别，也不能在预测时悄悄使用全零编码。
+        # 收集每个输入列的新类别，一次提示全部问题，不只报告第一列。
+        unknown_lines = []
         for name, known in zip(category_columns, encoder.categories_):
             # 逐列比较本次值与训练时记录的类别集合。
             unknown = sorted(set(category_data[name]) - set(known))
@@ -298,7 +299,13 @@ def prepare_prediction_features(data, metadata):
                 values = "、".join(
                     f"“{value[len(value_prefix):]}”" for value in unknown
                 )
-                raise ValueError(f"输入列“{name}”出现训练时未见过的类别：{values}")
+                unknown_lines.append(f"{name}：{values}")
+        # 编码器虽可忽略新类别，当前预测不能悄悄使用全零编码。
+        if unknown_lines:
+            raise ValueError(
+                "预测文件包含训练时未见过的类别：\n"
+                + "\n".join(unknown_lines)
+            )
         # 类别全部已知后才使用保存的编码器转换，不调用 fit。
         encoded = encoder.transform(category_data)
     elif encoder is not None:

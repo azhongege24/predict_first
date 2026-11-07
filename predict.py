@@ -77,6 +77,21 @@ global mmoe_epochs,mmoe_batch_size,mmoe_lambda_balance,mmoe_scale_features,fit_i
 method = 'NONE'  # 初始化方法为NONE
 # 读取输入参数
 scale_features=True
+
+
+def legacy_model_input_error(input_columns, column_info):
+    """说明无新版规则的模型是否能安全核对当前数值输入。"""
+    # 没有训练输入列名时，界面无法保证用户提供的列序正确。
+    if not input_columns:
+        return "旧模型未记录输入列，当前无法自动核对；人工按训练顺序选列的功能尚未接入"
+    # 旧模型没有中文类别编码规则，只允许已识别为数值的输入列。
+    types_by_name = {entry["name"]: entry["type"] for entry in column_info}
+    invalid = [name for name in input_columns if types_by_name.get(name) != "数值"]
+    if invalid:
+        return "旧模型仅支持数值输入；以下列不是数值或无法识别：" + "、".join(invalid)
+    return None
+
+
 class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
     def __init__(self, parent=None):
         super(POP_VA_para, self).__init__()
@@ -1473,11 +1488,33 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
                 self.update_predict_data_match_status()
                 return
 
+        # 旧模型缺少新版编码规则，确认前核对列名和数值类型。
+        if self.loaded_model_metadata is None:
+            problem = legacy_model_input_error(
+                self.loaded_input_columns, self.predict_column_info
+            )
+            if problem:
+                QMessageBox.warning(self, "无法确认", problem)
+                return
+
+        # 按当前行范围检查新模型输入；失败时主窗口旧结果尚未清空。
+        start = self.spinBox_predict_start.value()
+        end = self.spinBox_predict_end.value()
+        if not (0 <= start < end <= len(self.predict_data)):
+            QMessageBox.warning(self, "无法确认", "请设置有效的预测行范围")
+            return
+        if self.loaded_model_metadata is not None:
+            try:
+                # 只应用已保存的预处理规则，不调用模型的 predict 方法。
+                prepare_prediction_features(
+                    self.predict_data.iloc[start:end], self.loaded_model_metadata
+                )
+            except (TypeError, ValueError) as exc:
+                QMessageBox.warning(self, "无法确认", str(exc))
+                return
+
         # 用户可能在导入后修改行号，确认时把最终范围交给主窗口。
-        self.predict_row_range = (
-            self.spinBox_predict_start.value(),
-            self.spinBox_predict_end.value(),
-        )
+        self.predict_row_range = (start, end)
         self.parent_window.clear_interface()
         self.parent_window.lineEdit_Algorithm_name.setText("已加载预训练模型与预测数据")
         self.parent_window.predict_row_range = self.predict_row_range
@@ -1549,7 +1586,16 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
 
             # 更新界面显示
             self.lineEdit_pretrained_model_path.setText(f"已加载: {os.path.basename(path)}")
-            QMessageBox.information(self, "成功", "模型加载成功")
+            # 旧模型能加载，但不具备新模型的填补和中文类别编码能力。
+            if metadata is None:
+                QMessageBox.warning(
+                    self, "旧模型能力提示",
+                    "模型已加载，但未保存新版填补、中文类别编码和缩放规则。"
+                    "当前仅支持按模型记录的输入列使用数值数据；"
+                    "缺失值沿用旧处理方式，请核对训练时的列顺序。"
+                )
+            else:
+                QMessageBox.information(self, "成功", "模型加载成功")
             # 更新模型特征信息显示
             self.update_model_features_display()
 
@@ -4167,6 +4213,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         input_columns = self.loaded_input_cols if hasattr(self, 'loaded_input_cols') else None
         output_columns = self.loaded_output_cols if hasattr(self, 'loaded_output_cols') else None
         
+        # 无列名旧模型目前不能确认训练列序，避免按文件命名猜测后误预测。
+        if self.loaded_model_metadata is None and not input_columns:
+            QMessageBox.warning(
+                self, "无法预测", legacy_model_input_error(None, [])
+            )
+            return
+
         # 如果模型没有提供特征列信息，使用预测数据的特征列
         if input_columns is None:
             if not hasattr(self, 'predict_input_cols') or not self.predict_input_cols:
@@ -4184,6 +4237,15 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 "预测文件缺少模型所需输入列：" + "、".join(missing_columns)
             )
             return
+
+        # 即使绕过预测弹窗，旧模型也不能直接接收字符串输入。
+        if self.loaded_model_metadata is None:
+            problem = legacy_model_input_error(
+                input_columns, self.predict_column_info
+            )
+            if problem:
+                QMessageBox.warning(self, "无法预测", problem)
+                return
 
         if output_columns is None:
             if not hasattr(self, 'predict_output_cols') or not self.predict_output_cols:
@@ -4365,6 +4427,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 
             QMessageBox.information(self, "成功", "使用预训练模型预测完成")
             
+        except ValueError as e:
+            # 输入类别或数值不符合模型规则时，明确说明无法预测的原因。
+            QMessageBox.warning(self, "无法预测", str(e))
         except Exception as e:
             QMessageBox.warning(self, "预测失败", f"预测过程中出错: {str(e)}")
                 
