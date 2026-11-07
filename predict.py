@@ -7,7 +7,10 @@ import numpy as np
 from ui2025 import Ui_MainWindow #我新创建的界面类
 import pandas as pd
 from data_column_scan import read_utf8_csv, scan_dataframe_columns
-from training_preprocess import prepare_numeric_regression_data
+from training_preprocess import (
+    prepare_numeric_regression_data,
+    prepare_mixed_regression_data,
+)
 from PyQt5.QtWidgets import QApplication, QMainWindow,QProgressDialog, QPushButton,QMessageBox, QFileDialog, QGraphicsScene, QGraphicsView, QWidget, QCheckBox, QListWidgetItem
 from PyQt5.QtCore import Qt, QSettings, QTimer, QSize
 from PyQt5.QtGui import QPixmap
@@ -4282,7 +4285,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             self.lineEdit_state.setText('')
             return
 
-        # 字符串输入尚无编码规则，暂时阻止其进入数值回归算法。
+        # 用上传时识别的列类型找出本次选中的字符串输入。
         types_by_name = {
             entry["name"]: entry["type"] for entry in self.column_info
         }
@@ -4290,13 +4293,16 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             name for name in input_columns
             if types_by_name.get(name) == "字符串"
         ]
-        if string_inputs:
+        # 只有 DT 会在训练前把字符串转换为数值特征。
+        # 其他算法不能直接读取原始字符串，先说明原因并停止。
+        if string_inputs and method != 'DT':
             QMessageBox.warning(
                 self,
                 "无法开始训练",
-                "当前暂不支持字符串输入训练，请改选数值列："
+                "当前算法暂不支持字符串输入训练，请改选数值列："
                 + "、".join(string_inputs),
             )
+            # 保留选列状态，用户可以调整后再次启动训练。
             self.lineEdit_state.setText('')
             return
 
@@ -4373,17 +4379,81 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         data_test = data_filter.iloc[N_start_test:N_end_test].copy()
 
         try:
-            # 先删训练输出缺失行，再从剩余训练行学习输入中位数。
-            data_train, data_test, input_medians, removed_output_rows = (
-                prepare_numeric_regression_data(
-                    data_train, data_test, input_columns, output_columns
+            if string_inputs:
+                # 混合输入先填补数值缺失，再把字符串展开为数值特征。
+                # 同时取得测试集的新类别明细，供训练前提示用户。
+                (
+                    data_train,
+                    data_test,
+                    preprocessing_rules,
+                    removed_output_rows,
+                    unknown_details,
+                ) = prepare_mixed_regression_data(
+                    data_train,
+                    data_test,
+                    input_columns,
+                    output_columns,
+                    types_by_name,
                 )
-            )
+                # 模型按编码后的列名取值；界面仍显示原始列名。
+                model_input_columns = preprocessing_rules["feature_columns"]
+                # 训练结束时仍需记录数值列的填补规则。
+                input_medians = preprocessing_rules["input_medians"]
+            else:
+                # 纯数值输入只填补缺失，不改变模型读取的列名。
+                # 训练输出缺失行先排除，中位数仅从剩余训练行计算。
+                data_train, data_test, input_medians, removed_output_rows = (
+                    prepare_numeric_regression_data(
+                        data_train, data_test, input_columns, output_columns
+                    )
+                )
+                model_input_columns = input_columns
+                # 没有字符串输入时，不会出现未知字符串类别。
+                unknown_details = {"by_column": {}, "affected_rows": 0}
         except ValueError as exc:
-            # 数据不能用于回归时，不显示进度，也不调用任何算法。
+            # 预处理失败时，不显示进度，也不调用任何算法。
             QMessageBox.warning(self, "无法开始训练", str(exc))
             self.lineEdit_state.setText('')
             return
+
+        # 只有测试集确实含新类别时，才询问是否继续训练。
+        if unknown_details["affected_rows"]:
+            # 按原始列名列出每个新类别及其出现次数。
+            category_lines = [
+                f"{name}：" + "、".join(
+                    f"“{value}”{count} 行"
+                    for value, count in values.items()
+                )
+                for name, values in unknown_details["by_column"].items()
+            ]
+
+            # 在进度条启动前显示受影响行数和继续训练的风险。
+            warning = QMessageBox(self)
+            warning.setIcon(QMessageBox.Warning)
+            warning.setWindowTitle("测试数据出现新类别")
+            warning.setText(
+                f"测试集有 {unknown_details['affected_rows']} 行包含"
+                "训练时未见过的类别：\n"
+                + "\n".join(category_lines)
+                + "\n\n继续后仍会预测这些行，但结果请谨慎使用。"
+            )
+
+            # 继续与取消是两个明确的选择，关闭弹窗不会默认继续。
+            continue_button = warning.addButton(
+                "继续训练", QMessageBox.AcceptRole
+            )
+            cancel_button = warning.addButton(
+                "取消", QMessageBox.RejectRole
+            )
+            # 默认按钮和 Esc 都设为取消，避免误触后启动训练。
+            warning.setDefaultButton(cancel_button)
+            warning.setEscapeButton(cancel_button)
+            warning.exec_()
+
+            # 只有明确点击继续，才会执行后面的训练代码。
+            if warning.clickedButton() is not continue_button:
+                self.lineEdit_state.setText('')
+                return
 
         # 仅在确实排除了训练行时，告知用户剩余样本数。
         if removed_output_rows:
@@ -4479,10 +4549,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             self.lineEdit_DEVICE.setText("CPU")
             self.new_model = 1
             self.set_progress_value(50)
+            # 输入列已按所选类型准备好；字符串输入使用编码后的列名。
             model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
-                input_columns,
+                model_input_columns,
                 output_columns,
                 model_type='DT',
                 scale_features=scale_features,
