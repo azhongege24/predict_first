@@ -3966,7 +3966,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 elif self.file_save.endswith(('.xls', '.xlsx')):
                     self.data_save.to_excel(self.file_save, index=True)
                 else:  # 默认保存CSV
-                    self.data_save.to_csv(self.file_save, index=True)
+                    # 使用带签名的 UTF-8，便于表格软件直接识别中文结果列名。
+                    self.data_save.to_csv(
+                        self.file_save, index=True, encoding='utf-8-sig'
+                    )
 
                 self.lineEdit_Algorithm_name.setText('Data saved successfully')
             except Exception as e:
@@ -4207,9 +4210,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     # 此分支仅维持旧模型现有行为；新模型不会在这里拟合。
                     scaler_X = StandardScaler()
                     X_2d = scaler_X.fit_transform(X_2d)
-            # 真实输出的可选读取会在后续预测结果处理处接通。
-            y_test = predict_data[output_columns].values  # 真实值 (样本×任务)
-            n_tasks = len(output_columns)  # 任务数量
+            # 输出数量用于确定模型输入形状，不要求文件提供真实输出列。
+            n_tasks = len(output_columns)
 
             # 根据模型类型处理输入格式并预测
             model_type = None
@@ -4244,6 +4246,46 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
             print(f"使用{model_type}模型进行预测")
             print(f"预测结果形状: {y_pred.shape}")
+
+            # 单输出文件没有真实值时，也要保存并展示全部输入行的预测。
+            if n_tasks == 1 and output_columns[0] not in predict_data.columns:
+                # 统一一维和单列二维返回值，并核对预测与输入逐行对应。
+                predicted = np.asarray(y_pred, dtype=float).reshape(-1)
+                if len(predicted) != len(predict_data):
+                    raise ValueError("模型返回的预测行数与输入行数不一致")
+
+                # 空真实值只供现有绘图函数识别，使图中仅显示预测点。
+                # 导出结果会在下方单独创建，不包含这份空数组。
+                no_actual = np.full(len(predicted), np.nan)
+                single_plot_and_evaluate(
+                    self, no_actual, predicted, "LoadedModel",
+                    predict_data, output_columns, 0, len(predicted),
+                    np.nan, np.nan, np.nan, np.nan, np.nan, np.nan,
+                )
+
+                # 复用现有状态与指标控件，清除之前训练或预测的旧指标。
+                self.lineEdit_state.setText(
+                    f"仅预测 {len(predicted)} 行；无真实输出，未评估"
+                )
+                self.lineEdit_MSE.setText("未评估")
+                self.lineEdit_RMSE.setText("未评估")
+                self.lineEdit_MAE.setText("未评估")
+                self.lineEdit_R2.setText("未评估")
+                self.lineEdit_db_within_3_ratio.setText("未评估")
+
+                # 按原文件行号保存中文命名的预测列，不生成虚构真实值列。
+                self.data_save = pd.DataFrame(
+                    {f"pred_{output_columns[0]}": predicted},
+                    index=predict_data.index,
+                )
+                self.data_save.index.name = "original_index"
+                QMessageBox.information(
+                    self, "成功", "预测完成；文件无真实输出，未计算指标"
+                )
+                return
+
+            # 文件有真实输出时，继续使用原有的误差评价和绘图流程。
+            y_test = predict_data[output_columns].values
             
             # 调用评估和可视化函数
             if len(output_columns) > 1:
@@ -4277,7 +4319,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 )
             else:
                 # 单输出评估
-                from ALL_Algorithms.Algorithms import single_plot_and_evaluate
                 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
                 
                 mse = mean_squared_error(y_test, y_pred)
