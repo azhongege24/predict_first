@@ -158,7 +158,10 @@ def multi_task_regression_predictor(
 
 
 
-def ask_and_save_model(parent, model, default_name="model.pkl",input_columns=None, output_columns=None):
+def ask_and_save_model(
+    parent, model, default_name="model.pkl", input_columns=None,
+    output_columns=None, training_snapshot=None
+):
     """
     训练后询问是否保存模型，并保存到用户指定路径
     :param parent: 父窗口self
@@ -166,6 +169,7 @@ def ask_and_save_model(parent, model, default_name="model.pkl",input_columns=Non
     :param default_name: 默认保存文件名
     :param input_columns: 输入特征列名列表（可选）
     :param output_columns: 输出目标列名列表（可选）
+    :param training_snapshot: 与当前 DT 模型绑定的训练规则（可选）
     """
     reply = QMessageBox.question(
         parent,
@@ -199,13 +203,27 @@ def ask_and_save_model(parent, model, default_name="model.pkl",input_columns=Non
                     parent.lineEdit_state.setText("模型已保存")
                 
             else: 
-                # 对于scikit-learn模型，创建一个包含模型和元数据的字典
+                # 保留原有字段，旧加载路径仍可取得模型及原始列名。
                 model_data = {
                     'model': model,
-                    'input_columns': input_columns,  # 新增：保存输入特征列名
-                    'output_columns': output_columns,  # 新增：保存输出特征列名
-                    'model_type': model.__class__.__name__  # 新增：保存模型类型
+                    'input_columns': input_columns,
+                    'output_columns': output_columns,
+                    'model_type': model.__class__.__name__
                 }
+
+                if training_snapshot is not None:
+                    # 新格式额外记录模型实际读取的数值特征及其顺序。
+                    # 预处理规则包含训练中位数、类别编码器和空值标记。
+                    # 缩放器可能为 None，表示本次训练没有启用缩放。
+                    model_data.update({
+                        'format_version': 2,
+                        'task_type': training_snapshot['task_type'],
+                        'model_input_columns': training_snapshot['feature_columns'].copy(),
+                        'preprocessing_rules': training_snapshot['preprocessing_rules'],
+                        'scaler': training_snapshot['scaler'],
+                    })
+
+                # 只写模型和所需规则，不把含模型对象的整个快照重复存入。
                 joblib.dump(model_data, file_path)
                 if hasattr(parent, "lineEdit_state"):
                     parent.lineEdit_state.setText("模型已保存 " )

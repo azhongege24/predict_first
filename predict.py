@@ -3728,10 +3728,21 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             output_columns, _ = self.get_output()
             model_method = method
 
-        # 模型文件目前只保存模型和列名；完整规则的写入另行接通。
+        # 只有模型和快照属于同一次训练，才传递填补、编码和缩放规则。
+        training_snapshot = (
+            snapshot
+            if snapshot is not None and snapshot["model"] is model
+            else None
+        )
+
+        # 原始列名供界面匹配；训练快照供新模型保存完整预处理规则。
         ask_and_save_model(
-            self, model, f"{model_method}_model.pkl",
-            input_columns, output_columns
+            self,
+            model,
+            f"{model_method}_model.pkl",
+            input_columns,
+            output_columns,
+            training_snapshot=training_snapshot,
         )
          
          
