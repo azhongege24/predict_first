@@ -57,13 +57,13 @@ def prepare_numeric_regression_data(
     return train, test, input_medians, removed_output_rows
 
 
-def _category_token(value):
+def _category_token(value, missing_token="M:", value_prefix="V:"):
     """把字符串输入转换为内部类别，同时区分空值与真实文字。"""
     # 空值和只含空格的文字使用专用标记；真实文字都加另一种前缀。
     # 因此用户实际填写的“缺失”不会与空值被当成同一类别。
     if pd.isna(value) or (isinstance(value, str) and not value.strip()):
-        return "M:"
-    return "V:" + str(value)
+        return missing_token
+    return value_prefix + str(value)
 
 
 def prepare_mixed_regression_data(
@@ -212,3 +212,136 @@ def prepare_mixed_regression_data(
     }
     # 没有新类别时也返回空明细，调用方始终按相同的结构取结果。
     return train_result, test_result, rules, removed_rows, unknown_details
+
+
+def prepare_prediction_features(data, metadata):
+    """复用模型保存的填补、类别编码和缩放规则准备预测输入。"""
+    # 只有保存了完整规则的新模型才能使用这条预测输入路径。
+    # 版本不同意味着字段含义可能变化，不能猜测其处理方式。
+    if metadata.get("format_version") != 2:
+        raise ValueError("模型的预处理规则版本不受支持")
+    # 规则说明如何处理原始列；特征列表说明模型最终读取的列序。
+    rules = metadata.get("preprocessing_rules")
+    feature_columns = metadata.get("model_input_columns")
+    if not isinstance(rules, dict) or not feature_columns:
+        raise ValueError("模型缺少输入预处理规则或特征顺序")
+    # 保存文件中的两份特征顺序必须一致，避免把数值放错位置。
+    if feature_columns != rules.get("feature_columns"):
+        raise ValueError("模型保存的特征顺序不一致")
+
+    # 按训练时的原始列顺序读取输入，不依赖预测文件的列顺序。
+    # 输入被分成数值列和类别列；数值列还需要对应的填充值。
+    input_columns = rules.get("input_columns")
+    numeric_columns = rules.get("numeric_columns")
+    category_columns = rules.get("category_columns")
+    medians = rules.get("input_medians")
+    # 缺少任何一组基础规则时，无法可靠地恢复模型输入。
+    if not input_columns or numeric_columns is None or category_columns is None or not isinstance(medians, dict):
+        raise ValueError("模型保存的输入列或填补规则不完整")
+    # 每个原始输入只能出现一次，并且只能属于一种类型。
+    if len(set(input_columns)) != len(input_columns) or set(input_columns) != set(numeric_columns) | set(category_columns) or set(numeric_columns) & set(category_columns):
+        raise ValueError("模型保存的输入列类型不一致")
+    # 在读取数据之前列出缺失的原始列名，便于用户修正文件。
+    missing_columns = [name for name in input_columns if name not in data.columns]
+    if missing_columns:
+        raise ValueError("预测文件缺少模型所需输入列：" + "、".join(missing_columns))
+
+    # 数字文本按数值读取；空白和 NaN 使用训练时保存的逐列中位数。
+    numeric_values = {}
+    for name in numeric_columns:
+        # 每个数值输入都必须有训练时计算的中位数。
+        if name not in medians:
+            raise ValueError(f"模型缺少输入列“{name}”的填补值")
+        # 把空格文本和真正的 NaN 统一视为缺失，其他内容保留原值。
+        values = data[name].map(
+            lambda value: float("nan")
+            if pd.isna(value) or (isinstance(value, str) and not value.strip())
+            else value
+        )
+        try:
+            # 数字文本转为浮点数；只填当前输入列，不删除整行。
+            numeric_values[name] = pd.to_numeric(values, errors="raise").astype(float).fillna(medians[name])
+        except (TypeError, ValueError, OverflowError) as exc:
+            # 非数字文字不能悄悄转成缺失，否则会掩盖文件内容错误。
+            raise ValueError(f"输入列“{name}”包含无法转换为数值的内容") from exc
+
+    # 字符串缺失和真实文字分别使用模型保存的标记，不重新学习类别。
+    # 纯数值模型没有类别编码器，后面的类别分支会直接跳过。
+    encoder = rules.get("category_encoder")
+    encoded = None
+    if category_columns:
+        # 编码器保存的类别列数必须和原始字符串输入列数相同。
+        if encoder is None or len(encoder.categories_) != len(category_columns):
+            raise ValueError("模型保存的类别编码规则不完整")
+        # 读取训练时使用的两种标记，区分空值与实际文字。
+        missing_token = rules.get("missing_token")
+        value_prefix = rules.get("value_prefix")
+        if not missing_token or not value_prefix:
+            raise ValueError("模型缺少字符串类别标记")
+        # 保持原行索引；每个字符串值变成编码器认识的内部类别。
+        category_data = pd.DataFrame(
+            {
+                name: data[name].map(
+                    lambda value: _category_token(value, missing_token, value_prefix)
+                )
+                for name in category_columns
+            },
+            index=data.index,
+        )
+
+        # 编码器即使允许忽略新类别，也不能在预测时悄悄使用全零编码。
+        for name, known in zip(category_columns, encoder.categories_):
+            # 逐列比较本次值与训练时记录的类别集合。
+            unknown = sorted(set(category_data[name]) - set(known))
+            if unknown:
+                # 提示使用原始列名和真实文字，不暴露内部类别前缀。
+                values = "、".join(
+                    f"“{value[len(value_prefix):]}”" for value in unknown
+                )
+                raise ValueError(f"输入列“{name}”出现训练时未见过的类别：{values}")
+        # 类别全部已知后才使用保存的编码器转换，不调用 fit。
+        encoded = encoder.transform(category_data)
+    elif encoder is not None:
+        # 没有类别输入却保存了编码器，说明模型规则前后矛盾。
+        raise ValueError("模型保存的类别列和编码器不一致")
+
+    # 一个原始输入列依次对应一个数值特征或该列的全部独热编码位。
+    # 用原始行索引创建结果表，便于数值输入和类别编码逐行对齐。
+    prepared = pd.DataFrame(index=data.index)
+    # 两个位置分别跟踪模型特征列表和编码器输出数组的读取进度。
+    feature_index = 0
+    category_offset = 0
+    category_positions = {name: position for position, name in enumerate(category_columns)}
+    for name in input_columns:
+        if name in numeric_values:
+            # 数值输入占一个模型特征位；先防止损坏规则造成越界。
+            if feature_index >= len(feature_columns):
+                raise ValueError("模型保存的特征数量与输入规则不一致")
+            # 使用模型保存的内部特征名放入已填补的数值。
+            prepared[feature_columns[feature_index]] = numeric_values[name]
+            feature_index += 1
+        else:
+            # 字符串输入占多个特征位，数量等于训练时该列的类别数。
+            count = len(encoder.categories_[category_positions[name]])
+            for position in range(count):
+                # 每写入一个编码位，都检查模型特征列表是否足够长。
+                if feature_index >= len(feature_columns):
+                    raise ValueError("模型保存的特征数量与编码规则不一致")
+                # 从编码器结果中取这一列的 0/1 值，顺序与训练时一致。
+                prepared[feature_columns[feature_index]] = encoded[:, category_offset + position]
+                feature_index += 1
+            # 下一列字符串输入从编码器结果的下一个区段开始读取。
+            category_offset += count
+    # 所有输入写完后还剩下特征名，说明模型文件中的规则不匹配。
+    if feature_index != len(feature_columns):
+        raise ValueError("模型保存的特征数量与编码规则不一致")
+
+    # 缩放器只能应用训练时拟合的参数，预测数据绝不参与重新拟合。
+    # 按模型特征顺序取出二维数组，不把原始输出或无关列送给模型。
+    features = prepared[feature_columns].to_numpy(dtype=float)
+    scaler = metadata.get("scaler")
+    if scaler is not None:
+        # 使用保存的均值和方差；这里不能重新调用 fit_transform。
+        features = scaler.transform(features)
+    # 返回每行对应一个样本、每列对应一个训练特征的数值数组。
+    return features

@@ -10,6 +10,7 @@ from data_column_scan import read_utf8_csv, scan_dataframe_columns
 from training_preprocess import (
     prepare_numeric_regression_data,
     prepare_mixed_regression_data,
+    prepare_prediction_features,
 )
 from PyQt5.QtWidgets import QApplication, QMainWindow,QProgressDialog, QPushButton,QMessageBox, QFileDialog, QGraphicsScene, QGraphicsView, QWidget, QCheckBox, QListWidgetItem
 from PyQt5.QtCore import Qt, QSettings, QTimer, QSize
@@ -4188,16 +4189,27 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         try:
             self.start_time = time.time()
 
-            # 为本次预测截取选定的行，并沿用当前预测流程的 -1 缺失值填补规则。
-            predict_data = self.predict_data.iloc[predict_start:predict_end].fillna(-1)
-            X_2d = predict_data[input_columns].values  # 基础2D输入 (样本×特征)
+            # 只截取用户选定的行，并保留其中的原始 NaN 和中文值。
+            # 新模型要按训练时保存的规则分别处理各列，不能整表填成 -1。
+            predict_data = self.predict_data.iloc[predict_start:predict_end]
+            # 规则由预测弹窗在确认模型时一同传入主窗口。
+            metadata = self.loaded_model_metadata
+            if metadata is not None:
+                # 新模型按保存的列序做填补、类别编码和缩放。
+                # 返回的二维数组可直接交给模型，不再重新拟合处理器。
+                X_2d = prepare_prediction_features(predict_data, metadata)
+            else:
+                # 旧模型没有完整规则，暂时保留原先的 -1 填补行为。
+                # 在副本上填补，避免改变窗口保存的原始预测数据。
+                legacy_data = predict_data.fillna(-1)
+                X_2d = legacy_data[input_columns].values
+                if scale_features:
+                    # 此分支仅维持旧模型现有行为；新模型不会在这里拟合。
+                    scaler_X = StandardScaler()
+                    X_2d = scaler_X.fit_transform(X_2d)
+            # 真实输出的可选读取会在后续预测结果处理处接通。
             y_test = predict_data[output_columns].values  # 真实值 (样本×任务)
             n_tasks = len(output_columns)  # 任务数量
-
-            if scale_features:
-                print("启用特征缩放：对输入特征进行标准化处理")
-                scaler_X = StandardScaler()
-                X_2d = scaler_X.fit_transform(X_2d)
 
             # 根据模型类型处理输入格式并预测
             model_type = None
