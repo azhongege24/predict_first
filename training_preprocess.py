@@ -206,6 +206,9 @@ def prepare_mixed_regression_data(
         "feature_columns": feature_columns,
         "input_medians": medians,
         "category_encoder": encoder,
+        # 预测时使用相同前缀，才能区分真实文字与缺失值。
+        "missing_token": "M:",
+        "value_prefix": "V:",
     }
     # 没有新类别时也返回空明细，调用方始终按相同的结构取结果。
     return train_result, test_result, rules, removed_rows, unknown_details

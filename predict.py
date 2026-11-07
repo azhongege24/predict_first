@@ -3672,6 +3672,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.selected_model_path = None
         self.trained_model = None  # 用于存储训练好的模型
         self.last_numeric_preprocessing = None  # 最近一次成功训练的数值处理规则
+        # 将 DT 模型和训练时实际使用的列及处理规则放在同一份记录中。
+        self.dt_training_snapshot = None
 
         self.current_page = 0
         self.figures = []  # 存储所有图表的列表
@@ -3698,9 +3700,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.pushButton_bottom.clicked.connect(self.show_next_page)
         self.pushButton_help.clicked.connect(self.AL_help_para) # 打开帮助说明窗口
         self.pushButton_dataset.clicked.connect(self.AL_dataset_handle)  # 打开数据集合成处理窗口
-        self.pushButton_save_pretrained_model.clicked.connect(
-                    lambda: self.ask_and_save_model(self.trained_model, method)
-                ) # 保存预训练模型
+        # 点击时读取最近一次成功训练的模型及其对应列名。
+        self.pushButton_save_pretrained_model.clicked.connect(self.ask_and_save_model)
         # 添加跳转按钮和数值框的连接
         
         self.spinBox_jump_value.valueChanged.connect(self.jump_to_page)
@@ -3708,11 +3709,30 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.graphicsView.wheelEvent = self.graphics_view_wheel_event
 
 
-    def ask_and_save_model(self,model, method):
-        # 保存模型时使用真实列名，不读取列表中的类型和缺失数文字。
-        input_columns, _ = self.get_input()
-        output_columns, _ = self.get_output()
-        ask_and_save_model(self, model, f"{method}_model.pkl", input_columns, output_columns)
+    def ask_and_save_model(self):
+        # 没有成功训练的模型时，不打开保存文件对话框。
+        model = self.trained_model
+        if model is None:
+            QMessageBox.warning(self, "无法保存模型", "请先完成训练")
+            return
+
+        # 只有记录确实属于当前模型，才能使用训练时保存的列名。
+        snapshot = self.dt_training_snapshot
+        if snapshot is not None and snapshot["model"] is model:
+            input_columns = snapshot["input_columns"].copy()
+            output_columns = snapshot["output_columns"].copy()
+            model_method = snapshot["method"]
+        else:
+            # 尚未绑定规则的算法沿用原有的选列和命名方式。
+            input_columns, _ = self.get_input()
+            output_columns, _ = self.get_output()
+            model_method = method
+
+        # 模型文件目前只保存模型和列名；完整规则的写入另行接通。
+        ask_and_save_model(
+            self, model, f"{model_method}_model.pkl",
+            input_columns, output_columns
+        )
          
          
     #进度条相关函数   
@@ -4408,6 +4428,18 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     )
                 )
                 model_input_columns = input_columns
+                # 纯数值训练也记录模型实际读取的列序和填补规则。
+                preprocessing_rules = {
+                    "input_columns": input_columns.copy(),
+                    "output_columns": output_columns.copy(),
+                    "numeric_columns": input_columns.copy(),
+                    "category_columns": [],
+                    "feature_columns": input_columns.copy(),
+                    "input_medians": input_medians.copy(),
+                    "category_encoder": None,
+                    "missing_token": None,
+                    "value_prefix": None,
+                }
                 # 没有字符串输入时，不会出现未知字符串类别。
                 unknown_details = {"by_column": {}, "affected_rows": 0}
         except ValueError as exc:
@@ -4547,10 +4579,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         
         if method == 'DT':
             self.lineEdit_DEVICE.setText("CPU")
-            self.new_model = 1
             self.set_progress_value(50)
+            # 接住训练集拟合的缩放器；预测时须复用同一个对象。
             # 输入列已按所选类型准备好；字符串输入使用编码后的列名。
-            model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
+            model, fitted_scaler, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
                 model_input_columns,
@@ -4561,7 +4593,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 max_depth=int(max_depth),
             )
             self.set_progress_value(80)
-            self.trained_model = model  # 保存训练好的模型
             
 
             # `model` 是训练好的模型，`y_pred` 是预测结果
@@ -5057,6 +5088,22 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         }
         self.set_progress_value(100)
         self.stop_progress_indicator()      
+        if method == 'DT':
+            # 训练和结果展示均完成后，固定本次使用的原始列和预处理规则。
+            snapshot = {
+                "model": model,
+                "method": "DT",
+                "task_type": "regression",
+                "input_columns": input_columns.copy(),
+                "output_columns": output_columns.copy(),
+                "feature_columns": model_input_columns.copy(),
+                "preprocessing_rules": preprocessing_rules,
+                "scaler": fitted_scaler,
+            }
+            # 模型与快照一起更新，失败的训练不会覆盖上一次成功结果。
+            self.dt_training_snapshot = snapshot
+            self.trained_model = model
+            self.new_model = 1
     
 
     def _checked_column_names(self, list_widget):
