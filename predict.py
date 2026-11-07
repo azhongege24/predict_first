@@ -12,6 +12,8 @@ from training_preprocess import (
     prepare_mixed_regression_data,
     prepare_prediction_features,
 )
+# 真实输出只有部分行有值时，只用这些行计算回归指标。
+from regression_evaluation import evaluate_regression
 from PyQt5.QtWidgets import QApplication, QMainWindow,QProgressDialog, QPushButton,QMessageBox, QFileDialog, QGraphicsScene, QGraphicsView, QWidget, QCheckBox, QListWidgetItem
 from PyQt5.QtCore import Qt, QSettings, QTimer, QSize
 from PyQt5.QtGui import QPixmap
@@ -4318,19 +4320,48 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     total_db_deviation_per_feature=[0.0]*len(output_columns)
                 )
             else:
-                # 单输出评估
-                from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-                
-                mse = mean_squared_error(y_test, y_pred)
-                rmse = np.sqrt(mse)
-                mae = mean_absolute_error(y_test, y_pred)
-                r2 = r2_score(y_test, y_pred)
-                
-                self.data_save = single_plot_and_evaluate(
-                    self, y_test.flatten(), y_pred.flatten(), "LoadedModel", 
-                    predict_data, output_columns, 0, len(y_test),
-                    mse, rmse, mae, r2, 0.0, 0.0
+                # 单输出真实值可以部分缺失；先按数值读取，不删除任何预测行。
+                actual = pd.to_numeric(
+                    predict_data[output_columns[0]], errors="raise"
+                ).to_numpy(dtype=float)
+                predicted = np.asarray(y_pred, dtype=float).reshape(-1)
+                # 每个预测值都必须对应原文件的一行，才能正确绘图和导出。
+                if len(predicted) != len(actual):
+                    raise ValueError("模型返回的预测行数与输入行数不一致")
+
+                # 已有评价函数只使用真实值有效的行，并返回实际评价行数。
+                metrics = evaluate_regression(actual, predicted)
+                valid_count = metrics["valid_counts"][0]
+                # 图中显示全部预测点；真实值和误差连线只画有效行。
+                single_plot_and_evaluate(
+                    self, actual, predicted, "LoadedModel",
+                    predict_data, output_columns, 0, len(predicted),
+                    metrics["MSE"], metrics["RMSE"], metrics["MAE"],
+                    metrics["R2"], metrics["db_within_3_ratio"],
+                    metrics["total_db_deviation"],
                 )
+
+                # 输出列虽存在但全为空时，明确说明本次只完成了预测。
+                if valid_count == 0:
+                    self.lineEdit_state.setText(
+                        f"已预测 {len(predicted)} 行；真实输出均缺失，未评估"
+                    )
+                    self.lineEdit_MSE.setText("未评估")
+                    self.lineEdit_RMSE.setText("未评估")
+                    self.lineEdit_MAE.setText("未评估")
+                    self.lineEdit_R2.setText("未评估")
+                    self.lineEdit_db_within_3_ratio.setText("未评估")
+
+                # 导出全部行的真实值和预测值，并注明指标使用的行数。
+                self.data_save = pd.DataFrame(
+                    {
+                        f"true_{output_columns[0]}": actual,
+                        f"pred_{output_columns[0]}": predicted,
+                        "valid_true_count": valid_count,
+                    },
+                    index=predict_data.index,
+                )
+                self.data_save.index.name = "original_index"
                 
             QMessageBox.information(self, "成功", "使用预训练模型预测完成")
             
