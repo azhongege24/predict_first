@@ -69,7 +69,7 @@ def _category_token(value):
 def prepare_mixed_regression_data(
     data_train, data_test, input_columns, output_columns, types_by_name
 ):
-    """按训练集学习数值填补和字符串编码，返回模型数据及规则。"""
+    """按训练集学习填补和编码，返回模型数据、规则及未知类别明细。"""
     input_columns = list(input_columns)
     output_columns = list(output_columns)
 
@@ -107,21 +107,46 @@ def prepare_mixed_regression_data(
         sorted(set(train_categories[name]) | {"M:"})
         for name in category_columns
     ]
+    # 训练时学到的类别表已经固定，测试数据不会参与拟合。
+    # 测试集若出现新类别，编码器会给该字段的已知类别位全部填 0。
+    # 这里不能使用 error，否则在弹窗询问用户之前就会中断。
+    # 使用 sparse 以兼容项目当前的 scikit-learn 1.0.2。
     encoder = OneHotEncoder(
-        categories=categories, sparse=False, handle_unknown="error"
+        categories=categories, sparse=False, handle_unknown="ignore"
     )
     encoder.fit(train_categories)
 
-    # 空值的专用标记已预留；其他训练时未见过的类别不能随意编码。
-    # 提示使用文件中的原始列名和值，供界面在下一步直接展示。
+    # 单独收集新类别，不能因为编码器允许继续就略过对用户的提醒。
+    # by_column 使用原始列名，便于界面直接指出是哪一列有问题。
+    unknown_categories = {}
+    # 同一测试行可能在多个输入列都含新类别，受影响总行数只算一次。
+    unknown_rows = pd.Series(False, index=test_categories.index)
     for name, known in zip(category_columns, encoder.categories_):
-        unknown = sorted(set(test_categories[name]) - set(known))
-        if unknown:
-            values = "、".join(token[2:] for token in unknown)
-            raise ValueError(
-                f"输入列“{name}”出现训练时未见过的类别：{values}"
-            )
+        # 已知类别只来自有效训练行，外加预留的空值类别。
+        known_tokens = set(known)
+        # 统计测试段每个类别出现的次数，以供弹窗显示具体影响。
+        counts = test_categories[name].value_counts()
+        unseen_tokens = [
+            token for token in counts.index if token not in known_tokens
+        ]
+        if not unseen_tokens:
+            continue
 
+        # 去掉内部前缀，只把文件中的真实类别文字交给界面。
+        # 真正的空值使用已预留的 M:，不会进入未知类别列表。
+        unknown_categories[name] = {
+            token[2:]: int(counts[token]) for token in unseen_tokens
+        }
+        # 把本列受影响的行合并到总行掩码，不重复计算同一行。
+        unknown_rows |= test_categories[name].isin(unseen_tokens)
+
+    # 预处理只报告发现了什么；是否继续由训练入口的弹窗决定。
+    unknown_details = {
+        "by_column": unknown_categories,
+        "affected_rows": int(unknown_rows.sum()),
+    }
+
+    # 训练和测试都使用同一个编码器，内部特征数量与顺序相同。
     encoded_train = encoder.transform(train_categories)
     encoded_test = encoder.transform(test_categories)
 
@@ -144,7 +169,6 @@ def prepare_mixed_regression_data(
         category_offsets[name] = (offset, len(known))
         offset += len(known)
 
-    # 为修改后的列重命名
     for position, name in enumerate(input_columns):
         if name in numeric_columns:
             feature_name = f"{prefix}{position}_numeric"
@@ -183,4 +207,5 @@ def prepare_mixed_regression_data(
         "input_medians": medians,
         "category_encoder": encoder,
     }
-    return train_result, test_result, rules, removed_rows
+    # 没有新类别时也返回空明细，调用方始终按相同的结构取结果。
+    return train_result, test_result, rules, removed_rows, unknown_details
