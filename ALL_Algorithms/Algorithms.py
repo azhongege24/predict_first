@@ -169,7 +169,7 @@ def ask_and_save_model(
     :param default_name: 默认保存文件名
     :param input_columns: 输入特征列名列表（可选）
     :param output_columns: 输出目标列名列表（可选）
-    :param training_snapshot: 与当前 DT 模型绑定的训练规则（可选）
+    :param training_snapshot: 与当前模型绑定的训练规则（可选）
     """
     reply = QMessageBox.question(
         parent,
@@ -179,26 +179,41 @@ def ask_and_save_model(
         QMessageBox.No
     )
     if reply == QMessageBox.Yes:
+        # MMoE 保存为 PyTorch 检查点；其他模型沿用 joblib 文件。
+        is_mmoe = isinstance(model, MMoERegressor)
+        file_filter = "模型文件 (*.pt);;所有文件 (*)" if is_mmoe else "模型文件 (*.pkl *.joblib);;所有文件 (*)"
         file_path, _ = QFileDialog.getSaveFileName(
             parent,
             "保存模型文件",
             f"./trained_models/{default_name}",
-            "模型文件 (*.pkl *.joblib);;所有文件 (*)"
+            file_filter
         )
         if file_path:
-            if hasattr(model,'__class__') and model.__class__.__name__ == 'MMoERegressor':
-                # 保存pytorch模型
-                torch.save({
+            if is_mmoe:
+                # 检查点同时保存网络结构参数与内部缩放器，以便重新构造模型。
+                checkpoint = {
                     'model_state_dict': model.model.state_dict(),
                     'scaler': model.scaler,
-                    'input_dim' :model.input_dim,
+                    'input_dim': model.input_dim,
                     'output_dim': model.output_dim,
                     'num_experts': model.num_experts,
                     'expert_hidden': model.expert_hidden,
+                    'dropout_rate': model.dropout_rate,
                     'loss_history': model.loss_history,
                     'input_columns': input_columns,
-                    'output_columns': output_columns
-                },file_path.replace('.pkl','.pt'))
+                    'output_columns': output_columns,
+                }
+                # 预测所需的原始列、编码列及外部缩放规则与权重一起保存。
+                if training_snapshot is not None:
+                    checkpoint.update({
+                        'format_version': 2,
+                        'task_type': training_snapshot['task_type'],
+                        'model_input_columns': training_snapshot['feature_columns'].copy(),
+                        'preprocessing_rules': training_snapshot['preprocessing_rules'],
+                        'input_scaler': training_snapshot['scaler'],
+                    })
+                save_path = os.path.splitext(file_path)[0] + '.pt'
+                torch.save(checkpoint, save_path)
                 if hasattr(parent, "lineEdit_state"):
                     parent.lineEdit_state.setText("模型已保存")
                 
@@ -311,21 +326,46 @@ def load_model(model_path, model_type=None, include_metadata=False):
                     return model, input_columns, output_columns, None
                 return model, input_columns, output_columns
 
-            # 加载MMoE模型
-            elif model_type == 'MMoE':
+            # 未指定类型时，根据网络检查点字段识别 MMoE。
+            elif model_type == 'MMoE' or (
+                model_type is None and 'num_experts' in checkpoint
+                and 'model_state_dict' in checkpoint
+            ):
                 model = MMoERegressor(
                     input_dim=checkpoint['input_dim'],
                     output_dim=checkpoint['output_dim'],
                     num_experts=checkpoint['num_experts'],
-                    expert_hidden=checkpoint['expert_hidden']
+                    expert_hidden=checkpoint['expert_hidden'],
+                    dropout_rate=checkpoint.get('dropout_rate', 0.1),
+                    device='cpu',
+                )
+                # 构造与训练时相同的网络结构，之后才能加载权重。
+                model.model = MMoE(
+                    input_dim=model.input_dim,
+                    output_dim=model.output_dim,
+                    num_experts=model.num_experts,
+                    num_tasks=model.output_dim,
+                    expert_hidden=model.expert_hidden,
+                    dropout_rate=model.dropout_rate,
                 )
                 model.model.load_state_dict(checkpoint['model_state_dict'])
                 model.scaler = checkpoint.get('scaler')
                 model.loss_history = checkpoint.get('loss_history', [])
+                input_columns = checkpoint.get('input_columns')
+                output_columns = checkpoint.get('output_columns')
+                # 新模型将外部预处理规则返回给预测窗口；旧检查点仍无规则。
+                metadata = None
+                if 'format_version' in checkpoint:
+                    metadata = {
+                        'format_version': checkpoint.get('format_version'),
+                        'task_type': checkpoint.get('task_type'),
+                        'model_input_columns': checkpoint.get('model_input_columns'),
+                        'preprocessing_rules': checkpoint.get('preprocessing_rules'),
+                        'scaler': checkpoint.get('input_scaler'),
+                    }
                 print("成功加载MMoE模型")
-                # MMoE 原先只返回模型；请求完整信息时补齐空列名和规则。
                 if include_metadata:
-                    return model, None, None, None
+                    return model, input_columns, output_columns, metadata
                 return model
         
         raise ValueError(f"不支持的模型类型: {model_type}")

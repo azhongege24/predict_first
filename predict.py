@@ -3722,10 +3722,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         # 只保存已在预测弹窗确认的模型规则，旧模型对应 None。
         self.loaded_model_metadata = None
         self.last_numeric_preprocessing = None  # 最近一次成功训练的数值处理规则
-        # 将 DT 模型和训练时实际使用的列及处理规则放在同一份记录中。
-        self.dt_training_snapshot = None
-        # 记录尚未绑定保存规则的中文输入模型，避免将其保存为无法正确预测的文件。
-        self.mixed_model_without_saved_rules = None
+        # 将最近一次成功训练的模型与实际选列、处理规则和缩放器绑定。
+        self.training_snapshot = None
 
         self.current_page = 0
         self.figures = []  # 存储所有图表的列表
@@ -3768,42 +3766,24 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             QMessageBox.warning(self, "无法保存模型", "请先完成训练")
             return
 
-        # 中文输入模型需要随文件保存类别编码等规则；规则未绑定时阻止保存。
-        if self.mixed_model_without_saved_rules is model:
-            QMessageBox.warning(
-                self,
-                "无法保存模型",
-                "当前模型的中文输入处理规则尚未包含在保存文件中，暂不能保存。",
-            )
+        # 只使用属于当前模型的训练记录，避免训练后改选列造成错配。
+        snapshot = self.training_snapshot
+        if snapshot is None or snapshot["model"] is not model:
+            QMessageBox.warning(self, "无法保存模型", "当前模型缺少完整的训练记录")
             return
 
-        # 只有记录确实属于当前模型，才能使用训练时保存的列名。
-        snapshot = self.dt_training_snapshot
-        if snapshot is not None and snapshot["model"] is model:
-            input_columns = snapshot["input_columns"].copy()
-            output_columns = snapshot["output_columns"].copy()
-            model_method = snapshot["method"]
-        else:
-            # 尚未绑定规则的算法沿用原有的选列和命名方式。
-            input_columns, _ = self.get_input()
-            output_columns, _ = self.get_output()
-            model_method = method
-
-        # 只有模型和快照属于同一次训练，才传递填补、编码和缩放规则。
-        training_snapshot = (
-            snapshot
-            if snapshot is not None and snapshot["model"] is model
-            else None
-        )
+        input_columns = snapshot["input_columns"].copy()
+        output_columns = snapshot["output_columns"].copy()
+        model_method = snapshot["method"]
 
         # 原始列名供界面匹配；训练快照供新模型保存完整预处理规则。
         ask_and_save_model(
             self,
             model,
-            f"{model_method}_model.pkl",
+            f"{model_method}_model.{'pt' if model_method == 'MMoE' else 'pkl'}",
             input_columns,
             output_columns,
-            training_snapshot=training_snapshot,
+            training_snapshot=snapshot,
         )
          
          
@@ -4359,39 +4339,42 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 )
                 return
 
-            # 文件有真实输出时，继续使用原有的误差评价和绘图流程。
-            y_test = predict_data[output_columns].values
-            
-            # 调用评估和可视化函数
+            # 多输出文件可能没有真实输出，或只提供部分真实输出。
             if len(output_columns) > 1:
-                # 多输出评估
-                from ALL_Algorithms.Algorithms import Multi_output_plot_and_evaluate
-                # 计算评估指标
-                from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-                MSE_list = []
-                RMSE_list = []
-                MAE_list = []
-                R2_list = []
-                
-                for i in range(len(output_columns)):
-                    mse = mean_squared_error(y_test[:, i], y_pred[:, i])
-                    rmse = np.sqrt(mse)
-                    mae = mean_absolute_error(y_test[:, i], y_pred[:, i])
-                    r2 = r2_score(y_test[:, i], y_pred[:, i])
-                    
-                    MSE_list.append(mse)
-                    RMSE_list.append(rmse)
-                    MAE_list.append(mae)
-                    R2_list.append(r2)
-                
-                self.data_save = Multi_output_plot_and_evaluate(
-                    self, y_test, y_pred, "LoadedModel", predict_data, 
-                    output_columns, 0, len(y_test),
-                    MSE_list=MSE_list, RMSE_list=RMSE_list, 
-                    MAE_list=MAE_list, R2_list=R2_list,
-                    db_within_3_ratio_list=[0.0]*len(output_columns),
-                    total_db_deviation_per_feature=[0.0]*len(output_columns)
+                # 每列只读取文件实际提供的真实值；缺列用空值参与逐列评价。
+                predicted = np.asarray(y_pred, dtype=float).reshape(len(predict_data), -1)
+                if predicted.shape[1] != len(output_columns):
+                    raise ValueError("模型返回的预测列数与输出列数不一致")
+                actual = np.column_stack([
+                    pd.to_numeric(predict_data[name], errors="raise").to_numpy(dtype=float)
+                    if name in predict_data.columns else np.full(len(predict_data), np.nan)
+                    for name in output_columns
+                ])
+                metrics = evaluate_regression(actual, predicted)
+                Multi_output_plot_and_evaluate(
+                    self, actual, predicted, "LoadedModel", predict_data,
+                    output_columns, 0, len(predicted),
+                    MSE_list=metrics["MSE_list"], RMSE_list=metrics["RMSE_list"],
+                    MAE_list=metrics["MAE_list"], R2_list=metrics["R2_list"],
+                    db_within_3_ratio_list=metrics["db_within_3_ratio_list"],
+                    total_db_deviation_per_feature=metrics["total_db_deviation_per_feature"],
                 )
+
+                # 导出全部预测行，只为文件确实包含的输出列保留真实值。
+                exported = {}
+                for index, name in enumerate(output_columns):
+                    if name in predict_data.columns:
+                        exported[f"true_{name}"] = actual[:, index]
+                    exported[f"pred_{name}"] = predicted[:, index]
+                    exported[f"valid_true_count_{name}"] = metrics["valid_counts"][index]
+                self.data_save = pd.DataFrame(exported, index=predict_data.index)
+                self.data_save.index.name = "original_index"
+                if not any(metrics["valid_counts"]):
+                    self.lineEdit_state.setText(f"仅预测 {len(predicted)} 行；无真实输出，未评估")
+                    for field in (self.lineEdit_MSE, self.lineEdit_RMSE,
+                                  self.lineEdit_MAE, self.lineEdit_R2,
+                                  self.lineEdit_db_within_3_ratio):
+                        field.setText("未评估")
             else:
                 # 单输出真实值可以部分缺失；先按数值读取，不删除任何预测行。
                 actual = pd.to_numeric(
@@ -4695,7 +4678,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             
             self.set_progress_value(50)
             
-            model, _, y_test, y_pred, metrics = multi_task_regression_predictor(
+            model, fitted_scaler, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
                 model_input_columns,  # 按预处理生成的数值列训练模型。
@@ -4796,7 +4779,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             self.lineEdit_DEVICE.setText("CPU")
             self.new_model = 1
             self.set_progress_value(50)
-            model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
+            model, fitted_scaler, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
                 model_input_columns,  # 按预处理生成的数值列训练模型。
@@ -4846,7 +4829,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             self.lineEdit_DEVICE.setText("CPU")
             self.new_model = 1
             self.set_progress_value(50)
-            model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
+            model, fitted_scaler, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
                 model_input_columns,  # 按预处理生成的数值列训练模型。
@@ -4899,7 +4882,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             self.lineEdit_DEVICE.setText("CPU")
             self.new_model = 1
             self.set_progress_value(50)
-            model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
+            model, fitted_scaler, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
                 model_input_columns,  # 按预处理生成的数值列训练模型。
@@ -4949,7 +4932,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             self.lineEdit_DEVICE.setText("CPU")
             self.new_model = 1
             self.set_progress_value(50)
-            model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
+            model, fitted_scaler, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
                 model_input_columns,  # 按预处理生成的数值列训练模型。
@@ -5001,7 +4984,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             self.lineEdit_DEVICE.setText(f"{self.device if hasattr(self, 'device') else ('GPU' if torch.cuda.is_available() else 'CPU')}")
             self.new_model = 1
             self.set_progress_value(50)
-            model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
+            model, fitted_scaler, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
                 model_input_columns,  # 按预处理生成的数值列训练模型。
@@ -5186,7 +5169,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             self.lineEdit_DEVICE.setText("GPU" if torch.cuda.is_available() else "CPU")
             self.new_model = 1
             
-            model, mmoe_scale_features, y_test, y_pred, metrics = multi_task_regression_predictor(
+            model, fitted_scaler, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
                 model_input_columns,  # 输入维度与编码后的特征数量一致。
@@ -5248,27 +5231,26 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         }
         self.set_progress_value(100)
         self.stop_progress_indicator()      
-        # 保存入口据此识别尚未绑定类别编码规则的模型。
-        # 纯数值训练及已保存规则的决策树模型不受此限制。
-        self.mixed_model_without_saved_rules = (
-            model if string_inputs and method != 'DT' else None
-        )
-        if method == 'DT':
-            # 训练和结果展示均完成后，固定本次使用的原始列和预处理规则。
-            snapshot = {
-                "model": model,
-                "method": "DT",
-                "task_type": "regression",
-                "input_columns": input_columns.copy(),
-                "output_columns": output_columns.copy(),
-                "feature_columns": model_input_columns.copy(),
-                "preprocessing_rules": preprocessing_rules,
-                "scaler": fitted_scaler,
-            }
-            # 模型与快照一起更新，失败的训练不会覆盖上一次成功结果。
-            self.dt_training_snapshot = snapshot
-            self.trained_model = model
-            self.new_model = 1
+        # GL 在算法函数中缩放；其他算法使用共用函数返回的外部缩放器。
+        if method == 'GL':
+            fitted_scaler = model.input_scaler_
+        elif method in ('MTW', 'REMTW'):
+            fitted_scaler = None
+
+        # 所有算法都保存模型实际读取的特征顺序及原始界面列名。
+        # 成功展示结果后才替换快照，避免失败训练覆盖上一次记录。
+        self.training_snapshot = {
+            "model": model,
+            "method": method,
+            "task_type": "regression",
+            "input_columns": input_columns.copy(),
+            "output_columns": output_columns.copy(),
+            "feature_columns": model_input_columns.copy(),
+            "preprocessing_rules": preprocessing_rules,
+            "scaler": fitted_scaler,
+        }
+        self.trained_model = model
+        self.new_model = 1
     
 
     def _checked_column_names(self, list_widget):

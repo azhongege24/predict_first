@@ -128,6 +128,9 @@ def group_lasso_predictor(
 
     grouplasso.fit(X_train_3d, y_train_3d)
 
+    # 预测时需要先使用训练集拟合的同一缩放器，再构造三维输入。
+    grouplasso.input_scaler_ = scaler_X if scale else None
+
     if show_prints:
         print("\n训练完成!")
         print("共享系数矩阵维度:", grouplasso.coef_shared_.shape)
