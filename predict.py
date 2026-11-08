@@ -63,6 +63,7 @@ from ALL_Algorithms.Other import Ui_Other
 from ALL_Algorithms.OtherLogic import POP_Other_para
 from PyQt5.QtCore import pyqtSlot
 from ALL_Algorithms.Algorithms import multi_task_regression_predictor
+from ALL_Algorithms.Algorithms import svm_parallel_context
 from ALL_Algorithms.Algorithms import ask_and_save_model
 from ALL_Algorithms.Algorithms import single_plot_and_evaluate
 from ALL_Algorithms.Algorithms import Multi_output_plot_and_evaluate
@@ -4313,7 +4314,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             else:
                 model_type = "Normal"
                 if hasattr(model, 'predict'):
-                    y_pred = model.predict(X_2d)
+                    # 加载的 SVM 模型也使用训练时的线程并行方式。
+                    with svm_parallel_context(model):
+                        y_pred = model.predict(X_2d)
                 else:
                     raise ValueError("加载的模型不支持predict方法")
 

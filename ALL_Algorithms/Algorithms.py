@@ -1,5 +1,6 @@
 import os
 import time
+from contextlib import nullcontext
 import numpy as np
 import pandas as pd
 import torch
@@ -24,8 +25,17 @@ from sklearn.linear_model import LinearRegression, Ridge, Lasso
 from tqdm import tqdm
 import shutil
 import joblib
+from joblib import parallel_backend
 from ALL_Algorithms.Gassu_process import MultitaskGPRegressor,MultitaskGPModel
 import gpytorch
+
+
+def svm_parallel_context(model):
+    """让多输出 SVM 在训练和预测时使用相同的线程并行方式。"""
+    # 只有多输出 SVR 使用线程后端；其他算法保持原有的并行行为。
+    if isinstance(model, MultiOutputRegressor) and isinstance(model.estimator, SVR):
+        return parallel_backend("threading")
+    return nullcontext()
 
 
 
@@ -138,14 +148,18 @@ def multi_task_regression_predictor(
             pbar.update(mmoe_epochs)
     else:
         with tqdm(total=1, desc="训练进度", unit="step") as pbar:
-            model.fit(X_train, y_train)
+            # SVM 按 n_jobs 并行拟合各输出，线程不会重新启动打包程序。
+            with svm_parallel_context(model):
+                model.fit(X_train, y_train)
             pbar.update(1)
     
     # 预测逻辑保持不变...
     if model_type == 'MMoE':
         y_pred = model.predict(X_test)
     else:
-        y_pred = model.predict(X_test)  
+        # 训练后的验模预测沿用与拟合相同的并行方式。
+        with svm_parallel_context(model):
+            y_pred = model.predict(X_test)
     
    
     if y_test.ndim == 1:
