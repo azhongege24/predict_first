@@ -12,7 +12,8 @@ def select_pretrained_model_path(parent):
         parent,
         "选择预训练模型文件",
         "./trained_models",  # 默认打开的文件夹
-        "模型文件 (*.pkl *.joblib);;所有文件 (*)"
+        # 同时显示普通模型和 PyTorch 模型，用户可直接选择对应文件。
+        "模型文件 (*.pkl *.joblib *.pt);;所有文件 (*)"
     )
     if file_path:
         parent.selected_model_path = file_path
