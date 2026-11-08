@@ -1,3 +1,12 @@
+import os
+import sys
+
+# Matplotlib 的默认打包钩子会把字体缓存放进临时目录；启动前改用 EXE 旁的可写目录。
+if getattr(sys, "frozen", False):
+    matplotlib_cache = os.path.join(os.path.dirname(sys.executable), "cache", "matplotlib")
+    os.makedirs(matplotlib_cache, exist_ok=True)
+    os.environ["MPLCONFIGDIR"] = matplotlib_cache
+
 import subprocess
 import time
 import json
@@ -21,6 +30,15 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import sys
 import os
+
+
+def application_dir():
+    # 打包后从可执行文件旁读取可持久保存的配置和说明文件。
+    if getattr(sys, "frozen", False):
+        return os.path.dirname(sys.executable)
+    # 源码运行时沿用项目代码所在目录。
+    return os.path.dirname(os.path.abspath(__file__))
+
 import scipy.io as sio
 import torch
 import joblib
@@ -2319,7 +2337,7 @@ class POP_SVM_para(QMainWindow, Ui_SVM_para, Ui_MainWindow):
         self.parent_window = parent#保存主窗口的引用
 
         # 参数记忆功能初始化
-        self.config_dir = os.path.join(os.path.dirname(__file__), "config")
+        self.config_dir = os.path.join(application_dir(), "config")
         self.config_path = os.path.join(self.config_dir, "svm_params.json")
         
         # 连接保存参数按钮
@@ -2469,7 +2487,7 @@ class POP_MLP_para(QMainWindow, Ui_MLP_para, Ui_MainWindow):
         self.parent_window = parent#保存主窗口的引用
 
         # 参数记忆功能初始化
-        self.config_dir = os.path.join(os.path.dirname(__file__), "config")
+        self.config_dir = os.path.join(application_dir(), "config")
         self.config_path = os.path.join(self.config_dir, "mlp_params.json")
         
         # 连接保存参数按钮
@@ -2630,7 +2648,7 @@ class POP_ET_para(QMainWindow, Ui_ET_para, Ui_MainWindow):
         self.parent_window = parent#保存主窗口的引用
 
         # 参数记忆功能初始化
-        self.config_dir = os.path.join(os.path.dirname(__file__), "config")
+        self.config_dir = os.path.join(application_dir(), "config")
         self.config_path = os.path.join(self.config_dir, "et_params.json")
         
         # 连接保存参数按钮
@@ -2776,7 +2794,7 @@ class POP_GL_para(QMainWindow, Ui_GL_para, Ui_MainWindow):
         self.setupUi(self)
         self.parent_window = parent#保存主窗口的引用
         # 参数记忆功能初始化
-        self.config_dir = os.path.join(os.path.dirname(__file__), "config")
+        self.config_dir = os.path.join(application_dir(), "config")
         self.config_path = os.path.join(self.config_dir, "gl_params.json")
         # 连接保存参数按钮
         self.pushButton_save_params.clicked.connect(self.save_params)
@@ -2918,7 +2936,7 @@ class POP_MTW_para(QMainWindow, Ui_MTW_para, Ui_MainWindow):#mtw算法改
         self.parent_window = parent#保存主窗口的引用
 
         # 参数记忆功能初始化
-        self.config_dir = os.path.join(os.path.dirname(__file__), "config")
+        self.config_dir = os.path.join(application_dir(), "config")
         self.config_path = os.path.join(self.config_dir, "mtw_params.json")
         
         # 连接保存参数按钮
@@ -3070,7 +3088,7 @@ class POP_REMTW_para(QMainWindow, Ui_REMTW_para, Ui_MainWindow):#remtw算法改
         self.parent_window = parent#保存主窗口的引用
 
         # 参数记忆功能初始化
-        self.config_dir = os.path.join(os.path.dirname(__file__), "config")
+        self.config_dir = os.path.join(application_dir(), "config")
         self.config_path = os.path.join(self.config_dir, "remtw_params.json")
         
         # 连接保存参数按钮
@@ -3221,7 +3239,7 @@ class POP_MMoE_para(QMainWindow, Ui_MMoE_para, Ui_MainWindow):
         self.parent_window = parent#保存主窗口的引用
 
         # 参数记忆功能配置
-        self.config_dir = os.path.join(os.path.dirname(__file__), 'config')
+        self.config_dir = os.path.join(application_dir(), 'config')
         
         self.config_path = os.path.join(self.config_dir, 'mmoe_params.json')
         
@@ -3408,7 +3426,7 @@ class POP_GP_para(QMainWindow, Ui_GP_para, Ui_MainWindow):
         self.parent_window = parent#保存主窗口的引用
 
         # 参数记忆功能配置
-        self.config_dir = os.path.join(os.path.dirname(__file__), 'config')
+        self.config_dir = os.path.join(application_dir(), 'config')
         os.makedirs(self.config_dir, exist_ok=True)
         self.config_path = os.path.join(self.config_dir, 'gp_params.json')
         
@@ -3536,7 +3554,7 @@ class POP_LR_para(QMainWindow, Ui_LR_para, Ui_MainWindow):
         self.setupUi(self)
         self.parent_window = parent  # 保存主窗口的引用
         # 参数记忆功能配置
-        self.config_dir = os.path.join(os.path.dirname(__file__), 'config')
+        self.config_dir = os.path.join(application_dir(), 'config')
         os.makedirs(self.config_dir, exist_ok=True)
         self.config_path = os.path.join(self.config_dir, 'lr_params.json')
         
@@ -5379,6 +5397,9 @@ import multiprocessing
 if __name__ == '__main__':
     # 解决 PyInstaller 打包后多进程（joblib/sklearn等）导致无限启动主程序进而卡死闪退的问题
     multiprocessing.freeze_support()
+    # 单文件程序会解压到临时目录；相对路径应指向 EXE 旁的附属文件夹。
+    if getattr(sys, "frozen", False):
+        os.chdir(application_dir())
     
     app = QApplication(sys.argv)  # 在 QApplication 方法中使用，创建应用程序对象
     myWin = MyMainWindow()  # 实例化 MyMainWindow 类，创建主窗口
