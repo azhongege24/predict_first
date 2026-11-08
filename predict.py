@@ -4330,10 +4330,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
                 # 按原文件行号保存中文命名的预测列，不生成虚构真实值列。
                 self.data_save = pd.DataFrame(
-                    {f"pred_{output_columns[0]}": predicted},
+                    {f"预测_{output_columns[0]}": predicted},
                     index=predict_data.index,
                 )
-                self.data_save.index.name = "original_index"
+                self.data_save.index.name = "原始行号"
                 QMessageBox.information(
                     self, "成功", "预测完成；文件无真实输出，未计算指标"
                 )
@@ -4365,10 +4365,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 for index, name in enumerate(output_columns):
                     if name in predict_data.columns:
                         exported[f"true_{name}"] = actual[:, index]
-                    exported[f"pred_{name}"] = predicted[:, index]
-                    exported[f"valid_true_count_{name}"] = metrics["valid_counts"][index]
+                    # 有效真实值数量只用于指标计算，不作为逐行结果列导出。
+                    exported[f"预测_{name}"] = predicted[:, index]
                 self.data_save = pd.DataFrame(exported, index=predict_data.index)
-                self.data_save.index.name = "original_index"
+                self.data_save.index.name = "原始行号"
                 if not any(metrics["valid_counts"]):
                     self.lineEdit_state.setText(f"仅预测 {len(predicted)} 行；无真实输出，未评估")
                     for field in (self.lineEdit_MSE, self.lineEdit_RMSE,
@@ -4408,16 +4408,15 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     self.lineEdit_R2.setText("未评估")
                     self.lineEdit_db_within_3_ratio.setText("未评估")
 
-                # 导出全部行的真实值和预测值，并注明指标使用的行数。
+                # 导出全部行的真实值和预测值；有效数量只在评价时使用。
                 self.data_save = pd.DataFrame(
                     {
                         f"true_{output_columns[0]}": actual,
-                        f"pred_{output_columns[0]}": predicted,
-                        "valid_true_count": valid_count,
+                        f"预测_{output_columns[0]}": predicted,
                     },
                     index=predict_data.index,
                 )
-                self.data_save.index.name = "original_index"
+                self.data_save.index.name = "原始行号"
                 
             QMessageBox.information(self, "成功", "使用预训练模型预测完成")
             
