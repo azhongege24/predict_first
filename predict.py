@@ -3724,6 +3724,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.last_numeric_preprocessing = None  # 最近一次成功训练的数值处理规则
         # 将 DT 模型和训练时实际使用的列及处理规则放在同一份记录中。
         self.dt_training_snapshot = None
+        # 记录尚未绑定保存规则的中文输入模型，避免将其保存为无法正确预测的文件。
+        self.mixed_model_without_saved_rules = None
 
         self.current_page = 0
         self.figures = []  # 存储所有图表的列表
@@ -3764,6 +3766,15 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         model = self.trained_model
         if model is None:
             QMessageBox.warning(self, "无法保存模型", "请先完成训练")
+            return
+
+        # 中文输入模型需要随文件保存类别编码等规则；规则未绑定时阻止保存。
+        if self.mixed_model_without_saved_rules is model:
+            QMessageBox.warning(
+                self,
+                "无法保存模型",
+                "当前模型的中文输入处理规则尚未包含在保存文件中，暂不能保存。",
+            )
             return
 
         # 只有记录确实属于当前模型，才能使用训练时保存的列名。
@@ -4474,18 +4485,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             name for name in input_columns
             if types_by_name.get(name) == "字符串"
         ]
-        # 只有 DT 会在训练前把字符串转换为数值特征。
-        # 其他算法不能直接读取原始字符串，先说明原因并停止。
-        if string_inputs and method != 'DT':
-            QMessageBox.warning(
-                self,
-                "无法开始训练",
-                "当前算法暂不支持字符串输入训练，请改选数值列："
-                + "、".join(string_inputs),
-            )
-            # 保留选列状态，用户可以调整后再次启动训练。
-            self.lineEdit_state.setText('')
-            return
 
         if self.checkBox_percentage.isChecked():
 
@@ -4699,7 +4698,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             model, _, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
-                input_columns,
+                model_input_columns,  # 按预处理生成的数值列训练模型。
                 output_columns,
                 model_type='LR',
                 scale_features=scale_features,
@@ -4800,7 +4799,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
-                input_columns,
+                model_input_columns,  # 按预处理生成的数值列训练模型。
                 output_columns,
                 model_type='RF',
                 scale_features=scale_features,
@@ -4850,7 +4849,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
-                input_columns,
+                model_input_columns,  # 按预处理生成的数值列训练模型。
                 output_columns,
                 model_type='SVM',
                 scale_features=scale_features,
@@ -4903,7 +4902,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
-                input_columns,
+                model_input_columns,  # 按预处理生成的数值列训练模型。
                 output_columns,
                 model_type='ET',
                 scale_features=scale_features,
@@ -4953,7 +4952,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
-                input_columns,
+                model_input_columns,  # 按预处理生成的数值列训练模型。
                 output_columns,
                 model_type='MLP',
                 scale_features=scale_features,
@@ -5005,7 +5004,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             model,_, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
-                input_columns,
+                model_input_columns,  # 按预处理生成的数值列训练模型。
                 output_columns,
                 model_type='GP',
                 gp_learning_rate=float(learning_rate),
@@ -5054,7 +5053,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             model, X_test, y_test, y_pred, metrics,data_index = group_lasso_predictor(
                 data_train=data_train,
                 data_test=data_test,
-                input_columns=input_columns,
+                input_columns=model_input_columns,  # 读取编码后的数值特征。
                 output_columns=output_columns,
                 alpha=float(alpha),
                 random_state=int(random_state),
@@ -5075,7 +5074,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     coef_shared=model.coef_shared_,
                     coef_specific=model.coef_specific_,
                     method="Group Lasso",
-                    input_columns=input_columns,
+                    input_columns=model_input_columns,  # 系数标签与实际特征对齐。
                     output_columns=output_columns,
                     MSE=metrics['MSE'],
                     RMSE = metrics['RMSE'],
@@ -5100,7 +5099,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             model, X_test, y_test, y_pred, metrics,data_index = MTW_Lasso(
                 data_train=data_train,
                 data_test=data_test,
-                input_columns=input_columns,
+                input_columns=model_input_columns,  # 读取编码后的数值特征。
                 output_columns=output_columns,
                 alpha=float(alpha),
                 beta=float(beta),
@@ -5120,7 +5119,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             mtw_plot_and_evaluate(self,
                     mtw_model=model,
                     method="MTW Lasso",
-                    input_columns=input_columns,
+                    input_columns=model_input_columns,  # 系数标签与实际特征对齐。
                     output_columns=output_columns,
                     MSE=metrics['MSE'],
                     RMSE = metrics['RMSE'],
@@ -5145,7 +5144,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             model, X_test, y_test, y_pred, metrics,data_index = REMTW_Lasso(
                 data_train=data_train,
                 data_test=data_test,
-                input_columns=input_columns,
+                input_columns=model_input_columns,  # 读取编码后的数值特征。
                 output_columns=output_columns,
                 alpha=float(alpha),
                 beta=float(beta),
@@ -5165,7 +5164,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             remtw_plot_and_evaluate(self,
                     remtw_model=model,
                     method="ReMTW Lasso",
-                    input_columns=input_columns,
+                    input_columns=model_input_columns,  # 系数标签与实际特征对齐。
                     output_columns=output_columns,
                     MSE=metrics['MSE'],
                     RMSE = metrics['RMSE'],
@@ -5190,7 +5189,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             model, mmoe_scale_features, y_test, y_pred, metrics = multi_task_regression_predictor(
                 data_train,
                 data_test,
-                input_columns,
+                model_input_columns,  # 输入维度与编码后的特征数量一致。
                 output_columns,
                 model_type='MMoE',
                 scale_features=False,
@@ -5249,6 +5248,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         }
         self.set_progress_value(100)
         self.stop_progress_indicator()      
+        # 保存入口据此识别尚未绑定类别编码规则的模型。
+        # 纯数值训练及已保存规则的决策树模型不受此限制。
+        self.mixed_model_without_saved_rules = (
+            model if string_inputs and method != 'DT' else None
+        )
         if method == 'DT':
             # 训练和结果展示均完成后，固定本次使用的原始列和预处理规则。
             snapshot = {

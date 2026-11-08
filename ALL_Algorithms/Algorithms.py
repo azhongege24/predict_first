@@ -457,8 +457,9 @@ def Multi_output_plot_and_evaluate(self, y_test, y_pred, method, data_test,
     if len(MSE_list) != n_outputs or len(R2_list) != n_outputs:
         raise ValueError(f"指标列表长度与输出变量数不匹配: MSE列表长度={len(MSE_list)}, 输出变量数={n_outputs}")
     
-    # 创建保存图像的目录
-    output_dir = f"MultiOutput_view/{method}_view"
+    # 图表写入当前指定的输出目录，生成的完整路径仍交给界面翻页。
+    from ALL_Algorithms.plot_output import plot_output_dir
+    output_dir = plot_output_dir(f"MultiOutput_view/{method}_view")
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     else:

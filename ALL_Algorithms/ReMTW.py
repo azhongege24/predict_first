@@ -8,6 +8,7 @@ import seaborn as sns
 from sklearn.metrics import mean_squared_error, r2_score
 from mutar import ReMTW
 from matplotlib import rcParams
+from ALL_Algorithms.plot_output import plot_output_dir
 
 rcParams['font.sans-serif'] = ['SimHei']
 rcParams['axes.unicode_minus'] = False
@@ -56,8 +57,8 @@ def remtw_plot_and_evaluate(self, remtw_model, method, input_columns, output_col
     self.end_time = time.time()
     print(f"运行时间: {self.end_time - self.start_time:.2f} 秒")
 
-    # 创建保存图像的目录
-    output_dir = "ReMTW_view"
+    # 将本次图表放进指定输出根目录下的 ReMTW 子目录。
+    output_dir = plot_output_dir("ReMTW_view")
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     else:

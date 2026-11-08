@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 import seaborn as sns
 from ALL_Algorithms.Algorithms import Multi_output_plot_and_evaluate
+from ALL_Algorithms.plot_output import plot_output_dir
 
 # 设置中文显示 matplotlib
 rcParams['font.sans-serif'] = ['SimHei']
@@ -109,11 +110,15 @@ def group_lasso_predictor(
         print(f"任务数量: {n_tasks}")
         print("=" * 50)
 
+    # 有些编码列在训练集中全为零，中心化后仍没有可计算的列范数。
+    # 此时关闭模型内部的列归一化，避免除以零污染全部系数。
+    has_constant_feature = np.any(np.ptp(X_train, axis=0) == 0)
+
     # 2. 模型训练
     grouplasso = GroupLasso(
         alpha=alpha,
         fit_intercept=True,
-        normalize=True,
+        normalize=not has_constant_feature,
         max_iter=max_iter,
         tol=tol
     )
@@ -189,8 +194,8 @@ def group_lasso_plot_and_evaluate(self, coef_shared, coef_specific, method, inpu
     self.end_time = time.time()
     print(f"运行时间: {self.end_time - self.start_time:.2f} 秒")
 
-    # 创建保存图像的目录
-    output_dir = "GL_view"
+    # 将本次图表放进指定输出根目录下的 GL 子目录。
+    output_dir = plot_output_dir("GL_view")
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     else:
