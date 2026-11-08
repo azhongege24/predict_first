@@ -5,40 +5,49 @@ import csv
 import pandas as pd
 
 
-def read_utf8_csv(file_path):
-    """读取 UTF-8 CSV，并在重复列名被自动改名之前报错。"""
-    try:
-        # 先读取原始表头；utf-8-sig 兼容普通 UTF-8 和带 BOM 的 UTF-8。
-        with open(file_path, "r", encoding="utf-8-sig", newline="") as source:
-            header = next((row for row in csv.reader(source) if row), None)
+def read_csv_with_fallback(file_path):
+    """优先读取 UTF-8 CSV，解码失败时尝试 GB18030。"""
+    last_decode_error = None
 
-        if header is None:
-            raise ValueError("CSV 文件没有表头")
+    # utf-8-sig 同时读取普通 UTF-8 和带 BOM 的 UTF-8；GB18030 兼容 GBK。
+    for encoding in ("utf-8-sig", "gb18030"):
+        try:
+            # 表头和数据使用同一种编码，避免列名与数据内容解释不一致。
+            with open(file_path, "r", encoding=encoding, newline="") as source:
+                header = next((row for row in csv.reader(source) if row), None)
 
-        # 在读取数据前检查原始表头，避免重复列名被自动重命名。
-        seen = set()
-        repeated = []
-        for name in header:
-            if name in seen and name not in repeated:
-                repeated.append(name)
-            seen.add(name)
+            if header is None:
+                raise ValueError("CSV 文件没有表头")
 
-        if repeated:
-            raise ValueError(f"CSV 表头存在重复列名：{', '.join(repeated)}")
+            # 先检查原始表头，避免 pandas 将重复列名自动改写。
+            seen = set()
+            repeated = []
+            for name in header:
+                if name in seen and name not in repeated:
+                    repeated.append(name)
+                seen.add(name)
 
-        data = pd.read_csv(file_path, encoding="utf-8-sig")
+            if repeated:
+                raise ValueError(f"CSV 表头存在重复列名：{', '.join(repeated)}")
 
-    except UnicodeError as exc:
-        raise ValueError(
-            f"CSV 解码失败：{file_path}；请使用 UTF-8 编码。原因：{exc}"
-        ) from exc
-    except pd.errors.ParserError as exc:
-        raise ValueError(f"CSV 格式错误：{file_path}；原因：{exc}") from exc
+            data = pd.read_csv(file_path, encoding=encoding)
+        except UnicodeDecodeError as exc:
+            # 只有解码失败才尝试下一种编码；文件结构错误应直接提示用户。
+            last_decode_error = exc
+            continue
+        except pd.errors.ParserError as exc:
+            raise ValueError(f"CSV 格式错误：{file_path}；原因：{exc}") from exc
 
-    if len(data) == 0:
-        raise ValueError("CSV 文件只有表头，没有数据行")
+        if len(data) == 0:
+            raise ValueError("CSV 文件只有表头，没有数据行")
 
-    return data
+        # 两种编码的读取结果结构相同，供训练和预测继续使用。
+        return data
+
+    raise ValueError(
+        f"CSV 解码失败：{file_path}；请使用 UTF-8、GBK 或 GB18030 编码。"
+        f"原因：{last_decode_error}"
+    ) from last_decode_error
 
 
 def scan_dataframe_columns(data):
