@@ -2593,8 +2593,8 @@ color:rgb(0, 0, 0);		/*字体颜色*/
   <connection>
    <sender>shuffle_yes_or_no</sender>
    <signal>clicked()</signal>
-   <receiver>checkBox_percentage</receiver>
-   <slot>toggle()</slot>
+   <receiver>MainWindow</receiver>
+   <slot>sync_shuffle_percentage()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>1279</x>
@@ -2603,22 +2603,6 @@ color:rgb(0, 0, 0);		/*字体颜色*/
     <hint type="destinationlabel">
      <x>1140</x>
      <y>77</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>shuffle_yes_or_no</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>change_percentage()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1320</x>
-     <y>77</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1158</x>
-     <y>34</y>
     </hint>
    </hints>
   </connection>

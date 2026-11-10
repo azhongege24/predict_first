@@ -1348,8 +1348,7 @@ class Ui_MainWindow(object):
         self.pushButton_train.clicked.connect(MainWindow.openfolder) # type: ignore
         self.pushButton_5.clicked.connect(MainWindow.AL_GP_para) # type: ignore
         self.pushButton_otherpara.clicked.connect(MainWindow.AL_Other_para) # type: ignore
-        self.shuffle_yes_or_no.clicked.connect(self.checkBox_percentage.toggle) # type: ignore
-        self.shuffle_yes_or_no.clicked.connect(MainWindow.change_percentage) # type: ignore
+        self.shuffle_yes_or_no.clicked.connect(MainWindow.sync_shuffle_percentage) # type: ignore
         self.pushButton_AL4_2.clicked.connect(MainWindow.AL_LR_para) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 

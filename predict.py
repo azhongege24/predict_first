@@ -3722,6 +3722,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
     def __init__(self, parent=None):
         super(MyMainWindow, self).__init__(parent)  # 初始化父类
         self.setupUi(self)  # 继承 Ui_MainWindow 界面类
+        # 默认使用随机打乱和百分比划分，并显示对应的 90%/10% 范围。
+        self.shuffle_yes_or_no.setChecked(True)
+        self.checkBox_percentage.setChecked(True)
+        self.spinBox_train_start.setValue(0)
+        self.spinBox_train_end.setValue(90)
+        self.spinBox_test_start.setValue(90)
+        self.spinBox_test_end.setValue(100)
         self.fileName = ''
         self.new_model = 0
         self.data_load = 0
@@ -4131,9 +4138,17 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
         self.lineEdit_dataset_nums.setText(f'({self.shape[0]} Samples * {self.shape[1]} Features)')
 
-        self.spinBox_train_end.setValue(self.shape[0] * 0.9)
-        self.spinBox_test_start.setValue(self.shape[0] * 0.9 + 1)
-        self.spinBox_test_end.setValue(self.shape[0])
+        # 按当前输入模式设置默认划分，避免百分比模式把行数误当百分数。
+        if self.checkBox_percentage.isChecked():
+            self.spinBox_train_start.setValue(0)
+            self.spinBox_train_end.setValue(90)
+            self.spinBox_test_start.setValue(90)
+            self.spinBox_test_end.setValue(100)
+        else:
+            self.spinBox_train_start.setValue(0)
+            self.spinBox_train_end.setValue(round(self.shape[0] * 0.9))
+            self.spinBox_test_start.setValue(round(self.shape[0] * 0.9) + 1)
+            self.spinBox_test_end.setValue(self.shape[0])
         self.data_load = 1
     
     def add_listitem(self, columns, list_widget, column_info=None, checked_columns=None):
@@ -5322,6 +5337,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             )
 
         return None
+
+    def sync_shuffle_percentage(self):
+        # 仅当点击前两个选项相同时，才把百分比状态同步到点击后的shuffle状态。
+        if self.shuffle_yes_or_no.isChecked() != self.checkBox_percentage.isChecked():
+            self.checkBox_percentage.setChecked(self.shuffle_yes_or_no.isChecked())
+            # 百分比状态改变后，再将范围数值换算到对应的输入模式。
+            self.change_percentage()
 
     def change_percentage(self):
         box = self.checkBox_percentage#换成复选框
