@@ -2,7 +2,7 @@ import os
 import time
 import pandas as pd
 import numpy as np
-from regression_evaluation import evaluate_regression, display_metric
+from utils.regression_evaluation import evaluate_regression, display_metric
 import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib import rcParams
@@ -304,7 +304,7 @@ if __name__ == "__main__":
         np.random.rand(50, 22),  # 独立测试集
         columns=[f"feature_{i}" for i in range(22)]
     )
-    
+
     # 生成目标变量（模拟与特征的弱相关性）
     for i in range(16):
         data_train[f"target_{i}"] = 0.3 * data_train[f"feature_{i%22}"] + 0.1 * np.random.rand(100)
@@ -324,4 +324,3 @@ if __name__ == "__main__":
         model, "MTW", input_columns, output_columns,
         metrics, y_test, y_pred, test_index
     )
-    

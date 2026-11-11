@@ -15,14 +15,14 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationTool
 import numpy as np
 from ui2025 import Ui_MainWindow #我新创建的界面类
 import pandas as pd
-from data_column_scan import read_csv_with_fallback, scan_dataframe_columns
-from training_preprocess import (
+from utils.data_column_scan import read_csv_with_fallback, scan_dataframe_columns
+from utils.training_preprocess import (
     prepare_numeric_regression_data,
     prepare_mixed_regression_data,
     prepare_prediction_features,
 )
 # 真实输出只有部分行有值时，只用这些行计算回归指标。
-from regression_evaluation import evaluate_regression
+from utils.regression_evaluation import evaluate_regression
 from PyQt5.QtWidgets import QApplication, QMainWindow,QProgressDialog, QPushButton,QMessageBox, QFileDialog, QGraphicsScene, QGraphicsView, QWidget, QCheckBox, QListWidgetItem
 from PyQt5.QtCore import Qt, QSettings, QTimer, QSize
 from PyQt5.QtGui import QPixmap
@@ -39,7 +39,6 @@ def application_dir():
     # 源码运行时沿用项目代码所在目录。
     return os.path.dirname(os.path.abspath(__file__))
 
-import scipy.io as sio
 import torch
 import joblib
 import webbrowser
@@ -87,6 +86,11 @@ import matplotlib.pyplot as plt
 import matplotlib.font_manager as font_manager
 import matplotlib.ticker as ticker
 from sklearn.preprocessing import StandardScaler  # 新增：导入StandardScaler
+from utils.prediction_result_io import (
+    load_mat_dataframe,
+    merge_prediction_results,
+    save_prediction_dataframe,
+)
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 global max_depth, random_state,n_estimators,kernel, C, epsilon,scale_features
@@ -96,7 +100,6 @@ global mmoe_epochs,mmoe_batch_size,mmoe_lambda_balance,mmoe_scale_features,fit_i
 method = 'NONE'  # 初始化方法为NONE
 # 读取输入参数
 scale_features=True
-
 
 def legacy_model_input_error(input_columns, column_info):
     """说明无新版规则的模型是否能安全核对当前数值输入。"""
@@ -1635,18 +1638,7 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
             if file_path.endswith(('.xls', '.xlsx')):
                 loaded_data = pd.read_excel(file_path)
             elif file_path.endswith('.mat'):
-                mat_data = sio.loadmat(file_path)
-                all_keys = list(mat_data.keys())
-                feature_keys = all_keys[3:]
-                df = pd.DataFrame({
-                    key: mat_data[key].squeeze()  # 压缩单维度，如 (n,1)→n
-                    for key in feature_keys
-                })
-                columns = df.columns.tolist()
-
-                new_columns = columns[1:] + [columns[0]]
-
-                loaded_data = df[new_columns]
+                loaded_data = load_mat_dataframe(file_path)
 
             else:  # 默认处理CSV
                 loaded_data = read_csv_with_fallback(file_path)
@@ -4024,17 +4016,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
         if self.file_save:
             try:
-                if self.file_save.endswith('.mat'):
-                    # 将DataFrame转换为MATLAB兼容格式
-                    mat_data = {col: self.data_save[col].values for col in self.data.columns}
-                    sio.savemat(self.file_save, mat_data)
-                elif self.file_save.endswith(('.xls', '.xlsx')):
-                    self.data_save.to_excel(self.file_save, index=True)
-                else:  # 默认保存CSV
-                    # 使用带签名的 UTF-8，便于表格软件直接识别中文结果列名。
-                    self.data_save.to_csv(
-                        self.file_save, index=True, encoding='utf-8-sig'
-                    )
+                # 文件格式和编码由专用模块处理，界面只负责显示保存状态。
+                save_prediction_dataframe(self.data_save, self.file_save)
 
                 self.lineEdit_Algorithm_name.setText('Data saved successfully')
             except Exception as e:
@@ -4063,17 +4046,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             if selected_path.endswith(('.xls', '.xlsx')):
                 loaded_data = pd.read_excel(selected_path)
             elif selected_path.endswith('.mat'):
-                mat_data = sio.loadmat(selected_path)
-                all_keys = list(mat_data.keys())
-                feature_keys = all_keys[3:]
-                df = pd.DataFrame({
-                    key: mat_data[key].squeeze()  # 压缩单维度，如 (n,1)→n
-                    for key in feature_keys
-                })
-                columns = df.columns.tolist()
-
-                new_columns = columns[1:] + [columns[0]]
-                loaded_data = df[new_columns]
+                loaded_data = load_mat_dataframe(selected_path)
 
             else:  # 默认处理CSV
                 loaded_data = read_csv_with_fallback(selected_path)
@@ -4213,7 +4186,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
     def change_CheckBox_output(self):
         self._toggle_selectable_items(self.listWidget_outputfeature)
 
-    # 在主窗口类中使用已加载模型预测。
     def predict_with_loaded_model(self):
         # 检查是否已加载模型
         if not hasattr(self, 'loaded_model') or self.loaded_model is None:
@@ -4364,12 +4336,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 self.lineEdit_R2.setText("未评估")
                 self.lineEdit_db_within_3_ratio.setText("未评估")
 
-                # 按原文件行号保存中文命名的预测列，不生成虚构真实值列。
-                self.data_save = pd.DataFrame(
-                    {f"预测_{output_columns[0]}": predicted},
-                    index=predict_data.index,
+                # 将预测值追加到完整原文件对应的行，其他行保持空预测值。
+                self.data_save = merge_prediction_results(
+                    self.predict_data,
+                    predicted, output_columns, predict_start, predict_end
                 )
-                self.data_save.index.name = "原始行号"
                 QMessageBox.information(
                     self, "成功", "预测完成；文件无真实输出，未计算指标"
                 )
@@ -4396,15 +4367,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     total_db_deviation_per_feature=metrics["total_db_deviation_per_feature"],
                 )
 
-                # 导出全部预测行，只为文件确实包含的输出列保留真实值。
-                exported = {}
-                for index, name in enumerate(output_columns):
-                    if name in predict_data.columns:
-                        exported[f"true_{name}"] = actual[:, index]
-                    # 有效真实值数量只用于指标计算，不作为逐行结果列导出。
-                    exported[f"预测_{name}"] = predicted[:, index]
-                self.data_save = pd.DataFrame(exported, index=predict_data.index)
-                self.data_save.index.name = "原始行号"
+                # 保留全部原始字段，并将每个输出的预测列依次追加到右侧。
+                self.data_save = merge_prediction_results(
+                    self.predict_data,
+                    predicted, output_columns, predict_start, predict_end
+                )
                 if not any(metrics["valid_counts"]):
                     self.lineEdit_state.setText(f"仅预测 {len(predicted)} 行；无真实输出，未评估")
                     for field in (self.lineEdit_MSE, self.lineEdit_RMSE,
@@ -4444,15 +4411,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     self.lineEdit_R2.setText("未评估")
                     self.lineEdit_db_within_3_ratio.setText("未评估")
 
-                # 导出全部行的真实值和预测值；有效数量只在评价时使用。
-                self.data_save = pd.DataFrame(
-                    {
-                        f"true_{output_columns[0]}": actual,
-                        f"预测_{output_columns[0]}": predicted,
-                    },
-                    index=predict_data.index,
+                # 原真实输出保留在原列中，新增预测值只写入对应的范围行。
+                self.data_save = merge_prediction_results(
+                    self.predict_data,
+                    predicted, output_columns, predict_start, predict_end
                 )
-                self.data_save.index.name = "原始行号"
                 
             QMessageBox.information(self, "成功", "使用预训练模型预测完成")
             

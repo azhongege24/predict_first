@@ -19,7 +19,7 @@ from matplotlib import pyplot as plt
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import ExtraTreesRegressor, RandomForestRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error
-from regression_evaluation import evaluate_regression, display_metric
+from utils.regression_evaluation import evaluate_regression, display_metric
 from sklearn.svm import SVR
 from sklearn.linear_model import LinearRegression, Ridge, Lasso
 from tqdm import tqdm

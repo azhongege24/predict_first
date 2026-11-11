@@ -2,7 +2,7 @@ import os
 import time
 import pandas as pd
 import numpy as np
-from regression_evaluation import evaluate_regression, display_metric
+from utils.regression_evaluation import evaluate_regression, display_metric
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import mean_squared_error, r2_score

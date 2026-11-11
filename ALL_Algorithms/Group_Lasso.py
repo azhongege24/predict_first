@@ -2,7 +2,7 @@ import os
 import shutil
 import time
 import numpy as np
-from regression_evaluation import evaluate_regression, display_metric
+from utils.regression_evaluation import evaluate_regression, display_metric
 import pandas as pd
 from mutar import GroupLasso
 from sklearn.metrics import mean_squared_error, r2_score
