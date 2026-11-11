@@ -4061,19 +4061,27 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             time_columns_present = [col for col in time_columns if col in columns]
             
 
-            # 旧列名规则只用于初始勾选；列表仍会显示文件中的所有列。
+            # 输入继续按 input 名称预选，输出优先选最后一个含 rms 的列。
             input_columns = [col for col in columns if "input" in col.lower()]
-            output_columns = [col for col in columns if "output" in col.lower()]
+            rms_columns = [col for col in columns if "rms" in col.lower()]
+            if rms_columns:
+                output_columns = [rms_columns[-1]]
+            elif columns:
+                output_columns = [columns[-1]]
+            else:
+                output_columns = []
             
             # 关键修改：从输入特征中排除时间列，避免重复
             input_columns = [col for col in input_columns if col not in time_columns]            
+            # 默认输出列如果也匹配 input 名称，则只保留输出角色的预选状态。
+            input_columns = [col for col in input_columns if col not in output_columns]
             
 
             # 没有匹配旧命名规则时仍可在列表中手动选择。
             if not input_columns:
                 print("警告：未找到以'input'命名的输入特征列")
             if not output_columns:
-                print("警告：未找到以'output'命名的输出特征列")
+                print("警告：没有可默认勾选的输出特征列")
 
         except Exception as e:
             QMessageBox.warning(self, "加载失败", str(e))
@@ -4093,20 +4101,18 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
         self.listWidget_inputfeature.clear()
         self.listWidget_outputfeature.clear()
-        # 所有列均可查看；旧命名规则只决定首次勾选的角色。
-        # 同时匹配两种旧名称的列先不勾选，避免初始状态下重复选用。
-        ambiguous_names = set(input_columns) & set(output_columns)
+        # 所有列均会显示，两个列表只用默认规则设置首次勾选状态。
         self.add_listitem(
             columns,
             self.listWidget_inputfeature,
             column_info=column_info,
-            checked_columns=set(input_columns) - ambiguous_names,
+            checked_columns=set(input_columns),
         )
         self.add_listitem(
             columns,
             self.listWidget_outputfeature,
             column_info=column_info,
-            checked_columns=set(output_columns) - ambiguous_names,
+            checked_columns=set(output_columns),
         )
 
         self.lineEdit_dataset_nums.setText(f'({self.shape[0]} Samples * {self.shape[1]} Features)')
