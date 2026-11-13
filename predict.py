@@ -91,6 +91,7 @@ from utils.prediction_result_io import (
     merge_prediction_results,
     save_prediction_dataframe,
 )
+from utils.relationship_plots import make_relationship_pages, render_relationship_page
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 global max_depth, random_state,n_estimators,kernel, C, epsilon,scale_features
@@ -3895,13 +3896,24 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         """更新 graphicsView 中显示的内容"""
         if self.figures:
             self.graphicscene.clear()  # 清空当前内容
-            image_path = self.figures[self.current_page]
-            pixmap = QPixmap(image_path)  # 加载图像
-            self.graphicscene.addPixmap(pixmap)  # 将图像添加到场景
+            page = self.figures[self.current_page]
+            # 关系页首次翻到时才绘制；内存图片直接交给 Qt 显示。
+            if isinstance(page, dict) and page.get("kind") == "relationship":
+                page = render_relationship_page(page)
+                self.figures[self.current_page] = page
+            if isinstance(page, bytes):
+                pixmap = QPixmap()
+                if not pixmap.loadFromData(page, "PNG"):
+                    raise ValueError("无法显示内存中的图表图片")
+            else:
+                # 特殊算法已有的图页仍使用其原始图片路径。
+                pixmap = QPixmap(page)
+            self.graphicscene.addPixmap(pixmap)
             self.graphicsView.setScene(self.graphicscene)
             self.graphicsView.show()
 
             # 更新spinBox_jump_value的值为当前页面（1-based）
+            self.spinBox_jump_value.setRange(1, len(self.figures))
             self.spinBox_jump_value.setValue(self.current_page + 1)
 
     @pyqtSlot()
@@ -4347,6 +4359,17 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     self.predict_data,
                     predicted, output_columns, predict_start, predict_end
                 )
+                # 无真实输出时只绘制预测点，横轴仍取原始预测输入值。
+                predict_types = {
+                    entry["name"]: entry["type"]
+                    for entry in self.predict_column_info
+                }
+                self.figures.extend(make_relationship_pages(
+                    predict_data, no_actual, predicted, input_columns,
+                    output_columns, predict_types
+                ))
+                self.current_page = 0
+                self.update_graphics_view()
                 QMessageBox.information(
                     self, "成功", "预测完成；文件无真实输出，未计算指标"
                 )
@@ -4423,6 +4446,17 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     predicted, output_columns, predict_start, predict_end
                 )
                 
+            # 预测结果和原始输入按行对齐后，再追加各列组合的关系页面。
+            predict_types = {
+                entry["name"]: entry["type"]
+                for entry in self.predict_column_info
+            }
+            self.figures.extend(make_relationship_pages(
+                predict_data, actual, predicted, input_columns,
+                output_columns, predict_types
+            ))
+            self.current_page = 0
+            self.update_graphics_view()
             QMessageBox.information(self, "成功", "使用预训练模型预测完成")
             
         except ValueError as e:
@@ -4544,6 +4578,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         # 按位置切分，并复制表，避免处理结果改写上传后的原始数据。
         data_train = data_filter.iloc[N_start_train:N_end_train].copy()
         data_test = data_filter.iloc[N_start_test:N_end_test].copy()
+        # 保存未填补、未编码的测试输入，供关系图显示原始横轴值。
+        raw_data_test_for_plots = data_test.copy()
 
         try:
             if string_inputs:
@@ -5253,6 +5289,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             "preprocessing_rules": preprocessing_rules,
             "scaler": fitted_scaler,
         }
+        # 将所有已选输入与输出的关系图接在当前算法图页后面。
+        self.figures.extend(make_relationship_pages(
+            raw_data_test_for_plots, y_test, y_pred, input_columns,
+            output_columns, types_by_name
+        ))
+        self.current_page = 0
+        self.update_graphics_view()
         self.trained_model = model
         self.new_model = 1
     

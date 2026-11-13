@@ -111,13 +111,6 @@ def mtw_plot_and_evaluate(self, mtw_model, method, input_columns, output_columns
     # test_index_range = f"[{data_test_index[0]}:{data_test_index[-1]}]" if not data_test_index.empty else "[0:0]"
 
     for i ,col in  enumerate(output_columns):
-        # 当前输出的指标
-        current_mse = MSE_list[i]
-        current_r2 = R2_list[i]
-        current_rmse = RMSE_list[i] if RMSE_list else np.sqrt(current_mse)
-        current_mae = MAE_list[i] if MAE_list else np.mean(np.abs(y_test[:, i] - y_pred[:, i]))
-        current_db_within_3_ratio = db_within_3_ratio_list[i] if db_within_3_ratio_list else None
-        current_total_db_deviation_per_feature = total_db_deviation_per_feature[i] if total_db_deviation_per_feature else None
         # 创建对比图
         fig = plt.figure(figsize=(7, 4), dpi=120)
         ax = fig.add_subplot(111)
@@ -136,16 +129,10 @@ def mtw_plot_and_evaluate(self, mtw_model, method, input_columns, output_columns
             for row in positions[valid]:
                 ax.plot([row, row], [actual[row], predicted[row]],
                         color='#2F5597', linestyle='-', linewidth=1.5, alpha=0.6)
-        ratio_text = f'{current_db_within_3_ratio:.2%}' if np.isfinite(current_db_within_3_ratio) else '无有效真实值'
-        r2_text = '样本不足' if valid.sum() == 1 else display_metric(current_r2, 4)
-        ax.set_title(
-            f'输出变量: {col}，有效真实值: {valid.sum()}/{len(actual)}\n'
-            f'MSE: {display_metric(current_mse, 4)}, RMSE: {display_metric(current_rmse, 4)}\n'
-            f'MAE: {display_metric(current_mae, 4)}, R²: {r2_text}\n'
-            f'±3dB比例: {ratio_text}', fontsize=10
-        )
-        ax.set_xlabel('样本索引', fontsize=10)
-        ax.set_ylabel('数值', fontsize=10)
+        # 图表标题只说明当前输出列，指标由主界面统一呈现。
+        ax.set_title(f'输出变量: {col}', fontsize=10)
+        ax.set_xlabel('样本序号', fontsize=10)
+        ax.set_ylabel(col, fontsize=10)
         ax.grid(linestyle='--', alpha=0.5)
         ax.legend()
         ax.set_xlim(-5, len(y_test[:, i]) + 5)
