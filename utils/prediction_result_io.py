@@ -2,6 +2,7 @@
 
 import json
 import os
+from datetime import datetime, timezone
 
 import numpy as np
 import pandas as pd
@@ -148,3 +149,59 @@ def save_prediction_dataframe(dataframe, file_path):
     else:
         # 带BOM的UTF-8便于常见表格软件正确显示中文列名。
         dataframe.to_csv(file_path, index=False, encoding="utf-8-sig")
+
+
+def result_metadata_path(file_path):
+    """返回与结果文件同名的 JSON 路径。"""
+    return os.path.splitext(file_path)[0] + ".json"
+
+
+def save_result_metadata(file_path, context):
+    """结果写入成功后，记录其列对应关系和保存时间。"""
+    metadata = dict(context)
+    metadata["format_version"] = 1
+    metadata["saved_at"] = datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds")
+    path = result_metadata_path(file_path)
+    temporary = path + ".tmp"
+    try:
+        with open(temporary, "w", encoding="utf-8") as target:
+            json.dump(metadata, target, ensure_ascii=False, indent=2)
+        os.replace(temporary, path)
+    finally:
+        if os.path.exists(temporary):
+            os.remove(temporary)
+    return path
+
+
+def load_result_metadata(file_path, columns):
+    """读取配套说明并检查字段格式；缺少说明时返回 None。"""
+    path = result_metadata_path(file_path)
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, "r", encoding="utf-8") as source:
+            metadata = json.load(source)
+        if metadata.get("format_version") != 1:
+            raise ValueError("不支持的结果说明版本")
+        inputs = metadata["input_columns"]
+        outputs = metadata["output_columns"]
+        mapping = metadata["prediction_columns"]
+        if not isinstance(inputs, list) or not isinstance(outputs, list) or not isinstance(mapping, list):
+            raise ValueError("输入、输出或预测列说明格式错误")
+        if len(outputs) != len(mapping) or not outputs:
+            raise ValueError("输出列与预测列数量不一致")
+        if any(name not in columns for name in inputs + mapping):
+            raise ValueError("说明中记录的输入列或预测列不存在")
+        return metadata
+    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
+        raise ValueError(f"结果说明文件无效：{exc}") from exc
+
+
+def infer_legacy_result_columns(columns):
+    """旧结果只可推断预测列，不能推断实际模型输入。"""
+    predictions = [name for name in columns if name.startswith("预测_")]
+    if not predictions and columns:
+        predictions = [columns[-1]]
+    outputs = [name[3:] if name.startswith("预测_") else name for name in predictions]
+    candidates = [name for name in columns if name not in predictions]
+    return candidates, outputs, predictions

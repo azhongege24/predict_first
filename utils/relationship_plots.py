@@ -44,6 +44,43 @@ def make_relationship_pages(input_data, y_true, y_pred, input_columns,
     return pages
 
 
+def render_saved_result_page(actual, predicted, output_name):
+    """只根据结果文件绘制一页样本序号图，不改界面或评价指标。"""
+    actual = np.asarray(actual, dtype=float)
+    predicted = np.asarray(predicted, dtype=float)
+    positions = np.arange(len(predicted))
+    valid_prediction = np.isfinite(predicted)
+    valid_actual = valid_prediction & np.isfinite(actual)
+    fig, ax = plt.subplots(figsize=(7, 4), dpi=120)
+    try:
+        # 横轴使用原文件行位置，部分行预测不会从零重新编号。
+        ax.scatter(positions[valid_prediction], predicted[valid_prediction],
+                   c="r", marker="X", s=20, alpha=0.6, label="预测值")
+        if valid_actual.any():
+            ax.scatter(positions[valid_actual], actual[valid_actual],
+                       c="b", marker="o", s=10, alpha=0.8, label="真实值")
+            for row in positions[valid_actual]:
+                ax.plot([row, row], [actual[row], predicted[row]],
+                        color="#2F5597", linewidth=2.5, alpha=0.5, zorder=0)
+        ax.set_xlabel("样本序号")
+        ax.set_ylabel(output_name)
+        ax.set_title(f"输出变量：{output_name}")
+        ax.set_facecolor("#f8f9fa")
+        ax.grid(linestyle="--", alpha=0.5)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        if valid_prediction.any():
+            ax.legend(fontsize=10, loc="upper left")
+        else:
+            ax.text(0.5, 0.5, "没有可绘制的预测值", ha="center", va="center",
+                    transform=ax.transAxes)
+        with BytesIO() as image_buffer:
+            fig.savefig(image_buffer, format="png", bbox_inches="tight")
+            return image_buffer.getvalue()
+    finally:
+        plt.close(fig)
+
+
 def render_relationship_page(page):
     """将一页关系图绘制成内存中的 PNG 数据。"""
     x_values = np.asarray(page["input_values"], dtype=object)

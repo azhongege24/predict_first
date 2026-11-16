@@ -90,8 +90,11 @@ from utils.prediction_result_io import (
     load_mat_dataframe,
     merge_prediction_results,
     save_prediction_dataframe,
+    save_result_metadata,
+    load_result_metadata,
+    infer_legacy_result_columns,
 )
-from utils.relationship_plots import make_relationship_pages, render_relationship_page
+from utils.relationship_plots import make_relationship_pages, render_relationship_page, render_saved_result_page
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 global max_depth, random_state,n_estimators,kernel, C, epsilon,scale_features
@@ -1539,6 +1542,9 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         # 用户可能在导入后修改行号，确认时把最终范围交给主窗口。
         self.predict_row_range = (start, end)
         self.parent_window.clear_interface()
+        self.parent_window.viewing_saved_result = False
+        self.parent_window.saved_result_view = None
+        self.parent_window.prediction_result_context = None
         self.parent_window.lineEdit_Algorithm_name.setText("已加载预训练模型与预测数据")
         self.parent_window.predict_row_range = self.predict_row_range
 
@@ -3743,6 +3749,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.last_numeric_preprocessing = None  # 最近一次成功训练的数值处理规则
         # 将最近一次成功训练的模型与实际选列、处理规则和缩放器绑定。
         self.training_snapshot = None
+        self.prediction_result_context = None
+        self.viewing_saved_result = False
+        self.saved_result_view = None
 
         self.current_page = 0
         self.figures = []  # 存储所有图表的列表
@@ -3771,6 +3780,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.pushButton_dataset.clicked.connect(self.AL_dataset_handle)  # 打开数据集合成处理窗口
         # 点击时读取最近一次成功训练的模型及其对应列名。
         self.pushButton_save_pretrained_model.clicked.connect(self.ask_and_save_model)
+        self.pushButton_view_prediction_result.clicked.connect(self.view_prediction_result)
+        self.listWidget_inputfeature.itemChanged.connect(
+            lambda _: self.refresh_saved_result_pages()
+        )
         # 添加跳转按钮和数值框的连接
         
         self.spinBox_jump_value.valueChanged.connect(self.jump_to_page)
@@ -3779,6 +3792,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
 
 
     def ask_and_save_model(self):
+        if self.viewing_saved_result:
+            QMessageBox.warning(self, "无法保存模型", "当前只在查看历史结果，请重新上传训练数据")
+            return
         # 没有成功训练的模型时，不打开保存文件对话框。
         model = self.trained_model
         if model is None:
@@ -4020,6 +4036,12 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             return 0  # 获取失败时默认返回0
     
     def save(self):
+        if self.viewing_saved_result:
+            QMessageBox.warning(self, "无法保存", "当前只在查看历史结果")
+            return
+        if not isinstance(getattr(self, "data_save", None), pd.DataFrame):
+            QMessageBox.warning(self, "无法保存", "当前没有可保存的结果")
+            return
         # 保存功能保持不变，可以自动识别保存格式
         self.file_save, _ = QFileDialog.getSaveFileName(
             self, "保存文件", "",
@@ -4030,6 +4052,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             try:
                 # 文件格式和编码由专用模块处理，界面只负责显示保存状态。
                 save_prediction_dataframe(self.data_save, self.file_save)
+                # 只有预训练模型的预测结果附带选列说明；训练结果沿用原保存方式。
+                if self.prediction_result_context is not None:
+                    save_result_metadata(self.file_save, self.prediction_result_context)
 
                 self.lineEdit_Algorithm_name.setText('Data saved successfully')
             except Exception as e:
@@ -4100,7 +4125,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             return
 
         # 文件读入成功后，才更新当前数据、路径和界面。
+        if self.viewing_saved_result:
+            # 新训练文件替代历史查看，清除与该文件无关的旧图和指标。
+            self.clear_interface()
         self.fileName = selected_path
+        self.viewing_saved_result = False
+        self.saved_result_view = None
+        self.prediction_result_context = None
         self.lastSelectedPath = selected_path
         self.data = loaded_data
         # 新文件尚未训练，不能沿用上一份数据的填补规则。
@@ -4205,6 +4236,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self._toggle_selectable_items(self.listWidget_outputfeature)
 
     def predict_with_loaded_model(self):
+        if self.viewing_saved_result:
+            QMessageBox.warning(self, "无法预测", "当前只在查看历史结果，请重新确认模型与预测数据")
+            return
         # 检查是否已加载模型
         if not hasattr(self, 'loaded_model') or self.loaded_model is None:
             QMessageBox.warning(self, "警告", "请先加载预训练模型")
@@ -4359,6 +4393,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     self.predict_data,
                     predicted, output_columns, predict_start, predict_end
                 )
+                self.record_prediction_result(input_columns, output_columns, predict_start, predict_end)
                 # 无真实输出时只绘制预测点，横轴仍取原始预测输入值。
                 predict_types = {
                     entry["name"]: entry["type"]
@@ -4401,6 +4436,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     self.predict_data,
                     predicted, output_columns, predict_start, predict_end
                 )
+                self.record_prediction_result(input_columns, output_columns, predict_start, predict_end)
                 if not any(metrics["valid_counts"]):
                     self.lineEdit_state.setText(f"仅预测 {len(predicted)} 行；无真实输出，未评估")
                     for field in (self.lineEdit_MSE, self.lineEdit_RMSE,
@@ -4445,6 +4481,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                     self.predict_data,
                     predicted, output_columns, predict_start, predict_end
                 )
+                self.record_prediction_result(input_columns, output_columns, predict_start, predict_end)
                 
             # 预测结果和原始输入按行对齐后，再追加各列组合的关系页面。
             predict_types = {
@@ -4466,7 +4503,148 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             QMessageBox.warning(self, "预测失败", f"预测过程中出错: {str(e)}")
                 
         
+    def record_prediction_result(self, input_columns, output_columns, start, end):
+        """把本次模型与实际追加的预测列绑定，供保存 JSON 使用。"""
+        # 原文件列位于左侧，合并函数把预测列按输出顺序追加到最右侧。
+        prediction_columns = self.data_save.columns[len(self.predict_data.columns):].tolist()
+        model = self.loaded_model
+        estimator = getattr(model, "estimator", model)
+        # 常见模型显示中文名称；未知模型保留其类名，避免误写类型。
+        model_names = {
+            "DecisionTreeRegressor": "决策树",
+            "RandomForestRegressor": "随机森林",
+            "SVR": "支持向量机",
+            "MLPRegressor": "多层感知机",
+            "ExtraTreesRegressor": "极端随机树",
+            "LinearRegression": "线性回归",
+            "GaussianProcessRegressor": "高斯过程",
+            "GroupLasso": "Group Lasso",
+            "MTW": "MTW",
+            "ReMTW": "ReMTW",
+            "MMoERegressor": "MMoE",
+        }
+        class_name = type(estimator).__name__
+        self.prediction_result_context = {
+            "model_filename": os.path.basename(self.selected_model_path or ""),
+            "model_type": model_names.get(class_name, class_name),
+            "input_columns": list(input_columns),
+            "output_columns": list(output_columns),
+            "prediction_columns": prediction_columns,
+            "prediction_range": [int(start), int(end)],
+        }
+
+    def view_prediction_result(self):
+        """读取历史文件并在确认数据完整后切换到只读展示。"""
+        path, _ = QFileDialog.getOpenFileName(
+            self, "查看预测结果", self.lastSelectedPath or "data/",
+            "结果文件 (*.csv *.xls *.xlsx *.mat)"
+        )
+        if not path:
+            return
+        try:
+            # 读取方式与训练和预测上传一致，MAT 仍恢复中文原始列名。
+            extension = os.path.splitext(path)[1].lower()
+            if extension in (".xls", ".xlsx"):
+                data = pd.read_excel(path)
+            elif extension == ".mat":
+                data = load_mat_dataframe(path)
+            else:
+                data = read_csv_with_fallback(path)
+            data.columns = data.columns.astype(str)
+            if data.empty:
+                raise ValueError("结果文件没有数据行")
+            info = scan_dataframe_columns(data)
+            metadata = load_result_metadata(path, data.columns.tolist())
+            if metadata is None:
+                inputs, outputs, predictions = infer_legacy_result_columns(data.columns.tolist())
+                model_type = "未知模型"
+            else:
+                inputs = metadata["input_columns"]
+                outputs = metadata["output_columns"]
+                predictions = metadata["prediction_columns"]
+                model_type = metadata.get("model_type") or "未知模型"
+            if not predictions:
+                raise ValueError("结果文件没有可识别的预测列")
+            # 先生成样本页；有无真实输出都不重新计算评价指标。
+            pages = []
+            for output, prediction in zip(outputs, predictions):
+                predicted = pd.to_numeric(data[prediction], errors="raise").to_numpy(dtype=float)
+                actual = (pd.to_numeric(data[output], errors="coerce").to_numpy(dtype=float)
+                          if output in data.columns and output != prediction
+                          else np.full(len(data), np.nan))
+                pages.append(render_saved_result_page(actual, predicted, output))
+            view = (data, info, inputs, outputs, predictions, pages, model_type, metadata)
+        except Exception as exc:
+            QMessageBox.warning(self, "加载结果失败", str(exc))
+            return
+
+        # 所有检查成功后才替换当前界面，避免错误文件清掉旧图。
+        self.clear_interface()
+        self.viewing_saved_result = True
+        self.prediction_result_context = None
+        self.data_load = 0
+        self.trained_model = None
+        self.training_snapshot = None
+        self.loaded_model = None
+        self.predict_data = None
+        self.data_save = None
+        self.saved_result_view = view
+        self.lastSelectedPath = path
+        data, info, inputs, outputs, predictions, pages, model_type, metadata = view
+        self.lineEdit_dataset_file.setText(path)
+        self.lineEdit_dataset_nums.setText(f"({len(data)} Samples * {len(data.columns)} Features)")
+        self.lineEdit_Algorithm_name.setText(model_type)
+        self.lineEdit_state.setText("查看历史预测结果；未重新评估")
+        for field in (self.lineEdit_MSE, self.lineEdit_RMSE, self.lineEdit_MAE,
+                      self.lineEdit_R2, self.lineEdit_db_within_3_ratio):
+            field.setText("未评估")
+        self.listWidget_inputfeature.blockSignals(True)
+        self.listWidget_inputfeature.clear()
+        self.listWidget_outputfeature.clear()
+        self.add_listitem(inputs, self.listWidget_inputfeature, info,
+                          checked_columns=set(inputs) if metadata else set())
+        self.listWidget_inputfeature.blockSignals(False)
+        self.add_listitem(outputs, self.listWidget_outputfeature, info,
+                          checked_columns=set(outputs))
+        for index, output in enumerate(outputs):
+            self.listWidget_outputfeature.item(index).setToolTip(
+                f"原输出列：{output}\n预测结果列：{predictions[index]}"
+            )
+        self.refresh_saved_result_pages()
+        if metadata is None:
+            QMessageBox.information(
+                self, "旧结果文件", "没有同名 JSON，无法确定原模型使用的输入列。"
+                "请在输入特征栏勾选需要查看关系图的列。"
+            )
+
+    def refresh_saved_result_pages(self):
+        """根据查看状态中的输入勾选项补充关系图页面。"""
+        if not self.viewing_saved_result or self.saved_result_view is None:
+            return
+        data, info, inputs, outputs, predictions, sample_pages, _, _ = self.saved_result_view
+        chosen = [name for name in self._checked_column_names(self.listWidget_inputfeature)
+                  if name in data.columns]
+        column_types = {entry["name"]: entry["type"] for entry in info}
+        actual = np.column_stack([
+            pd.to_numeric(data[name], errors="coerce").to_numpy(dtype=float)
+            if name in data.columns else np.full(len(data), np.nan)
+            for name in outputs
+        ])
+        predicted = np.column_stack([
+            pd.to_numeric(data[name], errors="coerce").to_numpy(dtype=float)
+            for name in predictions
+        ])
+        self.figures = list(sample_pages) + make_relationship_pages(
+            data, actual, predicted, chosen, outputs, column_types
+        )
+        self.current_page = 0
+        self.update_graphics_view()
+
     def All_Methods_Begin(self):
+        if self.viewing_saved_result:
+            QMessageBox.warning(self, "无法训练", "当前只在查看历史结果，请重新上传训练数据")
+            return
+        self.prediction_result_context = None
         global method
 
         # 先准备MMoE的进度回调，训练条件检查通过后再启动进度条。

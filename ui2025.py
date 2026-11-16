@@ -1093,14 +1093,14 @@ class Ui_MainWindow(object):
         self.pushButton_help.setGeometry(QtCore.QRect(1290, 10, 75, 23))
         self.pushButton_help.setObjectName("pushButton_help")
         self.layoutWidget8 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget8.setGeometry(QtCore.QRect(1130, 750, 201, 101))
+        self.layoutWidget8.setGeometry(QtCore.QRect(1099, 750, 251, 101))
         self.layoutWidget8.setObjectName("layoutWidget8")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.layoutWidget8)
         self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.pushButton_save_pretrained_model = QtWidgets.QPushButton(self.layoutWidget8)
-        self.pushButton_save_pretrained_model.setMinimumSize(QtCore.QSize(87, 44))
-        self.pushButton_save_pretrained_model.setMaximumSize(QtCore.QSize(200, 40))
+        self.pushButton_save_pretrained_model.setMinimumSize(QtCore.QSize(250, 44))
+        self.pushButton_save_pretrained_model.setMaximumSize(QtCore.QSize(251, 40))
         self.pushButton_save_pretrained_model.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */\n"
 "    border-radius: 8px;                      /* 适中圆角更显严谨 */\n"
@@ -1130,15 +1130,17 @@ class Ui_MainWindow(object):
 "}")
         self.pushButton_save_pretrained_model.setObjectName("pushButton_save_pretrained_model")
         self.verticalLayout_5.addWidget(self.pushButton_save_pretrained_model)
+        self.horizontalLayout_saved_results = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_saved_results.setObjectName("horizontalLayout_saved_results")
         self.pushButton_8 = QtWidgets.QPushButton(self.layoutWidget8)
-        self.pushButton_8.setMinimumSize(QtCore.QSize(87, 44))
+        self.pushButton_8.setMinimumSize(QtCore.QSize(150, 44))
         self.pushButton_8.setMaximumSize(QtCore.QSize(200, 40))
         self.pushButton_8.setStyleSheet("QPushButton {\n"
 "    border: 1px solid rgb(60, 75, 90);       /* 深灰蓝边框，类似实验仪器金属色 */\n"
 "    border-radius: 8px;                      /* 适中圆角更显严谨 */\n"
 "    background-color: rgb(240, 245, 250);    /* 极浅灰蓝背景，参考实验室白板 */\n"
 "    color: rgb(30, 50, 70);                 /* 深灰蓝文字，如学术文献印刷色 */\n"
-"    font: bold 14pt \"微软雅黑\";\n"
+"    font: bold 10pt \"微软雅黑\";\n"
 "    min-width: 85px;\n"
 "    min-height: 42px;\n"
 " \n"
@@ -1161,7 +1163,16 @@ class Ui_MainWindow(object):
 "    border-color: rgb(210, 220, 230);\n"
 "}")
         self.pushButton_8.setObjectName("pushButton_8")
-        self.verticalLayout_5.addWidget(self.pushButton_8)
+        self.horizontalLayout_saved_results.addWidget(self.pushButton_8)
+        self.horizontalLayout_saved_results.setStretch(0, 2)
+        self.pushButton_view_prediction_result = QtWidgets.QPushButton(self.layoutWidget8)
+        self.pushButton_view_prediction_result.setMinimumSize(QtCore.QSize(80, 44))
+        self.pushButton_view_prediction_result.setMaximumSize(QtCore.QSize(90, 44))
+        self.pushButton_view_prediction_result.setStyleSheet(self.pushButton_8.styleSheet())
+        self.pushButton_view_prediction_result.setObjectName("pushButton_view_prediction_result")
+        self.horizontalLayout_saved_results.addWidget(self.pushButton_view_prediction_result)
+        self.horizontalLayout_saved_results.setStretch(1, 1)
+        self.verticalLayout_5.addLayout(self.horizontalLayout_saved_results)
         self.layoutWidget9 = QtWidgets.QWidget(self.centralwidget)
         self.layoutWidget9.setGeometry(QtCore.QRect(64, 810, 581, 34))
         self.layoutWidget9.setObjectName("layoutWidget9")
@@ -1424,6 +1435,7 @@ class Ui_MainWindow(object):
         self.pushButton_help.setText(_translate("MainWindow", "帮助文档"))
         self.pushButton_save_pretrained_model.setText(_translate("MainWindow", "保存训练模型"))
         self.pushButton_8.setText(_translate("MainWindow", "保存预测结果"))
+        self.pushButton_view_prediction_result.setText(_translate("MainWindow", "查看结果"))
         self.label_R2.setToolTip(_translate("MainWindow", "<html><head/><body><p>决定系数R^2,越接近1，代表模型拟合能力越强</p></body></html>"))
         self.label_R2.setText(_translate("MainWindow", "R^2"))
         self.label_R2_db_within_3_ratio.setToolTip(_translate("MainWindow", "<html><head/><body><p>决定系数R^2,越接近1，代表模型拟合能力越强</p></body></html>"))
