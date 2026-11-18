@@ -120,6 +120,61 @@ def legacy_model_input_error(input_columns, column_info):
     return None
 
 
+# 保存时记录的算法代号用于准确显示新模型的类型。
+MODEL_METHOD_LABELS = {
+    "LR": "线性回归", "DT": "决策树", "RF": "随机森林",
+    "SVM": "支持向量机", "ET": "极端随机树", "MLP": "多层感知机",
+    "GP": "高斯过程", "GL": "Group Lasso", "MTW": "MTW",
+    "REMTW": "ReMTW", "MMoE": "MMoE",
+}
+
+# 旧模型没有算法代号时，根据模型对象或多输出模型内部的算法识别类型。
+MODEL_CLASS_LABELS = {
+    "DecisionTreeRegressor": "决策树", "RandomForestRegressor": "随机森林",
+    "SVR": "支持向量机", "MLPRegressor": "多层感知机",
+    "ExtraTreesRegressor": "极端随机树", "LinearRegression": "线性回归",
+    "GaussianProcessRegressor": "高斯过程",
+    "MultitaskGPRegressor": "高斯过程", "GroupLasso": "Group Lasso",
+    "MTW": "MTW", "ReMTW": "ReMTW", "MMoERegressor": "MMoE",
+}
+
+
+def model_display_name(model, training_method=None):
+    """返回用户可读的模型类型；未知模型保留实际类名。"""
+    # 新模型优先使用训练时保存的算法代号，避免多输出包装器遮住类型。
+    if training_method in MODEL_METHOD_LABELS:
+        return MODEL_METHOD_LABELS[training_method]
+    # 旧模型没有代号时，查看包装器内部的基础算法。
+    estimator = getattr(model, "estimator", model)
+    class_name = type(estimator).__name__
+    return MODEL_CLASS_LABELS.get(class_name, class_name)
+
+
+def format_saved_validation_metrics(metrics):
+    """按固定顺序显示模型保存的四项总体验模指标。"""
+    # 旧模型没有保存指标，此时不生成指标区域。
+    if not isinstance(metrics, dict):
+        return []
+    lines = []
+    for key, label in (("MSE", "MSE"), ("RMSE", "RMSE"),
+                       ("MAE", "MAE"), ("R2", "R²")):
+        # 只显示文件中确实存在的指标，不从当前预测文件重新计算。
+        if key not in metrics:
+            continue
+        lines.append(f"{label}：{format_saved_metric_value(metrics[key])}")
+    return lines
+
+
+def format_saved_metric_value(raw_value):
+    """将保存的验模指标格式化为主界面和模型信息栏共用的文字。"""
+    # 缺失或不可计算的值不显示成 nan、inf 等内部数值。
+    try:
+        value = float(raw_value)
+        return f"{value:.5f}" if np.isfinite(value) else "无法计算"
+    except (TypeError, ValueError):
+        return "无法计算"
+
+
 class POP_VA_para(QMainWindow, Ui_VA_para, Ui_MainWindow):
     def __init__(self, parent=None):
         super(POP_VA_para, self).__init__()
@@ -1547,7 +1602,6 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         self.parent_window.viewing_saved_result = False
         self.parent_window.saved_result_view = None
         self.parent_window.prediction_result_context = None
-        self.parent_window.lineEdit_Algorithm_name.setText("已加载预训练模型与预测数据")
         self.parent_window.predict_row_range = self.predict_row_range
 
         # 模型、原始数据与列信息在此一次性更新，取消弹窗不会替换旧组合。
@@ -1562,6 +1616,25 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
         self.parent_window.predict_input_cols = self.predict_input_columns
         self.parent_window.predict_output_cols = self.predict_output_columns
         self.parent_window.data_load = 1
+
+        # 在训练时使用的位置显示模型类型和保存的测试集总体指标。
+        metadata = self.loaded_model_metadata or {}
+        model_name = model_display_name(
+            self.loaded_model, metadata.get("training_method")
+        )
+        self.parent_window.lineEdit_Algorithm_name.setText(model_name)
+        saved_metrics = metadata.get("validation_metrics")
+        saved_metrics = saved_metrics if isinstance(saved_metrics, dict) else {}
+        metric_fields = (
+            ("MSE", self.parent_window.lineEdit_MSE),
+            ("RMSE", self.parent_window.lineEdit_RMSE),
+            ("MAE", self.parent_window.lineEdit_MAE),
+            ("R2", self.parent_window.lineEdit_R2),
+        )
+        # 旧模型没有保存的指标保持空白，不从预测数据推算训练结果。
+        for name, field in metric_fields:
+            if name in saved_metrics:
+                field.setText(format_saved_metric_value(saved_metrics[name]))
         
         # 显示加载的模型信息
         print(f"已加载模型路径: {self.selected_model_path}")
@@ -1696,8 +1769,24 @@ class POP_Load_model_para(QMainWindow, Ui_Load_model_para, Ui_MainWindow):
                 self.predict_output_columns if self.predict_data is not None else None
             )
             
-            # 更新模型特征信息显示
-            self.plainTextEdit_model_features_info.setPlainText(scan_result['model_features_info'])
+            # 先显示模型类型，再接上现有的输入输出特征信息。
+            metadata = self.loaded_model_metadata or {}
+            model_name = model_display_name(
+                self.loaded_model, metadata.get("training_method")
+            )
+            sections = [
+                f"模型类型：{model_name}",
+                scan_result['model_features_info'],
+            ]
+            # 新模型若保存了验模指标，就在特征信息之后显示四项总体值。
+            metric_lines = format_saved_validation_metrics(
+                metadata.get("validation_metrics")
+            )
+            if metric_lines:
+                sections.append("训练验模指标：\n" + "\n".join(metric_lines))
+            self.plainTextEdit_model_features_info.setPlainText(
+                "\n\n".join(sections)
+            )
             
             # 更新状态显示
             self.lineEdit_state_yes_or_no.setText("模型加载完成，下一步请加载预测数据")
@@ -4506,26 +4595,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         """把本次模型与实际追加的预测列绑定，供保存 JSON 使用。"""
         # 原文件列位于左侧，合并函数把预测列按输出顺序追加到最右侧。
         prediction_columns = self.data_save.columns[len(self.predict_data.columns):].tolist()
-        model = self.loaded_model
-        estimator = getattr(model, "estimator", model)
-        # 常见模型显示中文名称；未知模型保留其类名，避免误写类型。
-        model_names = {
-            "DecisionTreeRegressor": "决策树",
-            "RandomForestRegressor": "随机森林",
-            "SVR": "支持向量机",
-            "MLPRegressor": "多层感知机",
-            "ExtraTreesRegressor": "极端随机树",
-            "LinearRegression": "线性回归",
-            "GaussianProcessRegressor": "高斯过程",
-            "GroupLasso": "Group Lasso",
-            "MTW": "MTW",
-            "ReMTW": "ReMTW",
-            "MMoERegressor": "MMoE",
-        }
-        class_name = type(estimator).__name__
+        # 预测结果的模型名称与加载窗口使用同一套识别规则。
+        metadata = self.loaded_model_metadata or {}
         self.prediction_result_context = {
             "model_filename": os.path.basename(self.selected_model_path or ""),
-            "model_type": model_names.get(class_name, class_name),
+            "model_type": model_display_name(
+                self.loaded_model, metadata.get("training_method")
+            ),
             "input_columns": list(input_columns),
             "output_columns": list(output_columns),
             "prediction_columns": prediction_columns,
@@ -5465,6 +5541,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
             "feature_columns": model_input_columns.copy(),
             "preprocessing_rules": preprocessing_rules,
             "scaler": fitted_scaler,
+            # 保存当前测试集的总体指标，供重新加载模型时直接展示。
+            "validation_metrics": {
+                name: float(metrics[name])
+                for name in ("MSE", "RMSE", "MAE", "R2")
+            },
         }
         # 将所有已选输入与输出的关系图接在当前算法图页后面。
         self.figures.extend(make_relationship_pages(

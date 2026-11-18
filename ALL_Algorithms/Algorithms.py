@@ -220,12 +220,17 @@ def ask_and_save_model(
                 }
                 # 预测所需的原始列、编码列及外部缩放规则与权重一起保存。
                 if training_snapshot is not None:
+                    # 将训练时的算法类型和测试集指标与模型权重一起保存。
                     checkpoint.update({
                         'format_version': 2,
                         'task_type': training_snapshot['task_type'],
                         'model_input_columns': training_snapshot['feature_columns'].copy(),
                         'preprocessing_rules': training_snapshot['preprocessing_rules'],
                         'input_scaler': training_snapshot['scaler'],
+                        'training_method': training_snapshot.get('method'),
+                        'validation_metrics': dict(
+                            training_snapshot.get('validation_metrics') or {}
+                        ),
                     })
                 save_path = os.path.splitext(file_path)[0] + '.pt'
                 torch.save(checkpoint, save_path)
@@ -245,12 +250,17 @@ def ask_and_save_model(
                     # 新格式额外记录模型实际读取的数值特征及其顺序。
                     # 预处理规则包含训练中位数、类别编码器和空值标记。
                     # 缩放器可能为 None，表示本次训练没有启用缩放。
+                    # 算法类型和测试集指标供预测窗口在选择模型后展示。
                     model_data.update({
                         'format_version': 2,
                         'task_type': training_snapshot['task_type'],
                         'model_input_columns': training_snapshot['feature_columns'].copy(),
                         'preprocessing_rules': training_snapshot['preprocessing_rules'],
                         'scaler': training_snapshot['scaler'],
+                        'training_method': training_snapshot.get('method'),
+                        'validation_metrics': dict(
+                            training_snapshot.get('validation_metrics') or {}
+                        ),
                     })
 
                 # 只写模型和所需规则，不把含模型对象的整个快照重复存入。
@@ -291,6 +301,9 @@ def load_model(model_path, model_type=None, include_metadata=False):
                             'model_input_columns': loaded_data.get('model_input_columns'),
                             'preprocessing_rules': loaded_data.get('preprocessing_rules'),
                             'scaler': loaded_data.get('scaler'),
+                            # 旧模型没有这些字段时返回 None，预测规则仍可使用。
+                            'training_method': loaded_data.get('training_method'),
+                            'validation_metrics': loaded_data.get('validation_metrics'),
                         }
                     print(f"成功加载{model_type if model_type else 'scikit-learn'}模型")
                     print(f"输入特征列: {input_columns}")
@@ -377,6 +390,9 @@ def load_model(model_path, model_type=None, include_metadata=False):
                         'model_input_columns': checkpoint.get('model_input_columns'),
                         'preprocessing_rules': checkpoint.get('preprocessing_rules'),
                         'scaler': checkpoint.get('input_scaler'),
+                        # 同时读取可选的类型和指标，不改变旧检查点的预测规则。
+                        'training_method': checkpoint.get('training_method'),
+                        'validation_metrics': checkpoint.get('validation_metrics'),
                     }
                 print("成功加载MMoE模型")
                 if include_metadata:
