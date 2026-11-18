@@ -282,7 +282,20 @@ font: 16 px  &quot;Times New Roman&quot;;
 }</string>
     </property>
     <property name="text">
-     <string>v5.0 2026.4.13</string>
+     <string>v5.0 2026.11.8</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_about">
+    <property name="geometry">
+     <rect>
+      <x>166</x>
+      <y>17</y>
+      <width>54</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>关于</string>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">

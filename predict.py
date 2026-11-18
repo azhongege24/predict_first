@@ -17,6 +17,7 @@ from ui2025 import Ui_MainWindow #我新创建的界面类
 import pandas as pd
 from utils.data_column_scan import read_csv_with_fallback, scan_dataframe_columns
 from ALL_Algorithms.TrainingFileDialogLogic import TrainingFileDialog
+from ALL_Algorithms.AboutDialogLogic import AboutDialog
 from utils.training_preprocess import (
     prepare_numeric_regression_data,
     prepare_mixed_regression_data,
@@ -3778,6 +3779,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.pushButton_top.clicked.connect(self.show_previous_page)
         self.pushButton_bottom.clicked.connect(self.show_next_page)
         self.pushButton_help.clicked.connect(self.AL_help_para) # 打开帮助说明窗口
+        # 打开独立的信息窗口，不改变主界面当前数据和图表。
+        self.pushButton_about.clicked.connect(self.show_about_dialog)
         self.pushButton_dataset.clicked.connect(self.AL_dataset_handle)  # 打开数据集合成处理窗口
         # 点击时读取最近一次成功训练的模型及其对应列名。
         self.pushButton_save_pretrained_model.clicked.connect(self.ask_and_save_model)
@@ -4024,6 +4027,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.ui_pop = POP_help_para(self)
         self.clear_interface()
         self.ui_pop.show()
+
+    def show_about_dialog(self):
+        # 将窗口交给对话框管理，关闭后继续使用当前主界面。
+        dialog = AboutDialog(self)
+        dialog.exec_()
     
     def get_gpu_util(self):
     # 调用 nvidia-smi 获取利用率（返回纯数字）
