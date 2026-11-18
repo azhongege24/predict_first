@@ -16,6 +16,7 @@ import numpy as np
 from ui2025 import Ui_MainWindow #我新创建的界面类
 import pandas as pd
 from utils.data_column_scan import read_csv_with_fallback, scan_dataframe_columns
+from ALL_Algorithms.TrainingFileDialogLogic import TrainingFileDialog
 from utils.training_preprocess import (
     prepare_numeric_regression_data,
     prepare_mixed_regression_data,
@@ -4061,34 +4062,21 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
                 self.lineEdit_Algorithm_name.setText(f"Save failed: {str(e)}")#尝试一下，三种格式的接入   
 
     def openfolder(self):
-        '''新内容取消的时候不会改变linedit'''
-        file_filter = "Data Files (*.csv *.xls *.xlsx *.mat);;Excel Files (*.xls *.xlsx);;MATLAB Files (*.mat);;CSV Files (*.csv);;All Files(*.*)"
-        # 使用上次路径作为初始目录，如果不存在则使用"data/"
-        initial_dir = self.lastSelectedPath if self.lastSelectedPath else "data/"
-        # 暂存所选路径，读取成功前不覆盖当前训练文件。
-        selected_path, _ = QFileDialog.getOpenFileName(
-            self, "选取文件", initial_dir, file_filter
-        )
-
-        if not selected_path:
+        """收集一个或多个文件，并把合并结果交给现有训练选列流程。"""
+        initial_dir = self.lastSelectedPath or "data/"
+        if os.path.isfile(initial_dir):
+            initial_dir = os.path.dirname(initial_dir)
+        dialog = TrainingFileDialog(self, initial_dir)
+        if dialog.exec_() != dialog.Accepted:
             return
+        self.load_training_data(dialog.merged_data, dialog.selected_paths)
 
-        if not os.path.isfile(selected_path):
-            QMessageBox.warning(self, "加载失败", f"文件不存在：{selected_path}")
-            return
-
-        # 各格式先读入局部变量，避免失败时留下不完整的窗口状态。
+    def load_training_data(self, loaded_data, selected_paths):
+        """接收已读入的数据表，更新列信息、预选项和训练范围。"""
+        # 所有字段扫描都在合并完成后执行，确保显示的是实际训练数据。
         try:
-            # 根据文件扩展名选择读取方式
-            if selected_path.endswith(('.xls', '.xlsx')):
-                loaded_data = pd.read_excel(selected_path)
-            elif selected_path.endswith('.mat'):
-                loaded_data = load_mat_dataframe(selected_path)
-
-            else:  # 默认处理CSV
-                loaded_data = read_csv_with_fallback(selected_path)
-
             # 保留含缺失值的原始行，供后续按所选列处理。
+            loaded_data = loaded_data.copy()
             loaded_data.columns = loaded_data.columns.astype(str)
             columns = loaded_data.columns.tolist()
             column_info = scan_dataframe_columns(loaded_data)
@@ -4128,11 +4116,14 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         if self.viewing_saved_result:
             # 新训练文件替代历史查看，清除与该文件无关的旧图和指标。
             self.clear_interface()
-        self.fileName = selected_path
+        # 单文件显示原路径；多文件显示数量，路径仍保留在窗口选择记录中。
+        display_name = (selected_paths[0] if len(selected_paths) == 1
+                        else f"已拼接 {len(selected_paths)} 个训练文件")
+        self.fileName = display_name
         self.viewing_saved_result = False
         self.saved_result_view = None
         self.prediction_result_context = None
-        self.lastSelectedPath = selected_path
+        self.lastSelectedPath = selected_paths[-1]
         self.data = loaded_data
         # 新文件尚未训练，不能沿用上一份数据的填补规则。
         self.last_numeric_preprocessing = None
@@ -4140,7 +4131,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承 QMainWindow类和 Ui_M
         self.column_info = column_info
         self.time_columns_present = time_columns_present
         self.shape = loaded_data.shape
-        self.lineEdit_dataset_file.setText(selected_path)
+        self.lineEdit_dataset_file.setText(display_name)
 
         self.listWidget_inputfeature.clear()
         self.listWidget_outputfeature.clear()

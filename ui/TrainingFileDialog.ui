@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TrainingFileDialog</class>
+ <widget class="QDialog" name="TrainingFileDialog">
+  <property name="geometry">
+   <rect><x>0</x><y>0</y><width>650</width><height>400</height></rect>
+  </property>
+  <property name="windowTitle"><string>选择训练数据文件</string></property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="label_instructions">
+     <property name="text"><string>按列表顺序纵向拼接；同名字段对齐，缺少的值留空。</string></property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QListWidget" name="file_list"/>
+   </item>
+   <item>
+    <widget class="QLabel" name="summary">
+     <property name="text"><string>尚未添加文件</string></property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="actionLayout">
+     <item><widget class="QPushButton" name="add_button"><property name="text"><string>添加文件</string></property></widget></item>
+     <item><widget class="QPushButton" name="remove_button"><property name="text"><string>删除所选</string></property></widget></item>
+     <item><widget class="QPushButton" name="move_up_button"><property name="text"><string>上移</string></property></widget></item>
+     <item><widget class="QPushButton" name="move_down_button"><property name="text"><string>下移</string></property></widget></item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="decisionLayout">
+     <item><spacer name="horizontalSpacer"><property name="orientation"><enum>Qt::Horizontal</enum></property><property name="sizeHint" stdset="0"><size><width>40</width><height>20</height></size></property></spacer></item>
+     <item><widget class="QPushButton" name="confirm_button"><property name="text"><string>确认拼接</string></property></widget></item>
+     <item><widget class="QPushButton" name="cancel_button"><property name="text"><string>取消</string></property></widget></item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
